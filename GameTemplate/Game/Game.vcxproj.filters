@@ -48,6 +48,9 @@
     <Filter Include="ExEngine\level2D">
       <UniqueIdentifier>{80abc458-e4b9-4836-89c7-3eb842072871}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode">
+      <UniqueIdentifier>{9c3da424-8d88-4dc7-a652-053e636d0815}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -208,6 +211,15 @@
     </ClCompile>
     <ClCompile Include="..\..\ExEngine\level2D\MapChip2D.cpp">
       <Filter>ExEngine\level2D</Filter>
+    </ClCompile>
+    <ClCompile Include="stage_select.cpp">
+      <Filter>MyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>MyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>MyCode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -393,6 +405,15 @@
     </ClInclude>
     <ClInclude Include="..\..\ExEngine\level2D\MapChip2D.h">
       <Filter>ExEngine\level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>MyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="stage_select.h">
+      <Filter>MyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>MyCode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
