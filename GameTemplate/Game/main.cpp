@@ -18,10 +18,12 @@ struct Light {
 	float ptRange;		//影響範囲
 
 	//ライト構造体にスポットライト用のメンバ変数を追加
-	//Vector3 spPosition;	//位置
-	//float pad3;			//パディング
-	//Vector3 spColor;	//カラー
-	//float spRange;		//影響範囲
+	Vector3 spPosition;		//位置
+	float pad3;				//パディング
+	Vector3 spColor;		//カラー
+	float spRange;			//影響範囲
+	Vector3 spDirection;	//射出方向
+	float spAngle;			//射出角度
 
 	//構造体に視点の位置を追加する
 	Vector3 eyePos; //視点の位置
@@ -58,9 +60,30 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ディレクションライトを初期化する
 	InitDirectionLight(light);
 	// ポイントライトを初期化する
-	InitPointLight(light);
+	//InitPointLight(light);
 	// アンビエントライトを初期化する
 	InitAmbientLight(light);
+
+	//スポットライトのデータを初期化する
+	//初期座標
+	light.spPosition.x = 0.0f;
+	light.spPosition.y = 0.0f;
+	light.spPosition.z = -50.0f;
+	//ライトのカラー
+	light.spColor.x = 200.0f;
+	light.spColor.y = 10.0f;
+	light.spColor.z = 10.0f;
+	//初期方向は斜め下にする。
+	light.spDirection.x = 1.0f;
+	light.spDirection.y = -1.0f;
+	light.spDirection.z = 1.0f;
+	//正規化
+	light.spDirection.Normalize();
+	//射出範囲は300
+	light.spRange = 300.0f;
+	//射出角度は25度
+	light.spAngle = Math::DegToRad(25.0f);
+
 
 
 
@@ -126,13 +149,29 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 		
-		light.ptPosition.x -= g_pad[0]->GetLStickXF();
+		//light.ptPosition.x -= g_pad[0]->GetLStickXF();
+		//if (g_pad[0]->IsPress(enButtonB)) {
+		//	light.ptPosition.y += g_pad[0]->GetLStickXF();
+		//}
+		//else {
+		//	light.ptPosition.z -= g_pad[0]->GetLStickYF();
+		//}
+		light.spPosition.x -= g_pad[0]->GetLStickXF();
 		if (g_pad[0]->IsPress(enButtonB)) {
-			light.ptPosition.y += g_pad[0]->GetLStickXF();
+			light.spPosition.y += g_pad[0]->GetLStickYF();
 		}
 		else {
-			light.ptPosition.z -= g_pad[0]->GetLStickYF();
+			light.spPosition.z -= g_pad[0]->GetLStickYF();
 		}
+
+		Quaternion qRotY;
+		qRotY.SetRotationY(g_pad[0]->GetRStickXF() * 0.01f);
+		qRotY.Apply(light.spDirection);
+		Vector3 rotAxis;
+		rotAxis.Cross(g_vec3AxisY, light.spDirection);
+		Quaternion qRotX;
+		qRotX.SetRotation(rotAxis, g_pad[0]->GetLStickYF() * 0.01f);
+		qRotX.Apply(light.spDirection);
 
 
 
