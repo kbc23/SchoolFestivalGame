@@ -22,6 +22,8 @@ void Player::DeleteIndividual(const int p_num)
 {
 	//p_numはプレイヤーのコントローラー番号
 
+	DeleteGO(m_modelRender[p_num]);
+
 	//DeleteGO(m_skinModelRender[p_num]);
 }
 
@@ -41,9 +43,6 @@ bool Player::Start()
 		}
 	}
 
-	m_modelRender = NewGO<ModelRender>(0);
-	m_modelRender->Init("Assets/modelData/unityChan.tkm");
-
 	return true;
 }
 
@@ -51,9 +50,9 @@ bool Player::StartIndividual(const int p_num)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	//m_skinModelRender[p_num] = NewGO<prefab::CSkinModelRender>(0);
-	//m_skinModelRender[p_num]->Init(L"modelData/unityChan.cmo");
-	//m_skinModelRender[p_num]->SetPosition(m_position[p_num]);
+	m_modelRender[p_num] = NewGO<ModelRender>(0);
+	m_modelRender[p_num]->Init("Assets/modelData/unityChan.tkm");
+	m_modelRender[p_num]->SetPosition({ 0.0f, 10.0f * p_num, 0.0f });
 
 	return true;
 }

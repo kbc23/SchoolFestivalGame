@@ -62,6 +62,27 @@ public:
     void Init(const char* filePath);
 
 
+public: //Setä÷êî
+
+	void SetPosition(Vector3 v)
+	{
+		m_position = v;
+	}
+
+	void SetRotation(Quaternion q)
+	{
+		m_rotation = q;
+	}
+
+	void SetScale(Vector3 v)
+	{
+		m_scale = v;
+	}
+
+
+
+
+
 
 
 
