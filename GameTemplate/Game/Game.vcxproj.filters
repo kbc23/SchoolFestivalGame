@@ -51,6 +51,9 @@
     <Filter Include="MyCode">
       <UniqueIdentifier>{9c3da424-8d88-4dc7-a652-053e636d0815}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\モデル">
+      <UniqueIdentifier>{61c1515d-5ad6-4e89-ba4f-18bcfd033163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>MyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="model_render.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +420,9 @@
     </ClInclude>
     <ClInclude Include="title.h">
       <Filter>MyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="model_render.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
