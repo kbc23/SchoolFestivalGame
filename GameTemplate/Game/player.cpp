@@ -41,6 +41,9 @@ bool Player::Start()
 		}
 	}
 
+	m_modelRender = NewGO<ModelRender>(0);
+	m_modelRender->Init("Assets/modelData/unityChan.tkm");
+
 	return true;
 }
 

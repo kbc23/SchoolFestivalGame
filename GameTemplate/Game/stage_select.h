@@ -1,13 +1,13 @@
 #pragma once
 
-class StageSelect
+class StageSelect : public IGameObject
 {
 public:
 	StageSelect();
 	~StageSelect();
 	bool Start();
 	void Update();
-	void Draw();
+
 
 private: //ƒƒ“ƒo•Ï”
 

@@ -225,6 +225,9 @@
       <Filter>MyCode</Filter>
     </ClCompile>
     <ClCompile Include="model_render.cpp">
+      <Filter>MyCode\モデル</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -422,7 +425,10 @@
       <Filter>MyCode</Filter>
     </ClInclude>
     <ClInclude Include="model_render.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\モデル</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

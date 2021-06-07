@@ -1,4 +1,5 @@
 #pragma once
+#include "model_render.h"
 
 class Player : public IGameObject
 {
@@ -89,7 +90,8 @@ private: //enum
 
 private: //メンバ変数
 	//プレイヤーが最大４人だから、メンバ変数は要素数４の配列で管理する。
-	//SkinModelRender* m_skinModelRender[PlayerNumberMax] = { nullptr }; //スキンモデルレンダラー。
+	ModelRender* m_modelRender = nullptr;
+	//ModelRender* m_ModelRender[PlayerNumberMax] = { nullptr }; //スキンモデルレンダラー。
 
 	//Vector3 m_position[PlayerNumberMax] = { { 0.0f,0.0f,0.0f } }; //キャラクターの座標
 	Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報

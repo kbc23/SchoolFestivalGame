@@ -25,8 +25,3 @@ void StageSelect::Update()
 
 
 }
-
-void StageSelect::Draw()
-{
-
-}
