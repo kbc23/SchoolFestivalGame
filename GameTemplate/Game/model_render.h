@@ -16,13 +16,13 @@ struct Light {
 	Vector3 dirColor;
 	float pad1;
 
-	//ライト構造体にポイントライト用のメンバ変数を追加する
+	//ポイントライト
 	Vector3 ptPosition; //位置
 	float pad2;			//パディング
 	Vector3 ptColor;	//カラー
 	float ptRange;		//影響範囲
 
-	//ライト構造体にスポットライト用のメンバ変数を追加
+	//スポットライト
 	Vector3 spPosition;		//位置
 	float pad3;				//パディング
 	Vector3 spColor;		//カラー
@@ -38,7 +38,7 @@ struct Light {
 	Vector3 ambientLight;   // アンビエントライト
 	float pad5;
 
-	//地面色と天球色、地面の法線を追加する
+	//半球ライト
 	Vector3 groundColor;	//地面色
 	float pad6;
 	Vector3 skyColor;		//天球色
@@ -64,17 +64,17 @@ public:
 
 public: //Set関数
 
-	void SetPosition(Vector3 v)
+	void SetPosition(const Vector3 v)
 	{
 		m_position = v;
 	}
 
-	void SetRotation(Quaternion q)
+	void SetRotation(const Quaternion q)
 	{
 		m_rotation = q;
 	}
 
-	void SetScale(Vector3 v)
+	void SetScale(const Vector3 v)
 	{
 		m_scale = v;
 	}
@@ -93,10 +93,11 @@ private:
     */
     void InitModel(const char* filePath);
 
-    void InitDirectionLight();
-    void InitPointLight();
-    void InitSpotLight();
-    void InitAmbientLight();
+    void InitDirectionLight(); //ディレクションライト
+    void InitPointLight(); //ポイントライト
+    void InitSpotLight(); //スポットライト
+    void InitAmbientLight(); //環境光
+	void InitHemiLight(); //半球ライト
 
 
 private: //data menber

@@ -57,6 +57,8 @@ struct SVSIn
 {
 	float4 pos 		: POSITION;		//モデルの頂点座標。
 	float3 normal   : NORMAL;
+	float3 tangent  : TANGENT;		//接ベクトル
+	float3 biNormal : BINORMAL;		//従法線
 	float2 uv 		: TEXCOORD0;	//UV座標。
 	SSkinVSIn skinVert;				//スキン用のデータ。
 };
@@ -65,6 +67,8 @@ struct SPSIn
 {
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
 	float3 normal	    : NORMAL;
+	float3 tangent  : TANGENT;		//接ベクトル
+	float3 biNormal : BINORMAL;		//従法線
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;
 	//ピクセルシェーダーへの入力にカメラ空間の法線を追加する
@@ -75,6 +79,7 @@ struct SPSIn
 // グローバル変数。
 ////////////////////////////////////////////////
 Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
+Texture2D<float4> g_normalMap : register(t1);			//法線マップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
 
@@ -96,9 +101,24 @@ float3 CalcLigFromSpotLight(SPSIn psIn);		//スポットライトによる反射
 float CalcLigFromRimLight(SPSIn psIn);			//リムライトによる反射光
 float3 CalcLigFromHemiLight(SPSIn psIn);		//半球ライトによる反射光
 
+
+float3 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
+
+
 ////////////////////////////////////////////////
 // 関数定義。
 ////////////////////////////////////////////////
+
+//法線マップから法線を得る
+float3 GetNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
+{
+	float3 binSpaceNormal = g_normalMap.SampleLevel(g_sampler, uv, 0.0f).xyz;
+	binSpaceNormal = (binSpaceNormal * 2.0f) - 1.0f;
+
+	float3 newNormal = tangent * binSpaceNormal.x + biNormal * binSpaceNormal.y + normal * binSpaceNormal.z;
+
+	return newNormal;
+}
 
 /// <summary>
 //スキン行列を計算する。
@@ -141,7 +161,13 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 
 	//頂点法線をピクセルシェーダーに渡す
 	psIn.normal = mul(m, vsIn.normal);
+	psIn.normal = normalize(psIn.normal);
 
+	//接ベクトル
+	psIn.tangent = normalize(mul(m, vsIn.tangent));
+	//従法線
+	psIn.biNormal = normalize(mul(m, vsIn.biNormal));
+	//UV
 	psIn.uv = vsIn.uv;
 
 	//カメラ空間の法線を求める
@@ -169,6 +195,10 @@ SPSIn VSSkinMain( SVSIn vsIn )
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
+
+	psIn.normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
+
+
 	//////////////////////////////
 	// ディレクションライトによるLambert拡散反射光とPhong鏡面反射光の計算
 	//////////////////////////////
@@ -220,13 +250,14 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//最終的な反射光にリムライトの反射光を合算する
 	//まずはリムライトのカラーを計算
 	float3 rimColor = rimPower * dirColor;
+
 	//最終的な反射光にリムの反射光を合算
 	finalLig += rimColor;
 
 	//半球ライトを最終的な反射光に加算する
 	finalLig += hemiLight;
 
-
+	//finalLig = directionLig + ambientLight;
 
 	//最終計算
 	float4 finalColor = g_albedo.Sample(g_sampler, psIn.uv);
@@ -261,7 +292,7 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 {
 	// 反射ベクトルを求める
 	float3 refVec = reflect(lightDirection, normal);
-
+	refVec = normalize(refVec);
 	// 光が当たったサーフェイスから視点に伸びるベクトルを求める
 	float3 toEye = eyePos - worldPos;
 	toEye = normalize(toEye);

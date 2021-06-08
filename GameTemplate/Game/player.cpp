@@ -1,9 +1,18 @@
 #include "stdafx.h"
 #include "player.h"
 
+namespace {
+	const Vector3 PLAYER_START_POSITION[Player::PlayerNumberMax] = {
+		{ 390.0f, 0.0f, -250.0f },	//プレイヤー１
+		{ 130.0f, 0.0f, -250.0f },	//プレイヤー２
+		{ -130.0f, 0.0f, -250.0f },	//プレイヤー３
+		{ -390.0f, 0.0f, -250.0f }	//プレイヤー４
+	};
+}
+
 Player::Player()
 {
-
+	
 }
 
 ////////////////////////////////////////////////////////////
@@ -42,6 +51,12 @@ bool Player::Start()
 			return false;
 		}
 	}
+	
+	m_testRender = NewGO<ModelRender>(0);
+	m_testRender->Init("Assets/modelData/unityChan.tkm");
+	m_testRender->SetPosition({ 0.0f,-50.0f,0.0f });
+	m_testRender->SetScale({ 0.5f,0.5f,0.5f });
+	//m_testRender->SetPosition(PLAYER_START_POSITION[p_num]);
 
 	return true;
 }
@@ -52,7 +67,10 @@ bool Player::StartIndividual(const int p_num)
 
 	m_modelRender[p_num] = NewGO<ModelRender>(0);
 	m_modelRender[p_num]->Init("Assets/modelData/unityChan.tkm");
-	m_modelRender[p_num]->SetPosition({ 0.0f, 10.0f * p_num, 0.0f });
+	m_modelRender[p_num]->SetPosition(PLAYER_START_POSITION[p_num]);
+	//Quaternion q = g_quatIdentity;
+	//q.Quaternion::SetRotationDegY(0);
+	//m_modelRender[p_num]->SetRotation(q);
 
 	return true;
 }
@@ -88,7 +106,7 @@ void Player::DrawIndividual(const int p_num)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	//m_skinModelRender[p_num]->SetPosition(m_position[p_num]);
+	//m_modelRender[p_num]->SetPosition({ 0.0f, 0.0f, 0.0f });
 }
 
 ////////////////////////////////////////////////////////////

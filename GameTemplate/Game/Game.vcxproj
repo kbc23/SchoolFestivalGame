@@ -289,9 +289,11 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="game_camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_render.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="stage.cpp" />
     <ClCompile Include="stage_select.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -365,8 +367,10 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="game_camera.h" />
     <ClInclude Include="model_render.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="stage.h" />
     <ClInclude Include="stage_select.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />

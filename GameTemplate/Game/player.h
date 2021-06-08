@@ -75,7 +75,7 @@ public: //Get関数
 
 
 
-private: //enum
+public: //enum
 	//プレイヤーの番号
 	enum PlayerNumber
 	{
@@ -92,11 +92,12 @@ private: //メンバ変数
 	//プレイヤーが最大４人だから、メンバ変数は要素数４の配列で管理する。
 	//ModelRender* m_modelRender = nullptr;
 	ModelRender* m_modelRender[PlayerNumberMax] = { nullptr }; //スキンモデルレンダラー。
+	ModelRender* m_testRender = nullptr;
 
-	//Vector3 m_position[PlayerNumberMax] = { { 0.0f,0.0f,0.0f } }; //キャラクターの座標
+	Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
 	Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報
 
-	bool m_activePlayer[PlayerNumberMax] = { true,false,false,false }; //プレイヤーが操作できるかどうか
+	bool m_activePlayer[PlayerNumberMax] = { true,true,true,true }; //プレイヤーが操作できるかどうか
 	//※今はテストのためm_activePlayer[player_1]だけtrue
 
 	int m_maxPlayer = PlayerNumberMax; //プレイヤーの最大数
