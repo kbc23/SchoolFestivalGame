@@ -57,6 +57,9 @@
     <Filter Include="MyCode\ゲーム">
       <UniqueIdentifier>{bc64cef2-3fc3-4d65-829b-21526d885c77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{3de4da7d-ecb9-4741-b360-9ae2485eb050}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -445,5 +448,10 @@
     <ClInclude Include="stage.h">
       <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\shader\model.fx">
+      <Filter>Assets</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -41,10 +41,10 @@ void ModelRender::InitModel(const char* filePath)
 	InitDirectionLight();
 
 	//ポイントライトを初期化する
-	InitPointLight();
+	//InitPointLight();
 
 	//スポットライトを初期化する
-	InitSpotLight();
+	//InitSpotLight();
 
 	//環境光を初期化する
 	InitAmbientLight();
@@ -74,7 +74,7 @@ void ModelRender::InitModel(const char* filePath)
 void ModelRender::InitDirectionLight()
 {
 	//ライトは斜め上から当たっている。
-	m_light.dirDirection.x = 0.0f;
+	m_light.dirDirection.x = 1.0f;
 	m_light.dirDirection.y = -1.0f;
 	m_light.dirDirection.z = -1.0f;
 	//正規化する。
@@ -123,7 +123,7 @@ void ModelRender::InitSpotLight()
 	//正規化
 	m_light.spDirection.Normalize();
 	//射出範囲は300
-	m_light.spRange = 3000000.0f;
+	m_light.spRange = 300.0f;
 	//射出角度は25度
 	m_light.spAngle = Math::DegToRad(25.0f);
 }

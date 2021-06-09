@@ -24,11 +24,11 @@ Stage::~Stage()
 bool Stage::Start()
 {
     m_modelRender1 = NewGO<ModelRender>(0);
-    m_modelRender1->Init("Assets/modelData/model_normal.tkm");
+    m_modelRender1->Init("Assets/modelData/green.tkm");
     m_modelRender1->SetPosition(BLOCK_START_POSITION[0]);
     m_modelRender1->SetScale(BLOCK_SCALE);
     m_modelRender2 = NewGO<ModelRender>(0);
-    m_modelRender2->Init("Assets/modelData/model_flat.tkm");
+    m_modelRender2->Init("Assets/modelData/green.tkm");
     m_modelRender2->SetPosition(BLOCK_START_POSITION[1]);
     m_modelRender2->SetScale(BLOCK_SCALE);
     m_modelRender3 = NewGO<ModelRender>(0);
