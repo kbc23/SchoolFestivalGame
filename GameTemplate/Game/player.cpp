@@ -1,13 +1,17 @@
 #include "stdafx.h"
+#include "stage.h"
+
 #include "player.h"
 
 namespace {
-	const Vector3 PLAYER_START_POSITION[Player::PlayerNumberMax] = {
-		{ 390.0f, 0.0f, -250.0f },	//プレイヤー１
-		{ 130.0f, 0.0f, -250.0f },	//プレイヤー２
-		{ -130.0f, 0.0f, -250.0f },	//プレイヤー３
-		{ -390.0f, 0.0f, -250.0f }	//プレイヤー４
+	const Vector3 PLAYER_START_POSITION[Player::PlayerNumberMax] = {	//プレイヤーの初期座標
+		{ 390.0f, 0.0f, -250.0f },											//プレイヤー１
+		{ 130.0f, 0.0f, -250.0f },											//プレイヤー２
+		{ -130.0f, 0.0f, -250.0f },											//プレイヤー３
+		{ -390.0f, 0.0f, -250.0f }											//プレイヤー４
 	};
+	const int MOVE_BUTTON_A = 2;										//Aボタンを押したときの移動量
+	const int MOVE_BUTTON_B = 1;										//Bボタンを押したときの移動量
 }
 
 Player::Player()
@@ -27,13 +31,15 @@ Player::~Player()
 	}
 }
 
-void Player::DeleteIndividual(const int p_num)
+
+
+void Player::DeleteIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	DeleteGO(m_modelRender[p_num]);
+	DeleteGO(m_modelRender[pNum]);
 
-	//DeleteGO(m_skinModelRender[p_num]);
+	//DeleteGO(m_skinModelRender[pNum]);
 }
 
 ////////////////////////////////////////////////////////////
@@ -51,26 +57,22 @@ bool Player::Start()
 			return false;
 		}
 	}
-	
-	m_testRender = NewGO<ModelRender>(0);
-	m_testRender->Init("Assets/modelData/unityChan.tkm");
-	m_testRender->SetPosition({ 0.0f,-50.0f,0.0f });
-	m_testRender->SetScale({ 0.5f,0.5f,0.5f });
-	//m_testRender->SetPosition(PLAYER_START_POSITION[p_num]);
+
+	m_stage = FindGO<Stage>("stage");
 
 	return true;
 }
 
-bool Player::StartIndividual(const int p_num)
+bool Player::StartIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	m_modelRender[p_num] = NewGO<ModelRender>(0);
-	m_modelRender[p_num]->Init("Assets/modelData/unityChan.tkm");
-	m_modelRender[p_num]->SetPosition(PLAYER_START_POSITION[p_num]);
+	m_modelRender[pNum] = NewGO<ModelRender>(0);
+	m_modelRender[pNum]->Init("Assets/modelData/unityChan.tkm");
+	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 	//Quaternion q = g_quatIdentity;
 	//q.Quaternion::SetRotationDegY(0);
-	//m_modelRender[p_num]->SetRotation(q);
+	//m_modelRender[pNum]->SetRotation(q);
 
 	return true;
 }
@@ -102,11 +104,11 @@ void Player::Draw()
 	}
 }
 
-void Player::DrawIndividual(const int p_num)
+void Player::DrawIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	//m_modelRender[p_num]->SetPosition({ 0.0f, 0.0f, 0.0f });
+	//m_modelRender[pNum]->SetPosition({ 0.0f, 0.0f, 0.0f });
 }
 
 ////////////////////////////////////////////////////////////
@@ -123,10 +125,18 @@ void Player::Controller()
 	}
 }
 
-void Player::ControllerIndividual(const int p_num)
+void Player::ControllerIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
+	//２マス進む
+	if (g_pad[pNum]->IsTrigger(enButtonA) == true) {
+		m_stage->MoveBlock(pNum, MOVE_BUTTON_A);
+	}
+	//１マス進む
+	else if (g_pad[pNum]->IsTrigger(enButtonB) == true) {
+		m_stage->MoveBlock(pNum, MOVE_BUTTON_B);
+	}
 	
 
 

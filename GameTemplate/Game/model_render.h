@@ -46,6 +46,8 @@ struct Light {
 	Vector3 groundNormal;	//地面の法線
 };
 
+
+
 class ModelRender : public IGameObject
 {
 public:
@@ -55,11 +57,30 @@ public:
     void Update() override final;
 	void Render(RenderContext& renderContext) override final;
 
-    /**
-     * @brief 初期化関数
-     * @param filePath tkmファイルのファイルパス
-    */
-    void Init(const char* filePath);
+
+
+public:
+	/**
+	 * @brief 初期化関数
+	 * @param filePath tkmファイルのファイルパス
+	*/
+	void Init(const char* filePath);
+
+
+
+private:
+	/**
+	 * @brief モデルの初期化
+	 * @param filePath tkmファイルのファイルパス
+	*/
+	void InitModel(const char* filePath);
+
+	void InitDirectionLight(); //ディレクションライト
+	void InitPointLight(); //ポイントライト
+	void InitSpotLight(); //スポットライト
+	void InitAmbientLight(); //環境光
+	void InitHemiLight(); //半球ライト
+
 
 
 public: //Set関数
@@ -80,24 +101,25 @@ public: //Set関数
 	}
 
 
+public: //Get関数
+
+	Vector3 GetPosition()
+	{
+		return m_position;
+	}
+
+	Quaternion GetRotation()
+	{
+		return m_rotation;
+	}
+
+	Vector3 GetScale()
+	{
+		return m_scale;
+	}
 
 
 
-
-
-
-private:
-    /**
-     * @brief モデルの初期化
-     * @param filePath tkmファイルのファイルパス
-    */
-    void InitModel(const char* filePath);
-
-    void InitDirectionLight(); //ディレクションライト
-    void InitPointLight(); //ポイントライト
-    void InitSpotLight(); //スポットライト
-    void InitAmbientLight(); //環境光
-	void InitHemiLight(); //半球ライト
 
 
 private: //data menber
@@ -111,10 +133,3 @@ private: //data menber
 
 	bool m_finishInit = false; //初期化が終わったか
 };
-
-////////////////////////////////////////////////////////////
-// 描画処理
-////////////////////////////////////////////////////////////
-
-
-

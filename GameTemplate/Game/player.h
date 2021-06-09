@@ -1,22 +1,24 @@
 #pragma once
 #include "model_render.h"
 
+class Stage;
+
 class Player : public IGameObject
 {
 public:
 	Player();
 
 	~Player();
-	void DeleteIndividual(const int p_num); //デストラクタの処理をプレイヤーごとに個別でおこなう。
+	void DeleteIndividual(const int pNum); //デストラクタの処理をプレイヤーごとに個別でおこなう。
 
 	bool Start();
-	bool StartIndividual(const int p_num); //Start関数の処理をプレイヤーごとに個別でおこなう。
+	bool StartIndividual(const int pNum); //Start関数の処理をプレイヤーごとに個別でおこなう。
 
 	void Update();
 
 	
 	void Draw();
-	void DrawIndividual(const int p_num); //Draw関数の処理をプレイヤーごとに個別でおこなう。
+	void DrawIndividual(const int pNum); //Draw関数の処理をプレイヤーごとに個別でおこなう。
 
 	////////////////////////////////////////////////////////////
     // プレイヤーの操作処理
@@ -30,8 +32,8 @@ public:
 	/// <summary>
 	/// プレイヤーの操作処理
 	/// </summary>
-	/// <param name="p_num">プレイヤー番号</param>
-	void ControllerIndividual(const int p_num);
+	/// <param name="pNum">プレイヤー番号</param>
+	void ControllerIndividual(const int pNum);
 
 public: //Set関数
 	//Set関数の引数にある[int i]はプレイヤー番号である。
@@ -89,15 +91,16 @@ public: //enum
 
 
 private: //メンバ変数
+	Stage* m_stage = nullptr;
+
 	//プレイヤーが最大４人だから、メンバ変数は要素数４の配列で管理する。
 	//ModelRender* m_modelRender = nullptr;
 	ModelRender* m_modelRender[PlayerNumberMax] = { nullptr }; //スキンモデルレンダラー。
-	ModelRender* m_testRender = nullptr;
 
 	Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
 	Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報
 
-	bool m_activePlayer[PlayerNumberMax] = { true,true,true,true }; //プレイヤーが操作できるかどうか
+	bool m_activePlayer[PlayerNumberMax] = { true, true, true, true }; //プレイヤーが操作できるかどうか
 	//※今はテストのためm_activePlayer[player_1]だけtrue
 
 	int m_maxPlayer = PlayerNumberMax; //プレイヤーの最大数

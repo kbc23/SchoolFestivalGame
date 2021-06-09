@@ -17,8 +17,8 @@ Game::~Game()
 
 bool Game::Start()
 {
-    m_player = NewGO<Player>(0);
-    m_stage = NewGO<Stage>(0);
+    m_stage = NewGO<Stage>(0, "stage");
+    m_player = NewGO<Player>(0, "player");
     m_gameCamera = NewGO<GameCamera>(0);
 
 
