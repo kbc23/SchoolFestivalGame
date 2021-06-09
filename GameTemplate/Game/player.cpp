@@ -4,15 +4,26 @@
 #include "player.h"
 
 namespace {
+	//////////////////////////////
+	// 位置情報
+	//////////////////////////////
+
 	const Vector3 PLAYER_START_POSITION[Player::PlayerNumberMax] = {	//プレイヤーの初期座標
 		{ 390.0f, 0.0f, -250.0f },											//プレイヤー１
 		{ 130.0f, 0.0f, -250.0f },											//プレイヤー２
 		{ -130.0f, 0.0f, -250.0f },											//プレイヤー３
 		{ -390.0f, 0.0f, -250.0f }											//プレイヤー４
 	};
-	const int MOVE_BUTTON_A = 2;										//Aボタンを押したときの移動量
-	const int MOVE_BUTTON_B = 1;										//Bボタンを押したときの移動量
+
+	//////////////////////////////
+	// 入力関係
+	//////////////////////////////
+
+	const int MOVE_BUTTON_A = 2;		//Aボタンを押したときの移動量
+	const int MOVE_BUTTON_B = 1;		//Bボタンを押したときの移動量
 }
+
+
 
 Player::Player()
 {

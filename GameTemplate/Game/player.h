@@ -52,6 +52,10 @@ public: //Set関数
 		m_activePlayer[i] = b;
 	}
 
+	void SetGoalRanking(int pNum, int rank) {
+		m_goalRanking[pNum] = rank;
+	}
+
 
 
 
@@ -97,13 +101,13 @@ private: //メンバ変数
 	//ModelRender* m_modelRender = nullptr;
 	ModelRender* m_modelRender[PlayerNumberMax] = { nullptr }; //スキンモデルレンダラー。
 
-	Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
-	Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報
+	//Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
+	//Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報
 
-	bool m_activePlayer[PlayerNumberMax] = { true, true, true, true }; //プレイヤーが操作できるかどうか
-	//※今はテストのためm_activePlayer[player_1]だけtrue
+	bool m_activePlayer[PlayerNumberMax] = { true,true,true,true }; //プレイヤーが操作できるかどうか
 
 	int m_maxPlayer = PlayerNumberMax; //プレイヤーの最大数
 	//※プレイヤー数選択画面を作成したら、そこからこの変数にプレイヤーの最大数を代入する。
 
+	int m_goalRanking[PlayerNumberMax] = { 0,0,0,0 }; //プレイヤーのゴール順位
 };
