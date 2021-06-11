@@ -3,12 +3,13 @@
 
 #include "player.h"
 
-namespace {
+namespace //constant
+{
 	//////////////////////////////
 	// ファイルパス
 	//////////////////////////////
 
-	const char* FILE_PATH_CHAEACTER_MODEL = "Assets/modelData/unityChan.tkm";
+	const char* FILE_PATH_TKM_CHAEACTER_MODEL = "Assets/modelData/unityChan.tkm";
 
 	//////////////////////////////
 	// 位置情報
@@ -94,7 +95,7 @@ bool Player::StartIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(0);
-	m_modelRender[pNum]->Init(FILE_PATH_CHAEACTER_MODEL);
+	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 
 	m_goalRankFont[pNum] = NewGO<FontRender>(0);
@@ -109,7 +110,7 @@ bool Player::StartIndividual(const int pNum)
 }
 
 ////////////////////////////////////////////////////////////
-// Update関数
+// 毎フレームの処理
 ////////////////////////////////////////////////////////////
 
 void Player::Update()
@@ -121,9 +122,9 @@ void Player::Update()
 	Draw();
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // Draw関数関連
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void Player::Draw()
 {
@@ -138,9 +139,9 @@ void Player::DrawIndividual(const int pNum)
 
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // プレイヤーの操作処理
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void Player::Controller()
 {
@@ -164,7 +165,4 @@ void Player::ControllerIndividual(const int pNum)
 	else if (g_pad[pNum]->IsTrigger(enButtonB) == true) {
 		m_stage->MoveBlock(pNum, MOVE_BUTTON_B);
 	}
-	
-
-
 }
