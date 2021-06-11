@@ -28,6 +28,12 @@ namespace //constant
 
 	const int MOVE_BUTTON_A = 2;		//Aボタンを押したときの移動量
 	const int MOVE_BUTTON_B = 1;		//Bボタンを押したときの移動量
+
+	//////////////////////////////
+	// タイマー関連
+	//////////////////////////////
+
+	const int TIME_ANIMATION = 30; //ジャンプアニメーションの時間（0.5秒）
 }
 
 
@@ -115,54 +121,61 @@ bool Player::StartIndividual(const int pNum)
 
 void Player::Update()
 {
-	//プレイヤーの操作
-	Controller();
-
-	//プレイヤー関連の描画処理
-	Draw();
-}
-
-//////////////////////////////
-// Draw関数関連
-//////////////////////////////
-
-void Player::Draw()
-{
-	//プレイヤーごとに描画
+	//プレイヤーごとに操作
 	for (int i = 0; i < m_maxPlayer; i++) {
-		DrawIndividual(i);
+		if (m_flagGoal[i] == false) {
+			Controller(i);
+			Animation(i);
+		}
+		else {
+			Animation(i);
+		}
 	}
-}
-
-void Player::DrawIndividual(const int pNum)
-{
-
 }
 
 //////////////////////////////
 // プレイヤーの操作処理
 //////////////////////////////
 
-void Player::Controller()
-{
-	//プレイヤーごとに操作
-	for (int i = 0; i < m_maxPlayer; i++) {
-		if (m_activePlayer[i] == true) {
-			ControllerIndividual(i);
-		}
-	}
-}
-
-void Player::ControllerIndividual(const int pNum)
+void Player::Controller(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
+
+	if (m_flagDoingAnimation[pNum] == true || m_stage->GetmActiveOperation(pNum) == false) {
+		return;
+	}
 
 	//２マス進む
 	if (g_pad[pNum]->IsTrigger(enButtonA) == true) {
 		m_stage->MoveBlock(pNum, MOVE_BUTTON_A);
+		m_flagDoingAnimation[pNum] = true;
 	}
 	//１マス進む
 	else if (g_pad[pNum]->IsTrigger(enButtonB) == true) {
 		m_stage->MoveBlock(pNum, MOVE_BUTTON_B);
+		m_flagDoingAnimation[pNum] = true;
+	}
+}
+
+void Player::Animation(const int pNum)
+{
+	if (m_flagDoingAnimation[pNum] == false) {
+		return;
+	}
+
+	++m_timerAnimation[pNum];
+
+	//ここのマジックナンバーを後で解消する。
+	if (m_timerAnimation[pNum] >= 0 && m_timerAnimation[pNum] <= 15) {
+		m_modelRender[pNum]->UpPositionY(1.0f);
+	}
+	else if (m_timerAnimation[pNum] >= 16 && m_timerAnimation[pNum] <= 30) {
+		m_modelRender[pNum]->DownPositionY(1.0f);
+	}
+
+
+	if (m_timerAnimation[pNum] >= TIME_ANIMATION) {
+		m_flagDoingAnimation[pNum] = false;
+		m_timerAnimation[pNum] = 0;
 	}
 }

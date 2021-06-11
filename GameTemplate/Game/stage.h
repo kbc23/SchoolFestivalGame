@@ -45,6 +45,14 @@ public:
     void GoalBlock();
 
 
+
+public: //GetŠÖ”
+    const bool GetmActiveOperation(const int pNum)
+    {
+        return m_activeOperation[pNum];
+    }
+
+
 public: //enum
     //ƒuƒƒbƒN‚Ìí—Ş
     enum StageData

@@ -244,6 +244,9 @@ void Stage::GoalBlock()
             //‡ˆÊ‚ðŠm’è
             m_player->SetGoalRanking(i, m_nowRank);
 
+            //ƒS[ƒ‹‚µ‚½ó‘Ô‚É‚·‚éB
+            m_player->SetFlagGoal(i, true);
+
             ++nextRank;
             addNowRank = true;
         }

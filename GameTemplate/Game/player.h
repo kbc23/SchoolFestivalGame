@@ -17,24 +17,17 @@ public:
 
 	void Update() override final;
 
-	
-	void Draw();
-	void DrawIndividual(const int pNum); //Draw関数の処理をプレイヤーごとに個別でおこなう。
-
 	////////////////////////////////////////////////////////////
     // プレイヤーの操作処理
     ////////////////////////////////////////////////////////////
 
-	/// <summary>
-	/// プレイヤーの操作処理の土台
-	/// </summary>
-	void Controller();
-	
-	/// <summary>
-	/// プレイヤーの操作処理
-	/// </summary>
-	/// <param name="pNum">プレイヤー番号</param>
-	void ControllerIndividual(const int pNum);
+	/**
+	 * @brief プレイヤーの操作処理の土台
+	 * @param pNum 
+	*/
+	void Controller(const int pNum);
+
+	void Animation(const int pNum);
 
 public: //Set関数
 	//Set関数の引数にある[int i]はプレイヤー番号である。
@@ -43,9 +36,9 @@ public: //Set関数
 	// m_positionのSet関数
 	//////////////////////////////
 
-	void SetPosition(const int i, const Vector3 v) {
+	//void SetPosition(const int i, const Vector3 v) {
 		//m_position[i] = v;
-	}
+	//}
 
 
 	
@@ -75,6 +68,11 @@ public: //Set関数
 		m_goalRankFont[pNum]->Activate();
 	}
 
+	void SetFlagGoal(const int pNum, const bool b)
+	{
+		m_flagGoal[pNum] = b;
+	}
+
 
 public: //Get関数
 	//Get関数の引数にある[int i]はプレイヤー番号である。
@@ -83,9 +81,9 @@ public: //Get関数
 	// m_positionのGet関数
 	//////////////////////////////
 
-	Vector3 GetPosition(const int i) {
+	//Vector3 GetPosition(const int i) {
 		//return m_position[i];
-	}
+	//}
 
 
 
@@ -119,10 +117,14 @@ private: //data menber
 	//Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
 	//Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報
 
-	bool m_activePlayer[PlayerNumberMax] = { true,true,true,true }; //プレイヤーが操作できるかどうか
+	bool m_activePlayer[PlayerNumberMax] = { true, true, true, true }; //プレイヤーが操作できるかどうか
 
 	int m_maxPlayer = PlayerNumberMax; //プレイヤーの最大数
 	//※プレイヤー数選択画面を作成したら、そこからこの変数にプレイヤーの最大数を代入する。
 
-	int m_goalRanking[PlayerNumberMax] = { 0,0,0,0 }; //プレイヤーのゴール順位
+	int m_goalRanking[PlayerNumberMax] = { 0, 0, 0, 0 }; //プレイヤーのゴール順位
+	bool m_flagGoal[PlayerNumberMax] = { false, false, false, false }; //ゴールしたか
+
+	bool m_flagDoingAnimation[PlayerNumberMax] = { false, false, false, false }; //アニメーション中か
+	int m_timerAnimation[PlayerNumberMax] = { 0, 0, 0, 0 }; //アニメーションのタイマー
 };

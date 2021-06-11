@@ -90,6 +90,16 @@ public: //Setä÷êî
 		m_position = v;
 	}
 
+	void UpPositionY(const float f)
+	{
+		m_position.y += f;
+	}
+
+	void DownPositionY(const float f)
+	{
+		m_position.y -= f;
+	}
+
 	void SetRotation(const Quaternion q)
 	{
 		m_rotation = q;
@@ -103,17 +113,17 @@ public: //Setä÷êî
 
 public: //Getä÷êî
 
-	Vector3 GetPosition()
+	const Vector3 GetPosition()
 	{
 		return m_position;
 	}
 
-	Quaternion GetRotation()
+	const Quaternion GetRotation()
 	{
 		return m_rotation;
 	}
 
-	Vector3 GetScale()
+	const Vector3 GetScale()
 	{
 		return m_scale;
 	}
