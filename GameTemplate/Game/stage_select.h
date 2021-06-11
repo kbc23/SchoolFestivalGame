@@ -5,11 +5,11 @@ class StageSelect : public IGameObject
 public:
 	StageSelect();
 	~StageSelect();
-	bool Start();
-	void Update();
+	bool Start() override final;
+	void Update() override final;
 
 
-private: //ƒƒ“ƒo•Ï”
+private: //data menber
 
 
 };

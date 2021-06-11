@@ -5,6 +5,12 @@
 
 namespace {
 	//////////////////////////////
+	// ファイルパス
+	//////////////////////////////
+
+	const char* FILE_PATH_CHAEACTER_MODEL = "Assets/modelData/unityChan.tkm";
+
+	//////////////////////////////
 	// 位置情報
 	//////////////////////////////
 
@@ -27,7 +33,7 @@ namespace {
 
 Player::Player()
 {
-	
+
 }
 
 ////////////////////////////////////////////////////////////
@@ -69,7 +75,16 @@ bool Player::Start()
 		}
 	}
 
+
+	//フォントの初期化処理
+	for (int i = 0; i < m_maxPlayer; i++) {
+		//m_fontRank[i] = NewGO<Font>(0);
+
+	}
+
 	m_stage = FindGO<Stage>("stage");
+
+
 
 	return true;
 }
@@ -79,8 +94,13 @@ bool Player::StartIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(0);
-	m_modelRender[pNum]->Init("Assets/modelData/unityChan.tkm");
+	m_modelRender[pNum]->Init(FILE_PATH_CHAEACTER_MODEL);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
+
+	m_goalRankFont[pNum] = NewGO<FontRender>(0);
+	m_goalRankFont[pNum]->Init(L"", { PLAYER_START_POSITION[pNum].x,PLAYER_START_POSITION[pNum].y });
+	m_goalRankFont[pNum]->Deactivate();
+
 	//Quaternion q = g_quatIdentity;
 	//q.Quaternion::SetRotationDegY(0);
 	//m_modelRender[pNum]->SetRotation(q);
@@ -109,17 +129,13 @@ void Player::Draw()
 {
 	//プレイヤーごとに描画
 	for (int i = 0; i < m_maxPlayer; i++) {
-		if (m_activePlayer[i] == true) {
-			DrawIndividual(i);
-		}
+		DrawIndividual(i);
 	}
 }
 
 void Player::DrawIndividual(const int pNum)
 {
-	//p_numはプレイヤーのコントローラー番号
 
-	//m_modelRender[pNum]->SetPosition({ 0.0f, 0.0f, 0.0f });
 }
 
 ////////////////////////////////////////////////////////////

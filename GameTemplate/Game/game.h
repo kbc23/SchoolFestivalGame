@@ -9,12 +9,12 @@ class Game : public IGameObject
 public:
     Game();
     ~Game();
-    bool Start();
-    void Update();
+    bool Start() override final;
+    void Update() override final;
 
 
 
-private:
+private: //data menber
     Player* m_player = nullptr;
     GameCamera* m_gameCamera = nullptr;
     Stage* m_stage = nullptr;

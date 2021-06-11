@@ -5,11 +5,11 @@ class Title : public IGameObject
 public:
 	Title();
 	~Title();
-	bool Start();
-	void Update();
+	bool Start() override final;
+	void Update() override final;
 	void Draw();
 
-private: //ƒƒ“ƒo•Ï”
+private: //data menber
 
 
 };

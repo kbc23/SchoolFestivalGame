@@ -51,14 +51,20 @@
     <Filter Include="MyCode">
       <UniqueIdentifier>{9c3da424-8d88-4dc7-a652-053e636d0815}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\モデル">
-      <UniqueIdentifier>{61c1515d-5ad6-4e89-ba4f-18bcfd033163}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\ゲーム">
       <UniqueIdentifier>{bc64cef2-3fc3-4d65-829b-21526d885c77}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{3de4da7d-ecb9-4741-b360-9ae2485eb050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\エンジン">
+      <UniqueIdentifier>{a88b4dd2-e261-4c3f-8bef-49ed72185e2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\エンジン\モデル">
+      <UniqueIdentifier>{61c1515d-5ad6-4e89-ba4f-18bcfd033163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\エンジン\フォント">
+      <UniqueIdentifier>{0dfa856f-5a5e-4a54-8834-cb67e5fc05ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -228,7 +234,7 @@
       <Filter>MyCode</Filter>
     </ClCompile>
     <ClCompile Include="model_render.cpp">
-      <Filter>MyCode\モデル</Filter>
+      <Filter>MyCode\エンジン\モデル</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>ソース ファイル</Filter>
@@ -241,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="stage.cpp">
       <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="font_render.cpp">
+      <Filter>MyCode\エンジン\フォント</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -434,7 +443,7 @@
       <Filter>MyCode</Filter>
     </ClInclude>
     <ClInclude Include="model_render.h">
-      <Filter>MyCode\モデル</Filter>
+      <Filter>MyCode\エンジン\モデル</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
       <Filter>ソース ファイル</Filter>
@@ -447,6 +456,9 @@
     </ClInclude>
     <ClInclude Include="stage.h">
       <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="font_render.h">
+      <Filter>MyCode\エンジン\フォント</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

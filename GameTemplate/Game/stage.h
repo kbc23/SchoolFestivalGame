@@ -3,15 +3,13 @@
 
 #include "player.h"
 
-
-
 class Stage : public IGameObject
 {
 public:
     Stage();
     ~Stage();
-    bool Start();
-    void Update();
+    bool Start() override final;
+    void Update() override final;
 
 
 public:
@@ -29,18 +27,19 @@ public:
 
 
 
-private: //定数
-    static const int MAX_BLOCK = 20;       //１レーンのブロックの最大数
-    static const int START_BLOCK = 0;       //スタート位置のブロックの番号
-    static const int INIT_RANK = 1;
+private: //constant
+    static const int m_MAX_BLOCK = 20;       //１レーンのブロックの最大数
+    static const int m_START_BLOCK = 0;       //スタート位置のブロックの番号
+    static const int m_INIT_RANK = 1;
 
 private: //data menber
 
     Player* m_player = nullptr;
     //[プレイヤー番号][ステージのマスの数]
-    ModelRender* m_modelRender[Player::PlayerNumberMax][MAX_BLOCK] = { nullptr };
+    ModelRender* m_modelRender[Player::PlayerNumberMax][m_MAX_BLOCK] = { nullptr };
+ 
     //プレイヤーの位置
-    int m_playerBlockPosition[Player::PlayerNumberMax] = { START_BLOCK,START_BLOCK,START_BLOCK,START_BLOCK };
+    int m_playerBlockPosition[Player::PlayerNumberMax] = { m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
 
-    int m_nowRank = INIT_RANK; //プレイヤーの順位データに渡すデータ
+    int m_nowRank = m_INIT_RANK; //プレイヤーの順位データに渡すデータ
 };

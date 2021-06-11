@@ -1,5 +1,6 @@
 #pragma once
 #include "model_render.h"
+#include "font_render.h"
 
 class Stage;
 
@@ -11,10 +12,10 @@ public:
 	~Player();
 	void DeleteIndividual(const int pNum); //デストラクタの処理をプレイヤーごとに個別でおこなう。
 
-	bool Start();
+	bool Start() override final;
 	bool StartIndividual(const int pNum); //Start関数の処理をプレイヤーごとに個別でおこなう。
 
-	void Update();
+	void Update() override final;
 
 	
 	void Draw();
@@ -42,24 +43,37 @@ public: //Set関数
 	// m_positionのSet関数
 	//////////////////////////////
 
-	void SetPosition(int i, const Vector3 v) {
+	void SetPosition(const int i, const Vector3 v) {
 		//m_position[i] = v;
 	}
 
 
 	
-	void SetActivePlayer(int i, bool b) {
+	void SetActivePlayer(const int i, const bool b) {
 		m_activePlayer[i] = b;
 	}
 
-	void SetGoalRanking(int pNum, int rank) {
+	/**
+	 * @brief ゴール時の順位を確定
+	 * @param pNum プレイヤー番号
+	 * @param rank 順位
+	*/
+	void SetGoalRanking(const int pNum, const int rank) {
 		m_goalRanking[pNum] = rank;
+
+		SetAndActivateGoalRankFont(pNum, rank);
 	}
 
-
-
-
-
+	/**
+	 * @brief 順位の描画処理ための値の設定と描画状態にする。
+	 * @param pNum 
+	 * @param rank 
+	*/
+	void SetAndActivateGoalRankFont(const int pNum, const int rank)
+	{
+		m_goalRankFont[pNum]->SetText(rank);
+		m_goalRankFont[pNum]->Activate();
+	}
 
 
 public: //Get関数
@@ -69,13 +83,13 @@ public: //Get関数
 	// m_positionのGet関数
 	//////////////////////////////
 
-	Vector3 GetPosition(int i) {
+	Vector3 GetPosition(const int i) {
 		//return m_position[i];
 	}
 
 
 
-	float GetActivePlayer(int i) {
+	float GetActivePlayer(const int i) {
 		return m_activePlayer[i];
 	}
 
@@ -94,12 +108,13 @@ public: //enum
 
 
 
-private: //メンバ変数
+private: //data menber
 	Stage* m_stage = nullptr;
 
 	//プレイヤーが最大４人だから、メンバ変数は要素数４の配列で管理する。
 	//ModelRender* m_modelRender = nullptr;
-	ModelRender* m_modelRender[PlayerNumberMax] = { nullptr }; //スキンモデルレンダラー。
+	ModelRender* m_modelRender[PlayerNumberMax] = { nullptr }; //モデルレンダー
+	FontRender* m_goalRankFont[PlayerNumberMax] = { nullptr }; //フォントレンダー
 
 	//Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
 	//Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報

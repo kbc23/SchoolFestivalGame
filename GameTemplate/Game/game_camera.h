@@ -5,10 +5,10 @@ class GameCamera : public IGameObject
 public:
     GameCamera();
     ~GameCamera();
-    bool Start();
-    void Update();
+    bool Start() override final;
+    void Update() override final;
 
-private:
+private: //data menber
 
 
 

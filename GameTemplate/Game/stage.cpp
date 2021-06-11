@@ -10,6 +10,12 @@
 
 
 namespace {
+    //////////////////////////////
+    // ファイルパス
+    //////////////////////////////
+
+
+
     //const Vector3 BLOCK_SCALE = { 1.0f, 1.0f, 1.0f };
     const float BLOCK_SIZE = 80.0f;         //ブロックのサイズ
 
@@ -31,6 +37,7 @@ namespace {
         { -130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                //プレイヤー３
         { -390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }	                    //プレイヤー４
     };
+
 }
 
 
@@ -43,7 +50,7 @@ Stage::Stage()
 Stage::~Stage()
 {
     for (int i = 0; i < Player::PlayerNumberMax; i++) {
-        for (int s = 0; s < MAX_BLOCK; s++) {
+        for (int s = 0; s < m_MAX_BLOCK; s++) {
             DeleteGO(m_modelRender[i][s]);
         }
     }
@@ -52,7 +59,7 @@ Stage::~Stage()
 bool Stage::Start()
 {
     for (int i = 0; i < Player::PlayerNumberMax; i++) {
-        for (int s = 0; s < MAX_BLOCK; s++) {
+        for (int s = 0; s < m_MAX_BLOCK; s++) {
             m_modelRender[i][s] = NewGO<ModelRender>(0);
             m_modelRender[i][s]->Init("Assets/modelData/green.tkm");
             //m_modelRender[i][s]->SetScale(BLOCK_SCALE);
@@ -74,7 +81,7 @@ void Stage::Update()
     //スタート地点に戻る( Debug )
     if (g_pad[0]->IsTrigger(enButtonX)) {
         for (int i = 0; i < Player::PlayerNumberMax; i++) {
-            for (int s = 0; s < MAX_BLOCK; s++) {
+            for (int s = 0; s < m_MAX_BLOCK; s++) {
                 m_modelRender[i][s]->SetPosition({
                     BLOCK_START_POSITION[i].x,
                     BLOCK_START_POSITION[i].y,
@@ -92,13 +99,11 @@ void Stage::MoveBlock(const int pNum, const int moveNum)
 {
     //プレイヤーが何個目のブロックにいるかの情報を更新
     m_playerBlockPosition[pNum] += moveNum;
-    if (m_playerBlockPosition[pNum] >= MAX_BLOCK) {
-        m_playerBlockPosition[pNum] = MAX_BLOCK - 1;
+    if (m_playerBlockPosition[pNum] >= m_MAX_BLOCK) {
+        m_playerBlockPosition[pNum] = m_MAX_BLOCK - 1;
     }
 
-    for (int i = 0; i < MAX_BLOCK; i++) {
-
-
+    for (int i = 0; i < m_MAX_BLOCK; i++) {
         m_modelRender[pNum][i]->SetPosition({
             BLOCK_POSITION_X[pNum],
             BLOCK_POSITION_Y,
@@ -116,7 +121,7 @@ void Stage::GoalBlock()
 
     for (int i = 0; i < Player::PlayerNumberMax; i++) {
         //プレイヤーの順位を確定
-        if (m_player->GetActivePlayer(i) == true && m_playerBlockPosition[i] == MAX_BLOCK - 1) {
+        if (m_player->GetActivePlayer(i) == true && m_playerBlockPosition[i] == m_MAX_BLOCK - 1) {
             //プレイヤーの操作をできないようにする。
             m_player->SetActivePlayer(i, false);
 
