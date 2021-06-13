@@ -48,6 +48,7 @@ namespace //constant
     // タイマー関連
     //////////////////////////////
 
+    const int TIMER_RESET = 0; //タイマーのリセット
     const int TIME_RETURN_OPERATION = 90;   //操作復帰にかかる時間（1.5秒）
 }
 
@@ -209,7 +210,7 @@ void Stage::ReturnOperationTimer(const int pNum)
 
     if (m_timerReturnOperation[pNum] >= TIME_RETURN_OPERATION) {
         m_activeOperation[pNum] = true;
-        m_timerReturnOperation[pNum] = 0;
+        m_timerReturnOperation[pNum] = TIMER_RESET;
         m_resistanceImpossibleOperation[pNum] = true;
     }
 

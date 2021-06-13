@@ -21,6 +21,15 @@ namespace //constant
 		{ -130.0f, 0.0f, -250.0f },											//プレイヤー３
 		{ -390.0f, 0.0f, -250.0f }											//プレイヤー４
 	};
+	
+	const Vector2 GOAL_RANK_FONT_POSITION[Player::PlayerNumberMax] = {	//ゴール順位の座標
+		{ -390.0f, 0.0f },													//プレイヤー１
+		{ -130.0f, 0.0f },													//プレイヤー２
+		{ 130.0f, 0.0f },													//プレイヤー３
+		{ 390.0f, 0.0f }													//プレイヤー４
+	};
+
+	//モデルとフォントのX座標の向きが逆っぽい
 
 	//////////////////////////////
 	// 入力関係
@@ -33,6 +42,7 @@ namespace //constant
 	// タイマー関連
 	//////////////////////////////
 
+	const int TIMER_RESET = 0; //タイマーのリセット
 	const int TIME_ANIMATION = 30; //ジャンプアニメーションの時間（0.5秒）
 }
 
@@ -105,7 +115,7 @@ bool Player::StartIndividual(const int pNum)
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 
 	m_goalRankFont[pNum] = NewGO<FontRender>(0);
-	m_goalRankFont[pNum]->Init(L"", { PLAYER_START_POSITION[pNum].x,PLAYER_START_POSITION[pNum].y });
+	m_goalRankFont[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
 	m_goalRankFont[pNum]->Deactivate();
 
 	//Quaternion q = g_quatIdentity;
@@ -176,6 +186,6 @@ void Player::Animation(const int pNum)
 
 	if (m_timerAnimation[pNum] >= TIME_ANIMATION) {
 		m_flagDoingAnimation[pNum] = false;
-		m_timerAnimation[pNum] = 0;
+		m_timerAnimation[pNum] = TIMER_RESET;
 	}
 }
