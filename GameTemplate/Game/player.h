@@ -10,10 +10,19 @@ public:
 	Player();
 
 	~Player();
-	void DeleteIndividual(const int pNum); //デストラクタの処理をプレイヤーごとに個別でおこなう。
+	/**
+	 * @brief デストラクタの処理をプレイヤーごとに個別でおこなう。
+	 * @param pNum プレイヤー番号
+	*/
+	void DeleteIndividual(const int pNum);
 
 	bool Start() override final;
-	bool StartIndividual(const int pNum); //Start関数の処理をプレイヤーごとに個別でおこなう。
+	/**
+	 * @brief Start関数の処理をプレイヤーごとに個別でおこなう。
+	 * @param pNum プレイヤー番号
+	 * @return 処理が正常に終了したかどうか
+	*/
+	bool StartIndividual(const int pNum);
 
 	void Update() override final;
 
@@ -26,6 +35,10 @@ public:
 	 * @param pNum プレイヤー番号
 	*/
 	void Controller(const int pNum);
+
+	////////////////////////////////////////////////////////////
+	// プレイヤーのアニメーション
+	////////////////////////////////////////////////////////////
 
 	/**
 	 * @brief プレイヤーのアニメーションの処理
@@ -47,24 +60,22 @@ public:
 
 
 public: //Set関数
-	//Set関数の引数にある[int i]はプレイヤー番号である。
-
-	//////////////////////////////
-	// m_positionのSet関数
-	//////////////////////////////
-
-	//void SetPosition(const int i, const Vector3 v) {
-		//m_position[i] = v;
-	//}
-
+	/**
+	 * @brief プレイヤーのモデルをX座標を軸に回転させる。
+	 * @param pNum プレイヤー番号
+	 * @param f 回転量
+	*/
 	void SetRotationX(const int pNum, float f) {
 		m_modelRender[pNum]->SetRotationX(f);
 	}
 
-
-	
-	void SetActivePlayer(const int i, const bool b) {
-		m_activePlayer[i] = b;
+	/**
+	 * @brief プレイヤーが操作できるかどうかのSet関数
+	 * @param pNum プレイヤー番号
+	 * @param b 操作できるかどうか
+	*/
+	void SetActivePlayer(const int pNum, const bool b) {
+		m_activePlayer[pNum] = b;
 	}
 
 	/**
@@ -80,8 +91,8 @@ public: //Set関数
 
 	/**
 	 * @brief 順位の描画処理ための値の設定と描画状態にする。
-	 * @param pNum 
-	 * @param rank 
+	 * @param pNum プレイヤー番号
+	 * @param rank 順位
 	*/
 	void SetAndActivateGoalRankFont(const int pNum, const int rank)
 	{
@@ -89,6 +100,11 @@ public: //Set関数
 		m_goalRankFont[pNum]->Activate();
 	}
 
+	/**
+	 * @brief ゴールしたかどうかのSet関数
+	 * @param pNum プレイヤー番号
+	 * @param b ゴールしたかどうか
+	*/
 	void SetFlagGoal(const int pNum, const bool b)
 	{
 		m_flagGoal[pNum] = b;
@@ -96,23 +112,20 @@ public: //Set関数
 
 
 public: //Get関数
-	//Get関数の引数にある[int i]はプレイヤー番号である。
-
-	//////////////////////////////
-	// m_positionのGet関数
-	//////////////////////////////
-
-	//Vector3 GetPosition(const int i) {
-		//return m_position[i];
-	//}
-
-
-
-	float GetActivePlayer(const int pNum) {
+	/**
+	 * @brief m_activePlayer[pNum]のGet関数
+	 * @param pNum プレイヤー番号
+	 * @return プレイヤー番号[pNum]が、操作できるかどうか
+	*/
+	bool GetActivePlayer(const int pNum) {
 		return m_activePlayer[pNum];
 	}
 
-
+	/**
+	 * @brief m_flagAnimationJump[pNum]のGet関数
+	 * @param pNum プレイヤー番号
+	 * @return プレイヤー番号[pNum]が、ジャンプアニメーションを再生しているかどうか
+	*/
 	bool GetmFlagAnimationJump(const int pNum) {
 		return m_flagAnimationJump[pNum];
 	}

@@ -153,6 +153,7 @@ void Stage::Update()
             m_playerBlockPosition[i] = 0;
         }
     }
+    //to this point( Debug )
 
 
     //ƒvƒŒƒCƒ„[‚²‚Æ‚Ìˆ—

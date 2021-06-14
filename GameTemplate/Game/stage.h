@@ -13,18 +13,30 @@ public:
 
 
 public:
+    ////////////////////////////////////////////////////////////
+    // 初期設定
+    ////////////////////////////////////////////////////////////
+
     /**
      * @brief ステージの作成処理
     */
     void StageCreate();
 
+    ////////////////////////////////////////////////////////////
+    // ブロックの移動
+    ////////////////////////////////////////////////////////////
+
     /**
      * @brief プレイヤーの移動に応じてブロックを動かす。
      * @param pNum プレイヤーの番号
      * @param moveNum ブロックの動く量
-     * @return ブロックが動いたかどうか
+     * @return ブロックを動かしたかどうか
     */
     bool MoveBlock(const int pNum, const int moveNum);
+
+    ////////////////////////////////////////////////////////////
+    // タイマー
+    ////////////////////////////////////////////////////////////
 
     /**
      * @brief 操作不能状態のタイマーのカウント
@@ -32,12 +44,19 @@ public:
     */
     void ReturnOperationTimer(const int pNum);
 
+    ////////////////////////////////////////////////////////////
+    // ブロックごとの処理
+    ////////////////////////////////////////////////////////////
 
     /**
      * @brief プレイヤーが乗っているブロックを判別
      * @param pNum プレイヤー番号
     */
     void CheckBlock(const int pNum);
+
+    //////////////////////////////
+    // 青色のブロック
+    //////////////////////////////
 
     /**
      * @brief 青色のブロックの上に行ったときの処理    
@@ -57,6 +76,10 @@ public:
     */
     void ReturnBlock(const int pNum);
 
+    ////////////////////////////////////////////////////////////
+    // ゴール時の処理
+    ////////////////////////////////////////////////////////////
+
     /**
      * @brief ゴール時の処理
     */
@@ -65,6 +88,11 @@ public:
 
 
 public: //Get関数
+    /**
+     * @brief m_activeOperation[pNum]のGet関数
+     * @param pNum プレイヤー番号
+     * @return プレイヤー番号[pNum]が、操作可能か
+    */
     const bool GetmActiveOperation(const int pNum)
     {
         return m_activeOperation[pNum];
@@ -90,7 +118,15 @@ private: //constant
 
 private: //data menber
 
+    ////////////////////////////////////////////////////////////
+    // クラスのオブジェクト
+    ////////////////////////////////////////////////////////////
+
     Player* m_player = nullptr;
+
+    ////////////////////////////////////////////////////////////
+    // ブロックのデータ
+    ////////////////////////////////////////////////////////////
 
     int m_stageData[Player::PlayerNumberMax][m_MAX_BLOCK] = { greenBlock }; //ステージのデータを保存する配列
     //[プレイヤー番号][ステージのマスの数]
@@ -100,6 +136,11 @@ private: //data menber
     int m_playerBlockPosition[Player::PlayerNumberMax] = { m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
     //プレイヤーの前にいたブロックの番号
     int m_playerBeforeBlockPosition[Player::PlayerNumberMax] = { m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
+
+    ////////////////////////////////////////////////////////////
+    // プレイヤーの操作状況
+    ////////////////////////////////////////////////////////////
+
     //プレイヤーが操作可能か
     bool m_activeOperation[Player::PlayerNumberMax] = { true, true, true, true };
     //プレイヤーの操作復帰のタイマー
