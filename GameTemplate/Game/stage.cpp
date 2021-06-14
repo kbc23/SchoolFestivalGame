@@ -48,8 +48,10 @@ namespace //constant
     // タイマー関連
     //////////////////////////////
 
-    const int TIMER_RESET = 0; //タイマーのリセット
-    const int TIME_RETURN_OPERATION = 90;   //操作復帰にかかる時間（1.5秒）
+    const int TIMER_RESET = 0;                  //タイマーのリセット
+    const int TIME_RETURN_OPERATION = 90;       //操作復帰にかかる時間（1.5秒）
+
+    const int TIME_BLUE_BLOCK_ANIMATION = 30;   //青色のブロックに行ったときのアニメーションの時間
 }
 
 
@@ -88,13 +90,10 @@ bool Stage::Start()
             else if (m_stageData[s] == blueBlock) {
                 m_modelRender[i][s]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             }
-            else if (m_stageData[s] == yellowBlock)
-            {
+            else if (m_stageData[s] == yellowBlock) {
                 m_modelRender[i][s]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
             }
 
-           
-            //m_modelRender[i][s]->SetScale(BLOCK_SCALE);
             m_modelRender[i][s]->SetPosition({
                 BLOCK_START_POSITION[i].x,
                 BLOCK_START_POSITION[i].y,
@@ -151,14 +150,14 @@ void Stage::Update()
 
 
 
-
+    //ゴール時の処理
     GoalBlock();
 }
 
-void Stage::MoveBlock(const int pNum, const int moveNum)
+bool Stage::MoveBlock(const int pNum, const int moveNum)
 {
-    if (m_activeOperation[pNum] == false) {
-        return;
+    if (m_activeOperation[pNum] == false || m_activeOperationVersionBlue[pNum] == false) {
+        return false;
     }
 
     //操作不能状態に対する耐性を削除
@@ -182,22 +181,8 @@ void Stage::MoveBlock(const int pNum, const int moveNum)
             //m_modelRender[pNum][i]->GetPosition().z - BLOCK_SIZE * moveNum
         });
     }
-}
 
-void Stage::ReturnBlock(const int pNum)
-{
-    //プレイヤーの現在位置を前の位置に戻す。
-    m_playerBlockPosition[pNum] = m_playerBeforeBlockPosition[pNum];
-
-    //モデルの位置を更新
-    for (int i = 0; i < m_MAX_BLOCK; i++) {
-        m_modelRender[pNum][i]->SetPosition({
-            BLOCK_POSITION_X[pNum],
-            BLOCK_POSITION_Y,
-            BLOCK_POSITION_Z + BLOCK_SIZE * i - BLOCK_SIZE * (m_playerBlockPosition[pNum])
-            //m_modelRender[pNum][i]->GetPosition().z - BLOCK_SIZE * moveNum
-        });
-    }
+    return true;
 }
 
 void Stage::ReturnOperationTimer(const int pNum)
@@ -208,6 +193,7 @@ void Stage::ReturnOperationTimer(const int pNum)
 
     ++m_timerReturnOperation[pNum];
 
+    //操作可能にする。
     if (m_timerReturnOperation[pNum] >= TIME_RETURN_OPERATION) {
         m_activeOperation[pNum] = true;
         m_timerReturnOperation[pNum] = TIMER_RESET;
@@ -218,11 +204,18 @@ void Stage::ReturnOperationTimer(const int pNum)
 
 void Stage::CheckBlock(const int pNum)
 {
+    //自キャラがいるブロックによって処理をおこなう。
+
+    //ジャンプアニメーション中は処理をおこなわない。
+    if (m_player->GetmFlagAnimationJump(pNum) == true) {
+        return;
+    }
+
     if (m_stageData[m_playerBlockPosition[pNum]] == greenBlock) {
 
     }
     else if (m_stageData[m_playerBlockPosition[pNum]] == blueBlock) {
-        ReturnBlock(pNum);
+        BlueBlock(pNum);
     }
     else if (m_stageData[m_playerBlockPosition[pNum]] == yellowBlock) {
         if (m_resistanceImpossibleOperation[pNum] == false) {
@@ -231,10 +224,55 @@ void Stage::CheckBlock(const int pNum)
     }
 }
 
+void Stage::BlueBlock(const int pNum)
+{
+    if (m_flagAnimationBlueBlock[pNum] == false) {
+        m_flagAnimationBlueBlock[pNum] = true;
+        m_activeOperationVersionBlue[pNum] = false;
+    }
+
+    BlueBlockAnimation(pNum);
+
+    ReturnBlock(pNum);
+}
+
+void Stage::BlueBlockAnimation(const int pNum)
+{
+    ++m_timerAnimationBlueBlock[pNum];
+
+    //前の位置に戻すためにフラグをfalseにする。
+    if (m_timerAnimationBlueBlock[pNum] >= TIME_BLUE_BLOCK_ANIMATION) {
+        m_flagAnimationBlueBlock[pNum] = false;
+        m_timerAnimationBlueBlock[pNum] = TIMER_RESET;
+        //プレイヤーを操作できるようにする。
+        m_activeOperationVersionBlue[pNum] = true;
+    }
+}
+
+void Stage::ReturnBlock(const int pNum)
+{
+    if (m_flagAnimationBlueBlock[pNum] == true) {
+        return;
+    }
+
+    //プレイヤーの現在位置を前の位置に戻す。
+    m_playerBlockPosition[pNum] = m_playerBeforeBlockPosition[pNum];
+
+    //モデルの位置を更新
+    for (int i = 0; i < m_MAX_BLOCK; i++) {
+        m_modelRender[pNum][i]->SetPosition({
+            BLOCK_POSITION_X[pNum],
+            BLOCK_POSITION_Y,
+            BLOCK_POSITION_Z + BLOCK_SIZE * i - BLOCK_SIZE * (m_playerBlockPosition[pNum])
+            //m_modelRender[pNum][i]->GetPosition().z - BLOCK_SIZE * moveNum
+            });
+    }
+}
+
 void Stage::GoalBlock()
 {
-    bool addNowRank = false;
-    int nextRank = 0;
+    bool addNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
+    int nextRank = 0; //次のプレイヤーの順位
 
     for (int i = 0; i < Player::PlayerNumberMax; i++) {
         //プレイヤーの順位を確定

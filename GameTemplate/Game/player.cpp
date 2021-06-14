@@ -151,25 +151,40 @@ void Player::Controller(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	if (m_flagDoingAnimation[pNum] == true || m_stage->GetmActiveOperation(pNum) == false) {
+	if (m_flagAnimationJump[pNum] == true ||
+		//m_flagCheckBlock[pNum] == true ||
+		m_stage->GetmActiveOperation(pNum) == false) {
 		return;
 	}
 
 	//２マス進む
 	if (g_pad[pNum]->IsTrigger(enButtonA) == true) {
-		m_stage->MoveBlock(pNum, MOVE_BUTTON_A);
-		m_flagDoingAnimation[pNum] = true;
+		if (m_stage->MoveBlock(pNum, MOVE_BUTTON_A) == false) {
+			return;
+		}
+		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_flagAnimationJump[pNum] = true;
 	}
 	//１マス進む
 	else if (g_pad[pNum]->IsTrigger(enButtonB) == true) {
-		m_stage->MoveBlock(pNum, MOVE_BUTTON_B);
-		m_flagDoingAnimation[pNum] = true;
+		if (m_stage->MoveBlock(pNum, MOVE_BUTTON_B) == false) {
+			return;
+		}
+		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_flagAnimationJump[pNum] = true;
 	}
 }
 
 void Player::Animation(const int pNum)
 {
-	if (m_flagDoingAnimation[pNum] == false) {
+	JumpAnimation(pNum);
+
+	//TimerCheckBlock(pNum);
+}
+
+void Player::JumpAnimation(const int pNum)
+{
+	if (m_flagAnimationJump[pNum] == false) {
 		return;
 	}
 
@@ -185,7 +200,23 @@ void Player::Animation(const int pNum)
 
 
 	if (m_timerAnimation[pNum] >= TIME_ANIMATION) {
-		m_flagDoingAnimation[pNum] = false;
+		m_flagAnimationJump[pNum] = false;
 		m_timerAnimation[pNum] = TIMER_RESET;
+		//ブロックチェックの時間を設ける。
+		//m_flagCheckBlock[pNum] = true;
 	}
 }
+
+//void Player::TimerCheckBlock(const int pNum)
+//{
+//	if (m_flagCheckBlock[pNum] == false) {
+//		return;
+//	}
+//
+//	++m_timerCheckBlock[pNum];
+//
+//	if (m_timerCheckBlock[pNum] >= 29) {
+//		m_flagCheckBlock[pNum] = false;
+//		m_timerCheckBlock[pNum] = TIMER_RESET;
+//	}
+//}

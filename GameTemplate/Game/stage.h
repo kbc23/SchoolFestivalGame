@@ -22,22 +22,40 @@ public:
      * @brief プレイヤーの移動に応じてブロックを動かす。
      * @param pNum プレイヤーの番号
      * @param moveNum ブロックの動く量
+     * @return ブロックが動いたかどうか
     */
-    void MoveBlock(const int pNum, const int moveNum);
+    bool MoveBlock(const int pNum, const int moveNum);
 
-    
-    void ReturnBlock(const int pNum);
-
+    /**
+     * @brief 操作不能状態のタイマーのカウント
+     * @param pNum プレイヤーの番号
+    */
     void ReturnOperationTimer(const int pNum);
 
 
     /**
      * @brief プレイヤーが乗っているブロックを判別
-     * @param pNum 
+     * @param pNum プレイヤー番号
     */
     void CheckBlock(const int pNum);
 
+    /**
+     * @brief 青色のブロックの上に行ったときの処理    
+     * @param pNum プレイヤー番号
+    */
+    void BlueBlock(const int pNum);
 
+    /**
+     * @brief 青色のブロックの上に行ったときのアニメーション
+     * @param pNum プレイヤー番号
+    */
+    void BlueBlockAnimation(const int pNum);
+
+    /**
+     * @brief 前にいた位置のブロックに戻る処理
+     * @param pNum プレイヤーの番号
+    */
+    void ReturnBlock(const int pNum);
 
     /**
      * @brief ゴール時の処理
@@ -88,6 +106,13 @@ private: //data menber
     int m_timerReturnOperation[Player::PlayerNumberMax] = { 0, 0, 0, 0 };
     //プレイヤーの操作不能状態に対する耐性があるか
     bool m_resistanceImpossibleOperation[Player::PlayerNumberMax] = { false, false, false, false };
+
+    //青いブロックに行ったときのアニメーションをおこなっているか
+    bool m_flagAnimationBlueBlock[Player::PlayerNumberMax] = { false, false, false, false };
+    //青いブロックに行ったときのアニメーションのタイマー
+    int m_timerAnimationBlueBlock[Player::PlayerNumberMax] = { 0, 0, 0, 0 };
+
+    bool m_activeOperationVersionBlue[Player::PlayerNumberMax] = { true, true, true, true };
 
     int m_nowRank = m_INIT_RANK; //プレイヤーの順位データに渡すデータ
 };
