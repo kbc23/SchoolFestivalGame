@@ -49,7 +49,7 @@ namespace //constant
     //////////////////////////////
 
     const int TIMER_RESET = 0;                  //タイマーのリセット
-    const int TIME_RETURN_OPERATION = 90;       //操作復帰にかかる時間（1.5秒）
+    const int TIME_RETURN_OPERATION = 30;       //操作復帰にかかる時間（1.5秒）
 
     const int TIME_BLUE_BLOCK_ANIMATION = 30;   //青色のブロックに行ったときのアニメーションの時間
 }
@@ -84,13 +84,13 @@ bool Stage::Start()
             m_modelRender[i][s] = NewGO<ModelRender>(0);
 
             //ステージの情報にてモデルを変更
-            if (m_stageData[s] == greenBlock) {
+            if (m_stageData[i][s] == greenBlock) {
                 m_modelRender[i][s]->Init(FILE_PATH_TKM_GREEN_BLOCK);
             }
-            else if (m_stageData[s] == blueBlock) {
+            else if (m_stageData[i][s] == blueBlock) {
                 m_modelRender[i][s]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             }
-            else if (m_stageData[s] == yellowBlock) {
+            else if (m_stageData[i][s] == yellowBlock) {
                 m_modelRender[i][s]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
             }
 
@@ -110,14 +110,28 @@ bool Stage::Start()
 void Stage::StageCreate()
 {
     for (int i = 0; i < m_MAX_BLOCK; i++) {
-        m_stageData[i] = greenBlock;
+        m_stageData[Player::player_1][i] = greenBlock;
     }
 
-    m_stageData[5] = blueBlock;
-    m_stageData[13] = yellowBlock;
-    m_stageData[19] = yellowBlock;
-    m_stageData[23] = blueBlock;
-    m_stageData[27] = blueBlock;
+    m_stageData[Player::player_1][6] = blueBlock;
+    m_stageData[Player::player_1][8] = blueBlock;
+    m_stageData[Player::player_1][12] = yellowBlock;
+    m_stageData[Player::player_1][15] = blueBlock;
+    m_stageData[Player::player_1][18] = blueBlock;
+    m_stageData[Player::player_1][25] = blueBlock;
+    m_stageData[Player::player_1][28] = yellowBlock;
+    m_stageData[Player::player_1][30] = blueBlock;
+    m_stageData[Player::player_1][32] = blueBlock;
+    m_stageData[Player::player_1][37] = yellowBlock;
+    m_stageData[Player::player_1][40] = blueBlock;
+    m_stageData[Player::player_1][43] = blueBlock;
+    m_stageData[Player::player_1][46] = blueBlock;
+
+    for (int i = 1; i < Player::PlayerNumberMax; i++) {
+        for (int s = 0; s < m_MAX_BLOCK; s++) {
+            m_stageData[i][s] = m_stageData[Player::player_1][s];
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -218,15 +232,17 @@ void Stage::CheckBlock(const int pNum)
         return;
     }
 
-    if (m_stageData[m_playerBlockPosition[pNum]] == greenBlock) {
+    if (m_stageData[pNum][m_playerBlockPosition[pNum]] == greenBlock) {
 
     }
-    else if (m_stageData[m_playerBlockPosition[pNum]] == blueBlock) {
+    else if (m_stageData[pNum][m_playerBlockPosition[pNum]] == blueBlock) {
         BlueBlock(pNum);
     }
-    else if (m_stageData[m_playerBlockPosition[pNum]] == yellowBlock) {
+    else if (m_stageData[pNum][m_playerBlockPosition[pNum]] == yellowBlock) {
         if (m_resistanceImpossibleOperation[pNum] == false) {
             m_activeOperation[pNum] = false;
+            //黄色ブロックを緑ブロックに変更
+            m_stageData[pNum][m_playerBlockPosition[pNum]] = greenBlock;
         }
     }
 }

@@ -84,7 +84,7 @@ public: //enum
 
 
 private: //constant
-    static const int m_MAX_BLOCK = 30;      //１レーンのブロックの最大数
+    static const int m_MAX_BLOCK = 50;      //１レーンのブロックの最大数
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 
@@ -92,7 +92,7 @@ private: //data menber
 
     Player* m_player = nullptr;
 
-    int m_stageData[m_MAX_BLOCK] = { greenBlock }; //ステージのデータを保存する配列
+    int m_stageData[Player::PlayerNumberMax][m_MAX_BLOCK] = { greenBlock }; //ステージのデータを保存する配列
     //[プレイヤー番号][ステージのマスの数]
     ModelRender* m_modelRender[Player::PlayerNumberMax][m_MAX_BLOCK] = { nullptr };
  
