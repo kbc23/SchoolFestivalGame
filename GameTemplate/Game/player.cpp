@@ -22,7 +22,7 @@ namespace //constant
 		{ -390.0f, 0.0f, -250.0f }											//プレイヤー４
 	};
 	
-	const Vector2 GOAL_RANK_FONT_POSITION[Player::PlayerNumberMax] = {	//ゴール順位の座標
+	const Vector2 GOAL_RANK_FONT_POSITION[Player::PlayerNumberMax] = {	//ゴール順位の表示座標
 		{ -390.0f, 0.0f },													//プレイヤー１
 		{ -130.0f, 0.0f },													//プレイヤー２
 		{ 130.0f, 0.0f },													//プレイヤー３
@@ -178,6 +178,8 @@ void Player::Controller(const int pNum)
 void Player::Animation(const int pNum)
 {
 	JumpAnimation(pNum);
+
+	ImpossibleOperationAnimation(pNum);
 }
 
 void Player::JumpAnimation(const int pNum)
@@ -201,4 +203,9 @@ void Player::JumpAnimation(const int pNum)
 		m_flagAnimationJump[pNum] = false;
 		m_timerAnimation[pNum] = TIMER_RESET;
 	}
+}
+
+void Player::ImpossibleOperationAnimation(const int pNum)
+{
+
 }

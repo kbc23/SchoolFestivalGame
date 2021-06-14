@@ -39,6 +39,12 @@ public:
 	*/
 	void JumpAnimation(const int pNum);
 
+	/**
+	 * @brief 操作不可時のアニメーション
+	 * @param pNum プレイヤー番号
+	*/
+	void ImpossibleOperationAnimation(const int pNum);
+
 
 public: //Set関数
 	//Set関数の引数にある[int i]はプレイヤー番号である。
@@ -50,6 +56,10 @@ public: //Set関数
 	//void SetPosition(const int i, const Vector3 v) {
 		//m_position[i] = v;
 	//}
+
+	void SetRotationX(const int pNum, float f) {
+		m_modelRender[pNum]->SetRotationX(f);
+	}
 
 
 	

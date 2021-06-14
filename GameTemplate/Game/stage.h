@@ -104,7 +104,7 @@ private: //data menber
     bool m_activeOperation[Player::PlayerNumberMax] = { true, true, true, true };
     //プレイヤーの操作復帰のタイマー
     int m_timerReturnOperation[Player::PlayerNumberMax] = { 0, 0, 0, 0 };
-    //プレイヤーの操作不能状態に対する耐性があるか
+    //プレイヤーの操作不可状態に対する耐性があるか
     bool m_resistanceImpossibleOperation[Player::PlayerNumberMax] = { false, false, false, false };
 
     //青いブロックに行ったときのアニメーションをおこなっているか

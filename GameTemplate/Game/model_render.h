@@ -105,6 +105,10 @@ public: //Setä÷êî
 		m_rotation = q;
 	}
 
+	void SetRotationX(const float f) {
+		m_rotation.SetRotationX(f);
+	}
+
 	void SetScale(const Vector3 v)
 	{
 		m_scale = v;

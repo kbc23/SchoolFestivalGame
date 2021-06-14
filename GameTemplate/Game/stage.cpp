@@ -178,7 +178,7 @@ bool Stage::MoveBlock(const int pNum, const int moveNum)
         return false;
     }
 
-    //操作不能状態に対する耐性を削除
+    //操作不可状態に対する耐性を削除
     m_resistanceImpossibleOperation[pNum] = false;
 
     //プレイヤーの現在の位置を保存
@@ -216,6 +216,9 @@ void Stage::ReturnOperationTimer(const int pNum)
         m_activeOperation[pNum] = true;
         m_timerReturnOperation[pNum] = TIMER_RESET;
         m_resistanceImpossibleOperation[pNum] = true;
+
+        //モデルの回転を元に戻す。
+        m_player->SetRotationX(pNum, 0.0f);
     }
 }
 
@@ -243,6 +246,8 @@ void Stage::CheckBlock(const int pNum)
             m_activeOperation[pNum] = false;
             //黄色ブロックを緑ブロックに変更
             m_stageData[pNum][m_playerBlockPosition[pNum]] = greenBlock;
+            //モデルを回転させる。
+            m_player->SetRotationX(pNum, -90.0f);
         }
     }
 }
@@ -256,6 +261,8 @@ void Stage::BlueBlock(const int pNum)
     if (m_flagAnimationBlueBlock[pNum] == false) {
         m_flagAnimationBlueBlock[pNum] = true;
         m_activeOperationVersionBlue[pNum] = false;
+        //モデルを回転させる。
+        m_player->SetRotationX(pNum, -90.0f);
     }
 
     BlueBlockAnimation(pNum);
@@ -273,6 +280,8 @@ void Stage::BlueBlockAnimation(const int pNum)
         m_timerAnimationBlueBlock[pNum] = TIMER_RESET;
         //プレイヤーを操作できるようにする。
         m_activeOperationVersionBlue[pNum] = true;
+        //モデルを元に戻す。
+        m_player->SetRotationX(pNum, 0.0f);
     }
 }
 
