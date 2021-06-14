@@ -33,9 +33,12 @@ public:
 	*/
 	void Animation(const int pNum);
 
+	/**
+	 * @brief ジャンプ時のアニメーション
+	 * @param pNum プレイヤー番号
+	*/
 	void JumpAnimation(const int pNum);
 
-	void TimerCheckBlock(const int pNum);
 
 public: //Set関数
 	//Set関数の引数にある[int i]はプレイヤー番号である。
@@ -141,7 +144,4 @@ private: //data menber
 	bool m_flagAnimationJump[PlayerNumberMax] = { false, false, false, false }; //ジャンプアニメーション中か
 	//bool m_flagDoingAnimation[PlayerNumberMax] = { false, false, false, false }; //アニメーション中か
 	int m_timerAnimation[PlayerNumberMax] = { 0, 0, 0, 0 }; //アニメーションのタイマー
-
-	//bool m_flagCheckBlock[PlayerNumberMax] = { false, false, false, false };
-	//int m_timerCheckBlock[PlayerNumberMax] = { 0, 0, 0, 0 };
 };

@@ -154,6 +154,10 @@ void Stage::Update()
     GoalBlock();
 }
 
+//////////////////////////////
+// ブロックの移動処理
+//////////////////////////////
+
 bool Stage::MoveBlock(const int pNum, const int moveNum)
 {
     if (m_activeOperation[pNum] == false || m_activeOperationVersionBlue[pNum] == false) {
@@ -199,8 +203,11 @@ void Stage::ReturnOperationTimer(const int pNum)
         m_timerReturnOperation[pNum] = TIMER_RESET;
         m_resistanceImpossibleOperation[pNum] = true;
     }
-
 }
+
+//////////////////////////////
+// ブロックごとの処理
+//////////////////////////////
 
 void Stage::CheckBlock(const int pNum)
 {
@@ -223,6 +230,10 @@ void Stage::CheckBlock(const int pNum)
         }
     }
 }
+
+//////////
+// 青色のブロック
+//////////
 
 void Stage::BlueBlock(const int pNum)
 {
@@ -268,6 +279,10 @@ void Stage::ReturnBlock(const int pNum)
             });
     }
 }
+
+//////////////////////////////
+// ゴール時の処理
+//////////////////////////////
 
 void Stage::GoalBlock()
 {

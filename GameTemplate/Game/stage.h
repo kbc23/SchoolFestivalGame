@@ -84,9 +84,9 @@ public: //enum
 
 
 private: //constant
-    static const int m_MAX_BLOCK = 30;       //１レーンのブロックの最大数
-    static const int m_START_BLOCK = 0;       //スタート位置のブロックの番号
-    static const int m_INIT_RANK = 1;
+    static const int m_MAX_BLOCK = 30;      //１レーンのブロックの最大数
+    static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
+    static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 
 private: //data menber
 
@@ -96,9 +96,9 @@ private: //data menber
     //[プレイヤー番号][ステージのマスの数]
     ModelRender* m_modelRender[Player::PlayerNumberMax][m_MAX_BLOCK] = { nullptr };
  
-    //プレイヤーの位置
+    //プレイヤーが何個目のブロックにいるか
     int m_playerBlockPosition[Player::PlayerNumberMax] = { m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
-    //プレイヤーの前にいた位置
+    //プレイヤーの前にいたブロックの番号
     int m_playerBeforeBlockPosition[Player::PlayerNumberMax] = { m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
     //プレイヤーが操作可能か
     bool m_activeOperation[Player::PlayerNumberMax] = { true, true, true, true };
@@ -111,7 +111,7 @@ private: //data menber
     bool m_flagAnimationBlueBlock[Player::PlayerNumberMax] = { false, false, false, false };
     //青いブロックに行ったときのアニメーションのタイマー
     int m_timerAnimationBlueBlock[Player::PlayerNumberMax] = { 0, 0, 0, 0 };
-
+    //プレイヤーが操作可能か（青色のブロックVer）
     bool m_activeOperationVersionBlue[Player::PlayerNumberMax] = { true, true, true, true };
 
     int m_nowRank = m_INIT_RANK; //プレイヤーの順位データに渡すデータ
