@@ -246,6 +246,8 @@ void Stage::CheckBlock(const int pNum)
             m_activeOperation[pNum] = false;
             //黄色ブロックを緑ブロックに変更
             m_stageData[pNum][m_playerBlockPosition[pNum]] = greenBlock;
+            m_modelRender[pNum][m_playerBlockPosition[pNum]]->Init(FILE_PATH_TKM_GREEN_BLOCK);
+            //※この方法でモデルを変更するよりかは、別の方法で変更するようにすること。
             //モデルを回転させる。
             m_player->SetRotationX(pNum, -90.0f);
         }

@@ -12,7 +12,9 @@ Game::Game()
 
 Game::~Game()
 {
-
+    DeleteGO(m_stage);
+    DeleteGO(m_player);
+    DeleteGO(m_gameCamera);
 }
 
 bool Game::Start()

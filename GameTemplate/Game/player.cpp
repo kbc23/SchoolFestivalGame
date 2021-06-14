@@ -72,6 +72,7 @@ void Player::DeleteIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	DeleteGO(m_modelRender[pNum]);
+	DeleteGO(m_goalRankFont[pNum]);
 
 	//DeleteGO(m_skinModelRender[pNum]);
 }
