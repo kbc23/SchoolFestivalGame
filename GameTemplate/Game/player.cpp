@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "stage.h"
-
 #include "player.h"
+
+#include "stage.h"
 
 namespace //constant
 {
@@ -94,6 +94,7 @@ bool Player::Start()
 	}
 
 	m_stage = FindGO<Stage>("stage");
+	m_game = FindGO<Game>("game");
 
 	return true;
 }
@@ -138,6 +139,10 @@ void Player::Update()
 void Player::Controller(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
+
+	if (m_game->GetStopOperation() == true) {
+		return;
+	}
 
 	if (m_flagAnimationJump[pNum] == true ||
 		//m_flagCheckBlock[pNum] == true ||

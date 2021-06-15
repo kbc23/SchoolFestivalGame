@@ -31,7 +31,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
 
-	Game* game = NewGO<Game>(0);
+	Game* game = NewGO<Game>(0, "game");
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

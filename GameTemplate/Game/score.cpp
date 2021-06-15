@@ -22,6 +22,7 @@ namespace //constant
     // タイマー関連
     ////////////////////////////////////////////////////////////
 
+    const wchar_t* INIT_FONT_SCORE_TIME = L"0:00:00";
     const int ONE_MINUTES_FLAME = 3600;             //フレームカウントでの１分
     const int ONE_DIGIT_CHECK = 10;                 //１桁かの確認に使用する定数
     const int SIXTY_FLAME = 60;                     //60フレーム
@@ -44,16 +45,21 @@ bool Score::Start()
 {
     for (int i = 0; i < Player::PlayerNumberMax; i++) {
         m_fontScoreTime[i] = NewGO<FontRender>(0);
-        m_fontScoreTime[i]->Init(L"", SCORE_TIME_FONT_POSITION[i]);
+        m_fontScoreTime[i]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[i]);
     }
 
     m_player = FindGO<Player>("player");
+    m_game = FindGO<Game>("game");
 
     return true;
 }
 
 void Score::Update()
 {
+    if (m_game->GetStopOperation() == true) {
+        return;
+    }
+
     for (int i = 0; i < Player::PlayerNumberMax; i++) {
         if (m_flagProcessing[i] == true) {
             AddTime(i);

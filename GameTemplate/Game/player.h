@@ -1,6 +1,7 @@
 #pragma once
 #include "model_render.h"
 #include "font_render.h"
+#include "game.h"
 
 class Stage;
 
@@ -152,6 +153,7 @@ public: //enum
 
 private: //data menber
 	Stage* m_stage = nullptr;
+	Game* m_game = nullptr;
 
 	//プレイヤーが最大４人だから、メンバ変数は要素数４の配列で管理する。
 	//ModelRender* m_modelRender = nullptr;

@@ -2,6 +2,7 @@
 #include "font_render.h"
 
 #include "player.h"
+#include "game.h"
 
 class Score : public IGameObject
 {
@@ -33,6 +34,7 @@ public:
 
 private: //data menber
     Player* m_player = nullptr;
+    Game* m_game = nullptr;
     FontRender* m_fontScoreTime[Player::PlayerNumberMax] = { nullptr };
 
     int m_scoreTime[Player::PlayerNumberMax] = { 0,0,0,0 };
