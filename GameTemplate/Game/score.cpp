@@ -3,13 +3,29 @@
 
 #include <string>
 
-namespace {
+#include "constant.h"
+
+namespace //constant
+{
+    ////////////////////////////////////////////////////////////
+    // 位置情報
+    ////////////////////////////////////////////////////////////
+
     const Vector2 SCORE_TIME_FONT_POSITION[Player::PlayerNumberMax] = {	//スコアタイムの表示位置
         { -390.0f, -290.0f },										        //プレイヤー１
-        { -130.0f, -290.0f },												    //プレイヤー２
-        { 130.0f, -290.0f },												    //プレイヤー３
+        { -130.0f, -290.0f },												//プレイヤー２
+        { 130.0f, -290.0f },												//プレイヤー３
         { 390.0f, -290.0f }													//プレイヤー４
     };
+
+    ////////////////////////////////////////////////////////////
+    // タイマー関連
+    ////////////////////////////////////////////////////////////
+
+    const int ONE_MINUTES_FLAME = 3600;             //フレームカウントでの１分
+    const int ONE_DIGIT_CHECK = 10;                 //１桁かの確認に使用する定数
+    const int SIXTY_FLAME = 60;                     //60フレーム
+    const int ADJUSTMENT_CONMA_SECONDS = 100;       //コンマ秒の表示の調整に使用
 }
 
 
@@ -66,25 +82,25 @@ void Score::DrawTime(const int pNum)
     std::wstring str;
 
     //分の計算
-    if (m_scoreTime[pNum] == 3600) {
-        m_scoreTime[pNum] = 0;
-        m_scoreTimeSeconds[pNum] = 0;
+    if (m_scoreTime[pNum] == ONE_MINUTES_FLAME) {
+        m_scoreTime[pNum] = con::ZERO;
+        m_scoreTimeSeconds[pNum] = con::ZERO;
         ++m_scoreTimeMinutes[pNum];
     }
 
     //秒の計算
-    m_scoreTimeSeconds[pNum] = m_scoreTime[pNum] / 60;
+    m_scoreTimeSeconds[pNum] = m_scoreTime[pNum] / SIXTY_FLAME;
 
     //コンマ秒の計算
-    double conmaSeconds = m_scoreTime[pNum] % 60;
+    double conmaSeconds = m_scoreTime[pNum] % SIXTY_FLAME;
 
-    conmaSeconds = conmaSeconds / 60 * 100;
+    conmaSeconds = conmaSeconds / SIXTY_FLAME * ADJUSTMENT_CONMA_SECONDS;
 
-    m_scoreTimeCommaSeconds[pNum] = conmaSeconds;
+    m_scoreTimeCommaSeconds[pNum] = int(conmaSeconds);
 
     //表示するタイムの文字列を作成
-    if (m_scoreTimeSeconds[pNum] < 10) {
-        if (m_scoreTimeCommaSeconds[pNum] < 10) {
+    if (m_scoreTimeSeconds[pNum] < ONE_DIGIT_CHECK) {
+        if (m_scoreTimeCommaSeconds[pNum] < ONE_DIGIT_CHECK) {
             str = std::to_wstring(m_scoreTimeMinutes[pNum]) + L":0" +
                 std::to_wstring(m_scoreTimeSeconds[pNum]) + L":0" +
                 std::to_wstring(m_scoreTimeCommaSeconds[pNum]);
@@ -96,7 +112,7 @@ void Score::DrawTime(const int pNum)
         }
     }
     else {
-        if (m_scoreTimeCommaSeconds[pNum] < 10) {
+        if (m_scoreTimeCommaSeconds[pNum] < ONE_DIGIT_CHECK) {
             str = std::to_wstring(m_scoreTimeMinutes[pNum]) + L":" +
                 std::to_wstring(m_scoreTimeSeconds[pNum]) + L":0" +
                 std::to_wstring(m_scoreTimeCommaSeconds[pNum]);

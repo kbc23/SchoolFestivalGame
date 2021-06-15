@@ -368,6 +368,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="constant.h" />
     <ClInclude Include="font_render.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_camera.h" />

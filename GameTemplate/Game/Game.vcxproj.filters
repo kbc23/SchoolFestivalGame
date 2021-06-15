@@ -66,6 +66,9 @@
     <Filter Include="MyCode\エンジン\フォント">
       <UniqueIdentifier>{0dfa856f-5a5e-4a54-8834-cb67e5fc05ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\エンジン\その他">
+      <UniqueIdentifier>{a934335a-9111-44b5-bede-75b2a13aa22b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -465,6 +468,9 @@
     </ClInclude>
     <ClInclude Include="score.h">
       <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="constant.h">
+      <Filter>MyCode\エンジン\その他</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
