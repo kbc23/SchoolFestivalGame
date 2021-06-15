@@ -82,6 +82,24 @@ private:
 	void InitHemiLight(); //îºãÖÉâÉCÉg
 
 
+public: //Getä÷êî
+
+	const Vector3 GetPosition()
+	{
+		return m_position;
+	}
+
+	const Quaternion GetRotation()
+	{
+		return m_rotation;
+	}
+
+	const Vector3 GetScale()
+	{
+		return m_scale;
+	}
+
+
 
 public: //Setä÷êî
 
@@ -112,24 +130,6 @@ public: //Setä÷êî
 	void SetScale(const Vector3 v)
 	{
 		m_scale = v;
-	}
-
-
-public: //Getä÷êî
-
-	const Vector3 GetPosition()
-	{
-		return m_position;
-	}
-
-	const Quaternion GetRotation()
-	{
-		return m_rotation;
-	}
-
-	const Vector3 GetScale()
-	{
-		return m_scale;
 	}
 
 

@@ -60,7 +60,7 @@ Player::Player()
 Player::~Player()
 {
 	//プレイヤーごとに処理
-	for (int i = 0; i < m_maxPlayer; i++) {
+	for (int i = 0; i < PlayerNumberMax; i++) {
 		DeleteIndividual(i);
 	}
 }
@@ -72,7 +72,7 @@ void Player::DeleteIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	DeleteGO(m_modelRender[pNum]);
-	DeleteGO(m_goalRankFont[pNum]);
+	DeleteGO(m_fontGoalRank[pNum]);
 
 	//DeleteGO(m_skinModelRender[pNum]);
 }
@@ -84,7 +84,7 @@ void Player::DeleteIndividual(const int pNum)
 bool Player::Start()
 {
 	//プレイヤーごとに処理
-	for (int i = 0; i < m_maxPlayer; i++) {
+	for (int i = 0; i < PlayerNumberMax; i++) {
 		bool check = StartIndividual(i);
 
 		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。
@@ -92,6 +92,10 @@ bool Player::Start()
 			return false;
 		}
 	}
+
+	m_fontEnd = NewGO<FontRender>(0);
+	m_fontEnd->Init(L"終了！");
+	m_fontEnd->Deactivate();
 
 	m_stage = FindGO<Stage>("stage");
 	m_game = FindGO<Game>("game");
@@ -107,9 +111,9 @@ bool Player::StartIndividual(const int pNum)
 	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 
-	m_goalRankFont[pNum] = NewGO<FontRender>(0);
-	m_goalRankFont[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
-	m_goalRankFont[pNum]->Deactivate();
+	m_fontGoalRank[pNum] = NewGO<FontRender>(0);
+	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
+	m_fontGoalRank[pNum]->Deactivate();
 
 	return true;
 }
@@ -129,6 +133,10 @@ void Player::Update()
 		else {
 			Animation(i);
 		}
+	}
+
+	if (m_maxPlayer == m_goalPlayer) {
+		m_fontEnd->Activate();
 	}
 }
 

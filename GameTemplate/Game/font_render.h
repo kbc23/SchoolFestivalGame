@@ -51,7 +51,16 @@ public: //Set関数
     }
 
     /**
-     * @brief 表示文字のピボットを設定
+     * @brief 表示するテキストの位置を設定
+     * @param vec 表示する位置
+    */
+    void SetPosition(const Vector2 vec)
+    {
+        m_position = vec;
+    }
+
+    /**
+     * @brief 表示するテキストのピボットを設定
      * @param vec ピボット
     */
     void SetPivot(const Vector2 vec)

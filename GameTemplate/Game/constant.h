@@ -7,4 +7,5 @@ namespace con //constant
     ////////////////////////////////////////////////////////////
 
     const int ZERO = 0;
+    const float FLOAT_ZERO = 0.0f;
 }

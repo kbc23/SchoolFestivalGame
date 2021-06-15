@@ -257,6 +257,9 @@
     <ClCompile Include="score.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
+    <ClCompile Include="player_select.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -471,6 +474,9 @@
     </ClInclude>
     <ClInclude Include="constant.h">
       <Filter>MyCode\エンジン\その他</Filter>
+    </ClInclude>
+    <ClInclude Include="player_select.h">
+      <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

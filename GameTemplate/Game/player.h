@@ -60,6 +60,32 @@ public:
 	void ImpossibleOperationAnimation(const int pNum);
 
 
+public: //Get関数
+/**
+ * @brief m_activePlayer[pNum]のGet関数
+ * @param pNum プレイヤー番号
+ * @return プレイヤー番号[pNum]が、操作できるかどうか
+*/
+	bool GetActivePlayer(const int pNum) {
+		return m_activePlayer[pNum];
+	}
+
+	/**
+	 * @brief m_flagAnimationJump[pNum]のGet関数
+	 * @param pNum プレイヤー番号
+	 * @return プレイヤー番号[pNum]が、ジャンプアニメーションを再生しているかどうか
+	*/
+	bool GetmFlagAnimationJump(const int pNum) {
+		return m_flagAnimationJump[pNum];
+	}
+
+
+	bool GetFlagGoal(const int pNum) {
+		return m_flagGoal[pNum];
+	}
+
+
+
 public: //Set関数
 	/**
 	 * @brief プレイヤーのモデルをX座標を軸に回転させる。
@@ -97,8 +123,9 @@ public: //Set関数
 	*/
 	void SetAndActivateGoalRankFont(const int pNum, const int rank)
 	{
-		m_goalRankFont[pNum]->SetText(rank);
-		m_goalRankFont[pNum]->Activate();
+		m_fontGoalRank[pNum]->SetText(rank);
+		m_fontGoalRank[pNum]->Activate();
+		++m_goalPlayer;
 	}
 
 	/**
@@ -111,30 +138,11 @@ public: //Set関数
 		m_flagGoal[pNum] = b;
 	}
 
-
-public: //Get関数
-	/**
-	 * @brief m_activePlayer[pNum]のGet関数
-	 * @param pNum プレイヤー番号
-	 * @return プレイヤー番号[pNum]が、操作できるかどうか
-	*/
-	bool GetActivePlayer(const int pNum) {
-		return m_activePlayer[pNum];
+	void SetMaxPlayer(const int i)
+	{
+		m_maxPlayer = i;
 	}
 
-	/**
-	 * @brief m_flagAnimationJump[pNum]のGet関数
-	 * @param pNum プレイヤー番号
-	 * @return プレイヤー番号[pNum]が、ジャンプアニメーションを再生しているかどうか
-	*/
-	bool GetmFlagAnimationJump(const int pNum) {
-		return m_flagAnimationJump[pNum];
-	}
-
-
-	bool GetFlagGoal(const int pNum) {
-		return m_flagGoal[pNum];
-	}
 
 
 
@@ -158,18 +166,20 @@ private: //data menber
 	//プレイヤーが最大４人だから、メンバ変数は要素数４の配列で管理する。
 	//ModelRender* m_modelRender = nullptr;
 	ModelRender* m_modelRender[PlayerNumberMax] = { nullptr }; //モデルレンダー
-	FontRender* m_goalRankFont[PlayerNumberMax] = { nullptr }; //フォントレンダー
+	FontRender* m_fontGoalRank[PlayerNumberMax] = { nullptr }; //フォントレンダー
+	FontRender* m_fontEnd = nullptr;
 
 	//Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
 	//Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報
 
-	bool m_activePlayer[PlayerNumberMax] = { true, true, true, true }; //プレイヤーが操作できるかどうか
+	int m_activePlayer[PlayerNumberMax] = { true, true, true, true };; //このプレイヤーは操作しているか
 
 	int m_maxPlayer = PlayerNumberMax; //プレイヤーの最大数
 	//※プレイヤー数選択画面を作成したら、そこからこの変数にプレイヤーの最大数を代入する。
 
 	int m_goalRanking[PlayerNumberMax] = { 0, 0, 0, 0 }; //プレイヤーのゴール順位
 	bool m_flagGoal[PlayerNumberMax] = { false, false, false, false }; //ゴールしたか
+	int m_goalPlayer = 0; //ゴールしたプレイヤーの人数
 
 	bool m_flagAnimationJump[PlayerNumberMax] = { false, false, false, false }; //ジャンプアニメーション中か
 	//bool m_flagDoingAnimation[PlayerNumberMax] = { false, false, false, false }; //アニメーション中か

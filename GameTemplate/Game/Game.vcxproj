@@ -294,6 +294,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_render.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="player_select.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="stage_select.cpp" />
@@ -374,6 +375,7 @@
     <ClInclude Include="game_camera.h" />
     <ClInclude Include="model_render.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="player_select.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="stage_select.h" />

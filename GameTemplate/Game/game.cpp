@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "game.h"
 
+#include "player_select.h"
 #include "player.h"
 #include "game_camera.h"
 #include "stage.h"
@@ -21,18 +22,55 @@ Game::~Game()
 
 bool Game::Start()
 {
-    m_stage = NewGO<Stage>(0, "stage");
-    m_player = NewGO<Player>(0, "player");
-    m_gameCamera = NewGO<GameCamera>(0);
-    m_score = NewGO<Score>(0);
-    m_fontStartCountdown = NewGO<FontRender>(0);
-    m_fontStartCountdown->Init(L"");
+    m_playerSelect = NewGO<PlayerSelect>(0);
+
 
 
     return true;
 }
 
 void Game::Update()
+{
+    //プレイヤーセレクトシーンの処理
+    if (m_flagPlayerSelectScene == true) {
+        PlayerSelectScene();
+    }
+
+    //ゲームシーンでの処理
+    if (m_flagGameScene == true) {
+        GameScene();
+    }
+}
+
+void Game::PlayerSelectScene()
+{
+    if (m_playerSelect->GetmFlagFinish() == false) {
+        return;
+    }
+
+    NewGOGame();
+
+    DeleteGO(m_playerSelect);
+
+    //Playerクラスに選択されたプレイヤー人数を渡す。
+    m_player->SetMaxPlayer(m_maxPlayer);
+    
+
+    m_flagPlayerSelectScene = false;
+    m_flagGameScene = true;
+}
+
+void Game::NewGOGame()
+{
+    m_stage = NewGO<Stage>(0, "stage");
+    m_player = NewGO<Player>(0, "player");
+    m_gameCamera = NewGO<GameCamera>(0);
+    m_score = NewGO<Score>(0);
+    m_fontStartCountdown = NewGO<FontRender>(0);
+    m_fontStartCountdown->Init(L"");
+}
+
+void Game::GameScene()
 {
     if (m_flagStartCountdown == false) {
         return;
