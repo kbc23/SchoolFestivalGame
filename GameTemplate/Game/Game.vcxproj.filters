@@ -251,6 +251,9 @@
     <ClCompile Include="font_render.cpp">
       <Filter>MyCode\エンジン\フォント</Filter>
     </ClCompile>
+    <ClCompile Include="score.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -459,6 +462,9 @@
     </ClInclude>
     <ClInclude Include="font_render.h">
       <Filter>MyCode\エンジン\フォント</Filter>
+    </ClInclude>
+    <ClInclude Include="score.h">
+      <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -131,6 +131,11 @@ public: //GetŠÖ”
 	}
 
 
+	bool GetFlagGoal(const int pNum) {
+		return m_flagGoal[pNum];
+	}
+
+
 
 public: //enum
 	//ƒvƒŒƒCƒ„[‚Ì”Ô†

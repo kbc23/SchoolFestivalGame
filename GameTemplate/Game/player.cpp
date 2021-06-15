@@ -93,16 +93,7 @@ bool Player::Start()
 		}
 	}
 
-
-	//ƒtƒHƒ“ƒg‚Ì‰Šú‰»ˆ—
-	for (int i = 0; i < m_maxPlayer; i++) {
-		//m_fontRank[i] = NewGO<Font>(0);
-
-	}
-
 	m_stage = FindGO<Stage>("stage");
-
-
 
 	return true;
 }

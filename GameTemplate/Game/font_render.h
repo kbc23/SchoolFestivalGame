@@ -50,6 +50,15 @@ public: //Set関数
         swprintf_s(m_text, L"%d", num);
     }
 
+    /**
+     * @brief 表示文字のピボットを設定
+     * @param vec ピボット
+    */
+    void SetPivot(const Vector2 vec)
+    {
+        m_pivot = vec;
+    }
+
 
 private: //constant
     static const int m_MAX_TEXT_SIZE = 256;
