@@ -2,6 +2,7 @@
 #include "player_select.h"
 
 #include "constant.h"
+#include "game.h"
 
 namespace
 {
@@ -11,17 +12,22 @@ namespace
         {100.0f,0.0f}                               //４人
     };
 
-    const Vector2 CURSOR_POSITION[3] = {          //フォントの位置情報
+    const Vector2 CURSOR_POSITION[3] = {        //フォントの位置情報
         {-100.0f,-60.0f},                           //２人
         {0.0f,-60.0f},                              //３人
         {100.0f,-60.0f}                             //４人
     };
 
-    const wchar_t* FONT_DISPLAY[3] = {
+    const wchar_t* FONT_DISPLAY[3] = {          //フォントの表示内容
         L"２人",
         L"３人",
         L"４人"
     };
+
+    const int ADD_TWO = 2;      //プレイ人数の値を渡すときの数合わせ
+
+    const int LEFT_END = 0;     //左端
+    const int RIGHT_END = 2;    //右端
 }
 
 
@@ -33,8 +39,8 @@ PlayerSelect::PlayerSelect()
 
 PlayerSelect::~PlayerSelect()
 {
-    for (int i = 0; i < 3; i++) {
-        DeleteGO(m_fontNumberOfPlayer[i]);
+    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_FONTS; fontNum++) {
+        DeleteGO(m_fontNumberOfPlayer[fontNum]);
     }
 
     DeleteGO(m_fontCursor);
@@ -42,15 +48,15 @@ PlayerSelect::~PlayerSelect()
 
 bool PlayerSelect::Start()
 {
-    for (int i = 0; i < 3; i++) {
-        m_fontNumberOfPlayer[i] = NewGO<FontRender>(0);
-        m_fontNumberOfPlayer[i]->Init(FONT_DISPLAY[i], FONT_POSITION[i]);
+    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_FONTS; fontNum++) {
+        m_fontNumberOfPlayer[fontNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+        m_fontNumberOfPlayer[fontNum]->Init(FONT_DISPLAY[fontNum], FONT_POSITION[fontNum]);
     }
 
-    m_fontCursor = NewGO<FontRender>(0);
-    m_fontCursor->Init(L"^\n|", CURSOR_POSITION[0]);
+    m_fontCursor = NewGO<FontRender>(igo::PRIORITY_FIRST);
+    m_fontCursor->Init(L"^\n|", CURSOR_POSITION[LEFT_END]);
 
-    m_game = FindGO<Game>("game");
+    m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
     return true;
 }
@@ -60,13 +66,13 @@ void PlayerSelect::Update()
     SelectTheNumberOfPlayers();
 
     if (m_flagDecision == true && m_flagFinish == false) {
-        Kari();
+        FinishPlayerSelect();
     }
 }
 
 void PlayerSelect::SelectTheNumberOfPlayers()
 {
-    if (g_pad[0]->GetLStickXF() == con::FLOAT_ZERO) {
+    if (g_pad[con::player_1]->GetLStickXF() == con::FLOAT_ZERO) {
         m_flagInput = false;
     }
 
@@ -76,12 +82,12 @@ void PlayerSelect::SelectTheNumberOfPlayers()
     }
 
     //決定
-    if (g_pad[0]->IsTrigger(enButtonA)) {
+    if (g_pad[con::player_1]->IsTrigger(enButtonA)) {
         m_flagDecision = true;
     }
     //左に移動
-    else if (g_pad[0]->GetLStickXF() < con::FLOAT_ZERO) {
-        if (m_cursorPosition == 0) {
+    else if (g_pad[con::player_1]->GetLStickXF() < con::FLOAT_ZERO) {
+        if (m_cursorPosition == LEFT_END) {
             return;
         }
 
@@ -92,8 +98,8 @@ void PlayerSelect::SelectTheNumberOfPlayers()
         m_flagInput = true;
     }
     //右に移動
-    else if (g_pad[0]->GetLStickXF() > con::FLOAT_ZERO) {
-        if (m_cursorPosition == 2) {
+    else if (g_pad[con::player_1]->GetLStickXF() > con::FLOAT_ZERO) {
+        if (m_cursorPosition == RIGHT_END) {
             return;
         }
 
@@ -105,9 +111,9 @@ void PlayerSelect::SelectTheNumberOfPlayers()
     }
 }
 
-void PlayerSelect::Kari()
+void PlayerSelect::FinishPlayerSelect()
 {
-    m_game->SetActivePlayer(m_cursorPosition + 2);
+    m_game->SetMaxPlayer(m_cursorPosition + ADD_TWO);
 
     m_flagFinish = true;
 }

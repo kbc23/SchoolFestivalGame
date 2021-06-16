@@ -260,6 +260,9 @@
     <ClCompile Include="player_select.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>MyCode\エンジン\その他</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -477,6 +480,9 @@
     </ClInclude>
     <ClInclude Include="player_select.h">
       <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>MyCode\エンジン\その他</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

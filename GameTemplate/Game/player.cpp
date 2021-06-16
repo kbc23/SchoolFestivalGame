@@ -1,28 +1,29 @@
 #include "stdafx.h"
 #include "player.h"
 
+#include "game.h"
 #include "stage.h"
 
 namespace //constant
 {
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 	// ファイルパス
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 
 	const char* FILE_PATH_TKM_CHAEACTER_MODEL = "Assets/modelData/unityChan.tkm";
 
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 	// 位置情報
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 
-	const Vector3 PLAYER_START_POSITION[Player::PlayerNumberMax] = {	//プレイヤーの初期座標
+	const Vector3 PLAYER_START_POSITION[con::PlayerNumberMax] = {	//プレイヤーの初期座標
 		{ 390.0f, 0.0f, -250.0f },											//プレイヤー１
 		{ 130.0f, 0.0f, -250.0f },											//プレイヤー２
 		{ -130.0f, 0.0f, -250.0f },											//プレイヤー３
 		{ -390.0f, 0.0f, -250.0f }											//プレイヤー４
 	};
 	
-	const Vector2 GOAL_RANK_FONT_POSITION[Player::PlayerNumberMax] = {	//ゴール順位の表示座標
+	const Vector2 GOAL_RANK_FONT_POSITION[con::PlayerNumberMax] = {	//ゴール順位の表示座標
 		{ -390.0f, 0.0f },													//プレイヤー１
 		{ -130.0f, 0.0f },													//プレイヤー２
 		{ 130.0f, 0.0f },													//プレイヤー３
@@ -31,16 +32,16 @@ namespace //constant
 
 	//モデルとフォントのX座標の向きが逆っぽい
 
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 	// 入力関係
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 
 	const int MOVE_BUTTON_A = 2;		//Aボタンを押したときの移動量
 	const int MOVE_BUTTON_B = 1;		//Bボタンを押したときの移動量
 
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 	// タイマー関連
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 
 	const int TIMER_RESET = 0; //タイマーのリセット
 	const int TIME_ANIMATION = 30; //ジャンプアニメーションの時間（0.5秒）
@@ -60,8 +61,8 @@ Player::Player()
 Player::~Player()
 {
 	//プレイヤーごとに処理
-	for (int i = 0; i < PlayerNumberMax; i++) {
-		DeleteIndividual(i);
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		DeleteIndividual(playerNum);
 	}
 }
 
@@ -84,8 +85,8 @@ void Player::DeleteIndividual(const int pNum)
 bool Player::Start()
 {
 	//プレイヤーごとに処理
-	for (int i = 0; i < PlayerNumberMax; i++) {
-		bool check = StartIndividual(i);
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		bool check = StartIndividual(playerNum);
 
 		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。
 		if (check == false) {
@@ -93,12 +94,12 @@ bool Player::Start()
 		}
 	}
 
-	m_fontEnd = NewGO<FontRender>(0);
+	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FIRST);
 	m_fontEnd->Init(L"終了！");
 	m_fontEnd->Deactivate();
 
-	m_stage = FindGO<Stage>("stage");
-	m_game = FindGO<Game>("game");
+	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
+	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
 	return true;
 }
@@ -107,11 +108,11 @@ bool Player::StartIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	m_modelRender[pNum] = NewGO<ModelRender>(0);
+	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
 	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 
-	m_fontGoalRank[pNum] = NewGO<FontRender>(0);
+	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
 	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
 	m_fontGoalRank[pNum]->Deactivate();
 
@@ -125,13 +126,13 @@ bool Player::StartIndividual(const int pNum)
 void Player::Update()
 {
 	//プレイヤーごとに操作
-	for (int i = 0; i < m_maxPlayer; i++) {
-		if (m_flagGoal[i] == false) {
-			Controller(i);
-			Animation(i);
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
+		if (m_flagGoal[playerNum] == false) {
+			Controller(playerNum);
+			Animation(playerNum);
 		}
 		else {
-			Animation(i);
+			Animation(playerNum);
 		}
 	}
 

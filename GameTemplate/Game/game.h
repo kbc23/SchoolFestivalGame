@@ -13,19 +13,47 @@ public:
     Game();
     ~Game();
     bool Start() override final;
+
+    ////////////////////////////////////////////////////////////
+    // 毎フレームの処理
+    ////////////////////////////////////////////////////////////
+
     void Update() override final;
 
+    //////////////////////////////
+    // プレイヤーセレクトシーンの処理
+    //////////////////////////////
+
+    /**
+     * @brief プレイヤーセレクトシーンの処理
+    */
     void PlayerSelectScene();
-    void GameScene();
 
-
+    /**
+     * @brief ゲームシーンで使用するオブジェクトのNewGO
+    */
     void NewGOGame();
 
-    
+    //////////////////////////////
+    // ゲームシーンの処理
+    //////////////////////////////
+
+    /**
+     * @brief ゲームシーンの処理
+    */
+    void GameScene();
+
+    /**
+     * @brief ゲーム開始時のカウントダウン
+    */
     void StartCountdown();
 
 
 public: //Get関数
+    /**
+     * @brief m_StopOperationのGet関数
+     * @return プレイヤーの操作処理をできなくしているか
+    */
     bool GetStopOperation()
     {
         return m_StopOperation;
@@ -34,17 +62,29 @@ public: //Get関数
 
 
 public: //Set関数
+    /**
+     * @brief m_flagPlayerSelectSceneのSet関数
+     * @param b プレイヤーセレクトシーンの処理をしているか
+    */
     void SetFlagPlayerSelectScene(const bool b)
     {
         m_flagPlayerSelectScene = b;
     }
 
+    /**
+     * @brief m_flagGameSceneのSet関数
+     * @param b ゲームシーンの処理をしているか
+    */
     void SetFlagGameScene(const bool b)
     {
         m_flagGameScene = b;
     }
 
-    void SetActivePlayer(const int i)
+    /**
+     * @brief m_maxPlayerのSet関数
+     * @param i 操作しているプレイヤーの数
+    */
+    void SetMaxPlayer(const int i)
     {
         m_maxPlayer = i;
     }
@@ -64,23 +104,27 @@ private: //data menber
     GameCamera* m_gameCamera = nullptr;
     Stage* m_stage = nullptr;
     Score* m_score = nullptr;
-    FontRender* m_fontStartCountdown = nullptr;
+    FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
     ////////////////////////////////////////////////////////////
 
-    int m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
-    bool m_flagStartCountdown = true;
-    bool m_StopOperation = true;
+    int m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;       //カウントダウンで使用されるタイマー
+    bool m_flagStartCountdown = true;                               //カウントダウンをおこなっているかのフラグ
+    bool m_StopOperation = true;                                    //プレイヤーの操作ができるか
 
     ////////////////////////////////////////////////////////////
     // フラグ関連
     ////////////////////////////////////////////////////////////
 
-    bool m_flagPlayerSelectScene = true;
-    bool m_flagGameScene = false;
+    bool m_flagPlayerSelectScene = true;        //プレイヤーセレクトシーンの処理をしているか
+    bool m_flagGameScene = false;               //ゲームシーンの処理をしているか
 
-    int m_maxPlayer = 0;
+    ////////////////////////////////////////////////////////////
+    // その他
+    ////////////////////////////////////////////////////////////
+
+    int m_maxPlayer = 0;                        //操作しているプレイヤーの数
 };
 

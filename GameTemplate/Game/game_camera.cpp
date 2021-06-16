@@ -5,9 +5,6 @@ GameCamera::GameCamera()
 {
     g_camera3D->SetTarget({ 0.0f,0.0f,0.0f });
     g_camera3D->SetPosition({ 0.0f,500.0f,300.0f });
-
-    //g_camera3D->SetPosition({ 0.0f,-50.0f,200.0f });
-    //g_camera3D->SetPosition({ 0.0f,4000.0f,3000.0f });
 }
 
 GameCamera::~GameCamera()

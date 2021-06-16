@@ -1,21 +1,20 @@
 #pragma once
 #include "model_render.h"
+#include "constant.h"
 
-#include "player.h"
+class Player;
 
 class Stage : public IGameObject
 {
 public:
     Stage();
     ~Stage();
-    bool Start() override final;
-    void Update() override final;
 
-
-public:
     ////////////////////////////////////////////////////////////
     // 初期設定
     ////////////////////////////////////////////////////////////
+
+    bool Start() override final;
 
     /**
      * @brief ステージの作成処理
@@ -23,8 +22,16 @@ public:
     void StageCreate();
 
     ////////////////////////////////////////////////////////////
-    // ブロックの移動
+    // 毎フレームの処理
     ////////////////////////////////////////////////////////////
+
+    void Update() override final;
+
+
+
+    //////////////////////////////
+    // ブロックの移動
+    //////////////////////////////
 
     /**
      * @brief プレイヤーの移動に応じてブロックを動かす。
@@ -34,9 +41,9 @@ public:
     */
     bool MoveBlock(const int pNum, const int moveNum);
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // タイマー
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief 操作不能状態のタイマーのカウント
@@ -44,9 +51,9 @@ public:
     */
     void ReturnOperationTimer(const int pNum);
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // ブロックごとの処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief プレイヤーが乗っているブロックを判別
@@ -54,9 +61,9 @@ public:
     */
     void CheckBlock(const int pNum);
 
-    //////////////////////////////
+    //////////
     // 青色のブロック
-    //////////////////////////////
+    //////////
 
     /**
      * @brief 青色のブロックの上に行ったときの処理    
@@ -76,9 +83,9 @@ public:
     */
     void ReturnBlock(const int pNum);
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // ゴール時の処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief ゴール時の処理
@@ -123,37 +130,34 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     Player* m_player = nullptr;
+    ModelRender* m_modelRender[con::PlayerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
+
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ
     ////////////////////////////////////////////////////////////
 
-    int m_stageData[Player::PlayerNumberMax][m_MAX_BLOCK] = { greenBlock }; //ステージのデータを保存する配列
-    //[プレイヤー番号][ステージのマスの数]
-    ModelRender* m_modelRender[Player::PlayerNumberMax][m_MAX_BLOCK] = { nullptr };
- 
-    //プレイヤーが何個目のブロックにいるか
-    int m_playerBlockPosition[Player::PlayerNumberMax] = { m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
-    //プレイヤーの前にいたブロックの番号
-    int m_playerBeforeBlockPosition[Player::PlayerNumberMax] = { m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
+    int m_stageData[con::PlayerNumberMax][m_MAX_BLOCK] = { greenBlock }; //ステージのデータを保存する配列
+    int m_playerBlockPosition[con::PlayerNumberMax] = {                  //プレイヤーが何個目のブロックにいるか
+        m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
+    int m_playerBeforeBlockPosition[con::PlayerNumberMax] = {            //プレイヤーの前にいたブロックの番号
+        m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
 
     ////////////////////////////////////////////////////////////
     // プレイヤーの操作状況
     ////////////////////////////////////////////////////////////
 
-    //プレイヤーが操作可能か
-    bool m_activeOperation[Player::PlayerNumberMax] = { true, true, true, true };
-    //プレイヤーの操作復帰のタイマー
-    int m_timerReturnOperation[Player::PlayerNumberMax] = { 0, 0, 0, 0 };
-    //プレイヤーの操作不可状態に対する耐性があるか
-    bool m_resistanceImpossibleOperation[Player::PlayerNumberMax] = { false, false, false, false };
+    bool m_activeOperation[con::PlayerNumberMax] = { true, true, true, true };   //プレイヤーが操作可能か
+    int m_timerReturnOperation[con::PlayerNumberMax] = { 0, 0, 0, 0 };           //プレイヤーの操作復帰のタイマー
+    bool m_resistanceImpossibleOperation[con::PlayerNumberMax] = {               //プレイヤーの操作不可状態に対する耐性があるか
+        false, false, false, false };
 
-    //青いブロックに行ったときのアニメーションをおこなっているか
-    bool m_flagAnimationBlueBlock[Player::PlayerNumberMax] = { false, false, false, false };
-    //青いブロックに行ったときのアニメーションのタイマー
-    int m_timerAnimationBlueBlock[Player::PlayerNumberMax] = { 0, 0, 0, 0 };
-    //プレイヤーが操作可能か（青色のブロックVer）
-    bool m_activeOperationVersionBlue[Player::PlayerNumberMax] = { true, true, true, true };
 
-    int m_nowRank = m_INIT_RANK; //プレイヤーの順位データに渡すデータ
+    bool m_flagAnimationBlueBlock[con::PlayerNumberMax] = {                 //青いブロックに行ったときのアニメーションをおこなっているか
+        false, false, false, false };
+    int m_timerAnimationBlueBlock[con::PlayerNumberMax] = { 0, 0, 0, 0 };   //青いブロックに行ったときのアニメーションのタイマー
+    bool m_activeOperationVersionBlue[con::PlayerNumberMax] = {             //プレイヤーが操作可能か（青色のブロックVer）
+        true, true, true, true };
+
+    int m_nowRank = m_INIT_RANK;            //プレイヤーの順位データに渡すデータ
 };

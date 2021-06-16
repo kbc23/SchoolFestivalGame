@@ -21,11 +21,11 @@ public:
 	}
 public:
 
-	
+
 	/*!
 	*@brief	Updateの直前で呼ばれる開始処理。
 	*@details
-	* 
+	*
 	* 本関数がtrueを返すとゲームオブジェクトの準備が完了したと判断されて</br>
 	* Update関数が呼ばれ出します。trueを返して以降はStart関数は呼ばれなくなります。</br>
 	* ゲームオブジェクトの初期化に複数フレームかかる場合などはfalseを返して、初期化ステップなどを使って</br>
@@ -43,7 +43,7 @@ public:
 	{
 		(void)renderContext;
 	}
-	
+
 public:
 	/*!
 	*@brief Start関数が完了した？
@@ -73,7 +73,7 @@ public:
 	{
 		m_isActive = false;
 	}
-	
+
 	/// <summary>
 	/// 死亡させる。
 	/// </summary>
@@ -115,20 +115,20 @@ public:
 
 	void RenderWrapper(RenderContext& renderContext)
 	{
-		if (m_isActive && m_isStart && !m_isDead ) {
+		if (m_isActive && m_isStart && !m_isDead) {
 			Render(renderContext);
 		}
 	}
-	
+
 	void UpdateWrapper()
 	{
-		if (m_isActive && m_isStart && !m_isDead ) {
+		if (m_isActive && m_isStart && !m_isDead) {
 			Update();
 		}
 	}
 	void StartWrapper()
 	{
-		if (m_isActive && !m_isStart && !m_isDead ) {
+		if (m_isActive && !m_isStart && !m_isDead) {
 			if (Start()) {
 				//初期化処理完了。
 				m_isStart = true;
@@ -136,7 +136,7 @@ public:
 		}
 	}
 
-		
+
 	friend class CGameObjectManager;
 protected:
 	std::string m_name;								//ゲームオブジェクトの名前
@@ -146,5 +146,31 @@ protected:
 	bool m_isNewFromGameObjectManager;	//GameObjectManagerでnewされた。
 	bool m_isRegist = false;							//GameObjectManagerに登録されている？
 	bool m_isActive = true;							//Activeフラグ。
-	
+
 };
+
+
+
+////////////////////////////////////////////////////////////
+// IGameObjectクラスを継承したクラス関連の定数
+////////////////////////////////////////////////////////////
+
+namespace igo //constant
+{
+	////////////////////////////////////////////////////////////
+	// クラスのオブジェクトにつけた名前
+	////////////////////////////////////////////////////////////
+
+	//constexpr const char*型で宣言すること
+	//しなかった場合は、コンパイルエラーが発生する。
+
+	constexpr const char* CLASS_NAME_PLAYER = "player";
+	constexpr const char* CLASS_NAME_GAME = "game";
+	constexpr const char* CLASS_NAME_STAGE = "stage";
+
+	////////////////////////////////////////////////////////////
+	// 優先度
+	////////////////////////////////////////////////////////////
+
+	const int PRIORITY_FIRST = 0;
+}

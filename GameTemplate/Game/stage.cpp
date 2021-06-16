@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "stage.h"
 
+#include "player.h"
+
 
 
 //モデルの読み込みで時間がかかっているので、
@@ -11,25 +13,25 @@
 
 namespace //constant
 {
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
     // ファイルパス
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     const char* FILE_PATH_TKM_GREEN_BLOCK = "Assets/modelData/green.tkm";
     const char* FILE_PATH_TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
     const char* FILE_PATH_TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
 
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
     // ブロックの情報
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     const float BLOCK_SIZE = 80.0f;         //ブロックのサイズ
 
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
     // 位置情報
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
 
-    const float BLOCK_POSITION_X[Player::PlayerNumberMax] = {           //ブロックのX座標
+    const float BLOCK_POSITION_X[con::PlayerNumberMax] = {           //ブロックのX座標
         390.0f,                                                             //プレイヤー１
         130.0f,                                                             //プレイヤー２
         -130.0f,                                                            //プレイヤー３
@@ -37,16 +39,16 @@ namespace //constant
     };
     const float BLOCK_POSITION_Y = -80.0f;                              //ブロックのY座標
     const float BLOCK_POSITION_Z = -250.0f;                             //ブロックのZ座標
-    const Vector3 BLOCK_START_POSITION[Player::PlayerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
+    const Vector3 BLOCK_START_POSITION[con::PlayerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
         { 390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }, 	                //プレイヤー１
         { 130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                    //プレイヤー２
         { -130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                //プレイヤー３
         { -390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }	                    //プレイヤー４
     };
 
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
     // タイマー関連
-    //////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     const int TIMER_RESET = 0;                  //タイマーのリセット
     const int TIME_RETURN_OPERATION = 30;       //操作復帰にかかる時間（1.5秒）
@@ -63,9 +65,9 @@ Stage::Stage()
 
 Stage::~Stage()
 {
-    for (int i = 0; i < Player::PlayerNumberMax; i++) {
-        for (int s = 0; s < m_MAX_BLOCK; s++) {
-            DeleteGO(m_modelRender[i][s]);
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
+            DeleteGO(m_modelRender[playerNum][blockNum]);
         }
     }
 }
@@ -79,57 +81,57 @@ bool Stage::Start()
     //ステージを作成
     StageCreate();
 
-    for (int i = 0; i < Player::PlayerNumberMax; i++) {
-        for (int s = 0; s < m_MAX_BLOCK; s++) {
-            m_modelRender[i][s] = NewGO<ModelRender>(0);
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+            m_modelRender[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
 
             //ステージの情報にてモデルを変更
-            if (m_stageData[i][s] == greenBlock) {
-                m_modelRender[i][s]->Init(FILE_PATH_TKM_GREEN_BLOCK);
+            if (m_stageData[playerNum][blockNum] == greenBlock) {
+                m_modelRender[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
             }
-            else if (m_stageData[i][s] == blueBlock) {
-                m_modelRender[i][s]->Init(FILE_PATH_TKM_BLUE_BLOCK);
+            else if (m_stageData[playerNum][blockNum] == blueBlock) {
+                m_modelRender[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             }
-            else if (m_stageData[i][s] == yellowBlock) {
-                m_modelRender[i][s]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
+            else if (m_stageData[playerNum][blockNum] == yellowBlock) {
+                m_modelRender[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
             }
 
-            m_modelRender[i][s]->SetPosition({
-                BLOCK_START_POSITION[i].x,
-                BLOCK_START_POSITION[i].y,
-                BLOCK_START_POSITION[i].z + BLOCK_SIZE * s
+            m_modelRender[playerNum][blockNum]->SetPosition({
+                BLOCK_START_POSITION[playerNum].x,
+                BLOCK_START_POSITION[playerNum].y,
+                BLOCK_START_POSITION[playerNum].z + BLOCK_SIZE * blockNum
             });
         }
     }
 
-    m_player = FindGO<Player>("player");
+    m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
     return true;
 }
 
 void Stage::StageCreate()
 {
-    for (int i = 0; i < m_MAX_BLOCK; i++) {
-        m_stageData[Player::player_1][i] = greenBlock;
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+        m_stageData[con::player_1][blockNum] = greenBlock;
     }
 
-    m_stageData[Player::player_1][6] = blueBlock;
-    m_stageData[Player::player_1][8] = blueBlock;
-    m_stageData[Player::player_1][12] = yellowBlock;
-    m_stageData[Player::player_1][15] = blueBlock;
-    m_stageData[Player::player_1][18] = blueBlock;
-    m_stageData[Player::player_1][25] = blueBlock;
-    m_stageData[Player::player_1][28] = yellowBlock;
-    m_stageData[Player::player_1][30] = blueBlock;
-    m_stageData[Player::player_1][32] = blueBlock;
-    m_stageData[Player::player_1][37] = yellowBlock;
-    m_stageData[Player::player_1][40] = blueBlock;
-    m_stageData[Player::player_1][43] = blueBlock;
-    m_stageData[Player::player_1][46] = blueBlock;
+    m_stageData[con::player_1][6] = blueBlock;
+    m_stageData[con::player_1][8] = blueBlock;
+    m_stageData[con::player_1][12] = yellowBlock;
+    m_stageData[con::player_1][15] = blueBlock;
+    m_stageData[con::player_1][18] = blueBlock;
+    m_stageData[con::player_1][25] = blueBlock;
+    m_stageData[con::player_1][28] = yellowBlock;
+    m_stageData[con::player_1][30] = blueBlock;
+    m_stageData[con::player_1][32] = blueBlock;
+    m_stageData[con::player_1][37] = yellowBlock;
+    m_stageData[con::player_1][40] = blueBlock;
+    m_stageData[con::player_1][43] = blueBlock;
+    m_stageData[con::player_1][46] = blueBlock;
 
-    for (int i = 1; i < Player::PlayerNumberMax; i++) {
-        for (int s = 0; s < m_MAX_BLOCK; s++) {
-            m_stageData[i][s] = m_stageData[Player::player_1][s];
+    for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+            m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
         }
     }
 }
@@ -142,25 +144,25 @@ void Stage::Update()
 {
     //スタート地点に戻る( Debug )
     if (g_pad[0]->IsTrigger(enButtonX)) {
-        for (int i = 0; i < Player::PlayerNumberMax; i++) {
-            for (int s = 0; s < m_MAX_BLOCK; s++) {
-                m_modelRender[i][s]->SetPosition({
-                    BLOCK_START_POSITION[i].x,
-                    BLOCK_START_POSITION[i].y,
-                    BLOCK_START_POSITION[i].z + BLOCK_SIZE * s
+        for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+            for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+                m_modelRender[playerNum][blockNum]->SetPosition({
+                    BLOCK_START_POSITION[playerNum].x,
+                    BLOCK_START_POSITION[playerNum].y,
+                    BLOCK_START_POSITION[playerNum].z + BLOCK_SIZE * blockNum
                     });
             }
-            m_playerBlockPosition[i] = 0;
+            m_playerBlockPosition[playerNum] = 0;
         }
     }
     //to this point( Debug )
 
 
     //プレイヤーごとの処理
-    for (int i = 0; i < Player::PlayerNumberMax; i++) {
-        CheckBlock(i);
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        CheckBlock(playerNum);
 
-        ReturnOperationTimer(i);
+        ReturnOperationTimer(playerNum);
     }
 
 
@@ -187,22 +189,28 @@ bool Stage::MoveBlock(const int pNum, const int moveNum)
 
     //プレイヤーが何個目のブロックにいるかの情報を更新
     m_playerBlockPosition[pNum] += moveNum;
+
+    //最大数を超えていたら、最大数 - 1に合わせる。
     if (m_playerBlockPosition[pNum] >= m_MAX_BLOCK) {
         m_playerBlockPosition[pNum] = m_MAX_BLOCK - 1;
     }
 
     //モデルの位置を更新
-    for (int i = 0; i < m_MAX_BLOCK; i++) {
-        m_modelRender[pNum][i]->SetPosition({
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+        m_modelRender[pNum][blockNum]->SetPosition({
             BLOCK_POSITION_X[pNum],
             BLOCK_POSITION_Y,
-            BLOCK_POSITION_Z + BLOCK_SIZE * i - BLOCK_SIZE * (m_playerBlockPosition[pNum])
+            BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - BLOCK_SIZE * (m_playerBlockPosition[pNum])
             //m_modelRender[pNum][i]->GetPosition().z - BLOCK_SIZE * moveNum
         });
     }
 
     return true;
 }
+
+//////////////////////////////
+// タイマー
+//////////////////////////////
 
 void Stage::ReturnOperationTimer(const int pNum)
 {
@@ -219,7 +227,7 @@ void Stage::ReturnOperationTimer(const int pNum)
         m_resistanceImpossibleOperation[pNum] = true;
 
         //モデルの回転を元に戻す。
-        m_player->SetRotationX(pNum, 0.0f);
+        m_player->SetRotationX(pNum, con::FLOAT_ZERO);
     }
 }
 
@@ -236,6 +244,7 @@ void Stage::CheckBlock(const int pNum)
         return;
     }
 
+    //ブロックごとに処理
     if (m_stageData[pNum][m_playerBlockPosition[pNum]] == greenBlock) {
 
     }
@@ -284,7 +293,7 @@ void Stage::BlueBlockAnimation(const int pNum)
         //プレイヤーを操作できるようにする。
         m_activeOperationVersionBlue[pNum] = true;
         //モデルを元に戻す。
-        m_player->SetRotationX(pNum, 0.0f);
+        m_player->SetRotationX(pNum, con::FLOAT_ZERO);
     }
 }
 
@@ -298,13 +307,12 @@ void Stage::ReturnBlock(const int pNum)
     m_playerBlockPosition[pNum] = m_playerBeforeBlockPosition[pNum];
 
     //モデルの位置を更新
-    for (int i = 0; i < m_MAX_BLOCK; i++) {
-        m_modelRender[pNum][i]->SetPosition({
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+        m_modelRender[pNum][blockNum]->SetPosition({
             BLOCK_POSITION_X[pNum],
             BLOCK_POSITION_Y,
-            BLOCK_POSITION_Z + BLOCK_SIZE * i - BLOCK_SIZE * (m_playerBlockPosition[pNum])
-            //m_modelRender[pNum][i]->GetPosition().z - BLOCK_SIZE * moveNum
-            });
+            BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - BLOCK_SIZE * (m_playerBlockPosition[pNum])
+        });
     }
 }
 
@@ -315,19 +323,19 @@ void Stage::ReturnBlock(const int pNum)
 void Stage::GoalBlock()
 {
     bool addNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
-    int nextRank = 0; //次のプレイヤーの順位
+    int nextRank = con::INIT_ZERO; //次のプレイヤーの順位
 
-    for (int i = 0; i < Player::PlayerNumberMax; i++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         //プレイヤーの順位を確定
-        if (m_player->GetActivePlayer(i) == true && m_playerBlockPosition[i] == m_MAX_BLOCK - 1) {
+        if (m_player->GetActivePlayer(playerNum) == true && m_playerBlockPosition[playerNum] == m_MAX_BLOCK - 1) {
             //プレイヤーの操作をできないようにする。
-            m_player->SetActivePlayer(i, false);
+            m_player->SetActivePlayer(playerNum, false);
 
             //順位を確定
-            m_player->SetGoalRanking(i, m_nowRank);
+            m_player->SetGoalRanking(playerNum, m_nowRank);
 
             //ゴールした状態にする。
-            m_player->SetFlagGoal(i, true);
+            m_player->SetFlagGoal(playerNum, true);
 
             ++nextRank;
             addNowRank = true;

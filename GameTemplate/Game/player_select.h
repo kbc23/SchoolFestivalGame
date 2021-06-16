@@ -1,6 +1,7 @@
 #pragma once
 #include "font_render.h"
-#include "game.h"
+
+class Game;
 
 class PlayerSelect : public IGameObject
 {
@@ -8,25 +9,38 @@ public:
     PlayerSelect();
     ~PlayerSelect();
     bool Start() override final;
+    
+    ////////////////////////////////////////////////////////////
+    // 毎フレームの処理
+    ////////////////////////////////////////////////////////////
+
     void Update() override final;
 
-
-
+    /**
+     * @brief 操作するプレイヤーの人数の選択
+    */
     void SelectTheNumberOfPlayers();
 
-
-    void Kari();
+    /**
+     * @brief このクラスの処理の終了処理
+    */
+    void FinishPlayerSelect();
 
 
 
 public: //Get関数
-
+    /**
+     * @brief m_flagFinishのGet関数
+     * @return このクラスの処理が終了したか
+    */
     bool GetmFlagFinish()
     {
         return m_flagFinish;
     }
 
 
+private: //constant
+    static const int m_NUMBER_OF_FONTS = 3;     //フォントの数
 
 
 private: //data menber
@@ -35,8 +49,8 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     Game* m_game = nullptr;
-    FontRender* m_fontNumberOfPlayer[3] = { nullptr };
-    FontRender* m_fontCursor = nullptr;
+    FontRender* m_fontNumberOfPlayer[m_NUMBER_OF_FONTS] = { nullptr };      //操作するプレイヤーの人数を選択するフォント
+    FontRender* m_fontCursor = nullptr;                     //カーソルのフォント
 
     ////////////////////////////////////////////////////////////
     // その他

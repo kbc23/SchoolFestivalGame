@@ -1,8 +1,9 @@
 #pragma once
 #include "font_render.h"
+#include "constant.h"
 
-#include "player.h"
-#include "game.h"
+class Game;
+class Player;
 
 class Score : public IGameObject
 {
@@ -10,6 +11,11 @@ public:
     Score();
     ~Score();
     bool Start() override final;
+
+    ////////////////////////////////////////////////////////////
+    // 毎フレームの処理
+    ////////////////////////////////////////////////////////////
+
     void Update() override final;
 
     /**
@@ -33,18 +39,25 @@ public:
 
 
 private: //data menber
+    ////////////////////////////////////////////////////////////
+    // クラスのオブジェクト
+    ////////////////////////////////////////////////////////////
+    
     Player* m_player = nullptr;
     Game* m_game = nullptr;
-    FontRender* m_fontScoreTime[Player::PlayerNumberMax] = { nullptr };
+    FontRender* m_fontScoreTime[con::PlayerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
 
-    int m_scoreTime[Player::PlayerNumberMax] = { 0,0,0,0 };
+    ////////////////////////////////////////////////////////////
+    // スコアタイム関連
+    ////////////////////////////////////////////////////////////
 
-    bool m_flagProcessing[Player::PlayerNumberMax] = { true,true,true,true };
+    int m_scoreTime[con::PlayerNumberMax] = { 0,0,0,0 };                     //スコアタイムのカウント
 
+    bool m_flagProcessing[con::PlayerNumberMax] = { true,true,true,true };   //スコアタイムのカウントの処理をおこなっているか
 
-    int m_scoreTimeMinutes[Player::PlayerNumberMax] = { 0,0,0,0 };            //分
-    int m_scoreTimeSeconds[Player::PlayerNumberMax] = { 0,0,0,0 };            //秒
-    int m_scoreTimeCommaSeconds[Player::PlayerNumberMax] = { 0,0,0,0 };       //コンマ秒
+    int m_scoreTimeMinutes[con::PlayerNumberMax] = { 0,0,0,0 };              //分
+    int m_scoreTimeSeconds[con::PlayerNumberMax] = { 0,0,0,0 };              //秒
+    int m_scoreTimeCommaSeconds[con::PlayerNumberMax] = { 0,0,0,0 };         //コンマ秒
 
 };
 

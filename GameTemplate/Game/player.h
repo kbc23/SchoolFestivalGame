@@ -1,8 +1,9 @@
 #pragma once
 #include "model_render.h"
 #include "font_render.h"
-#include "game.h"
+#include "constant.h"
 
+class Game;
 class Stage;
 
 class Player : public IGameObject
@@ -25,11 +26,15 @@ public:
 	*/
 	bool StartIndividual(const int pNum);
 
+	////////////////////////////////////////////////////////////
+	// 毎フレームの処理
+	////////////////////////////////////////////////////////////
+
 	void Update() override final;
 
-	////////////////////////////////////////////////////////////
+	//////////////////////////////
     // プレイヤーの操作処理
-    ////////////////////////////////////////////////////////////
+	//////////////////////////////
 
 	/**
 	 * @brief プレイヤーの操作処理の土台
@@ -37,9 +42,9 @@ public:
 	*/
 	void Controller(const int pNum);
 
-	////////////////////////////////////////////////////////////
+	//////////////////////////////
 	// プレイヤーのアニメーション
-	////////////////////////////////////////////////////////////
+	//////////////////////////////
 
 	/**
 	 * @brief プレイヤーのアニメーションの処理
@@ -61,11 +66,11 @@ public:
 
 
 public: //Get関数
-/**
- * @brief m_activePlayer[pNum]のGet関数
- * @param pNum プレイヤー番号
- * @return プレイヤー番号[pNum]が、操作できるかどうか
-*/
+	/**
+	 * @brief m_activePlayer[pNum]のGet関数
+	 * @param pNum プレイヤー番号
+	 * @return プレイヤー番号[pNum]が、操作できるかどうか
+	*/
 	bool GetActivePlayer(const int pNum) {
 		return m_activePlayer[pNum];
 	}
@@ -79,7 +84,11 @@ public: //Get関数
 		return m_flagAnimationJump[pNum];
 	}
 
-
+	/**
+	 * @brief m_flagGoal[pNum]のGet関数
+	 * @param pNum プレイヤー番号
+	 * @return プレイヤーがゴールしたかどうか
+	*/
 	bool GetFlagGoal(const int pNum) {
 		return m_flagGoal[pNum];
 	}
@@ -88,7 +97,7 @@ public: //Get関数
 
 public: //Set関数
 	/**
-	 * @brief プレイヤーのモデルをX座標を軸に回転させる。
+	 * @brief m_modelRender[pNum]のX軸の回転量を設定するSet関数
 	 * @param pNum プレイヤー番号
 	 * @param f 回転量
 	*/
@@ -97,7 +106,7 @@ public: //Set関数
 	}
 
 	/**
-	 * @brief プレイヤーが操作できるかどうかのSet関数
+	 * @brief m_activePlayer[pNum]のSet関数
 	 * @param pNum プレイヤー番号
 	 * @param b 操作できるかどうか
 	*/
@@ -138,50 +147,43 @@ public: //Set関数
 		m_flagGoal[pNum] = b;
 	}
 
+	/**
+	 * @brief 操作するプレイヤーの人数を保存する変数のSet関数
+	 * @param i 操作するプレイヤーの人数
+	*/
 	void SetMaxPlayer(const int i)
 	{
 		m_maxPlayer = i;
 	}
 
 
-
-
-public: //enum
-	//プレイヤーの番号
-	enum PlayerNumber
-	{
-		player_1,
-		player_2,
-		player_3,
-		player_4,
-		PlayerNumberMax
-	};
-
-
-
 private: //data menber
+	////////////////////////////////////////////////////////////
+	// クラスのオブジェクト
+	////////////////////////////////////////////////////////////
+
 	Stage* m_stage = nullptr;
 	Game* m_game = nullptr;
 
-	//プレイヤーが最大４人だから、メンバ変数は要素数４の配列で管理する。
-	//ModelRender* m_modelRender = nullptr;
-	ModelRender* m_modelRender[PlayerNumberMax] = { nullptr }; //モデルレンダー
-	FontRender* m_fontGoalRank[PlayerNumberMax] = { nullptr }; //フォントレンダー
-	FontRender* m_fontEnd = nullptr;
+	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
+	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
+	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
 
-	//Vector3 m_position[PlayerNumberMax]; //キャラクターの座標
-	//Quaternion m_rotation[PlayerNumberMax] = { Quaternion::Identity }; //キャラクターの回転情報
+	////////////////////////////////////////////////////////////
+	// プレイヤー情報
+	////////////////////////////////////////////////////////////
 
-	int m_activePlayer[PlayerNumberMax] = { true, true, true, true };; //このプレイヤーは操作しているか
+	int m_activePlayer[con::PlayerNumberMax] = { true, true, true, true };	//このプレイヤーは操作しているか
+	int m_maxPlayer = con::PlayerNumberMax;									//プレイヤーの最大数
 
-	int m_maxPlayer = PlayerNumberMax; //プレイヤーの最大数
-	//※プレイヤー数選択画面を作成したら、そこからこの変数にプレイヤーの最大数を代入する。
+	int m_goalRanking[con::PlayerNumberMax] = { 0, 0, 0, 0 };				//プレイヤーのゴール順位
+	bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
+	int m_goalPlayer = 0;												//ゴールしたプレイヤーの人数
 
-	int m_goalRanking[PlayerNumberMax] = { 0, 0, 0, 0 }; //プレイヤーのゴール順位
-	bool m_flagGoal[PlayerNumberMax] = { false, false, false, false }; //ゴールしたか
-	int m_goalPlayer = 0; //ゴールしたプレイヤーの人数
+	////////////////////////////////////////////////////////////
+	// タイマー関連
+	////////////////////////////////////////////////////////////
 
-	bool m_flagAnimationJump[PlayerNumberMax] = { false, false, false, false }; //ジャンプアニメーション中か
-	//bool m_flagDoingAnimation[PlayerNumberMax] = { false, false, false, false }; //アニメーション中か
-	int m_timerAnimation[PlayerNumberMax] = { 0, 0, 0, 0 }; //アニメーションのタイマー
+	bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
+	int m_timerAnimation[con::PlayerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
 };

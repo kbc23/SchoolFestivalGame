@@ -7,6 +7,17 @@
 #include "stage.h"
 #include "score.h"
 
+namespace
+{
+    const int COUNTDOWN_3 = 180;
+    const int COUNTDOWN_2 = 120;
+    const int COUNTDOWN_1 = 60;
+    const int COUNTDOWN_0 = 0;
+    const int COUNTDOWN_DEACTIVATE = -60;
+}
+
+
+
 Game::Game()
 {
 
@@ -18,16 +29,19 @@ Game::~Game()
     DeleteGO(m_player);
     DeleteGO(m_gameCamera);
     DeleteGO(m_score);
+    DeleteGO(m_fontStartCountdown);
 }
 
 bool Game::Start()
 {
-    m_playerSelect = NewGO<PlayerSelect>(0);
-
-
+    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_FIRST);
 
     return true;
 }
+
+////////////////////////////////////////////////////////////
+// 毎フレームの処理
+////////////////////////////////////////////////////////////
 
 void Game::Update()
 {
@@ -41,6 +55,10 @@ void Game::Update()
         GameScene();
     }
 }
+
+//////////////////////////////
+// プレイヤーセレクトシーンの処理
+//////////////////////////////
 
 void Game::PlayerSelectScene()
 {
@@ -62,13 +80,17 @@ void Game::PlayerSelectScene()
 
 void Game::NewGOGame()
 {
-    m_stage = NewGO<Stage>(0, "stage");
-    m_player = NewGO<Player>(0, "player");
-    m_gameCamera = NewGO<GameCamera>(0);
-    m_score = NewGO<Score>(0);
-    m_fontStartCountdown = NewGO<FontRender>(0);
+    m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
+    m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
+    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
+    m_score = NewGO<Score>(igo::PRIORITY_FIRST);
+    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FIRST);
     m_fontStartCountdown->Init(L"");
 }
+
+//////////////////////////////
+// ゲームシーンの処理
+//////////////////////////////
 
 void Game::GameScene()
 {
@@ -83,21 +105,26 @@ void Game::StartCountdown()
 {
     --m_countStartCountdown;
 
-    if (m_countStartCountdown <= -60) {
+    //カウントダウンフォントを非表示
+    if (m_countStartCountdown <= COUNTDOWN_DEACTIVATE) {
         m_fontStartCountdown->Deactivate();
         m_flagStartCountdown = false;
     }
-    else if (m_countStartCountdown <= 0) {
+    //カウント０
+    else if (m_countStartCountdown <= COUNTDOWN_0) {
         m_fontStartCountdown->SetText(L"Start!");
         m_StopOperation = false;
     }
-    else if (m_countStartCountdown <= 60) {
+    //カウント１
+    else if (m_countStartCountdown <= COUNTDOWN_1) {
         m_fontStartCountdown->SetText(1);
     }
-    else if (m_countStartCountdown <= 120) {
+    //カウント２
+    else if (m_countStartCountdown <= COUNTDOWN_2) {
         m_fontStartCountdown->SetText(2);
     }
-    else if (m_countStartCountdown <= 180) {
+    //カウント３
+    else if (m_countStartCountdown <= COUNTDOWN_3) {
         m_fontStartCountdown->SetText(3);
     }
 }
