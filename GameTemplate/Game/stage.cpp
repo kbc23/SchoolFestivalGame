@@ -56,6 +56,13 @@ namespace //constant
     const int TIME_RETURN_OPERATION = 30;       //操作復帰にかかる時間（1.5秒）
 
     const int TIME_BLUE_BLOCK_ANIMATION = 30;   //青色のブロックに行ったときのアニメーションの時間
+
+    ////////////////////////////////////////////////////////////
+    // 入力関係
+    ////////////////////////////////////////////////////////////
+
+    const int MOVE_BUTTON_A = 2;		//Aボタンを押したときの移動量
+    const int MOVE_BUTTON_B = 1;		//Bボタンを押したときの移動量
 }
 
 
@@ -109,107 +116,6 @@ bool Stage::Start()
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         DrawBlock(playerNum);
     }
-
-
-
-    //int numberOfUsesGreenBlock = 0;
-    //int numberOfUsesBlueBlock = 0;
-    //int numberOfUsesYellowBlock = 0;
-
-    //for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-    //    for (int blockNum = m_playerBlockPosition[playerNum]; blockNum < 14; blockNum++) {
-    //        if (m_stageData[playerNum][blockNum] == greenBlock) {
-    //            m_modelGreenBlock[playerNum][numberOfUsesGreenBlock]->SetPosition({
-    //            BLOCK_POSITION_X[playerNum],
-    //            BLOCK_POSITION_Y,
-    //            BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-    //                });
-    //            ++numberOfUsesGreenBlock;
-    //        }
-    //        else if (m_stageData[playerNum][blockNum] == blueBlock) {
-    //            m_modelBlueBlock[playerNum][numberOfUsesBlueBlock]->SetPosition({
-    //              BLOCK_POSITION_X[playerNum],
-    //              BLOCK_POSITION_Y,
-    //              BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-    //                });
-    //            ++numberOfUsesBlueBlock;
-    //        }
-    //        else if (m_stageData[playerNum][blockNum] == yellowBlock) {
-    //            m_modelYellowBlock[playerNum][numberOfUsesYellowBlock]->SetPosition({
-    //               BLOCK_POSITION_X[playerNum],
-    //               BLOCK_POSITION_Y,
-    //               BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-    //                });
-    //            ++numberOfUsesYellowBlock;
-    //        }
-
-
-
-
-            /*switch (m_stageData[playerNum][blockNum]) {
-            case greenBlock:
-                m_modelGreenBlock[playerNum][numberOfUsesGreenBlock]->SetPosition({
-                    BLOCK_POSITION_X[playerNum],
-                    BLOCK_POSITION_Y,
-                    BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
-                ++numberOfUsesGreenBlock;
-
-                break;
-            case blueBlock:
-                m_modelBlueBlock[playerNum][numberOfUsesBlueBlock]->SetPosition({
-                    BLOCK_POSITION_X[playerNum],
-                    BLOCK_POSITION_Y,
-                    BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
-                ++numberOfUsesBlueBlock;
-
-                break;
-            case yellowBlock:
-                m_modelYellowBlock[playerNum][numberOfUsesYellowBlock]->SetPosition({
-                    BLOCK_POSITION_X[playerNum],
-                    BLOCK_POSITION_Y,
-                    BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
-                ++numberOfUsesYellowBlock;
-
-                break;
-            default:
-
-                break;
-            }*/
-    //    }
-    //    numberOfUsesGreenBlock = 0;
-    //    numberOfUsesBlueBlock = 0;
-    //    numberOfUsesYellowBlock = 0;
-    //}
-
-
-
-    //old
-
-    //for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-    //    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-    //        m_modelRender[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-
-    //        //ステージの情報にてモデルを変更
-    //        if (m_stageData[playerNum][blockNum] == greenBlock) {
-    //            m_modelRender[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
-    //        }
-    //        else if (m_stageData[playerNum][blockNum] == blueBlock) {
-    //            m_modelRender[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
-    //        }
-    //        else if (m_stageData[playerNum][blockNum] == yellowBlock) {
-    //            m_modelRender[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
-    //        }
-
-    //        m_modelRender[playerNum][blockNum]->SetPosition({
-    //            BLOCK_START_POSITION[playerNum].x,
-    //            BLOCK_START_POSITION[playerNum].y,
-    //            BLOCK_START_POSITION[playerNum].z + BLOCK_SIZE * blockNum
-    //        });
-    //    }
-    //}
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
@@ -287,37 +193,6 @@ void Stage::StageCreate()
             m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
         }
     }
-
-
-
-
-
-
-    //old
-    
-    //for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-    //    m_stageData[con::player_1][blockNum] = greenBlock;
-    //}
-
-    //m_stageData[con::player_1][6] = blueBlock;
-    //m_stageData[con::player_1][8] = blueBlock;
-    //m_stageData[con::player_1][12] = yellowBlock;
-    //m_stageData[con::player_1][15] = blueBlock;
-    //m_stageData[con::player_1][18] = blueBlock;
-    //m_stageData[con::player_1][25] = blueBlock;
-    //m_stageData[con::player_1][28] = yellowBlock;
-    //m_stageData[con::player_1][30] = blueBlock;
-    //m_stageData[con::player_1][32] = blueBlock;
-    //m_stageData[con::player_1][37] = yellowBlock;
-    //m_stageData[con::player_1][40] = blueBlock;
-    //m_stageData[con::player_1][43] = blueBlock;
-    //m_stageData[con::player_1][46] = blueBlock;
-
-    //for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
-    //    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-    //        m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
-    //    }
-    //}
 }
 
 bool Stage::CreateGreen(const int blockNum, const int randomGreenNum, const int continuousGreenBlock)
@@ -427,6 +302,8 @@ void Stage::Update()
         CheckBlock(playerNum);
 
         ReturnOperationTimer(playerNum);
+
+        DrawMoveBlock(playerNum);
     }
 
 
@@ -445,13 +322,12 @@ void Stage::DrawBlock(const int pNum)
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
 
-
     //モデルの描画
     int numberOfUsesGreenBlock = 0;
     int numberOfUsesBlueBlock = 0;
     int numberOfUsesYellowBlock = 0;
 
-    for (int blockNum = -6; blockNum < 14; blockNum++) {
+    for (int blockNum = -6; blockNum < 15; blockNum++) {
         //スタート地点より前のブロックを描画しない
         if (m_playerBlockPosition[pNum] + blockNum < 0) {
             continue;
@@ -488,41 +364,94 @@ void Stage::DrawBlock(const int pNum)
             m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->Activate();
             ++numberOfUsesYellowBlock;
         }
-
-        /*switch (m_stageData[pNum][blockNum]) {
-        case greenBlock:
-            m_modelGreenBlock[pNum][numberOfUsesGreenBlock]->SetPosition({
-                BLOCK_POSITION_X[pNum],
-                BLOCK_POSITION_Y,
-                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-            });
-            ++numberOfUsesGreenBlock;
-
-            break;
-        case blueBlock:
-            m_modelBlueBlock[pNum][blockNum]->SetPosition({
-                BLOCK_POSITION_X[pNum],
-                BLOCK_POSITION_Y,
-                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-            });
-            ++numberOfUsesBlueBlock;
-
-            break;
-        case yellowBlock:
-            m_modelYellowBlock[pNum][blockNum]->SetPosition({
-                BLOCK_POSITION_X[pNum],
-                BLOCK_POSITION_Y,
-                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-            });
-            ++numberOfUsesYellowBlock;
-
-            break;
-        default:
-
-            break;
-        }*/
     }
 
+}
+
+void Stage::DrawMoveBlock(const int pNum)
+{
+    if (m_flagAnimationJump[pNum] == false) {
+        return;
+    }
+
+    ++m_timerAnimation[pNum];
+
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+        m_modelGreenBlock[pNum][blockNum]->Deactivate();
+    }
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
+        m_modelBlueBlock[pNum][blockNum]->Deactivate();
+        m_modelYellowBlock[pNum][blockNum]->Deactivate();
+    }
+
+
+    //モデルの描画
+    int numberOfUsesGreenBlock = 0;
+    int numberOfUsesBlueBlock = 0;
+    int numberOfUsesYellowBlock = 0;
+
+    double moveCorrection = 0;
+
+    int playerBlockPosition = m_playerBlockPosition[pNum] - m_amountOfMovement[pNum];
+
+    //if (m_amountOfMovement[pNum] == MOVE_BUTTON_A) {
+    //    moveCorrection = BLOCK_SIZE * MOVE_BUTTON_A / (30 - m_player->GetTimerAnimation(pNum));
+    //}
+    //else if (m_amountOfMovement[pNum] == MOVE_BUTTON_B) {
+    //    moveCorrection = BLOCK_SIZE * MOVE_BUTTON_B / (30 - m_player->GetTimerAnimation(pNum));
+    //}
+
+
+    if (m_timerAnimation[pNum] < 30) {
+        double test = BLOCK_SIZE * m_amountOfMovement[pNum] / 30;
+
+        moveCorrection = test * m_timerAnimation[pNum];
+
+
+        for (int blockNum = -6; blockNum < 15; blockNum++) {
+            //スタート地点より前のブロックを描画しない
+            if (playerBlockPosition + blockNum < 0) {
+                continue;
+            }
+            //ゴール地点より後のブロックを描画しない
+            if (playerBlockPosition + blockNum >= m_MAX_BLOCK) {
+                break;
+            }
+
+            if (m_stageData[pNum][playerBlockPosition + blockNum] == greenBlock) {
+                m_modelGreenBlock[pNum][numberOfUsesGreenBlock]->SetPosition({
+                BLOCK_POSITION_X[pNum],
+                BLOCK_POSITION_Y,
+                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - float(moveCorrection)
+                    });
+                m_modelGreenBlock[pNum][numberOfUsesGreenBlock]->Activate();
+                ++numberOfUsesGreenBlock;
+            }
+            else if (m_stageData[pNum][playerBlockPosition + blockNum] == blueBlock) {
+                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
+                  BLOCK_POSITION_X[pNum],
+                  BLOCK_POSITION_Y,
+                  BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - float(moveCorrection)
+                    });
+                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();
+                ++numberOfUsesBlueBlock;
+            }
+            else if (m_stageData[pNum][playerBlockPosition + blockNum] == yellowBlock) {
+                m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->SetPosition({
+                   BLOCK_POSITION_X[pNum],
+                   BLOCK_POSITION_Y,
+                   BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - float(moveCorrection)
+                    });
+                m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->Activate();
+                ++numberOfUsesYellowBlock;
+            }
+        }
+    }
+    else {
+        DrawBlock(pNum);
+        m_timerAnimation[pNum] = 0;
+        m_flagAnimationJump[pNum] = false;
+    }
 }
 
 //////////////////////////////
@@ -534,6 +463,9 @@ bool Stage::MoveBlock(const int pNum, const int moveNum)
     if (m_activeOperation[pNum] == false || m_activeOperationVersionBlue[pNum] == false) {
         return false;
     }
+
+    //移動量を保存
+    m_amountOfMovement[pNum] = moveNum;
 
     //操作不可状態に対する耐性を削除
     m_resistanceImpossibleOperation[pNum] = false;
@@ -547,25 +479,11 @@ bool Stage::MoveBlock(const int pNum, const int moveNum)
     //最大数を超えていたら、最大数 - 1に合わせる。
     if (m_playerBlockPosition[pNum] >= m_MAX_BLOCK) {
         m_playerBlockPosition[pNum] = m_MAX_BLOCK - 1;
+        m_amountOfMovement[pNum] = MOVE_BUTTON_B;
     }
 
-
-    DrawBlock(pNum);
-
-
-
-
-    //old
-
-    //モデルの位置を更新
-    //for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-    //    m_modelRender[pNum][blockNum]->SetPosition({
-    //        BLOCK_POSITION_X[pNum],
-    //        BLOCK_POSITION_Y,
-    //        BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - BLOCK_SIZE * (m_playerBlockPosition[pNum])
-    //        //m_modelRender[pNum][i]->GetPosition().z - BLOCK_SIZE * moveNum
-    //    });
-    //}
+    //ブロックの描画
+    m_flagAnimationJump[pNum] = true;
 
     return true;
 }
@@ -670,47 +588,6 @@ void Stage::ReturnBlock(const int pNum)
     //モデルの位置を更新
     //モデルの描画
     DrawBlock(pNum);
-
-
- /*   int numberOfUsesGreenBlock = 0;
-    int numberOfUsesBlueBlock = 0;
-    int numberOfUsesYellowBlock = 0;
-
-    for (int blockNum = 0; blockNum < 14; blockNum++) {
-        if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == greenBlock) {
-            m_modelGreenBlock[pNum][numberOfUsesGreenBlock]->SetPosition({
-            BLOCK_POSITION_X[pNum],
-            BLOCK_POSITION_Y,
-            BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
-            ++numberOfUsesGreenBlock;
-        }
-        else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == blueBlock) {
-            m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
-              BLOCK_POSITION_X[pNum],
-              BLOCK_POSITION_Y,
-              BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
-            ++numberOfUsesBlueBlock;
-        }
-        else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == yellowBlock) {
-            m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->SetPosition({
-               BLOCK_POSITION_X[pNum],
-               BLOCK_POSITION_Y,
-               BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
-            ++numberOfUsesYellowBlock;
-        }
-    }*/
-
-
-    //for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-    //    m_modelRender[pNum][blockNum]->SetPosition({
-    //        BLOCK_POSITION_X[pNum],
-    //        BLOCK_POSITION_Y,
-    //        BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - BLOCK_SIZE * (m_playerBlockPosition[pNum])
-    //    });
-    //}
 }
 
 //////////////////////////////

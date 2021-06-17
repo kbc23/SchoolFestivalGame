@@ -33,6 +33,8 @@ public:
 
     void DrawBlock(const int pNum);
 
+    void DrawMoveBlock(const int pNum);
+
 
 
     //////////////////////////////
@@ -129,7 +131,7 @@ private: //constant
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 
-    static const int m_MAX_GREEN_BLOCK = 16;
+    static const int m_MAX_GREEN_BLOCK = 18;
     static const int m_MAX_BLUE_OR_YELLOW_BLOCK = 8;
 
 private: //data menber
@@ -171,4 +173,13 @@ private: //data menber
         true, true, true, true };
 
     int m_nowRank = m_INIT_RANK;            //プレイヤーの順位データに渡すデータ
+
+    int m_amountOfMovement[con::PlayerNumberMax] = { 0, 0, 0, 0 };
+
+    ////////////////////////////////////////////////////////////
+    // タイマー関連
+    ////////////////////////////////////////////////////////////
+
+    bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
+    int m_timerAnimation[con::PlayerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
 };

@@ -93,6 +93,15 @@ public: //GetŠÖ”
 		return m_flagGoal[pNum];
 	}
 
+	int GetTimerAnimation(const int pNum)
+	{
+		return m_timerAnimation[pNum];
+	}
+
+	bool GetFlagAnimationJump(const int pNum)
+	{
+		return m_flagAnimationJump[pNum];
+	}
 
 
 public: //SetŠÖ”
