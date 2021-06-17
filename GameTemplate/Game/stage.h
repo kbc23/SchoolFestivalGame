@@ -31,6 +31,8 @@ public:
 
     void Update() override final;
 
+    void DrawBlock(const int pNum);
+
 
 
     //////////////////////////////
@@ -127,6 +129,9 @@ private: //constant
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 
+    static const int m_MAX_GREEN_BLOCK = 16;
+    static const int m_MAX_BLUE_OR_YELLOW_BLOCK = 8;
+
 private: //data menber
 
     ////////////////////////////////////////////////////////////
@@ -135,7 +140,9 @@ private: //data menber
 
     Player* m_player = nullptr;
     ModelRender* m_modelRender[con::PlayerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
-
+    ModelRender* m_modelGreenBlock[con::PlayerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
+    ModelRender* m_modelBlueBlock[con::PlayerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
+    ModelRender* m_modelYellowBlock[con::PlayerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ
