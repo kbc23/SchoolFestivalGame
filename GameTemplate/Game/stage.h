@@ -21,6 +21,10 @@ public:
     */
     void StageCreate();
 
+    bool CreateGreen(const int blockNum, const int randomGreenNum, const int continuousGreenBlock);
+
+    void CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowNum);
+
     ////////////////////////////////////////////////////////////
     // 毎フレームの処理
     ////////////////////////////////////////////////////////////
@@ -119,7 +123,7 @@ public: //enum
 
 
 private: //constant
-    static const int m_MAX_BLOCK = 50;      //１レーンのブロックの最大数
+    static const int m_MAX_BLOCK = 100;      //１レーンのブロックの最大数
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 

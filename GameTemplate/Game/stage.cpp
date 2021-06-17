@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "stage.h"
 
+#include <random>
+
 #include "player.h"
 
 
@@ -111,28 +113,193 @@ bool Stage::Start()
 
 void Stage::StageCreate()
 {
+    //緑は連続で６個まで
+    //青の後は緑
+    //黄色の後は緑
+    //青:70% 黄色:30%
+
+    std::mt19937 mt{ std::random_device{}() };
+    std::uniform_int_distribution<int> dist(1, 100);
+
+    int continuousGreenBlock = 0;   //緑のブロックが何回連続で出ているか。
+    int randomGreenNum = 0;              //乱数を入れる変数
+    int randomBlueOrYellowNum = 0;  //青色か黄色をセットするときに使用する乱数を入れる変数
+    bool lastTimeBlockBlueOrYellow = false; //前回のブロックが青色か黄色だったか
+
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-        m_stageData[con::player_1][blockNum] = greenBlock;
+        randomGreenNum = dist(mt); //乱数をセット
+
+        //最初のブロックは緑
+        if (blockNum == con::FIRST_OF_THE_ARRAY) {
+            m_stageData[con::player_1][blockNum] = greenBlock;
+            ++continuousGreenBlock;
+            continue;
+        }
+
+        //ゴールの位置のブロックは緑
+        if (blockNum == m_MAX_BLOCK - 1) {
+            m_stageData[con::player_1][blockNum] = greenBlock;
+            continue;
+        }
+
+        //緑ブロックが６回連続で出ていた場合
+        if (continuousGreenBlock >= 6) {
+            //青ブロック、黄色ブロックのセット
+            randomBlueOrYellowNum = dist(mt);
+            CreateBlueOrYellow(blockNum, randomBlueOrYellowNum);
+            continuousGreenBlock = 0;
+            lastTimeBlockBlueOrYellow = true;
+            continue;
+        }
+
+        //前回が青色か黄色のブロックだった場合
+        if (lastTimeBlockBlueOrYellow == true) {
+            m_stageData[con::player_1][blockNum] = greenBlock;
+            ++continuousGreenBlock;
+            lastTimeBlockBlueOrYellow = false;
+            continue;
+        }
+
+        //緑ブロックの確率
+        if (CreateGreen(blockNum, randomGreenNum, continuousGreenBlock) == true) {
+            m_stageData[con::player_1][blockNum] = greenBlock;
+            ++continuousGreenBlock;
+            continue;
+        }
+        else {
+            //青ブロック、黄色ブロックのセット
+            randomBlueOrYellowNum = dist(mt);
+            CreateBlueOrYellow(blockNum, randomBlueOrYellowNum);
+            continuousGreenBlock = 0;
+            lastTimeBlockBlueOrYellow = true;
+            continue;
+        }
+
+
+
+
+
+ 
+
+
     }
 
-    m_stageData[con::player_1][6] = blueBlock;
-    m_stageData[con::player_1][8] = blueBlock;
-    m_stageData[con::player_1][12] = yellowBlock;
-    m_stageData[con::player_1][15] = blueBlock;
-    m_stageData[con::player_1][18] = blueBlock;
-    m_stageData[con::player_1][25] = blueBlock;
-    m_stageData[con::player_1][28] = yellowBlock;
-    m_stageData[con::player_1][30] = blueBlock;
-    m_stageData[con::player_1][32] = blueBlock;
-    m_stageData[con::player_1][37] = yellowBlock;
-    m_stageData[con::player_1][40] = blueBlock;
-    m_stageData[con::player_1][43] = blueBlock;
-    m_stageData[con::player_1][46] = blueBlock;
-
+    //プレイヤー１でセットしたものを他のプレイヤーのところにもセットする。
     for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
             m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
         }
+    }
+
+
+
+
+
+
+    //old
+    
+    //for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+    //    m_stageData[con::player_1][blockNum] = greenBlock;
+    //}
+
+    //m_stageData[con::player_1][6] = blueBlock;
+    //m_stageData[con::player_1][8] = blueBlock;
+    //m_stageData[con::player_1][12] = yellowBlock;
+    //m_stageData[con::player_1][15] = blueBlock;
+    //m_stageData[con::player_1][18] = blueBlock;
+    //m_stageData[con::player_1][25] = blueBlock;
+    //m_stageData[con::player_1][28] = yellowBlock;
+    //m_stageData[con::player_1][30] = blueBlock;
+    //m_stageData[con::player_1][32] = blueBlock;
+    //m_stageData[con::player_1][37] = yellowBlock;
+    //m_stageData[con::player_1][40] = blueBlock;
+    //m_stageData[con::player_1][43] = blueBlock;
+    //m_stageData[con::player_1][46] = blueBlock;
+
+    //for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
+    //    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+    //        m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
+    //    }
+    //}
+}
+
+bool Stage::CreateGreen(const int blockNum, const int randomGreenNum, const int continuousGreenBlock)
+{
+    bool createGreenBlock = false;
+
+    switch (continuousGreenBlock) {
+    case 0:
+        if (randomGreenNum <= 80) {
+            createGreenBlock = true;
+        }
+        else {
+            createGreenBlock = false;
+        }
+
+        break;
+    case 1:
+        if (randomGreenNum <= 70) {
+            createGreenBlock = true;
+        }
+        else {
+            createGreenBlock = false;
+        }
+
+        break;
+        
+    case 2:
+        if (randomGreenNum <= 65) {
+            createGreenBlock = true;
+        }
+        else {
+            createGreenBlock = false;
+        }
+
+        break;
+    case 3:
+        if (randomGreenNum <= 60) {
+            createGreenBlock = true;
+        }
+        else {
+            createGreenBlock = false;
+        }
+
+        break;
+    case 4:
+        if (randomGreenNum <= 55) {
+            createGreenBlock = true;
+        }
+        else {
+            createGreenBlock = false;
+        }
+
+        break;
+    case 5:
+        if (randomGreenNum <= 50) {
+            createGreenBlock = true;
+        }
+        else {
+            createGreenBlock = false;
+        }
+
+        break;
+    default:
+
+        break;
+    }
+
+    return createGreenBlock;
+}
+
+void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowNum)
+{
+    //青ブロック（70%）
+    if (randomBlueOrYellowNum <= 70) {
+        m_stageData[con::player_1][blockNum] = blueBlock;
+    }
+    //黄色ブロック（30%）
+    else {
+        m_stageData[con::player_1][blockNum] = yellowBlock;
     }
 }
 
