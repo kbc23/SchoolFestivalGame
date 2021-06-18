@@ -33,7 +33,7 @@ namespace //constant
     // 位置情報
     ////////////////////////////////////////////////////////////
 
-    const float BLOCK_POSITION_X[con::PlayerNumberMax] = {           //ブロックのX座標
+    const float BLOCK_POSITION_X[con::playerNumberMax] = {           //ブロックのX座標
         390.0f,                                                             //プレイヤー１
         130.0f,                                                             //プレイヤー２
         -130.0f,                                                            //プレイヤー３
@@ -41,7 +41,7 @@ namespace //constant
     };
     const float BLOCK_POSITION_Y = -80.0f;                              //ブロックのY座標
     const float BLOCK_POSITION_Z = -250.0f;                             //ブロックのZ座標
-    const Vector3 BLOCK_START_POSITION[con::PlayerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
+    const Vector3 BLOCK_START_POSITION[con::playerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
         { 390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }, 	                //プレイヤー１
         { 130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                    //プレイヤー２
         { -130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                //プレイヤー３
@@ -63,6 +63,20 @@ namespace //constant
 
     const int MOVE_BUTTON_A = 2;		//Aボタンを押したときの移動量
     const int MOVE_BUTTON_B = 1;		//Bボタンを押したときの移動量
+
+
+
+    const int UPPER_LIMIT_CONTINUOUS_GREEN_BLOCK = 6;   //連続で作成する緑ブロックの上限
+    const int PROBABILITY_CREATE_GREEN_BLOCK[UPPER_LIMIT_CONTINUOUS_GREEN_BLOCK] = {    //緑ブロックを作成するかの確率
+        80,                                                                                 //０個
+        70,                                                                                 //１個
+        65,                                                                                 //２個
+        60,                                                                                 //３個
+        55,                                                                                 //４個
+        50                                                                                  //５個
+    };
+    const int PROBABILITY_CREATE_BLUE_BLOCK = 70;       //青ブロックを作成するかの確率
+    //( 100 - PROBABILITY_CREATE_BLUE_BLOCK )が黄色ブロックを作成するかの確率
 }
 
 
@@ -74,7 +88,7 @@ Stage::Stage()
 
 Stage::~Stage()
 {
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
             DeleteGO(m_modelRender[playerNum][blockNum]);
         }
@@ -95,7 +109,7 @@ bool Stage::Start()
     //黄色８個
 
     //モデルの作成
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
             m_modelGreenBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
@@ -113,7 +127,7 @@ bool Stage::Start()
     }
 
     //モデルの描画
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         DrawBlock(playerNum);
     }
 
@@ -130,7 +144,7 @@ void Stage::StageCreate()
     //青:70% 黄色:30%
 
     std::mt19937 mt{ std::random_device{}() };
-    std::uniform_int_distribution<int> dist(1, 100);
+    std::uniform_int_distribution<int> randomNum(1, 100);
 
     int continuousGreenBlock = 0;   //緑のブロックが何回連続で出ているか。
     int randomGreenNum = 0;              //乱数を入れる変数
@@ -138,8 +152,6 @@ void Stage::StageCreate()
     bool lastTimeBlockBlueOrYellow = false; //前回のブロックが青色か黄色だったか
 
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-        randomGreenNum = dist(mt); //乱数をセット
-
         //最初のブロックは緑
         if (blockNum == con::FIRST_OF_THE_ARRAY) {
             m_stageData[con::player_1][blockNum] = greenBlock;
@@ -153,11 +165,10 @@ void Stage::StageCreate()
             continue;
         }
 
-        //緑ブロックが６回連続で出ていた場合
-        if (continuousGreenBlock >= 6) {
+        //緑ブロックが６回連続で作成されている場合
+        if (continuousGreenBlock >= UPPER_LIMIT_CONTINUOUS_GREEN_BLOCK) {
             //青ブロック、黄色ブロックのセット
-            randomBlueOrYellowNum = dist(mt);
-            CreateBlueOrYellow(blockNum, randomBlueOrYellowNum);
+            CreateBlueOrYellow(blockNum, randomNum(mt));
             continuousGreenBlock = 0;
             lastTimeBlockBlueOrYellow = true;
             continue;
@@ -171,16 +182,16 @@ void Stage::StageCreate()
             continue;
         }
 
-        //緑ブロックの確率
-        if (CreateGreen(blockNum, randomGreenNum, continuousGreenBlock) == true) {
+        //緑ブロックを作成するか
+        if (CreateGreen(continuousGreenBlock, randomNum(mt)) == true) {
+            //緑ブロックを作成
             m_stageData[con::player_1][blockNum] = greenBlock;
             ++continuousGreenBlock;
             continue;
         }
         else {
-            //青ブロック、黄色ブロックのセット
-            randomBlueOrYellowNum = dist(mt);
-            CreateBlueOrYellow(blockNum, randomBlueOrYellowNum);
+            //青ブロック、黄色ブロックを作成
+            CreateBlueOrYellow(blockNum, randomNum(mt));
             continuousGreenBlock = 0;
             lastTimeBlockBlueOrYellow = true;
             continue;
@@ -188,89 +199,35 @@ void Stage::StageCreate()
     }
 
     //プレイヤー１でセットしたものを他のプレイヤーのところにもセットする。
-    for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
+    for (int playerNum = con::player_2; playerNum < con::playerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
             m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
         }
     }
 }
 
-bool Stage::CreateGreen(const int blockNum, const int randomGreenNum, const int continuousGreenBlock)
+bool Stage::CreateGreen(const int continuousGreenBlock, const int randomGreenNum)
 {
-    bool createGreenBlock = false;
-
-    switch (continuousGreenBlock) {
-    case 0:
-        if (randomGreenNum <= 80) {
-            createGreenBlock = true;
-        }
-        else {
-            createGreenBlock = false;
-        }
-
-        break;
-    case 1:
-        if (randomGreenNum <= 70) {
-            createGreenBlock = true;
-        }
-        else {
-            createGreenBlock = false;
-        }
-
-        break;
-        
-    case 2:
-        if (randomGreenNum <= 65) {
-            createGreenBlock = true;
-        }
-        else {
-            createGreenBlock = false;
-        }
-
-        break;
-    case 3:
-        if (randomGreenNum <= 60) {
-            createGreenBlock = true;
-        }
-        else {
-            createGreenBlock = false;
-        }
-
-        break;
-    case 4:
-        if (randomGreenNum <= 55) {
-            createGreenBlock = true;
-        }
-        else {
-            createGreenBlock = false;
-        }
-
-        break;
-    case 5:
-        if (randomGreenNum <= 50) {
-            createGreenBlock = true;
-        }
-        else {
-            createGreenBlock = false;
-        }
-
-        break;
-    default:
-
-        break;
+    //緑ブロックを作成するかどうか
+    if (randomGreenNum <= PROBABILITY_CREATE_GREEN_BLOCK[continuousGreenBlock]) {
+        //緑ブロックを作成
+        return true;
     }
-
-    return createGreenBlock;
+    else {
+        //緑ブロックを作成しない
+        return false;
+    }
 }
 
 void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowNum)
 {
-    //青ブロック（70%）
-    if (randomBlueOrYellowNum <= 70) {
+    //青ブロックと黄色ブロックのどちらを作成するか
+    if (randomBlueOrYellowNum <= PROBABILITY_CREATE_BLUE_BLOCK) {
+        //青ブロックを作成
         m_stageData[con::player_1][blockNum] = blueBlock;
     }
-    //黄色ブロック（30%）
     else {
+        //黄色ブロックを作成
         m_stageData[con::player_1][blockNum] = yellowBlock;
     }
 }
@@ -282,31 +239,29 @@ void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowN
 void Stage::Update()
 {
     //スタート地点に戻る( Debug )
-    if (g_pad[0]->IsTrigger(enButtonX)) {
-        for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-            for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-                m_modelRender[playerNum][blockNum]->SetPosition({
-                    BLOCK_START_POSITION[playerNum].x,
-                    BLOCK_START_POSITION[playerNum].y,
-                    BLOCK_START_POSITION[playerNum].z + BLOCK_SIZE * blockNum
-                    });
-            }
-            m_playerBlockPosition[playerNum] = 0;
-        }
-    }
+    //if (g_pad[0]->IsTrigger(enButtonX)) {
+    //    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    //        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+    //            m_modelRender[playerNum][blockNum]->SetPosition({
+    //                BLOCK_START_POSITION[playerNum].x,
+    //                BLOCK_START_POSITION[playerNum].y,
+    //                BLOCK_START_POSITION[playerNum].z + BLOCK_SIZE * blockNum
+    //                });
+    //        }
+    //        m_playerBlockPosition[playerNum] = 0;
+    //    }
+    //}
     //to this point( Debug )
 
 
     //プレイヤーごとの処理
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         CheckBlock(playerNum);
 
         ReturnOperationTimer(playerNum);
 
         DrawMoveBlock(playerNum);
     }
-
-
 
     //ゴール時の処理
     GoalBlock();
@@ -599,7 +554,7 @@ void Stage::GoalBlock()
     bool addNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
     int nextRank = con::INIT_ZERO; //次のプレイヤーの順位
 
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         //プレイヤーの順位を確定
         if (m_player->GetActivePlayer(playerNum) == true && m_playerBlockPosition[playerNum] == m_MAX_BLOCK - 1) {
             //プレイヤーの操作をできないようにする。

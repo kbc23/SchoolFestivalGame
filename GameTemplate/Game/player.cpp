@@ -16,14 +16,14 @@ namespace //constant
 	// 位置情報
 	////////////////////////////////////////////////////////////
 
-	const Vector3 PLAYER_START_POSITION[con::PlayerNumberMax] = {	//プレイヤーの初期座標
+	const Vector3 PLAYER_START_POSITION[con::playerNumberMax] = {	//プレイヤーの初期座標
 		{ 390.0f, 0.0f, -250.0f },											//プレイヤー１
 		{ 130.0f, 0.0f, -250.0f },											//プレイヤー２
 		{ -130.0f, 0.0f, -250.0f },											//プレイヤー３
 		{ -390.0f, 0.0f, -250.0f }											//プレイヤー４
 	};
 	
-	const Vector2 GOAL_RANK_FONT_POSITION[con::PlayerNumberMax] = {	//ゴール順位の表示座標
+	const Vector2 GOAL_RANK_FONT_POSITION[con::playerNumberMax] = {	//ゴール順位の表示座標
 		{ -390.0f, 0.0f },													//プレイヤー１
 		{ -130.0f, 0.0f },													//プレイヤー２
 		{ 130.0f, 0.0f },													//プレイヤー３
@@ -61,7 +61,7 @@ Player::Player()
 Player::~Player()
 {
 	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::playerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
 }
@@ -85,7 +85,7 @@ void Player::DeleteIndividual(const int pNum)
 bool Player::Start()
 {
 	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::playerNumberMax; playerNum++) {
 		bool check = StartIndividual(playerNum);
 
 		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。

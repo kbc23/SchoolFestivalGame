@@ -45,19 +45,19 @@ private: //data menber
     
     Player* m_player = nullptr;
     Game* m_game = nullptr;
-    FontRender* m_fontScoreTime[con::PlayerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
+    FontRender* m_fontScoreTime[con::playerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
 
     ////////////////////////////////////////////////////////////
     // スコアタイム関連
     ////////////////////////////////////////////////////////////
 
-    int m_scoreTime[con::PlayerNumberMax] = { 0,0,0,0 };                     //スコアタイムのカウント
+    int m_scoreTime[con::playerNumberMax] = { 0,0,0,0 };                     //スコアタイムのカウント
 
-    bool m_flagProcessing[con::PlayerNumberMax] = { true,true,true,true };   //スコアタイムのカウントの処理をおこなっているか
+    bool m_flagProcessing[con::playerNumberMax] = { true,true,true,true };   //スコアタイムのカウントの処理をおこなっているか
 
-    int m_scoreTimeMinutes[con::PlayerNumberMax] = { 0,0,0,0 };              //分
-    int m_scoreTimeSeconds[con::PlayerNumberMax] = { 0,0,0,0 };              //秒
-    int m_scoreTimeCommaSeconds[con::PlayerNumberMax] = { 0,0,0,0 };         //コンマ秒
+    int m_scoreTimeMinutes[con::playerNumberMax] = { 0,0,0,0 };              //分
+    int m_scoreTimeSeconds[con::playerNumberMax] = { 0,0,0,0 };              //秒
+    int m_scoreTimeCommaSeconds[con::playerNumberMax] = { 0,0,0,0 };         //コンマ秒
 
 };
 

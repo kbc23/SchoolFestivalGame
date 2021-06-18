@@ -174,25 +174,25 @@ private: //data menber
 	Stage* m_stage = nullptr;
 	Game* m_game = nullptr;
 
-	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
-	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
+	ModelRender* m_modelRender[con::playerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
+	FontRender* m_fontGoalRank[con::playerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
 	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
 
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報
 	////////////////////////////////////////////////////////////
 
-	int m_activePlayer[con::PlayerNumberMax] = { true, true, true, true };	//このプレイヤーは操作しているか
-	int m_maxPlayer = con::PlayerNumberMax;									//プレイヤーの最大数
+	int m_activePlayer[con::playerNumberMax] = { true, true, true, true };	//このプレイヤーは操作しているか
+	int m_maxPlayer = con::playerNumberMax;									//プレイヤーの最大数
 
-	int m_goalRanking[con::PlayerNumberMax] = { 0, 0, 0, 0 };				//プレイヤーのゴール順位
-	bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
+	int m_goalRanking[con::playerNumberMax] = { 0, 0, 0, 0 };				//プレイヤーのゴール順位
+	bool m_flagGoal[con::playerNumberMax] = { false, false, false, false };	//ゴールしたか
 	int m_goalPlayer = 0;												//ゴールしたプレイヤーの人数
 
 	////////////////////////////////////////////////////////////
 	// タイマー関連
 	////////////////////////////////////////////////////////////
 
-	bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
-	int m_timerAnimation[con::PlayerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
+	bool m_flagAnimationJump[con::playerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
+	int m_timerAnimation[con::playerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
 };
