@@ -12,6 +12,7 @@
 //※現在は、プロトなのでこのままで続行
 
 
+
 namespace //constant
 {
     ////////////////////////////////////////////////////////////
@@ -237,22 +238,6 @@ void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowN
 
 void Stage::Update()
 {
-    //スタート地点に戻る( Debug )
-    //if (g_pad[0]->IsTrigger(enButtonX)) {
-    //    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
-    //        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
-    //            m_modelRender[playerNum][blockNum]->SetPosition({
-    //                BLOCK_START_POSITION[playerNum].x,
-    //                BLOCK_START_POSITION[playerNum].y,
-    //                BLOCK_START_POSITION[playerNum].z + BLOCK_SIZE * blockNum
-    //                });
-    //        }
-    //        m_playerBlockPosition[playerNum] = 0;
-    //    }
-    //}
-    //to this point( Debug )
-
-
     //プレイヤーごとの処理
     for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         CheckBlock(playerNum);
@@ -348,12 +333,6 @@ void Stage::DrawMoveBlock(const int pNum)
 
     int playerBlockPosition = m_playerBlockPosition[pNum] - m_amountOfMovement[pNum];
 
-    //if (m_amountOfMovement[pNum] == MOVE_BUTTON_A) {
-    //    moveCorrection = BLOCK_SIZE * MOVE_BUTTON_A / (30 - m_player->GetTimerAnimation(pNum));
-    //}
-    //else if (m_amountOfMovement[pNum] == MOVE_BUTTON_B) {
-    //    moveCorrection = BLOCK_SIZE * MOVE_BUTTON_B / (30 - m_player->GetTimerAnimation(pNum));
-    //}
 
 
     if (m_timerAnimation[pNum] < 30) {
