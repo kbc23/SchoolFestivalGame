@@ -23,6 +23,8 @@ namespace //constant
     const char* FILE_PATH_TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
     const char* FILE_PATH_TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
 
+    //※バナナとバナナが乗ってるブロックは１つのモデルでできている。
+
     ////////////////////////////////////////////////////////////
     // ブロックの情報
     ////////////////////////////////////////////////////////////
