@@ -168,7 +168,7 @@ void AnimationPlayController::ProgressKeyframeNo(float deltaTime)
 void AnimationPlayController::Update(float deltaTime, Animation* animation)
 {
 	if(m_animationClip == nullptr){
-		return ;
+		return;
 	}
 
 	m_time += deltaTime;

@@ -84,6 +84,15 @@ void Player::DeleteIndividual(const int pNum)
 
 bool Player::Start()
 {
+	//アニメーションの設定
+	m_animationPlayer[Animation_idle].Load("Assets/animData/UnityChanIdle.tka");
+	//ループ再生をtrueにする
+	m_animationPlayer[Animation_idle].SetLoopFlag(true);
+	//アニメーションの設定
+	//m_animationPlayer[Animation_jump].Load("Assets/animData/UnityChanJump.tka");
+	//ループ再生をtrueにする
+	//m_animationPlayer[Animation_jump].SetLoopFlag(true);
+
 	//プレイヤーごとに処理
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::playerNumberMax; playerNum++) {
 		bool check = StartIndividual(playerNum);
@@ -101,6 +110,8 @@ bool Player::Start()
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
+
+
 	return true;
 }
 
@@ -109,8 +120,9 @@ bool Player::StartIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL);
+	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
+	m_modelRender[pNum]->PlayAnimation(Animation_idle);
 
 	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
 	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
@@ -139,6 +151,13 @@ void Player::Update()
 	if (m_maxPlayer == m_goalPlayer) {
 		m_fontEnd->Activate();
 	}
+	m_modelRender[0]->PlayAnimation(Animation_idle);
+
+	bool check = m_modelRender[0]->IsInited();
+
+	bool check2 = m_modelRender[0]->IsPlayingAnimation();
+
+	int a = 10;
 }
 
 //////////////////////////////

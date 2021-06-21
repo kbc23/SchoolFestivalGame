@@ -166,6 +166,16 @@ public: //Set関数
 	}
 
 
+private:
+	enum AnimationEnum
+	{
+		Animation_idle,
+		//Animation_jump,
+		Animation_Max
+	};
+
+
+
 private: //data menber
 	////////////////////////////////////////////////////////////
 	// クラスのオブジェクト
@@ -177,6 +187,8 @@ private: //data menber
 	ModelRender* m_modelRender[con::playerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	FontRender* m_fontGoalRank[con::playerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
 	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
+
+	AnimationClip m_animationPlayer[Animation_Max];
 
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報

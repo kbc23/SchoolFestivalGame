@@ -22,16 +22,77 @@ bool ModelRender::Start()
 // 初期化
 ////////////////////////////////////////////////////////////
 
-void ModelRender::Init(const char* filePath)
-{
-    //tkmファイルのファイルパスを保持
-    m_tkmFilePath = filePath;
+//void ModelRender::Init(const char* filePath)
+//{
+//  //tkmファイルのファイルパスを保持
+//  m_tkmFilePath = filePath;
+//
+//	//モデルの初期化
+//	InitModel(filePath);
+//
+//	//初期化完了
+//	m_finishInit = true;
+//}
 
+void ModelRender::Init(const char* filePath,
+	AnimationClip* animationClip,
+	int maxAnimationClipNum
+)
+{
+	//tkmファイルのファイルパスを保持
+	m_tkmFilePath = filePath;
+	//スケルトンのデータの読み込み
+	InitSkeleton(filePath);
 	//モデルの初期化
 	InitModel(filePath);
+	//アニメーションを初期化
+	InitAnimation(animationClip, maxAnimationClipNum);
 
 	//初期化完了
 	m_finishInit = true;
+}
+
+bool ModelRender::InitSkeleton(const char* filePath)
+{
+	//tkmファイルをtksファイルに変換
+	std::string skeletonFilePath = filePath;
+	int pos = (int)skeletonFilePath.find(".tkm");
+	skeletonFilePath.replace(pos, 4, ".tks");
+
+	//スケルトンのリソースを確保
+	m_skeletonPointer.reset(new Skeleton);
+	//スケルトンのデータの読み込み
+	bool isInited = m_skeletonPointer->Init(skeletonFilePath.c_str());
+
+	//初期化に成功したか
+	//成功
+	if (isInited) {
+		return true;
+	}
+	//失敗
+	else {
+		//スケルトンのリソースを解放
+		m_skeletonPointer.reset();
+		return false;
+	}
+}
+
+void ModelRender::InitAnimation(AnimationClip* animationClip, int maxAnimationClipNum)
+{
+	//アニメ―ションクリップを登録しているか
+	if (animationClip == nullptr) {
+		//していたらreturn
+		return;
+	}
+
+	//アニメーションのリソースを確保
+	m_animationPointer.reset(new Animation);
+	//アニメーションを初期化
+	m_animationPointer->Init(
+		*m_skeletonPointer,
+		animationClip,
+		maxAnimationClipNum
+	);
 }
 
 void ModelRender::InitModel(const char* filePath)
@@ -59,6 +120,10 @@ void ModelRender::InitModel(const char* filePath)
 	modelInitData.m_tkmFilePath = filePath;
 	//使用するシェーダーファイルパスを設定
 	modelInitData.m_fxFilePath = "Assets/shader/model.fx";
+	//スケルトンを指定する。
+	if (m_skeletonPointer) {	//スケルトンが初期化されていたら
+		modelInitData.m_skeleton = m_skeletonPointer.get();
+	}
 	//ライトの情報を定数バッファとしてディスクリプタヒープに
 	//登録するためにモデルの初期化情報として渡す。
 	modelInitData.m_expandConstantBuffer = &m_light;
@@ -176,6 +241,14 @@ void ModelRender::Update()
 		return;
 	}
 
+	//スケルトンを更新。
+	if (m_skeletonPointer) {	//スケルトンが初期化されていたら
+		m_skeletonPointer->Update(m_model.GetWorldMatrix());
+	}
+	//アニメーションを進める。
+	if (m_animationPointer) {	//アニメーションが初期化されていたら
+		m_animationPointer->Progress(1.0f / 60.0f);
+	}
 	//モデルの座標更新
 	m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 

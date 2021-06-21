@@ -142,7 +142,7 @@ private: //constant
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 
-    static const int m_MAX_GREEN_BLOCK = 18;            //作成する緑ブロックのモデルの数
+    static const int m_MAX_GREEN_BLOCK = 20;            //作成する緑ブロックのモデルの数
     static const int m_MAX_BLUE_OR_YELLOW_BLOCK = 8;    //作成する青、黄色ブロックのモデルの数
 
 private: //data menber

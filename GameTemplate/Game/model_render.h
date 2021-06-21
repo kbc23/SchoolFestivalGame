@@ -64,7 +64,13 @@ public:
 	 * @brief 初期化関数
 	 * @param filePath tkmファイルのファイルパス
 	*/
-	void Init(const char* filePath);
+	//void Init(const char* filePath);
+
+
+	void Init(const char* filePath,
+		AnimationClip* animationClip = nullptr,
+		int maxAnimationClipNum = 0
+	);
 
 
 
@@ -80,6 +86,43 @@ private:
 	void InitSpotLight(); //スポットライト
 	void InitAmbientLight(); //環境光
 	void InitHemiLight(); //半球ライト
+
+
+	bool InitSkeleton(const char* filePath);
+
+	/**
+	 * @brief アニメーションの初期化
+	 * @param animationClip アニメーションクリップ
+	 * @param maxAnimationClipNum アニメーションクリップの総数
+	*/
+	void InitAnimation(AnimationClip* animationClip, int maxAnimationClipNum);
+
+
+public:
+	/**
+	 * @brief アニメーションを再生する
+	 * @param animationNumber 登録しているアニメーションクリップの番号
+	 * @param interpolateTime 補完時間（単位：秒）
+	*/
+	void PlayAnimation(int animationNumber, float interpolateTime = 0.2f)
+	{
+		m_animationPointer->Play(animationNumber, interpolateTime);
+	}
+
+	/**
+	 * @brief アニメーションを再生中か
+	 * @return 再生中
+	*/
+	const bool IsPlayingAnimation() const
+	{
+		return m_animationPointer->IsPlaying();
+	}
+
+	bool IsInited() const
+	{
+		return m_animationPointer->IsInited();
+	}
+
 
 
 public: //Get関数
@@ -138,6 +181,10 @@ public: //Set関数
 
 private: //data menber
     Model m_model;
+	std::unique_ptr<Skeleton> m_skeletonPointer; //スケルトンのポインター
+	std::unique_ptr<Animation> m_animationPointer; //アニメーションのポインター
+
+
     const char* m_tkmFilePath = nullptr; //tkmファイルのファイルパス
 	Light m_light;
 
