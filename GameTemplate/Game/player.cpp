@@ -17,10 +17,10 @@ namespace //constant
 	////////////////////////////////////////////////////////////
 
 	const Vector3 PLAYER_START_POSITION[con::playerNumberMax] = {	//プレイヤーの初期座標
-		{ 390.0f, 0.0f, -250.0f },											//プレイヤー１
-		{ 130.0f, 0.0f, -250.0f },											//プレイヤー２
-		{ -130.0f, 0.0f, -250.0f },											//プレイヤー３
-		{ -390.0f, 0.0f, -250.0f }											//プレイヤー４
+		{ 390.0f, 0.0f, -240.0f },											//プレイヤー１
+		{ 130.0f, 0.0f, -240.0f },											//プレイヤー２
+		{ -130.0f, 0.0f, -240.0f },											//プレイヤー３
+		{ -390.0f, 0.0f, -240.0f }											//プレイヤー４
 	};
 	
 	const Vector2 GOAL_RANK_FONT_POSITION[con::playerNumberMax] = {	//ゴール順位の表示座標
@@ -45,6 +45,12 @@ namespace //constant
 
 	const int TIMER_RESET = 0; //タイマーのリセット
 	const int TIME_ANIMATION = 30; //ジャンプアニメーションの時間（0.5秒）
+
+	////////////////////////////////////////////////////////////
+	// その他
+	////////////////////////////////////////////////////////////
+
+	const float JUMP_MOVE = 3.0f;
 }
 
 
@@ -120,8 +126,9 @@ bool Player::StartIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL, m_animationPlayer, Animation_Max);
+	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
+	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
 	m_modelRender[pNum]->PlayAnimation(Animation_idle);
 
 	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
@@ -153,9 +160,15 @@ void Player::Update()
 	}
 	m_modelRender[0]->PlayAnimation(Animation_idle);
 
-	bool check = m_modelRender[0]->IsInited();
+	bool check[4] = { false,false,false,false };
 
-	bool check2 = m_modelRender[0]->IsPlayingAnimation();
+	bool check2[4] = { false,false,false,false };
+	
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
+		check[playerNum] = m_modelRender[playerNum]->IsInited();
+
+		check2[playerNum] = m_modelRender[playerNum]->IsPlayingAnimation();
+	}
 
 	int a = 10;
 }
@@ -217,10 +230,10 @@ void Player::JumpAnimation(const int pNum)
 
 	//ここのマジックナンバーを後で解消する。
 	if (m_timerAnimation[pNum] >= 0 && m_timerAnimation[pNum] <= 15) {
-		m_modelRender[pNum]->UpPositionY(1.0f);
+		m_modelRender[pNum]->UpPositionY(JUMP_MOVE);
 	}
 	else if (m_timerAnimation[pNum] >= 16 && m_timerAnimation[pNum] <= 30) {
-		m_modelRender[pNum]->DownPositionY(1.0f);
+		m_modelRender[pNum]->DownPositionY(JUMP_MOVE);
 	}
 
 

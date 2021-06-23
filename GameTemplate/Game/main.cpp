@@ -61,6 +61,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 	//ゲームオブジェクトマネージャーを削除。
+	PhysicsWorld::DeleteInstance();
 	GameObjectManager::DeleteInstance();
 	return 0;
 }

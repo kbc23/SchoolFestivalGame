@@ -35,6 +35,7 @@ bool ModelRender::Start()
 //}
 
 void ModelRender::Init(const char* filePath,
+	modelUpAxis::EnModelUpAxis modelUpAxis,
 	AnimationClip* animationClip,
 	int maxAnimationClipNum
 )
@@ -44,7 +45,7 @@ void ModelRender::Init(const char* filePath,
 	//スケルトンのデータの読み込み
 	InitSkeleton(filePath);
 	//モデルの初期化
-	InitModel(filePath);
+	InitModel(filePath, modelUpAxis);
 	//アニメーションを初期化
 	InitAnimation(animationClip, maxAnimationClipNum);
 
@@ -95,7 +96,7 @@ void ModelRender::InitAnimation(AnimationClip* animationClip, int maxAnimationCl
 	);
 }
 
-void ModelRender::InitModel(const char* filePath)
+void ModelRender::InitModel(const char* filePath, modelUpAxis::EnModelUpAxis modelUpAxis)
 {
 	//ライトの設定をする。
 	//ディレクションライトを初期化する
@@ -124,6 +125,8 @@ void ModelRender::InitModel(const char* filePath)
 	if (m_skeletonPointer) {	//スケルトンが初期化されていたら
 		modelInitData.m_skeleton = m_skeletonPointer.get();
 	}
+	//モデルの上方向を指定
+	modelInitData.m_modelUpAxis = modelUpAxis;
 	//ライトの情報を定数バッファとしてディスクリプタヒープに
 	//登録するためにモデルの初期化情報として渡す。
 	modelInitData.m_expandConstantBuffer = &m_light;

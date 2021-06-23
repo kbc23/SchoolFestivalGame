@@ -6,25 +6,29 @@
 
 class IShaderResource;
 
-//モデルの上方向
-enum EnModelUpAxis {
-	enModelUpAxisY,		//モデルの上方向がY軸。
-	enModelUpAxisZ,		//モデルの上方向がZ軸。
-};
+namespace modelUpAxis
+{
+	//モデルの上方向
+	enum EnModelUpAxis {
+		enModelUpAxisY,		//モデルの上方向がY軸。
+		enModelUpAxisZ,		//モデルの上方向がZ軸。
+	};
+}
+
 /// <summary>
 /// モデルの初期化データ
 /// </summary>
 struct ModelInitData {
 	const char* m_tkmFilePath = nullptr;							//tkmファイルパス。
 	const char* m_vsEntryPointFunc = "VSMain";						//頂点シェーダーのエントリーポイント。
-	const char* m_vsSkinEntryPointFunc = "VSMain";					//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
+	const char* m_vsSkinEntryPointFunc = "VSSkinMain";				//スキンありマテリアル用の頂点シェーダーのエントリーポイント。
 	const char* m_psEntryPointFunc = "PSMain";						//ピクセルシェーダーのエントリーポイント。
 	const char* m_fxFilePath = nullptr;								//.fxファイルのファイルパス。
 	void* m_expandConstantBuffer = nullptr;							//ユーザー拡張の定数バッファ。
 	int m_expandConstantBufferSize = 0;								//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;			//ユーザー拡張のシェーダーリソース。
 	Skeleton* m_skeleton = nullptr;									//スケルトン。
-	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
+	modelUpAxis::EnModelUpAxis m_modelUpAxis = modelUpAxis::enModelUpAxisZ;		//モデルの上方向。
 };
 
 /// <summary>
@@ -88,13 +92,13 @@ public:
 	/// <returns></returns>
 	const TkmFile& GetTkmFile() const
 	{
-		return m_tkmFile;
+		return *m_tkmFile;
 	}
 private:
 
 	Matrix m_world;														//ワールド行列。
-	TkmFile m_tkmFile;													//tkmファイル。
+	TkmFile* m_tkmFile;													//tkmファイル。
 	Skeleton m_skeleton;												//スケルトン。
 	MeshParts m_meshParts;											//メッシュパーツ。
-	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
+	modelUpAxis::EnModelUpAxis m_modelUpAxis = modelUpAxis::enModelUpAxisY;		//モデルの上方向。
 };

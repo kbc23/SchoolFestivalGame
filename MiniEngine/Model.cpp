@@ -28,9 +28,18 @@ void Model::Init(const ModelInitData& initData)
 	
 	m_modelUpAxis = initData.m_modelUpAxis;
 
-	m_tkmFile.Load(initData.m_tkmFilePath);
+	auto tkmFile = g_engine->GetTkmFileFromBank(initData.m_tkmFilePath);
+	if (tkmFile == nullptr) {
+		//ñ¢ìoò^
+		tkmFile = new TkmFile;
+		tkmFile->Load(initData.m_tkmFilePath);
+		g_engine->RegistTkmFileToBank(initData.m_tkmFilePath, tkmFile);
+	}
+	m_tkmFile = tkmFile;
+
+	//m_tkmFile.Load(initData.m_tkmFilePath);
 	m_meshParts.InitFromTkmFile(
-		m_tkmFile, 
+		*m_tkmFile, 
 		wfxFilePath, 
 		initData.m_vsEntryPointFunc,
 		initData.m_vsSkinEntryPointFunc,
@@ -46,8 +55,12 @@ void Model::Init(const ModelInitData& initData)
 
 void Model::UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale)
 {
+	//Yç¿ïWÇè„ÅiâºÅj
+	//Å¶å„Ç≈ï ÇÃèÍèäÇ≈Ç∑ÇÈÇ±Ç∆
+	//m_modelUpAxis = enModelUpAxisY;
+
 	Matrix mBias;
-	if (m_modelUpAxis == enModelUpAxisZ) {
+	if (m_modelUpAxis == modelUpAxis::enModelUpAxisZ) {
 		//Z-up
 		mBias.MakeRotationX(Math::PI * -0.5f);
 	}

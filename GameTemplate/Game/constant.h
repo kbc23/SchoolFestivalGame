@@ -22,4 +22,10 @@ namespace con //constant
 		player_4,
 		playerNumberMax
 	};
+
+	//モデルの上方向の軸
+	//const enum ModelUpAxis {
+	//	modelUpAxisY,		//モデルの上方向がY軸。
+	//	modelUpAxisZ,		//モデルの上方向がZ軸。
+	//};
 }

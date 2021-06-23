@@ -1,4 +1,7 @@
 #pragma once
+#include <Model.h>
+
+#include "constant.h"
 
 
 
@@ -68,6 +71,7 @@ public:
 
 
 	void Init(const char* filePath,
+		modelUpAxis::EnModelUpAxis modelUpAxis = modelUpAxis::enModelUpAxisZ,
 		AnimationClip* animationClip = nullptr,
 		int maxAnimationClipNum = 0
 	);
@@ -79,7 +83,7 @@ private:
 	 * @brief モデルの初期化
 	 * @param filePath tkmファイルのファイルパス
 	*/
-	void InitModel(const char* filePath);
+	void InitModel(const char* filePath, modelUpAxis::EnModelUpAxis = modelUpAxis::enModelUpAxisZ);
 
 	void InitDirectionLight(); //ディレクションライト
 	void InitPointLight(); //ポイントライト
