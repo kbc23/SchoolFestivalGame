@@ -1,5 +1,6 @@
 #pragma once
 #include "model_render.h"
+#include "sound_BGM.h"
 #include "constant.h"
 
 class Player;
@@ -156,6 +157,7 @@ private: //data menber
     ModelRender* m_modelGreenBlock[con::playerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
     ModelRender* m_modelBlueBlock[con::playerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
     ModelRender* m_modelYellowBlock[con::playerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
+    SoundBGM* m_bgm = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ

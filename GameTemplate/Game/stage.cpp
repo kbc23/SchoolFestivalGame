@@ -133,6 +133,11 @@ bool Stage::Start()
         DrawBlock(playerNum);
     }
 
+    //BGMÇÃçƒê∂
+    m_bgm = NewGO<SoundBGM>(0);
+    m_bgm->Init(L"Assets/Sound/Stage1.wav");
+    m_bgm->Play(true);
+
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
     return true;

@@ -69,6 +69,12 @@
     <Filter Include="MyCode\エンジン\その他">
       <UniqueIdentifier>{a934335a-9111-44b5-bede-75b2a13aa22b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\エンジン\音">
+      <UniqueIdentifier>{1eea3f54-1850-4e5c-aa79-17576ce182ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\エンジン\音\触らないやつ">
+      <UniqueIdentifier>{f8bdb55e-6547-4055-be90-6cf771887c62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -262,6 +268,24 @@
     </ClCompile>
     <ClCompile Include="timer.cpp">
       <Filter>MyCode\エンジン\その他</Filter>
+    </ClCompile>
+    <ClCompile Include="sound_SE.cpp">
+      <Filter>MyCode\エンジン\音</Filter>
+    </ClCompile>
+    <ClCompile Include="sound_BGM.cpp">
+      <Filter>MyCode\エンジン\音</Filter>
+    </ClCompile>
+    <ClCompile Include="sound_engine.cpp">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClCompile>
+    <ClCompile Include="sound_source.cpp">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClCompile>
+    <ClCompile Include="wav_file.cpp">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClCompile>
+    <ClCompile Include="wav_file_bank.cpp">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -483,6 +507,30 @@
     </ClInclude>
     <ClInclude Include="timer.h">
       <Filter>MyCode\エンジン\その他</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>MyCode\エンジン\その他</Filter>
+    </ClInclude>
+    <ClInclude Include="Noncopyable.h">
+      <Filter>MyCode\エンジン\その他</Filter>
+    </ClInclude>
+    <ClInclude Include="sound_SE.h">
+      <Filter>MyCode\エンジン\音</Filter>
+    </ClInclude>
+    <ClInclude Include="sound_BGM.h">
+      <Filter>MyCode\エンジン\音</Filter>
+    </ClInclude>
+    <ClInclude Include="sound_engine.h">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClInclude>
+    <ClInclude Include="sound_source.h">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClInclude>
+    <ClInclude Include="wav_file.h">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClInclude>
+    <ClInclude Include="wav_file_bank.h">
+      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
