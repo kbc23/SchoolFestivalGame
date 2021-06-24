@@ -1,14 +1,17 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "sound_engine.h"
+#include "effect.h"
 
 #include "game.h"
+
 
 
 namespace //constant
 {
 	const int NUMBER_OF_CONTROLLER = 4; //コントローラーの最大の数
 }
+
 
 
 ///////////////////////////////////////////////////////////////////
@@ -31,7 +34,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
-	SoundEngine::CreateInstance();			//サウンドエンジン
+	SoundEngine::CreateInstance(); //サウンドエンジン
+	EffectEngine::CreateInstance(); //エフェクトエンジン
 
 	Game* game = NewGO<Game>(0, "game");
 	
@@ -52,8 +56,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+		//エフェクトエンジンのアップデート。
+		EffectEngine::GetInstance()->Update(1.0f / 60.0f);
+
 		//サウンドエンジンのアップデート
 		SoundEngine::GetInstance()->Update();
+
+
+
+		//エフェクトのドロー。
+		EffectEngine::GetInstance()->Draw();
 
 		//////////////////////////////////////
 		// 絵を描くコードを書くのはここまで！！！
@@ -67,7 +79,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーを削除。
 	PhysicsWorld::DeleteInstance();
 	GameObjectManager::DeleteInstance();
-	SoundEngine::DeleteInstance();			//サウンドエンジン
+	EffectEngine::DeleteInstance(); //エフェクトエンジン
+	SoundEngine::DeleteInstance(); //サウンドエンジン
 
 	return 0;
 }

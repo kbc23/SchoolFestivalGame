@@ -75,6 +75,9 @@
     <Filter Include="MyCode\エンジン\音\触らないやつ">
       <UniqueIdentifier>{f8bdb55e-6547-4055-be90-6cf771887c62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\エンジン\エフェクト">
+      <UniqueIdentifier>{aea1777c-6440-456a-a133-de23bc47d762}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -286,6 +289,12 @@
     </ClCompile>
     <ClCompile Include="wav_file_bank.cpp">
       <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClCompile>
+    <ClCompile Include="effect_render.cpp">
+      <Filter>MyCode\エンジン\エフェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
+      <Filter>ExEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -531,6 +540,12 @@
     </ClInclude>
     <ClInclude Include="wav_file_bank.h">
       <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+    </ClInclude>
+    <ClInclude Include="effect_render.h">
+      <Filter>MyCode\エンジン\エフェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
+      <Filter>ExEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

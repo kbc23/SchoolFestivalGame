@@ -11,6 +11,10 @@
 //読み込む必要があるモデルの数を減らすことができないか検証してみること。
 //※現在は、プロトなのでこのままで続行
 
+//メモ
+//バナナでこけたときに、バナナが飛ぶようにした方がいいとのこと（重要度：中）
+//青ブロックの水がアニメーションする方がいいとのこと（重要度：低）
+
 
 
 namespace //constant
@@ -137,6 +141,12 @@ bool Stage::Start()
     m_bgm = NewGO<SoundBGM>(0);
     m_bgm->Init(L"Assets/Sound/Stage1.wav");
     m_bgm->Play(true);
+
+    //エフェクトの再生
+    m_testEffect = NewGO<EffectRender>(0);
+    m_testEffect->Init(u"Assets/Effect/goal.efk");
+    m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
+    m_testEffect->Play();
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
