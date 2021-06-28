@@ -26,6 +26,7 @@ namespace //constant
     const char* FILE_PATH_TKM_GREEN_BLOCK = "Assets/modelData/green.tkm";
     const char* FILE_PATH_TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
     const char* FILE_PATH_TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
+    const wchar_t* FLIE_PATH_WAV_STAGE1 = L"Assets/Sound/Stage1.wav";
 
     //※バナナとバナナが乗ってるブロックは１つのモデルでできている。
 
@@ -83,6 +84,9 @@ namespace //constant
     };
     const int PROBABILITY_CREATE_BLUE_BLOCK = 70;       //青ブロックを作成するかの確率
     //( 100 - PROBABILITY_CREATE_BLUE_BLOCK )が黄色ブロックを作成するかの確率
+
+    const int MINIMUM_RANDOM_NUMBER = 1;  
+    const int MAXIMUM_RANDOM_NUMBER = 100;
 }
 
 
@@ -139,7 +143,7 @@ bool Stage::Start()
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
-    m_bgm->Init(L"Assets/Sound/Stage1.wav");
+    m_bgm->Init(FLIE_PATH_WAV_STAGE1);
     m_bgm->Play(true);
 
     //エフェクトの再生
@@ -161,7 +165,7 @@ void Stage::StageCreate()
     //青:70% 黄色:30%
 
     std::mt19937 mt{ std::random_device{}() };
-    std::uniform_int_distribution<int> randomNum(1, 100);
+    std::uniform_int_distribution<int> randomNum(MINIMUM_RANDOM_NUMBER, MAXIMUM_RANDOM_NUMBER);
 
     int continuousGreenBlock = 0;   //緑のブロックが何回連続で出ているか。
     int randomGreenNum = 0;              //乱数を入れる変数
