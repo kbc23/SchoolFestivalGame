@@ -6,6 +6,16 @@
 
 namespace
 {
+    ////////////////////////////////////////////////////////////
+    // ファイルパス
+    ////////////////////////////////////////////////////////////
+
+    const char* FILE_PATH_DDS_BACKGROUND = "Assets/Image/Background.dds";
+
+    ////////////////////////////////////////////////////////////
+    // 位置情報
+    ////////////////////////////////////////////////////////////
+
     const Vector2 FONT_POSITION[3] = {          //フォントの位置情報
         {-100.0f,0.0f},                             //２人
         {0.0f,0.0f},                                //３人
@@ -23,6 +33,10 @@ namespace
         L"３人",
         L"４人"
     };
+
+    ////////////////////////////////////////////////////////////
+    // その他
+    ////////////////////////////////////////////////////////////
 
     const int ADD_TWO = 2;      //プレイ人数の値を渡すときの数合わせ
 
@@ -58,7 +72,7 @@ bool PlayerSelect::Start()
     m_fontCursor->Init(L"^\n|", CURSOR_POSITION[LEFT_END]);
 
     m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
-    m_spriteBackground->Init("Assets/Image/Background.dds", 1280.0f, 720.0f);
+    m_spriteBackground->Init(FILE_PATH_DDS_BACKGROUND, 1280.0f, 720.0f);
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
