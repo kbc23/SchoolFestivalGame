@@ -302,6 +302,7 @@
     <ClCompile Include="sound_engine.cpp" />
     <ClCompile Include="sound_SE.cpp" />
     <ClCompile Include="sound_source.cpp" />
+    <ClCompile Include="sprite_render.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="stage_select.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -393,6 +394,7 @@
     <ClInclude Include="sound_engine.h" />
     <ClInclude Include="sound_SE.h" />
     <ClInclude Include="sound_source.h" />
+    <ClInclude Include="sprite_render.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="stage_select.h" />
     <ClInclude Include="stdafx.h" />

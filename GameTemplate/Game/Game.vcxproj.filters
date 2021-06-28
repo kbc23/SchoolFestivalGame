@@ -78,6 +78,9 @@
     <Filter Include="MyCode\エンジン\エフェクト">
       <UniqueIdentifier>{aea1777c-6440-456a-a133-de23bc47d762}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\エンジン\スプライト">
+      <UniqueIdentifier>{323f9224-8d02-4c27-929a-272ae79a9216}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -296,13 +299,13 @@
     <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
       <Filter>ExEngine</Filter>
     </ClCompile>
+    <ClCompile Include="sprite_render.cpp">
+      <Filter>MyCode\エンジン\スプライト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
       <Filter>ヘッダー ファイル\system</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
       <Filter>MiniEngine</Filter>
@@ -546,6 +549,12 @@
     </ClInclude>
     <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
       <Filter>ExEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite_render.h">
+      <Filter>MyCode\エンジン\スプライト</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

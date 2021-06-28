@@ -173,4 +173,5 @@ namespace igo //constant
 	////////////////////////////////////////////////////////////
 
 	const int PRIORITY_FIRST = 0;
+	const int PRIORITY_SECOND = 1;
 }

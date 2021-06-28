@@ -1,5 +1,6 @@
 #pragma once
 #include "font_render.h"
+#include "sprite_render.h"
 
 class Game;
 
@@ -51,6 +52,7 @@ private: //data menber
     Game* m_game = nullptr;
     FontRender* m_fontNumberOfPlayer[m_NUMBER_OF_FONTS] = { nullptr };      //操作するプレイヤーの人数を選択するフォント
     FontRender* m_fontCursor = nullptr;                     //カーソルのフォント
+    SpriteRender* m_spriteBackground = nullptr;
 
     ////////////////////////////////////////////////////////////
     // その他

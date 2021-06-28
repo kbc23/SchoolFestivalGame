@@ -49,12 +49,15 @@ PlayerSelect::~PlayerSelect()
 bool PlayerSelect::Start()
 {
     for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_FONTS; fontNum++) {
-        m_fontNumberOfPlayer[fontNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+        m_fontNumberOfPlayer[fontNum] = NewGO<FontRender>(igo::PRIORITY_SECOND);
         m_fontNumberOfPlayer[fontNum]->Init(FONT_DISPLAY[fontNum], FONT_POSITION[fontNum]);
     }
 
-    m_fontCursor = NewGO<FontRender>(igo::PRIORITY_FIRST);
+    m_fontCursor = NewGO<FontRender>(igo::PRIORITY_SECOND);
     m_fontCursor->Init(L"^\n|", CURSOR_POSITION[LEFT_END]);
+
+    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteBackground->Init("Assets/Image/Background.dds", 1280.0f, 720.0f);
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
