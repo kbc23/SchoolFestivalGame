@@ -302,6 +302,9 @@
     <ClCompile Include="sprite_render.cpp">
       <Filter>MyCode\エンジン\スプライト</Filter>
     </ClCompile>
+    <ClCompile Include="rule1.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -555,6 +558,9 @@
     </ClInclude>
     <ClInclude Include="sprite_render.h">
       <Filter>MyCode\エンジン\スプライト</Filter>
+    </ClInclude>
+    <ClInclude Include="rule1.h">
+      <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

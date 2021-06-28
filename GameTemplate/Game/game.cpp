@@ -6,6 +6,7 @@
 #include "game_camera.h"
 #include "stage.h"
 #include "score.h"
+#include "rule1.h"
 
 namespace
 {
@@ -81,6 +82,7 @@ void Game::PlayerSelectScene()
 void Game::NewGOGame()
 {
     m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
+    m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);     //ワンデスモード
     m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
     m_score = NewGO<Score>(igo::PRIORITY_FIRST);

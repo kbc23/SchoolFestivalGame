@@ -297,6 +297,7 @@
     <ClCompile Include="model_render.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="player_select.cpp" />
+    <ClCompile Include="rule1.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="sound_BGM.cpp" />
     <ClCompile Include="sound_engine.cpp" />
@@ -389,6 +390,7 @@
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="player_select.h" />
+    <ClInclude Include="rule1.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="sound_BGM.h" />
     <ClInclude Include="sound_engine.h" />

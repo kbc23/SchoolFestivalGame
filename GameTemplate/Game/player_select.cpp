@@ -44,6 +44,7 @@ PlayerSelect::~PlayerSelect()
     }
 
     DeleteGO(m_fontCursor);
+    DeleteGO(m_spriteBackground);
 }
 
 bool PlayerSelect::Start()
