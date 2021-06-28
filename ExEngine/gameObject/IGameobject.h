@@ -167,6 +167,7 @@ namespace igo //constant
 	constexpr const char* CLASS_NAME_PLAYER = "player";
 	constexpr const char* CLASS_NAME_GAME = "game";
 	constexpr const char* CLASS_NAME_STAGE = "stage";
+	constexpr const char* CLASS_NAME_RULE1 = "rule1";
 
 	////////////////////////////////////////////////////////////
 	// óDêÊìx

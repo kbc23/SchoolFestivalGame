@@ -6,6 +6,7 @@ class Player;
 class GameCamera;
 class Stage;
 class Score;
+class Rule1;
 
 class Game : public IGameObject
 {
@@ -103,6 +104,7 @@ private: //data menber
     Player* m_player = nullptr;
     GameCamera* m_gameCamera = nullptr;
     Stage* m_stage = nullptr;
+    Rule1* m_rule1 = nullptr;
     Score* m_score = nullptr;
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
 

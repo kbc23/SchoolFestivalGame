@@ -137,7 +137,8 @@ public: //enum
         stageDataMax
     };
 
-
+    public:
+        bool stop = false;  //黄色、青に乗った時の1ゲーム操作不可能フラグ
 
 private: //constant
     static const int m_MAX_BLOCK = 100;      //１レーンのブロックの最大数

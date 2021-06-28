@@ -296,6 +296,9 @@
     <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
       <Filter>ExEngine</Filter>
     </ClCompile>
+    <ClCompile Include="rule1.cpp">
+      <Filter>MyCode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -546,6 +549,9 @@
     </ClInclude>
     <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
       <Filter>ExEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="rule1.h">
+      <Filter>MyCode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

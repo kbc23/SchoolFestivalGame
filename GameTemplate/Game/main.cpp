@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "sound_engine.h"
-#include "effect.h"
+#include "effect_render.h"
 
 #include "game.h"
 

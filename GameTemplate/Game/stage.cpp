@@ -259,7 +259,9 @@ void Stage::Update()
     for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         CheckBlock(playerNum);
 
-        ReturnOperationTimer(playerNum);
+        if (stop == false) {    //‰©F‚Éæ‚Á‚½Žž‚É‚¸‚Á‚Æ‘€ì•s”\‚É‚·‚é‚©‚Ç‚¤‚©
+            ReturnOperationTimer(playerNum);
+        }
 
         DrawMoveBlock(playerNum);
     }
@@ -506,9 +508,11 @@ void Stage::BlueBlock(const int pNum)
         m_player->SetRotationX(pNum, -90.0f);
     }
 
+    if (stop == false) {
     BlueBlockAnimation(pNum);
 
     ReturnBlock(pNum);
+    }
 }
 
 void Stage::BlueBlockAnimation(const int pNum)
