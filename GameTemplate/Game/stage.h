@@ -146,7 +146,7 @@ private: //constant
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 
     static const int m_MAX_GREEN_BLOCK = 20;            //作成する緑ブロックのモデルの数
-    static const int m_MAX_BLUE_OR_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
+    static const int m_MAX_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
 
 private: //data menber
 
@@ -157,8 +157,8 @@ private: //data menber
     Player* m_player = nullptr;
     ModelRender* m_modelRender[con::playerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
     ModelRender* m_modelGreenBlock[con::playerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
-    ModelRender* m_modelBlueBlock[con::playerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
-    ModelRender* m_modelYellowBlock[con::playerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
+    //ModelRender* m_modelBlueBlock[con::playerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
+    ModelRender* m_modelYellowBlock[con::playerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
     EffectRender* m_testEffect = nullptr;
 

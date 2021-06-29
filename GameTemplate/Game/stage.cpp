@@ -126,10 +126,10 @@ bool Stage::Start()
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
-            m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
-            m_modelBlueBlock[playerNum][blockNum]->Deactivate();
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+            //m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
+            //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
+            //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
             m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
             m_modelYellowBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
@@ -279,8 +279,8 @@ void Stage::DrawBlock(const int pNum)
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
-        m_modelBlueBlock[pNum][blockNum]->Deactivate();
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
 
@@ -309,12 +309,12 @@ void Stage::DrawBlock(const int pNum)
             ++numberOfUsesGreenBlock;
         }
         else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == blueBlock) {
-            m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
+            /*m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
               BLOCK_POSITION_X[pNum],
               BLOCK_POSITION_Y,
               BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
                 });
-            m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();
+            m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();*/
             ++numberOfUsesBlueBlock;
         }
         else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == yellowBlock) {
@@ -341,8 +341,8 @@ void Stage::DrawMoveBlock(const int pNum)
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
-        m_modelBlueBlock[pNum][blockNum]->Deactivate();
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
 
@@ -384,12 +384,12 @@ void Stage::DrawMoveBlock(const int pNum)
                 ++numberOfUsesGreenBlock;
             }
             else if (m_stageData[pNum][playerBlockPosition + blockNum] == blueBlock) {
-                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
+                /*m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
                   BLOCK_POSITION_X[pNum],
                   BLOCK_POSITION_Y,
                   BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - float(moveCorrection)
                     });
-                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();
+                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();*/
                 ++numberOfUsesBlueBlock;
             }
             else if (m_stageData[pNum][playerBlockPosition + blockNum] == yellowBlock) {
