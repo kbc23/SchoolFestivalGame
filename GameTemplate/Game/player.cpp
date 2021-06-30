@@ -7,12 +7,6 @@
 namespace //constant
 {
 	////////////////////////////////////////////////////////////
-	// ファイルパス
-	////////////////////////////////////////////////////////////
-
-	const char* FILE_PATH_TKM_CHAEACTER_MODEL = "Assets/modelData/unityChan.tkm";
-
-	////////////////////////////////////////////////////////////
 	// 位置情報
 	////////////////////////////////////////////////////////////
 
@@ -91,7 +85,7 @@ void Player::DeleteIndividual(const int pNum)
 bool Player::Start()
 {
 	//アニメーションの設定
-	m_animationPlayer[Animation_idle].Load("Assets/animData/UnityChanIdle.tka");
+	m_animationPlayer[Animation_idle].Load(filePath::TKA_IDLE);
 	//ループ再生をtrueにする
 	m_animationPlayer[Animation_idle].SetLoopFlag(true);
 	//アニメーションの設定
@@ -126,7 +120,7 @@ bool Player::StartIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-	m_modelRender[pNum]->Init(FILE_PATH_TKM_CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
+	m_modelRender[pNum]->Init(filePath::TKM_CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
 	m_modelRender[pNum]->PlayAnimation(Animation_idle);

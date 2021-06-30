@@ -19,15 +19,6 @@
 
 namespace //constant
 {
-    ////////////////////////////////////////////////////////////
-    // ファイルパス
-    ////////////////////////////////////////////////////////////
-
-    const char* FILE_PATH_TKM_GREEN_BLOCK = "Assets/modelData/green.tkm";
-    //const char* FILE_PATH_TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
-    const char* FILE_PATH_TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
-    const wchar_t* FLIE_PATH_WAV_STAGE1 = L"Assets/Sound/Stage1.wav";
-
     //※バナナとバナナが乗ってるブロックは１つのモデルでできている。
 
     ////////////////////////////////////////////////////////////
@@ -139,7 +130,7 @@ bool Stage::Start()
     for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelGreenBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
+            m_modelGreenBlock[playerNum][blockNum]->Init(filePath::TKM_GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
@@ -148,7 +139,7 @@ bool Stage::Start()
             //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
             m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelYellowBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
+            m_modelYellowBlock[playerNum][blockNum]->Init(filePath::TKM_YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
     }
@@ -160,7 +151,7 @@ bool Stage::Start()
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
-    m_bgm->Init(FLIE_PATH_WAV_STAGE1);
+    m_bgm->Init(filePath::WAV_STAGE1);
     m_bgm->Play(true);
 
     //エフェクトの再生
@@ -191,8 +182,6 @@ void Stage::StageCreate()
     std::uniform_int_distribution<int> randomNum(MINIMUM_RANDOM_NUMBER, MAXIMUM_RANDOM_NUMBER);
 
     int continuousGreenBlock = 0;   //緑のブロックが何回連続で出ているか。
-    int randomGreenNum = 0;              //乱数を入れる変数
-    int randomBlueOrYellowNum = 0;  //青色か黄色をセットするときに使用する乱数を入れる変数
     bool lastTimeBlockBlueOrYellow = false; //前回のブロックが青色か黄色だったか
 
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {

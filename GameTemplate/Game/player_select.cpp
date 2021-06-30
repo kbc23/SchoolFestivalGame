@@ -7,12 +7,6 @@
 namespace
 {
     ////////////////////////////////////////////////////////////
-    // ファイルパス
-    ////////////////////////////////////////////////////////////
-
-    const char* FILE_PATH_DDS_BACKGROUND = "Assets/Image/Background.dds";
-
-    ////////////////////////////////////////////////////////////
     // 位置情報
     ////////////////////////////////////////////////////////////
 
@@ -72,7 +66,7 @@ bool PlayerSelect::Start()
     m_fontCursor->Init(L"^\n|", CURSOR_POSITION[LEFT_END]);
 
     m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
-    m_spriteBackground->Init(FILE_PATH_DDS_BACKGROUND, 1280.0f, 720.0f);
+    m_spriteBackground->Init(filePath::DDS_BACKGROUND, 1280.0f, 720.0f);
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
