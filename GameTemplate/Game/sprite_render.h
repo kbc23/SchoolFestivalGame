@@ -90,6 +90,10 @@ public:
 	 * アルファ値を掛けて透過するときは、Initするときに
 	 * アルファブレンディングモードを透過合成モードにしておくこと
 	 * @param mulColor 乗算する色
+	 * mulColor.x = Rカラー
+	 * mulColor.y = Gカラー
+	 * mulColor.z = Bカラー
+	 * mulColor.w = 透過
 	*/
 	void SetMulColor(const Vector4& mulColor)
 	{
