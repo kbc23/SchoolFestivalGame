@@ -16,8 +16,8 @@ bool SpriteRender::Start()
     return true;
 }
 
-void SpriteRender::Init(const char* texFilePath, float w, float h, const Vector2& pivot,
-	AlphaBlendMode alphaBlendMode)
+void SpriteRender::Init(const char* texFilePath, float w, float h,
+	AlphaBlendMode alphaBlendMode , const Vector2& pivot)
 {
 	//スプライトの初期化用データ
 	SpriteInitData initData;

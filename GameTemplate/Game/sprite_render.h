@@ -1,5 +1,15 @@
 #pragma once
 
+
+
+namespace src //constant
+{
+	const Vector4 COLOR_NORMAL = { 1.0f,1.0f,1.0f,1.0f };
+	const Vector4 COLOR_GRAY = { 0.5f,0.5f,0.5f,1.0f };
+}
+
+
+
 class SpriteRender : public IGameObject
 {
 public:
@@ -30,8 +40,8 @@ public:
 	 * @param pivot ピボット（基点）
 	 * @param alphaBlendMode アルファブレンディングモード
 	*/
-	void Init(const char* texFilePath, float w, float h, const Vector2& pivot = { 0.5f,0.5f },
-		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None);
+	void Init(const char* texFilePath, float w, float h,
+		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None, const Vector2& pivot = { 0.5f,0.5f });
 
 	/**
 	 * @brief 場所を設定（{0.0f,0.0f}が中心）
@@ -76,12 +86,32 @@ public:
 	}
 
 	/**
+	 * @brief スプライトに色を乗算する関数
+	 * アルファ値を掛けて透過するときは、Initするときに
+	 * アルファブレンディングモードを透過合成モードにしておくこと
+	 * @param mulColor 乗算する色
+	 * mulColor.x = Rカラー
+	 * mulColor.y = Gカラー
+	 * mulColor.z = Bカラー
+	 * mulColor.w = 透過
+	*/
+	void SetMulColor(const Vector4& mulColor)
+	{
+		m_sprite.SetMulColor(mulColor);
+	}
+
+	/**
 	 * @brief m_positionのGet関数
 	 * @return 
 	*/
 	Vector3 GetPosition()
 	{
 		return m_position;
+	}
+
+	float GetMulColorW()
+	{
+		return m_sprite.GetMulColorW();
 	}
 
 

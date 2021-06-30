@@ -20,14 +20,6 @@
 
 namespace //constant
 {
-    ////////////////////////////////////////////////////////////
-    // ファイルパス
-    ////////////////////////////////////////////////////////////
-
-    const char* FILE_PATH_TKM_GREEN_BLOCK = "Assets/modelData/green.tkm";
-    const char* FILE_PATH_TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
-    const char* FILE_PATH_TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
-
     //※バナナとバナナが乗ってるブロックは１つのモデルでできている。
 
     ////////////////////////////////////////////////////////////
@@ -53,6 +45,13 @@ namespace //constant
         { 130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                    //プレイヤー２
         { -130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                //プレイヤー３
         { -390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }	                    //プレイヤー４
+    };
+
+    const Vector2 PLAYER_BLOCK_POSITION_FONT_POSITION[con::playerNumberMax] = {	//スコアタイムの表示位置
+    { -390.0f, -200.0f },										        //プレイヤー１
+    { -130.0f, -200.0f },												//プレイヤー２
+    { 130.0f, -200.0f },												//プレイヤー３
+    { 390.0f, -200.0f }													//プレイヤー４
     };
 
     ////////////////////////////////////////////////////////////
@@ -84,6 +83,9 @@ namespace //constant
     };
     const int PROBABILITY_CREATE_BLUE_BLOCK = 70;       //青ブロックを作成するかの確率
     //( 100 - PROBABILITY_CREATE_BLUE_BLOCK )が黄色ブロックを作成するかの確率
+
+    const int MINIMUM_RANDOM_NUMBER = 1;  
+    const int MAXIMUM_RANDOM_NUMBER = 100;
 }
 
 
@@ -96,10 +98,20 @@ Stage::Stage()
 Stage::~Stage()
 {
     for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
-        for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
-            DeleteGO(m_modelRender[playerNum][blockNum]);
+        //for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
+        //    DeleteGO(m_modelRender[playerNum][blockNum]);
+        //}
+        for (int blockNum = 0; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+            DeleteGO(m_modelGreenBlock[playerNum][blockNum]);
         }
+        for (int blockNum = 0; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+            DeleteGO(m_modelYellowBlock[playerNum][blockNum]);
+        }
+        DeleteGO(m_fontPlayerBlockPosition[playerNum]);
     }
+
+    DeleteGO(m_bgm);
+    DeleteGO(m_testEffect);
 }
 
 ////////////////////////////////////////////////////////////
@@ -119,16 +131,16 @@ bool Stage::Start()
     for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelGreenBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
+            m_modelGreenBlock[playerNum][blockNum]->Init(filePath::TKM_GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
-            m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
-            m_modelBlueBlock[playerNum][blockNum]->Deactivate();
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+            //m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
+            //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
+            //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
             m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelYellowBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
+            m_modelYellowBlock[playerNum][blockNum]->Init(filePath::TKM_YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
     }
@@ -140,7 +152,7 @@ bool Stage::Start()
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
-    m_bgm->Init(L"Assets/Sound/Stage1.wav");
+    m_bgm->Init(filePath::WAV_STAGE1);
     m_bgm->Play(true);
 
     //エフェクトの再生
@@ -148,6 +160,12 @@ bool Stage::Start()
     m_testEffect->Init(u"Assets/Effect/goal.efk");
     m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
     m_testEffect->Play();
+
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+        m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+        m_fontPlayerBlockPosition[playerNum]->Init(L"", PLAYER_BLOCK_POSITION_FONT_POSITION[playerNum]);
+        m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
+    }
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
@@ -162,11 +180,9 @@ void Stage::StageCreate()
     //青:70% 黄色:30%
 
     std::mt19937 mt{ std::random_device{}() };
-    std::uniform_int_distribution<int> randomNum(1, 100);
+    std::uniform_int_distribution<int> randomNum(MINIMUM_RANDOM_NUMBER, MAXIMUM_RANDOM_NUMBER);
 
     int continuousGreenBlock = 0;   //緑のブロックが何回連続で出ているか。
-    int randomGreenNum = 0;              //乱数を入れる変数
-    int randomBlueOrYellowNum = 0;  //青色か黄色をセットするときに使用する乱数を入れる変数
     bool lastTimeBlockBlueOrYellow = false; //前回のブロックが青色か黄色だったか
 
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
@@ -265,6 +281,8 @@ void Stage::Update()
         }
 
         DrawMoveBlock(playerNum);
+
+        DrawFontPlayerBlockPosition(playerNum);
     }
 
     //ゴール時の処理
@@ -277,8 +295,8 @@ void Stage::DrawBlock(const int pNum)
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
-        m_modelBlueBlock[pNum][blockNum]->Deactivate();
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
 
@@ -307,12 +325,12 @@ void Stage::DrawBlock(const int pNum)
             ++numberOfUsesGreenBlock;
         }
         else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == blueBlock) {
-            m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
+            /*m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
               BLOCK_POSITION_X[pNum],
               BLOCK_POSITION_Y,
               BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
                 });
-            m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();
+            m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();*/
             ++numberOfUsesBlueBlock;
         }
         else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == yellowBlock) {
@@ -339,8 +357,8 @@ void Stage::DrawMoveBlock(const int pNum)
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
-        m_modelBlueBlock[pNum][blockNum]->Deactivate();
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
 
@@ -382,12 +400,12 @@ void Stage::DrawMoveBlock(const int pNum)
                 ++numberOfUsesGreenBlock;
             }
             else if (m_stageData[pNum][playerBlockPosition + blockNum] == blueBlock) {
-                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
+                /*m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->SetPosition({
                   BLOCK_POSITION_X[pNum],
                   BLOCK_POSITION_Y,
                   BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - float(moveCorrection)
                     });
-                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();
+                m_modelBlueBlock[pNum][numberOfUsesBlueBlock]->Activate();*/
                 ++numberOfUsesBlueBlock;
             }
             else if (m_stageData[pNum][playerBlockPosition + blockNum] == yellowBlock) {
@@ -406,6 +424,11 @@ void Stage::DrawMoveBlock(const int pNum)
         m_timerAnimation[pNum] = 0;
         m_flagAnimationJump[pNum] = false;
     }
+}
+
+void Stage::DrawFontPlayerBlockPosition(const int pNum)
+{
+    m_fontPlayerBlockPosition[pNum]->SetText(m_playerBlockPosition[pNum] + 1);
 }
 
 //////////////////////////////
@@ -604,9 +627,9 @@ void Stage::NextRound()
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
             //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
-            m_modelBlueBlock[playerNum][blockNum]->Deactivate();
+            //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
             //m_modelYellowBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }

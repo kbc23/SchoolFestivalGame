@@ -2,6 +2,7 @@
 #include "model_render.h"
 #include "sound_BGM.h"
 #include "effect_render.h"
+#include "font_render.h"
 #include "constant.h"
 
 class Player;
@@ -12,12 +13,14 @@ class Stage : public IGameObject
 public:
     Stage();
     ~Stage();
+    bool Start() override final;
+    void Update() override final;
 
+
+private:
     ////////////////////////////////////////////////////////////
     // 初期設定
     ////////////////////////////////////////////////////////////
-
-    bool Start() override final;
 
     /**
      * @brief ステージの作成処理
@@ -43,25 +46,13 @@ public:
     // 毎フレームの処理
     ////////////////////////////////////////////////////////////
 
-    void Update() override final;
+
 
     void DrawBlock(const int pNum);
 
     void DrawMoveBlock(const int pNum);
 
-
-
-    //////////////////////////////
-    // ブロックの移動
-    //////////////////////////////
-
-    /**
-     * @brief プレイヤーの移動に応じてブロックを動かす。
-     * @param pNum プレイヤーの番号
-     * @param moveNum ブロックの動く量
-     * @return ブロックを動かしたかどうか
-    */
-    bool MoveBlock(const int pNum, const int moveNum);
+    void DrawFontPlayerBlockPosition(const int pNum);
 
     //////////////////////////////
     // タイマー
@@ -118,10 +109,26 @@ public:
     // ラウンド変更の処理
     //////////////////////////////
 
+
     /**
      * @brief ラウンド変更の処理
     */
     void NextRound();
+
+public:
+    //////////////////////////////
+    // ブロックの移動
+    //////////////////////////////
+
+    /**
+     * @brief プレイヤーの移動に応じてブロックを動かす。
+     * @param pNum プレイヤーの番号
+     * @param moveNum ブロックの動く量
+     * @return ブロックを動かしたかどうか
+    */
+    bool MoveBlock(const int pNum, const int moveNum);
+
+
 
 public: //Get関数
     /**
@@ -155,7 +162,7 @@ private: //constant
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
 
     static const int m_MAX_GREEN_BLOCK = 20;            //作成する緑ブロックのモデルの数
-    static const int m_MAX_BLUE_OR_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
+    static const int m_MAX_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
 
 private: //data menber
 
@@ -164,13 +171,17 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     Player* m_player = nullptr;
-    ModelRender* m_modelRender[con::playerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
+    //ModelRender* m_modelRender[con::playerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
     ModelRender* m_modelGreenBlock[con::playerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
-    ModelRender* m_modelBlueBlock[con::playerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
-    ModelRender* m_modelYellowBlock[con::playerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
+    //ModelRender* m_modelBlueBlock[con::playerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
+    ModelRender* m_modelYellowBlock[con::playerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
     EffectRender* m_testEffect = nullptr;
+
     Game* m_game = nullptr;
+
+    FontRender* m_fontPlayerBlockPosition[con::playerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示
+
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ
