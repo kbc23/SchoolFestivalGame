@@ -171,6 +171,8 @@ void Player::Update()
 	}
 
 	int a = 10;
+
+
 }
 
 //////////////////////////////
@@ -246,4 +248,23 @@ void Player::JumpAnimation(const int pNum)
 void Player::ImpossibleOperationAnimation(const int pNum)
 {
 
+}
+
+void Player::NextRound()
+{
+	if (m_stage->goal == true) {
+		//アニメーションの設定
+		m_animationPlayer[Animation_idle].Load("Assets/animData/UnityChanIdle.tka");
+		//ループ再生をtrueにする
+		m_animationPlayer[Animation_idle].SetLoopFlag(true);
+
+		//プレイヤーごとに処理
+		for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::playerNumberMax; playerNum++) {
+			bool check = StartIndividual(playerNum);
+
+		}
+
+		m_fontEnd->Init(L"終了！");
+		m_fontEnd->Deactivate();
+	}
 }

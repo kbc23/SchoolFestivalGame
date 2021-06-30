@@ -64,6 +64,15 @@ public:
 	*/
 	void ImpossibleOperationAnimation(const int pNum);
 
+	//////////////////////////////
+	// ラウンド変更の処理
+	//////////////////////////////
+
+	/**
+	 * @brief ラウンド変更の処理
+	*/
+	void NextRound();
+
 
 public: //Get関数
 	/**
@@ -102,7 +111,6 @@ public: //Get関数
 	{
 		return m_flagAnimationJump[pNum];
 	}
-
 
 public: //Set関数
 	/**

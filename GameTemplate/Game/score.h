@@ -4,6 +4,7 @@
 
 class Game;
 class Player;
+class Stage;
 
 class Score : public IGameObject
 {
@@ -36,7 +37,14 @@ public:
     */
     void DrawTime(const int pNum);
 
+    //////////////////////////////
+    // ラウンド変更の処理
+    //////////////////////////////
 
+    /**
+     * @brief ラウンド変更の処理
+    */
+    void NextRound();
 
 private: //data menber
     ////////////////////////////////////////////////////////////
@@ -46,6 +54,7 @@ private: //data menber
     Player* m_player = nullptr;
     Game* m_game = nullptr;
     FontRender* m_fontScoreTime[con::playerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
+    Stage* m_stage = nullptr;
 
     ////////////////////////////////////////////////////////////
     // スコアタイム関連

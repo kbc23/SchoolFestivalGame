@@ -5,6 +5,7 @@
 
 #include "game.h"
 #include "player.h"
+#include "stage.h"
 
 namespace //constant
 {
@@ -139,4 +140,16 @@ void Score::DrawTime(const int pNum)
 
     //•\Ž¦‚·‚é•¶Žš—ñ‚ðXV
     m_fontScoreTime[pNum]->SetText(scoreTimeString.c_str());
+}
+
+void Score::NextRound()
+{
+
+    if (m_stage->goal == true) {
+        for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+            m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+            m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
+        }
+    }
+
 }

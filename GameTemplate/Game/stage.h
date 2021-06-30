@@ -5,6 +5,7 @@
 #include "constant.h"
 
 class Player;
+class Game;
 
 class Stage : public IGameObject
 {
@@ -113,7 +114,14 @@ public:
     */
     void GoalBlock();
 
+    //////////////////////////////
+    // ラウンド変更の処理
+    //////////////////////////////
 
+    /**
+     * @brief ラウンド変更の処理
+    */
+    void NextRound();
 
 public: //Get関数
     /**
@@ -139,6 +147,7 @@ public: //enum
 
     public:
         bool stop = false;  //黄色、青に乗った時の1ゲーム操作不可能フラグ
+        bool goal = false;  //ゴール時のNextRund生成フラグ
 
 private: //constant
     static const int m_MAX_BLOCK = 100;      //１レーンのブロックの最大数
@@ -161,6 +170,7 @@ private: //data menber
     ModelRender* m_modelYellowBlock[con::playerNumberMax][m_MAX_BLUE_OR_YELLOW_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
     EffectRender* m_testEffect = nullptr;
+    Game* m_game = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ
@@ -198,4 +208,6 @@ private: //data menber
 
     bool m_flagAnimationJump[con::playerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
     int m_timerAnimation[con::playerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
+
+    int Playermember = 0;
 };

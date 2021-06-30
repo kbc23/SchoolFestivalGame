@@ -4,6 +4,7 @@
 #include <random>
 
 #include "player.h"
+#include "game.h"
 
 
 
@@ -268,6 +269,7 @@ void Stage::Update()
 
     //ゴール時の処理
     GoalBlock();
+
 }
 
 void Stage::DrawBlock(const int pNum)
@@ -567,11 +569,64 @@ void Stage::GoalBlock()
 
             ++nextRank;
             addNowRank = true;
+            
         }
     }
 
     if (addNowRank == true) {
         //次の順位を設定
         m_nowRank += nextRank;
+
+        NextRound();
+        goal = true;
     }
+
+}
+
+//////////////////////////////
+// ラウンド変更の処理
+//////////////////////////////
+
+void Stage::NextRound()
+{  
+
+    //ステージを作成
+    StageCreate();
+
+    //緑１６個
+    //青８個
+    //黄色８個
+
+    //モデルの作成
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+            //m_modelGreenBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
+            m_modelGreenBlock[playerNum][blockNum]->Deactivate();
+        }
+
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLUE_OR_YELLOW_BLOCK; blockNum++) {
+            //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
+            m_modelBlueBlock[playerNum][blockNum]->Deactivate();
+            //m_modelYellowBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);
+            m_modelYellowBlock[playerNum][blockNum]->Deactivate();
+        }
+    }
+
+    //モデルの描画
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+        m_playerBlockPosition[playerNum] = 0;
+        DrawBlock(playerNum);
+    }
+
+    
+
+    //BGMの再生
+    m_bgm->Init(L"Assets/Sound/Stage1.wav");
+    m_bgm->Play(true);
+
+    //エフェクトの再生
+    m_testEffect->Init(u"Assets/Effect/goal.efk");
+    m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
+    m_testEffect->Play();
+
 }
