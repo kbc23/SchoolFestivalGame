@@ -55,6 +55,7 @@ void Game::Update()
     if (m_flagGameScene == true) {
         GameScene();
     }
+
 }
 
 //////////////////////////////
@@ -82,13 +83,15 @@ void Game::PlayerSelectScene()
 void Game::NewGOGame()
 {
     m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
-    m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);     //ワンデスモード
+    //m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);     //ワンデスモード
     m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
     m_score = NewGO<Score>(igo::PRIORITY_FIRST);
     m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FIRST);
     m_fontStartCountdown->Init(L"");
+
 }
+
 
 //////////////////////////////
 // ゲームシーンの処理
@@ -101,6 +104,7 @@ void Game::GameScene()
     }
 
     StartCountdown();
+
 }
 
 void Game::StartCountdown()
