@@ -4,7 +4,7 @@
 
 #include "game.h"
 
-
+//作業が終わったら、Get関数、Set関数をconst参照に変更しておくこと
 
 namespace //constant
 {
