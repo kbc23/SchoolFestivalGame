@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "game.h"
 
+#include "title.h"
 #include "player_select.h"
 #include "player.h"
 #include "game_camera.h"
 #include "stage.h"
 #include "score.h"
 #include "rule1.h"
+
+
 
 namespace
 {
@@ -39,17 +42,19 @@ Game::~Game()
 
 bool Game::Start()
 {
-    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_FIRST);
+    m_title = NewGO<Title>(igo::PRIORITY_FIRST);
 
     return true;
 }
 
-////////////////////////////////////////////////////////////
-// 毎フレームの処理
-////////////////////////////////////////////////////////////
-
 void Game::Update()
 {
+    //このif文をフラグで管理しているのを、enum型で管理するように変更すること
+
+    //タイトルシーンの処理
+    if (m_flagTitleScene == true) {
+        TitleScene();
+    }
     //プレイヤーセレクトシーンの処理
     if (m_flagPlayerSelectScene == true) {
         PlayerSelectScene();
@@ -61,17 +66,40 @@ void Game::Update()
     }
 }
 
-//////////////////////////////
-// プレイヤーセレクトシーンの処理
-//////////////////////////////
+////////////////////////////////////////////////////////////
+// タイトルシーンの処理
+////////////////////////////////////////////////////////////
 
-void Game::PlayerSelectScene()
+void Game::TitleScene()
 {
-    if (m_playerSelect->GetmFlagFinish() == false) {
+    if (m_title->GetFlagFinish() == false) {
         return;
     }
 
-    NewGOGame();
+    NewGOPlayerSelectScene();
+
+    DeleteGO(m_title);
+
+    m_flagTitleScene = false;
+    m_flagPlayerSelectScene = true;
+}
+
+void Game::NewGOPlayerSelectScene()
+{
+    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_FIRST);
+}
+
+////////////////////////////////////////////////////////////
+// プレイヤーセレクトシーンの処理
+////////////////////////////////////////////////////////////
+
+void Game::PlayerSelectScene()
+{
+    if (m_playerSelect->GetFlagFinish() == false) {
+        return;
+    }
+
+    NewGOGameScene();
 
     DeleteGO(m_playerSelect);
 
@@ -83,10 +111,10 @@ void Game::PlayerSelectScene()
     m_flagGameScene = true;
 }
 
-void Game::NewGOGame()
+void Game::NewGOGameScene()
 {
     m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
-    m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);     //ワンデスモード
+    m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);
     m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
     m_score = NewGO<Score>(igo::PRIORITY_FIRST);
@@ -94,9 +122,9 @@ void Game::NewGOGame()
     m_fontStartCountdown->Init(L"");
 }
 
-//////////////////////////////
+////////////////////////////////////////////////////////////
 // ゲームシーンの処理
-//////////////////////////////
+////////////////////////////////////////////////////////////
 
 void Game::GameScene()
 {
