@@ -24,7 +24,7 @@ namespace //constant
     ////////////////////////////////////////////////////////////
 
     const char* FILE_PATH_TKM_GREEN_BLOCK = "Assets/modelData/green.tkm";
-    const char* FILE_PATH_TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
+    //const char* FILE_PATH_TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
     const char* FILE_PATH_TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
     const wchar_t* FLIE_PATH_WAV_STAGE1 = L"Assets/Sound/Stage1.wav";
 
@@ -53,6 +53,13 @@ namespace //constant
         { 130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                    //プレイヤー２
         { -130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                //プレイヤー３
         { -390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }	                    //プレイヤー４
+    };
+
+    const Vector2 PLAYER_BLOCK_POSITION_FONT_POSITION[con::playerNumberMax] = {	//スコアタイムの表示位置
+    { -390.0f, -200.0f },										        //プレイヤー１
+    { -130.0f, -200.0f },												//プレイヤー２
+    { 130.0f, -200.0f },												//プレイヤー３
+    { 390.0f, -200.0f }													//プレイヤー４
     };
 
     ////////////////////////////////////////////////////////////
@@ -99,10 +106,20 @@ Stage::Stage()
 Stage::~Stage()
 {
     for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
-        for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
-            DeleteGO(m_modelRender[playerNum][blockNum]);
+        //for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
+        //    DeleteGO(m_modelRender[playerNum][blockNum]);
+        //}
+        for (int blockNum = 0; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+            DeleteGO(m_modelGreenBlock[playerNum][blockNum]);
         }
+        for (int blockNum = 0; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+            DeleteGO(m_modelYellowBlock[playerNum][blockNum]);
+        }
+        DeleteGO(m_fontPlayerBlockPosition[playerNum]);
     }
+
+    DeleteGO(m_bgm);
+    DeleteGO(m_testEffect);
 }
 
 ////////////////////////////////////////////////////////////
@@ -151,6 +168,12 @@ bool Stage::Start()
     m_testEffect->Init(u"Assets/Effect/goal.efk");
     m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
     m_testEffect->Play();
+
+    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+        m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+        m_fontPlayerBlockPosition[playerNum]->Init(L"", PLAYER_BLOCK_POSITION_FONT_POSITION[playerNum]);
+        m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
+    }
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
@@ -268,6 +291,8 @@ void Stage::Update()
         }
 
         DrawMoveBlock(playerNum);
+
+        DrawFontPlayerBlockPosition(playerNum);
     }
 
     //ゴール時の処理
@@ -408,6 +433,11 @@ void Stage::DrawMoveBlock(const int pNum)
         m_timerAnimation[pNum] = 0;
         m_flagAnimationJump[pNum] = false;
     }
+}
+
+void Stage::DrawFontPlayerBlockPosition(const int pNum)
+{
+    m_fontPlayerBlockPosition[pNum]->SetText(m_playerBlockPosition[pNum] + 1);
 }
 
 //////////////////////////////

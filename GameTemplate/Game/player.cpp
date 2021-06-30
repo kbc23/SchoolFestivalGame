@@ -110,7 +110,7 @@ bool Player::Start()
 	}
 
 	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FIRST);
-	m_fontEnd->Init(L"I—¹I");
+	m_fontEnd->Init(L"I—¹!");
 	m_fontEnd->Deactivate();
 
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
