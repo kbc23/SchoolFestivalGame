@@ -37,11 +37,13 @@ public:
 	 * @param texFilePath ddsファイルパス
 	 * @param w 横幅
 	 * @param h 縦幅
-	 * @param pivot ピボット（基点）
+	 * 縦幅と横幅は、すべて同じサイズの画像で作っているため、デフォルト引数にしている。
 	 * @param alphaBlendMode アルファブレンディングモード
+	 * 基本的に透過画像を使用するのでAlphaBlendMode_Transをデフォルト引数にしている。
+	 * @param pivot ピボット（基点）
 	*/
-	void Init(const char* texFilePath, float w, float h,
-		AlphaBlendMode alphaBlendMode = AlphaBlendMode_None, const Vector2& pivot = { 0.5f,0.5f });
+	void Init(const char* texFilePath, float w = 1280.0f, float h = 720.0f,
+		AlphaBlendMode alphaBlendMode = AlphaBlendMode_Trans, const Vector2& pivot = { 0.5f,0.5f });
 
 	/**
 	 * @brief 場所を設定（{0.0f,0.0f}が中心）
@@ -70,7 +72,7 @@ public:
 		m_scale = scale;
 		//座標系の関係で左右反転するから
 		//xの拡大を反転させる
-		m_scale.x *= -1.0f;
+		//m_scale.x *= -1.0f;
 	}
 
 	/**
@@ -104,12 +106,12 @@ public:
 	 * @brief m_positionのGet関数
 	 * @return 
 	*/
-	Vector3 GetPosition()
+	const Vector3& GetPosition()
 	{
 		return m_position;
 	}
 
-	float GetMulColorW()
+	const float& GetMulColorW()
 	{
 		return m_sprite.GetMulColorW();
 	}
@@ -123,6 +125,6 @@ private: //data menber
 	Quaternion m_rotation = g_quatIdentity;		//回転
 	//座標系の関係で左右反転するから
 	//xの拡大を反転させる
-	Vector3 m_scale = { -1.0f,1.0f,1.0f };		//拡大
+	Vector3 m_scale = { 1.0f,1.0f,1.0f };		//拡大
 	Vector2 m_pivot = { 0.5f,0.5f };			//ピボット（基点）
 };

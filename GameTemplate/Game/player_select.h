@@ -34,7 +34,7 @@ public: //Get関数
      * @brief m_flagFinishのGet関数
      * @return このクラスの処理が終了したか
     */
-    bool GetmFlagFinish()
+    bool GetFlagFinish()
     {
         return m_flagFinish;
     }
@@ -68,7 +68,7 @@ private: //data menber
 
     bool m_flagDecision = false;    //人数を決定したかのフラグ
 
-    bool m_flagFinish = false;      //人数を決定した後の処理を終了したかのフラグ
+    bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
 
     bool m_flagInput = false;       //前のフレームで入力しているかどうかのフラグ
 };

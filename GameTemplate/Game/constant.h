@@ -37,54 +37,54 @@ namespace filePath
 	// モデル
 	////////////////////////////////////////////////////////////
 
-	const char* TKM_CHAEACTER_MODEL = "Assets/modelData/unityChan.tkm";
-	const char* TKM_GREEN_BLOCK = "Assets/modelData/green.tkm";
+	constexpr const char* TKM_CHAEACTER_MODEL = "Assets/modelData/unityChan.tkm";
+	constexpr const char* TKM_GREEN_BLOCK = "Assets/modelData/green.tkm";
 	//const char* TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
-	const char* TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
+	constexpr const char* TKM_YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
 
 	////////////////////////////////////////////////////////////
 	// アニメーション
 	////////////////////////////////////////////////////////////
 
-	const char* TKA_IDLE = "Assets/animData/UnityChanIdle.tka";
+	constexpr const char* TKA_IDLE = "Assets/animData/UnityChanIdle.tka";
 
 	////////////////////////////////////////////////////////////
 	// 2D画像
 	////////////////////////////////////////////////////////////
 
 	//選択画面系の背景
-	const char* DDS_BACKGROUND = "Assets/Image/Background.dds";
+	constexpr const char* DDS_BACKGROUND = "Assets/Image/Background.dds";
 	//CPUの強さを選択する画面のUI
-	const char* DDS_CPU_WEAK = "Assets/Image/CPU_weak.dds";
-	const char* DDS_CPU_USUALLY = "Assets/Image/CPU_usually.dds";
-	const char* DDS_CPU_STRONG = "Assets/Image/CPU_strong.dds";
+	constexpr const char* DDS_CPU_WEAK = "Assets/Image/CPU_weak.dds";
+	constexpr const char* DDS_CPU_USUALLY = "Assets/Image/CPU_usually.dds";
+	constexpr const char* DDS_CPU_STRONG = "Assets/Image/CPU_strong.dds";
 	//プレイヤー数選択画面のUI
-	const char* DDS_NUMBER_OF_PLAYERS_1 = "Assets/Image/Number_of_players_1.dds";
-	const char* DDS_NUMBER_OF_PLAYERS_2 = "Assets/Image/Number_of_players_2.dds";
-	const char* DDS_NUMBER_OF_PLAYERS_3 = "Assets/Image/Number_of_players_3.dds";
-	const char* DDS_NUMBER_OF_PLAYERS_4 = "Assets/Image/Number_of_players_4.dds";
+	constexpr const char* DDS_NUMBER_OF_PLAYERS_1 = "Assets/Image/Number_of_players_1.dds";
+	constexpr const char* DDS_NUMBER_OF_PLAYERS_2 = "Assets/Image/Number_of_players_2.dds";
+	constexpr const char* DDS_NUMBER_OF_PLAYERS_3 = "Assets/Image/Number_of_players_3.dds";
+	constexpr const char* DDS_NUMBER_OF_PLAYERS_4 = "Assets/Image/Number_of_players_4.dds";
 	//ポーズ画面のUI
-	const char* DDS_PAUSE_RETURN_TO_GAME = "Assets/Image/Pause_return_to_game.dds";
-	const char* DDS_PAUSE_RETRY = "Assets/Image/Pause_retry.dds";
-	const char* DDS_PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game";
+	constexpr const char* DDS_PAUSE_RETURN_TO_GAME = "Assets/Image/Pause_return_to_game.dds";
+	constexpr const char* DDS_PAUSE_RETRY = "Assets/Image/Pause_retry.dds";
+	constexpr const char* DDS_PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game";
 	//タイトル画面のUI
-	const char* DDS_PLESS_A_BUTTON = "Assets/Image/Pless_A_Button.dds";
+	constexpr const char* DDS_PRESS_A_BUTTON = "Assets/Image/Press_A_Button.dds";
 	//ゲーム画面のUI
-	const char* DDS_SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
-	const char* DDS_BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
+	constexpr const char* DDS_SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
+	constexpr const char* DDS_BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
 	//ルール選択画面のUI
-	const char* DDS_COMMAND_RACE = "Assets/Image/Command_race.dds";
+	constexpr const char* DDS_COMMAND_RACE = "Assets/Image/Command_race.dds";
 	//結果画面後の選択画面のUI
-	const char* DDS_COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
-	const char* DDS_COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players";
-	const char* DDS_COMMAND_CHOOSE_A_RULE = "Assets/Image/Command_choose_a_rule.dds";
-	const char* DDS_COMMAND_EXIT_GAME = "Assets/Image/Command_exit_game.dds";
+	constexpr const char* DDS_COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
+	constexpr const char* DDS_COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players";
+	constexpr const char* DDS_COMMAND_CHOOSE_A_RULE = "Assets/Image/Command_choose_a_rule.dds";
+	constexpr const char* DDS_COMMAND_EXIT_GAME = "Assets/Image/Command_exit_game.dds";
 
 	////////////////////////////////////////////////////////////
 	// BGM
 	////////////////////////////////////////////////////////////
 
-	const wchar_t* WAV_STAGE1 = L"Assets/Sound/Stage1.wav";
+	constexpr const wchar_t* WAV_STAGE1 = L"Assets/Sound/Stage1.wav";
 
 	////////////////////////////////////////////////////////////
 	// SE
