@@ -2,7 +2,7 @@
 
 
 
-namespace src //constant
+namespace srName //constant
 {
 	const Vector4 COLOR_NORMAL = { 1.0f,1.0f,1.0f,1.0f };
 	const Vector4 COLOR_GRAY = { 0.5f,0.5f,0.5f,1.0f };

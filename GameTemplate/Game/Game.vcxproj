@@ -296,6 +296,7 @@
     <ClCompile Include="game_camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_render.cpp" />
+    <ClCompile Include="mode_select.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="player_select.cpp" />
     <ClCompile Include="rule1.cpp" />
@@ -389,6 +390,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="game_camera.h" />
     <ClInclude Include="model_render.h" />
+    <ClInclude Include="mode_select.h" />
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="player_select.h" />

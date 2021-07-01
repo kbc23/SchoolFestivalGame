@@ -4,7 +4,9 @@
 #include "constant.h"
 #include "game.h"
 
-namespace
+
+
+namespace //constant
 {
     ////////////////////////////////////////////////////////////
     // à íuèÓïÒ
@@ -47,7 +49,7 @@ PlayerSelect::PlayerSelect()
 
 PlayerSelect::~PlayerSelect()
 {
-    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_FONTS; fontNum++) {
+    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_CHOICES; fontNum++) {
         DeleteGO(m_fontNumberOfPlayer[fontNum]);
     }
 
@@ -57,7 +59,7 @@ PlayerSelect::~PlayerSelect()
 
 bool PlayerSelect::Start()
 {
-    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_FONTS; fontNum++) {
+    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_CHOICES; fontNum++) {
         m_fontNumberOfPlayer[fontNum] = NewGO<FontRender>(igo::PRIORITY_SECOND);
         m_fontNumberOfPlayer[fontNum]->Init(FONT_DISPLAY[fontNum], FONT_POSITION[fontNum]);
     }

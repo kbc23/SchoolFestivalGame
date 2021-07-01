@@ -308,6 +308,9 @@
     <ClCompile Include="fade.cpp">
       <Filter>MyCode\エンジン\スプライト</Filter>
     </ClCompile>
+    <ClCompile Include="mode_select.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -567,6 +570,9 @@
     </ClInclude>
     <ClInclude Include="fade.h">
       <Filter>MyCode\エンジン\スプライト</Filter>
+    </ClInclude>
+    <ClInclude Include="mode_select.h">
+      <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

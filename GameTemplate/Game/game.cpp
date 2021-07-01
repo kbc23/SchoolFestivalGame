@@ -2,6 +2,7 @@
 #include "game.h"
 
 #include "title.h"
+#include "mode_select.h"
 #include "player_select.h"
 #include "player.h"
 #include "game_camera.h"
@@ -49,20 +50,22 @@ bool Game::Start()
 
 void Game::Update()
 {
-    //このif文をフラグで管理しているのを、enum型で管理するように変更すること
-
-    //タイトルシーンの処理
-    if (m_flagTitleScene == true) {
+    switch (m_gameStatus) {
+    case GameStatus::title:
         TitleScene();
-    }
-    //プレイヤーセレクトシーンの処理
-    if (m_flagPlayerSelectScene == true) {
+        break;
+    case GameStatus::modeSelect:
+        ModeSelectScene();
+        break;
+    case GameStatus::playerSelect:
         PlayerSelectScene();
-    }
-
-    //ゲームシーンでの処理
-    if (m_flagGameScene == true) {
+        break;
+    case GameStatus::game:
         GameScene();
+        break;
+    default:
+        MessageBoxA(nullptr, "ゲームの遷移にてエラーが発生しました。", "エラー", MB_OK);
+        return;
     }
 }
 
@@ -76,12 +79,33 @@ void Game::TitleScene()
         return;
     }
 
-    NewGOPlayerSelectScene();
+    NewGOModeSelectScene();
 
     DeleteGO(m_title);
 
-    m_flagTitleScene = false;
-    m_flagPlayerSelectScene = true;
+    m_gameStatus = GameStatus::modeSelect;
+}
+
+void Game::NewGOModeSelectScene()
+{
+    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_FIRST);
+}
+
+////////////////////////////////////////////////////////////
+// モードセレクトシーンの処理
+////////////////////////////////////////////////////////////
+
+void Game::ModeSelectScene()
+{
+    if (m_modeSelect->GetFlagFinish() == false) {
+        return;
+    }
+
+    NewGOPlayerSelectScene();
+
+    DeleteGO(m_modeSelect);
+
+    m_gameStatus = GameStatus::playerSelect;
 }
 
 void Game::NewGOPlayerSelectScene()
@@ -105,10 +129,8 @@ void Game::PlayerSelectScene()
 
     //Playerクラスに選択されたプレイヤー人数を渡す。
     m_player->SetMaxPlayer(m_maxPlayer);
-    
 
-    m_flagPlayerSelectScene = false;
-    m_flagGameScene = true;
+    m_gameStatus = GameStatus::game;
 }
 
 void Game::NewGOGameScene()

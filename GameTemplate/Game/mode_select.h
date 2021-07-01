@@ -1,29 +1,26 @@
 #pragma once
-#include "font_render.h"
 #include "sprite_render.h"
 
-class Game;
-
-class PlayerSelect : public IGameObject
+class ModeSelect : public IGameObject
 {
 public:
-    PlayerSelect();
-    ~PlayerSelect();
+public:
+    ModeSelect();
+    ~ModeSelect();
     bool Start() override final;
     void Update() override final;
-    
+
 
 private:
     /**
      * @brief 操作するプレイヤーの人数の選択
     */
-    void SelectTheNumberOfPlayers();
+    void SelectTheNumberOfMode();
 
     /**
      * @brief このクラスの処理の終了処理
     */
-    void FinishPlayerSelect();
-
+    void FinishModeSelect();
 
 
 public: //Get関数
@@ -38,7 +35,8 @@ public: //Get関数
 
 
 private: //constant
-    static const int m_NUMBER_OF_CHOICES = 3;     //選択肢の数
+    static const int m_NUMBER_OF_CHOICES = 2;     //選択肢の数
+
 
 
 private: //data menber
@@ -46,9 +44,7 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
-    Game* m_game = nullptr;
-    FontRender* m_fontNumberOfPlayer[m_NUMBER_OF_CHOICES] = { nullptr };      //操作するプレイヤーの人数を選択するフォント
-    FontRender* m_fontCursor = nullptr;                     //カーソルのフォント
+    SpriteRender* m_spriteChoices[2] = { nullptr };
     SpriteRender* m_spriteBackground = nullptr;
 
     ////////////////////////////////////////////////////////////
@@ -68,4 +64,7 @@ private: //data menber
     bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
 
     bool m_flagInput = false;       //前のフレームで入力しているかどうかのフラグ
+
+
+
 };
