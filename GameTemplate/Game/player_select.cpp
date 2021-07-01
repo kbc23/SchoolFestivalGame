@@ -12,32 +12,21 @@ namespace //constant
     // 位置情報
     ////////////////////////////////////////////////////////////
 
-    const Vector2 FONT_POSITION[3] = {          //フォントの位置情報
-        {-100.0f,0.0f},                             //２人
-        {0.0f,0.0f},                                //３人
-        {100.0f,0.0f}                               //４人
-    };
-
-    const Vector2 CURSOR_POSITION[3] = {        //フォントの位置情報
-        {-100.0f,-60.0f},                           //２人
-        {0.0f,-60.0f},                              //３人
-        {100.0f,-60.0f}                             //４人
-    };
-
-    const wchar_t* FONT_DISPLAY[3] = {          //フォントの表示内容
-        L"2人",
-        L"3人",
-        L"4人"
+    const Vector3 CHOICES_POSITION[4] = {
+        {-300.0f,0.0f,0.0f},
+        {-100.0f,0.0f,0.0f},
+        {100.0f,0.0f,0.0f},
+        {300.0f,0.0f,0.0f}
     };
 
     ////////////////////////////////////////////////////////////
     // その他
     ////////////////////////////////////////////////////////////
 
-    const int ADD_TWO = 2;      //プレイ人数の値を渡すときの数合わせ
+    const int ADD_ONE = 1;      //プレイ人数の値を渡すときの数合わせ
 
     const int LEFT_END = 0;     //左端
-    const int RIGHT_END = 2;    //右端
+    const int RIGHT_END = 3;    //右端
 }
 
 
@@ -49,26 +38,34 @@ PlayerSelect::PlayerSelect()
 
 PlayerSelect::~PlayerSelect()
 {
-    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_CHOICES; fontNum++) {
-        DeleteGO(m_fontNumberOfPlayer[fontNum]);
+    for (int choicesNum = con::FIRST_OF_THE_ARRAY; choicesNum < m_NUMBER_OF_CHOICES; choicesNum++) {
+        DeleteGO(m_spriteChoices[choicesNum]);
     }
 
-    DeleteGO(m_fontCursor);
     DeleteGO(m_spriteBackground);
 }
 
 bool PlayerSelect::Start()
 {
-    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_CHOICES; fontNum++) {
-        m_fontNumberOfPlayer[fontNum] = NewGO<FontRender>(igo::PRIORITY_SECOND);
-        m_fontNumberOfPlayer[fontNum]->Init(FONT_DISPLAY[fontNum], FONT_POSITION[fontNum]);
-    }
-
-    m_fontCursor = NewGO<FontRender>(igo::PRIORITY_SECOND);
-    m_fontCursor->Init(L"^\n|", CURSOR_POSITION[LEFT_END]);
 
     m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
     m_spriteBackground->Init(filePath::DDS_BACKGROUND);
+    m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteChoices[0]->Init(filePath::DDS_NUMBER_OF_PLAYERS_1);
+    m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
+    m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteChoices[1]->Init(filePath::DDS_NUMBER_OF_PLAYERS_2);
+    m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
+    m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteChoices[2]->Init(filePath::DDS_NUMBER_OF_PLAYERS_3);
+    m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
+    m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[3] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteChoices[3]->Init(filePath::DDS_NUMBER_OF_PLAYERS_4);
+    m_spriteChoices[3]->SetPosition(CHOICES_POSITION[3]);
+    m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
+
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
@@ -105,9 +102,11 @@ void PlayerSelect::SelectTheNumberOfPlayers()
             return;
         }
 
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+
         --m_cursorPosition;
 
-        m_fontCursor->SetPosition(CURSOR_POSITION[m_cursorPosition]);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
 
         m_flagInput = true;
     }
@@ -117,9 +116,11 @@ void PlayerSelect::SelectTheNumberOfPlayers()
             return;
         }
 
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+
         ++m_cursorPosition;
 
-        m_fontCursor->SetPosition(CURSOR_POSITION[m_cursorPosition]);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
 
         m_flagInput = true;
     }
@@ -127,7 +128,7 @@ void PlayerSelect::SelectTheNumberOfPlayers()
 
 void PlayerSelect::FinishPlayerSelect()
 {
-    m_game->SetMaxPlayer(m_cursorPosition + ADD_TWO);
+    m_game->SetMaxPlayer(m_cursorPosition + ADD_ONE);
 
     m_flagFinish = true;
 }

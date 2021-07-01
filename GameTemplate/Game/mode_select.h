@@ -44,7 +44,7 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
-    SpriteRender* m_spriteChoices[2] = { nullptr };
+    SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     SpriteRender* m_spriteBackground = nullptr;
 
     ////////////////////////////////////////////////////////////

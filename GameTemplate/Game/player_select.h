@@ -38,7 +38,7 @@ public: //Get関数
 
 
 private: //constant
-    static const int m_NUMBER_OF_CHOICES = 3;     //選択肢の数
+    static const int m_NUMBER_OF_CHOICES = 4;     //選択肢の数
 
 
 private: //data menber
@@ -47,8 +47,7 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     Game* m_game = nullptr;
-    FontRender* m_fontNumberOfPlayer[m_NUMBER_OF_CHOICES] = { nullptr };      //操作するプレイヤーの人数を選択するフォント
-    FontRender* m_fontCursor = nullptr;                     //カーソルのフォント
+    SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     SpriteRender* m_spriteBackground = nullptr;
 
     ////////////////////////////////////////////////////////////
