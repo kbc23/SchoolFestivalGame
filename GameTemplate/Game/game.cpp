@@ -102,6 +102,11 @@ void Game::NewGOModeSelectScene()
 void Game::ModeSelectScene()
 {
     if (m_modeSelect->GetFlagFinish() == false) {
+        //キャンセル
+        if (g_pad[con::player_1]->IsTrigger(enButtonB)) {
+            ReturnTitleScene();
+        }
+
         return;
     }
 
@@ -117,6 +122,15 @@ void Game::NewGOPlayerSelectScene()
     m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_FIRST);
 }
 
+void Game::ReturnTitleScene()
+{
+    m_title = NewGO<Title>(igo::PRIORITY_FIRST);
+
+    DeleteGO(m_modeSelect);
+
+    m_gameStatus = GameStatus::title;
+}
+
 ////////////////////////////////////////////////////////////
 // プレイヤーセレクトシーンの処理
 ////////////////////////////////////////////////////////////
@@ -124,6 +138,11 @@ void Game::NewGOPlayerSelectScene()
 void Game::PlayerSelectScene()
 {
     if (m_playerSelect->GetFlagFinish() == false) {
+        //キャンセル
+        if (g_pad[con::player_1]->IsTrigger(enButtonB)) {
+            ReturnModeSelectScene();
+        }
+
         return;
     }
 
@@ -139,6 +158,15 @@ void Game::NewGOCPUStrengthSelectScene()
     m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_FIRST);
 }
 
+void Game::ReturnModeSelectScene()
+{
+    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_FIRST);
+
+    DeleteGO(m_playerSelect);
+
+    m_gameStatus = GameStatus::modeSelect;
+}
+
 ////////////////////////////////////////////////////////////
 // CPUの難易度選択シーンの処理
 ////////////////////////////////////////////////////////////
@@ -146,6 +174,11 @@ void Game::NewGOCPUStrengthSelectScene()
 void Game::CPUStrengthSelectScene()
 {
     if (m_CPUStrengthSelect->GetFlagFinish() == false) {
+        //キャンセル
+        if (g_pad[con::player_1]->IsTrigger(enButtonB)) {
+            ReturnPlayerSelectScene();
+        }
+
         return;
     }
 
@@ -159,7 +192,7 @@ void Game::CPUStrengthSelectScene()
 void Game::NewGOGameScene()
 {
     m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
-    m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);
+    //m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);
     m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
     m_score = NewGO<Score>(igo::PRIORITY_FIRST);
@@ -168,6 +201,15 @@ void Game::NewGOGameScene()
 
     //Playerクラスに選択されたプレイヤー人数を渡す。
     m_player->SetMaxPlayer(m_maxPlayer);
+}
+
+void Game::ReturnPlayerSelectScene()
+{
+    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_FIRST);
+
+    DeleteGO(m_CPUStrengthSelect);
+
+    m_gameStatus = GameStatus::playerSelect;
 }
 
 ////////////////////////////////////////////////////////////
