@@ -311,6 +311,9 @@
     <ClCompile Include="mode_select.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
+    <ClCompile Include="CPU_strength_select.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -572,6 +575,9 @@
       <Filter>MyCode\エンジン\スプライト</Filter>
     </ClInclude>
     <ClInclude Include="mode_select.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU_strength_select.h">
       <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>

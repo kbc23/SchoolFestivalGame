@@ -4,6 +4,7 @@
 class Title;
 class ModeSelect;
 class PlayerSelect;
+class CPUStrengthSelect;
 class Player;
 class GameCamera;
 class Stage;
@@ -59,6 +60,20 @@ private:
 
     /**
      * @brief ゲームシーンで使用するオブジェクトのNewGO
+    */
+    void NewGOCPUStrengthSelectScene();
+
+    ////////////////////////////////////////////////////////////
+    // CPUの難易度選択シーンの処理
+    ////////////////////////////////////////////////////////////
+
+    /**
+     * @brief タイトルシーンの処理
+    */
+    void CPUStrengthSelectScene();
+
+    /**
+     * @brief プレイヤーセレクトシーンで使用するオブジェクトのNewGO
     */
     void NewGOGameScene();
 
@@ -124,6 +139,7 @@ private: //enum
         title,
         modeSelect,
         playerSelect,
+        CPUStrengthSelect,
         game,
         GameStatusMax
     };
@@ -139,6 +155,7 @@ private: //data menber
     Title* m_title = nullptr;
     ModeSelect* m_modeSelect = nullptr;
     PlayerSelect* m_playerSelect = nullptr;
+    CPUStrengthSelect* m_CPUStrengthSelect = nullptr;
     Player* m_player = nullptr;
     GameCamera* m_gameCamera = nullptr;
     Stage* m_stage = nullptr;

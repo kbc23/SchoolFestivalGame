@@ -4,6 +4,7 @@
 #include "title.h"
 #include "mode_select.h"
 #include "player_select.h"
+#include "CPU_strength_select.h"
 #include "player.h"
 #include "game_camera.h"
 #include "stage.h"
@@ -59,6 +60,9 @@ void Game::Update()
         break;
     case GameStatus::playerSelect:
         PlayerSelectScene();
+        break;
+    case GameStatus::CPUStrengthSelect:
+        CPUStrengthSelectScene();
         break;
     case GameStatus::game:
         GameScene();
@@ -123,12 +127,31 @@ void Game::PlayerSelectScene()
         return;
     }
 
-    NewGOGameScene();
+    NewGOCPUStrengthSelectScene();
 
     DeleteGO(m_playerSelect);
 
-    //Playerクラスに選択されたプレイヤー人数を渡す。
-    m_player->SetMaxPlayer(m_maxPlayer);
+    m_gameStatus = GameStatus::CPUStrengthSelect;
+}
+
+void Game::NewGOCPUStrengthSelectScene()
+{
+    m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_FIRST);
+}
+
+////////////////////////////////////////////////////////////
+// CPUの難易度選択シーンの処理
+////////////////////////////////////////////////////////////
+
+void Game::CPUStrengthSelectScene()
+{
+    if (m_CPUStrengthSelect->GetFlagFinish() == false) {
+        return;
+    }
+
+    NewGOGameScene();
+
+    DeleteGO(m_CPUStrengthSelect);
 
     m_gameStatus = GameStatus::game;
 }
@@ -142,6 +165,9 @@ void Game::NewGOGameScene()
     m_score = NewGO<Score>(igo::PRIORITY_FIRST);
     m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FIRST);
     m_fontStartCountdown->Init(L"");
+
+    //Playerクラスに選択されたプレイヤー人数を渡す。
+    m_player->SetMaxPlayer(m_maxPlayer);
 }
 
 ////////////////////////////////////////////////////////////
