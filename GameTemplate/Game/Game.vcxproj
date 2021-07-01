@@ -290,6 +290,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="effect_render.cpp" />
+    <ClCompile Include="fade.cpp" />
     <ClCompile Include="font_render.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_camera.cpp" />
@@ -383,6 +384,7 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="constant.h" />
     <ClInclude Include="effect_render.h" />
+    <ClInclude Include="fade.h" />
     <ClInclude Include="font_render.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_camera.h" />

@@ -305,6 +305,9 @@
     <ClCompile Include="rule1.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
+    <ClCompile Include="fade.cpp">
+      <Filter>MyCode\エンジン\スプライト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -561,6 +564,9 @@
     </ClInclude>
     <ClInclude Include="rule1.h">
       <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>MyCode\エンジン\スプライト</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

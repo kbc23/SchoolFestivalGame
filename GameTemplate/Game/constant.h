@@ -79,6 +79,8 @@ namespace filePath
 	constexpr const char* DDS_COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players";
 	constexpr const char* DDS_COMMAND_CHOOSE_A_RULE = "Assets/Image/Command_choose_a_rule.dds";
 	constexpr const char* DDS_COMMAND_EXIT_GAME = "Assets/Image/Command_exit_game.dds";
+	//フェード
+	constexpr const char* DDS_FADE = "Assets/Image/Fade.dds";
 
 	////////////////////////////////////////////////////////////
 	// BGM

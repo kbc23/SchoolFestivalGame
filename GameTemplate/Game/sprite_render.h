@@ -102,6 +102,11 @@ public:
 		m_sprite.SetMulColor(mulColor);
 	}
 
+	void SetMulColorW(const float& mulColorW)
+	{
+		m_sprite.SetMulColorW(mulColorW);
+	}
+
 	/**
 	 * @brief m_positionÇÃGetä÷êî
 	 * @return 
