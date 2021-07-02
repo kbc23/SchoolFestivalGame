@@ -44,10 +44,10 @@ Game::~Game()
 
 bool Game::Start()
 {
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
     m_spriteBackground->Init(filePath::DDS_BACKGROUND);
-    m_title = NewGO<Title>(igo::PRIORITY_FIRST);
-    m_fade = NewGO<Fade>(igo::PRIORITY_THIRD);
+    m_title = NewGO<Title>(igo::PRIORITY_CLASS);
+    m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
 
     return true;
 }
@@ -98,7 +98,7 @@ void Game::TitleScene()
 
 void Game::NewGOModeSelectScene()
 {
-    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_FIRST);
+    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_CLASS);
 }
 
 ////////////////////////////////////////////////////////////
@@ -125,12 +125,12 @@ void Game::ModeSelectScene()
 
 void Game::NewGOPlayerSelectScene()
 {
-    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_FIRST);
+    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_CLASS);
 }
 
 void Game::ReturnTitleScene()
 {
-    m_title = NewGO<Title>(igo::PRIORITY_FIRST);
+    m_title = NewGO<Title>(igo::PRIORITY_CLASS);
 
     DeleteGO(m_modeSelect);
 
@@ -161,12 +161,12 @@ void Game::PlayerSelectScene()
 
 void Game::NewGOCPUStrengthSelectScene()
 {
-    m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_FIRST);
+    m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_CLASS);
 }
 
 void Game::ReturnModeSelectScene()
 {
-    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_FIRST);
+    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_CLASS);
 
     DeleteGO(m_playerSelect);
 
@@ -203,7 +203,7 @@ void Game::NewGOGameScene()
 
 void Game::ReturnPlayerSelectScene()
 {
-    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_FIRST);
+    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_CLASS);
 
     DeleteGO(m_CPUStrengthSelect);
 
@@ -246,12 +246,12 @@ void Game::PreparingForLoading()
 
 void Game::Loading()
 {
-    m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
+    m_stage = NewGO<Stage>(igo::PRIORITY_CLASS, igo::CLASS_NAME_STAGE);
     //m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);
-    m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
-    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
-    m_score = NewGO<Score>(igo::PRIORITY_FIRST);
-    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_SECOND);
+    m_player = NewGO<Player>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PLAYER);
+    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
+    m_score = NewGO<Score>(igo::PRIORITY_CLASS);
+    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FONT);
     m_fontStartCountdown->Init(L"");
 
     //Playerクラスに選択されたプレイヤー人数を渡す。

@@ -119,6 +119,9 @@ Stage::~Stage()
 
 bool Stage::Start()
 {
+    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground->Init(filePath::DDS_BACKGROUND_SKY);
+
     //ステージを作成
     StageCreate();
 
@@ -129,7 +132,7 @@ bool Stage::Start()
     //モデルの作成
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
-            m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
+            m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
             m_modelGreenBlock[playerNum][blockNum]->Init(filePath::TKM_GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
@@ -138,7 +141,7 @@ bool Stage::Start()
             //m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
             //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
-            m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
+            m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
             m_modelYellowBlock[playerNum][blockNum]->Init(filePath::TKM_YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
@@ -161,7 +164,7 @@ bool Stage::Start()
     m_testEffect->Play();
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+        m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
         m_fontPlayerBlockPosition[playerNum]->Init(L"", PLAYER_BLOCK_POSITION_FONT_POSITION[playerNum]);
         m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
     }

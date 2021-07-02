@@ -39,10 +39,10 @@ ModeSelect::~ModeSelect()
 
 bool ModeSelect::Start()
 {
-    m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
     m_spriteChoices[0]->Init(filePath::DDS_COMMAND_RACE);
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
-    m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
     m_spriteChoices[1]->Init(filePath::DDS_COMMAND_RACE);
     m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
     m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);

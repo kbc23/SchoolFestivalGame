@@ -47,7 +47,7 @@ Score::~Score()
 bool Score::Start()
 {
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+        m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
         m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
     }
 

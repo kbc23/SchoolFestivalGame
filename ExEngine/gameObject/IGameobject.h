@@ -173,7 +173,10 @@ namespace igo //constant
 	// óDêÊìx
 	////////////////////////////////////////////////////////////
 
-	const int PRIORITY_FIRST = 0;
-	const int PRIORITY_SECOND = 1;
-	const int PRIORITY_THIRD = 2;
+	const int PRIORITY_CLASS = 0;
+	const int PRIORITY_BACKGROUND = 0;
+	const int PRIORITY_MODEL = 1;
+	const int PRIORITY_UI = 2;
+	const int PRIORITY_FONT = 3;
+	const int PRIORITY_FADE = 4;
 }

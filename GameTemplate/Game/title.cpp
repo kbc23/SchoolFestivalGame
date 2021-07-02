@@ -15,7 +15,7 @@ Title::~Title()
 
 bool Title::Start()
 {
-	m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+	m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_UI);
 	m_spritePressAButton->Init(filePath::DDS_PRESS_A_BUTTON);
 
 	return true;

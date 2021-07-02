@@ -26,7 +26,7 @@ public:
         const Vector4 color = { 1.0f,1.0f,1.0f,1.0f },
         const float rotation = 0.0f,
         const float scale = 1.0f,
-        const Vector2 pivot = { 0.0f,0.0f }
+        const Vector2 pivot = { 0.5f,0.5f }
     );
 
 
@@ -80,7 +80,7 @@ private: //data menber
     Vector4 m_color = { 1.0f,1.0f,1.0f,1.0f }; //文字のカラー（白色）
     float m_rotation = 0.0f; //回転
     float m_scale = 1.0f; //拡大率
-    Vector2 m_pivot = { 0.0f,0.0f }; //ピボット（基点）
+    Vector2 m_pivot = { 0.5f,0.5f }; //ピボット（基点）
 
 
 };

@@ -3,6 +3,7 @@
 #include "sound_BGM.h"
 #include "effect_render.h"
 #include "font_render.h"
+#include "sprite_render.h"
 #include "constant.h"
 
 class Player;
@@ -166,6 +167,7 @@ private: //data menber
     SoundBGM* m_bgm = nullptr;
     EffectRender* m_testEffect = nullptr;
     FontRender* m_fontPlayerBlockPosition[con::PlayerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示
+    SpriteRender* m_spriteBackground = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ

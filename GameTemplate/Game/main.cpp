@@ -36,7 +36,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	SoundEngine::CreateInstance(); //サウンドエンジン
 	EffectEngine::CreateInstance(); //エフェクトエンジン
 
-	Game* game = NewGO<Game>(igo::PRIORITY_FIRST, igo::CLASS_NAME_GAME);
+	Game* game = NewGO<Game>(igo::PRIORITY_CLASS, igo::CLASS_NAME_GAME);
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

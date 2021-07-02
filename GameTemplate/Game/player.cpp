@@ -103,7 +103,7 @@ bool Player::Start()
 		}
 	}
 
-	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FIRST);
+	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontEnd->Init(L"終了!");
 	m_fontEnd->Deactivate();
 
@@ -119,13 +119,13 @@ bool Player::StartIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
+	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
 	m_modelRender[pNum]->Init(filePath::TKM_CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
 	m_modelRender[pNum]->PlayAnimation(Animation_idle);
 
-	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
 	m_fontGoalRank[pNum]->Deactivate();
 
