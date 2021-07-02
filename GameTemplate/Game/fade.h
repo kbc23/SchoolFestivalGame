@@ -20,47 +20,33 @@ private:
     /**
      * @brief フェードの量を増加
     */
-    void IncreaseFade();
-
-    /**
-     * @brief フェードで画面を隠した状態で待機
-    */
-    void WaitFade();
+    void FadeOut();
 
     /**
      * @brief フェードの量を減少
     */
-    void DecreaseFade();
+    void FadeIn();
 
 public: //Get関数
 
 
 public: //Set関数
     /**
-     * @brief フェードの増加量を変更
-     * @param f フェードの増加量
+     * @brief フェードアウトの量を変更
+     * @param f フェードアウトの量
     */
-    void SetIncreaseAmountOfChange(const float& f)
+    void SetAmountOfChangeFadeOut(const float& f)
     {
-        m_increaseAmountOfChange = f;
+        m_amountOfChangeFadeOut = f;
     }
 
     /**
-     * @brief フェードの減少量を変更
-     * @param f フェードの減少量
+     * @brief フェードインの量を変更
+     * @param f フェードインの量
     */
-    void SetmDecreaseAmountOfChange(const float& f)
+    void SetAmountOfChangeFadeIn(const float& f)
     {
-        m_decreaseAmountOfChange = f;
-    }
-
-    /**
-     * @brief フェードの待機時間を変更
-     * @param i フェードの待機時間（60で１秒）
-    */
-    void SetWaitTime(const int& i)
-    {
-        m_waitTime = i;
+        m_amountOfChangeFadeIn = f;
     }
 
 
@@ -68,18 +54,28 @@ public: //その他
     /**
      * @brief フェードを始める
     */
-    void StartFade()
+    void StartFadeOut()
     {
-        m_flagFade = true;
+        m_stateFade = CurrentFadeState::fadeOut;
+    }
+
+    void StartFadeIn()
+    {
+        m_stateFade = CurrentFadeState::fadeIn;
     }
 
     /**
      * @brief 現在フェードをしているか
      * @return 現在フェードをしているか
     */
-    const bool& IsFadeInProgress()
+    const bool& IsFadeProgress()
     {
-        return m_flagFade;
+        if (m_stateFade == CurrentFadeState::wait) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     /**
@@ -87,10 +83,8 @@ public: //その他
     */
     void EmergencyStop()
     {
-        m_flagFade = false;
-        m_stateFade = CurrentFadeState::increase;
+        m_stateFade = CurrentFadeState::wait;
         m_amountOfFade = 0.0f;
-        m_waitTimer = 0;
         m_spriteFade->SetMulColorW(m_amountOfFade);
     }
 
@@ -101,9 +95,9 @@ private: //enum
     */
     enum class CurrentFadeState
     {
-        increase,               //増加中
         wait,                   //待機中
-        decrease,               //減少中
+        fadeOut,                //フェードアウト中
+        fadeIn,                 //フェードイン中
         CurrentFadeStateMax
     };
 
@@ -119,12 +113,9 @@ private: //data menber
     // フェード処理の変数
     ////////////////////////////////////////////////////////////
 
-    bool m_flagFade = false;                    //フェードをしているかのフラグ
     float m_amountOfFade = 0.0f;                //現在のフェードの量
-    float m_increaseAmountOfChange = 0.1f;      //フェードの増加量（1フレーム）
-    float m_decreaseAmountOfChange = 0.1f;      //フェードの減少量（1フレーム）
-    int m_waitTime = 60;                        //フェードの待機時間（60で１秒）
-    int m_waitTimer = 0;                        //フェードの待機時間のタイマー
-    CurrentFadeState m_stateFade = CurrentFadeState::increase;    //現在のフェードの状態
+    float m_amountOfChangeFadeOut = 0.1f;      //フェードの増加量（1フレーム）
+    float m_amountOfChangeFadeIn = 0.1f;      //フェードの減少量（1フレーム）
+    CurrentFadeState m_stateFade = CurrentFadeState::wait;    //現在のフェードの状態
 
 };

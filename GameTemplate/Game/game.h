@@ -1,6 +1,7 @@
 #pragma once
 #include "font_render.h"
 #include "sprite_render.h"
+#include "fade.h"
 
 class Title;
 class ModeSelect;
@@ -179,6 +180,7 @@ private: //data menber
     Score* m_score = nullptr;
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
     SpriteRender* m_spriteBackground = nullptr;
+    Fade* m_fade = nullptr;
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
