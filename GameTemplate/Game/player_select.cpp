@@ -42,14 +42,11 @@ PlayerSelect::~PlayerSelect()
         DeleteGO(m_spriteChoices[choicesNum]);
     }
 
-    DeleteGO(m_spriteBackground);
 }
 
 bool PlayerSelect::Start()
 {
 
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
-    m_spriteBackground->Init(filePath::DDS_BACKGROUND);
     m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
     m_spriteChoices[0]->Init(filePath::DDS_NUMBER_OF_PLAYERS_1);
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);

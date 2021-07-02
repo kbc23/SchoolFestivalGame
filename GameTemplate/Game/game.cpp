@@ -44,6 +44,8 @@ Game::~Game()
 
 bool Game::Start()
 {
+    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
+    m_spriteBackground->Init(filePath::DDS_BACKGROUND);
     m_title = NewGO<Title>(igo::PRIORITY_FIRST);
 
     return true;
@@ -220,6 +222,11 @@ void Game::GameScene()
 {
     if (m_flagStartCountdown == false) {
         return;
+    }
+
+    if (m_flagDeleteBackground == false) {
+        DeleteGO(m_spriteBackground);
+        m_flagDeleteBackground = true;
     }
 
     StartCountdown();

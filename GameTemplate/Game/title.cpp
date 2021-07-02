@@ -10,14 +10,11 @@ Title::Title()
 
 Title::~Title()
 {
-	DeleteGO(m_spriteBackground);
 	DeleteGO(m_spritePressAButton);
 }
 
 bool Title::Start()
 {
-	m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
-	m_spriteBackground->Init(filePath::DDS_BACKGROUND);
 	m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
 	m_spritePressAButton->Init(filePath::DDS_PRESS_A_BUTTON);
 

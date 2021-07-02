@@ -45,7 +45,6 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
-    SpriteRender* m_spriteBackground = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ‚»‚Ì‘¼

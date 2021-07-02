@@ -1,5 +1,6 @@
 #pragma once
 #include "font_render.h"
+#include "sprite_render.h"
 
 class Title;
 class ModeSelect;
@@ -177,6 +178,7 @@ private: //data menber
     Rule1* m_rule1 = nullptr;
     Score* m_score = nullptr;
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
+    SpriteRender* m_spriteBackground = nullptr;
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
@@ -191,6 +193,7 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     GameStatus m_gameStatus = GameStatus::title;
+    bool m_flagDeleteBackground = false;
 
     ////////////////////////////////////////////////////////////
     // その他

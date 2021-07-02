@@ -35,13 +35,10 @@ ModeSelect::~ModeSelect()
 {
     DeleteGO(m_spriteChoices[0]);
     DeleteGO(m_spriteChoices[1]);
-    DeleteGO(m_spriteBackground);
 }
 
 bool ModeSelect::Start()
 {
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
-    m_spriteBackground->Init(filePath::DDS_BACKGROUND);
     m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
     m_spriteChoices[0]->Init(filePath::DDS_COMMAND_RACE);
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);

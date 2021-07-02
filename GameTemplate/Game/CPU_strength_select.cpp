@@ -37,13 +37,10 @@ CPUStrengthSelect::~CPUStrengthSelect()
     DeleteGO(m_spriteChoices[0]);
     DeleteGO(m_spriteChoices[1]);
     DeleteGO(m_spriteChoices[2]);
-    DeleteGO(m_spriteBackground);
 }
 
 bool CPUStrengthSelect::Start()
 {
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
-    m_spriteBackground->Init(filePath::DDS_BACKGROUND);
     m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
     m_spriteChoices[0]->Init(filePath::DDS_CPU_WEAK);
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
