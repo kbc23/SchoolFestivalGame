@@ -20,7 +20,7 @@ namespace con //constant
 		player_2,
 		player_3,
 		player_4,
-		playerNumberMax
+		PlayerNumberMax
 	};
 
 	//ƒ‚ƒfƒ‹‚Ìã•ûŒü‚Ì²

@@ -95,6 +95,18 @@ private:
     void ReturnPlayerSelectScene();
 
     ////////////////////////////////////////////////////////////
+    // ゲームシーンのためのロード
+    ////////////////////////////////////////////////////////////
+
+    void LoadingGameScene();
+
+    void PreparingForLoading();
+
+    void Loading();
+
+    void EndOfLoading();
+
+    ////////////////////////////////////////////////////////////
     // ゲームシーンの処理
     ////////////////////////////////////////////////////////////
 
@@ -157,9 +169,20 @@ private: //enum
         modeSelect,
         playerSelect,
         CPUStrengthSelect,
+        loadingGame,
         game,
         GameStatusMax
     };
+
+    enum class LoadingStatus
+    {
+        doNothing,              //何もしていない
+        preparingForLoading,    //ロードの準備
+        loading,                //ロード中
+        endOfLoading,           //ロード終了
+        LoadStatusMax
+    };
+
 
 private: //constant
     static const int m_INIT_COUNT_START_COUNTDOWN = 180;        //m_countStartCountdownの初期値
@@ -195,7 +218,9 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     GameStatus m_gameStatus = GameStatus::title;
-    bool m_flagDeleteBackground = false;
+    LoadingStatus m_loadStatus = LoadingStatus::doNothing;
+    bool m_startPreparingForLoading = false;
+    bool m_startEndOfLoading = false;
 
     ////////////////////////////////////////////////////////////
     // その他

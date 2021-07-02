@@ -56,12 +56,12 @@ public: //その他
     */
     void StartFadeOut()
     {
-        m_stateFade = CurrentFadeState::fadeOut;
+        m_statusFade = CurrentFadeState::fadeOut;
     }
 
     void StartFadeIn()
     {
-        m_stateFade = CurrentFadeState::fadeIn;
+        m_statusFade = CurrentFadeState::fadeIn;
     }
 
     /**
@@ -70,7 +70,7 @@ public: //その他
     */
     const bool& IsFadeProgress()
     {
-        if (m_stateFade == CurrentFadeState::wait) {
+        if (m_statusFade == CurrentFadeState::wait) {
             return false;
         }
         else {
@@ -79,11 +79,39 @@ public: //その他
     }
 
     /**
+     * @brief 現在フェードアウトをしているか
+     * @return 現在フェードアウトをしているか
+    */
+    const bool& IsFadeOutProgress()
+    {
+        if (m_statusFade == CurrentFadeState::fadeOut) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * @brief 現在フェードインをしているか
+     * @return 現在フェードインをしているか
+    */
+    const bool& IsFadeInProgress()
+    {
+        if (m_statusFade == CurrentFadeState::fadeIn) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
      * @brief フェードの緊急停止
     */
     void EmergencyStop()
     {
-        m_stateFade = CurrentFadeState::wait;
+        m_statusFade = CurrentFadeState::wait;
         m_amountOfFade = 0.0f;
         m_spriteFade->SetMulColorW(m_amountOfFade);
     }
@@ -116,6 +144,6 @@ private: //data menber
     float m_amountOfFade = 0.0f;                //現在のフェードの量
     float m_amountOfChangeFadeOut = 0.1f;      //フェードの増加量（1フレーム）
     float m_amountOfChangeFadeIn = 0.1f;      //フェードの減少量（1フレーム）
-    CurrentFadeState m_stateFade = CurrentFadeState::wait;    //現在のフェードの状態
+    CurrentFadeState m_statusFade = CurrentFadeState::wait;    //現在のフェードの状態
 
 };

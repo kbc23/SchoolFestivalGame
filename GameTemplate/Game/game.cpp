@@ -47,6 +47,7 @@ bool Game::Start()
     m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
     m_spriteBackground->Init(filePath::DDS_BACKGROUND);
     m_title = NewGO<Title>(igo::PRIORITY_FIRST);
+    m_fade = NewGO<Fade>(igo::PRIORITY_THIRD);
 
     return true;
 }
@@ -65,6 +66,9 @@ void Game::Update()
         break;
     case GameStatus::CPUStrengthSelect:
         CPUStrengthSelectScene();
+        break;
+    case GameStatus::loadingGame:
+        LoadingGameScene();
         break;
     case GameStatus::game:
         GameScene();
@@ -188,21 +192,13 @@ void Game::CPUStrengthSelectScene()
 
     DeleteGO(m_CPUStrengthSelect);
 
-    m_gameStatus = GameStatus::game;
+    m_gameStatus = GameStatus::loadingGame;
+    m_loadStatus = LoadingStatus::preparingForLoading;
 }
 
 void Game::NewGOGameScene()
 {
-    m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
-    //m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);
-    m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
-    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
-    m_score = NewGO<Score>(igo::PRIORITY_FIRST);
-    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FIRST);
-    m_fontStartCountdown->Init(L"");
 
-    //Playerクラスに選択されたプレイヤー人数を渡す。
-    m_player->SetMaxPlayer(m_maxPlayer);
 }
 
 void Game::ReturnPlayerSelectScene()
@@ -215,6 +211,72 @@ void Game::ReturnPlayerSelectScene()
 }
 
 ////////////////////////////////////////////////////////////
+// ゲームシーンのためのロード
+////////////////////////////////////////////////////////////
+
+void Game::LoadingGameScene()
+{
+    switch (m_loadStatus) {
+    case LoadingStatus::preparingForLoading:
+        PreparingForLoading();
+        break;
+    case LoadingStatus::loading:
+        Loading();
+        break;
+    case LoadingStatus::endOfLoading:
+        EndOfLoading();
+        break;
+    default:
+        MessageBoxA(nullptr, "ゲームのロードにてエラーが発生しました。", "エラー", MB_OK);
+        return;
+    }
+}
+
+void Game::PreparingForLoading()
+{
+    if (m_startPreparingForLoading == false) {
+        m_fade->StartFadeOut();
+        m_startPreparingForLoading = true;
+    }
+
+    if (m_fade->IsFadeOutProgress() == false) {
+        m_loadStatus = LoadingStatus::loading;
+    }
+}
+
+void Game::Loading()
+{
+    m_stage = NewGO<Stage>(igo::PRIORITY_FIRST, igo::CLASS_NAME_STAGE);
+    //m_rule1 = NewGO<Rule1>(igo::PRIORITY_FIRST, igo::CLASS_NAME_RULE1);
+    m_player = NewGO<Player>(igo::PRIORITY_FIRST, igo::CLASS_NAME_PLAYER);
+    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_FIRST);
+    m_score = NewGO<Score>(igo::PRIORITY_FIRST);
+    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_SECOND);
+    m_fontStartCountdown->Init(L"");
+
+    //Playerクラスに選択されたプレイヤー人数を渡す。
+    m_player->SetMaxPlayer(m_maxPlayer);
+
+    //選択画面の背景を削除
+    DeleteGO(m_spriteBackground);
+
+    m_loadStatus = LoadingStatus::endOfLoading;
+}
+
+void Game::EndOfLoading()
+{
+    if (m_startEndOfLoading == false) {
+        m_fade->StartFadeIn();
+        m_startEndOfLoading = true;
+    }
+    
+    if (m_fade->IsFadeInProgress() == false) {
+        m_gameStatus = GameStatus::game;
+        m_loadStatus = LoadingStatus::doNothing;
+    }
+}
+
+////////////////////////////////////////////////////////////
 // ゲームシーンの処理
 ////////////////////////////////////////////////////////////
 
@@ -222,11 +284,6 @@ void Game::GameScene()
 {
     if (m_flagStartCountdown == false) {
         return;
-    }
-
-    if (m_flagDeleteBackground == false) {
-        DeleteGO(m_spriteBackground);
-        m_flagDeleteBackground = true;
     }
 
     StartCountdown();

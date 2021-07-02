@@ -31,7 +31,7 @@ namespace //constant
     // 位置情報
     ////////////////////////////////////////////////////////////
 
-    const float BLOCK_POSITION_X[con::playerNumberMax] = {           //ブロックのX座標
+    const float BLOCK_POSITION_X[con::PlayerNumberMax] = {           //ブロックのX座標
         390.0f,                                                             //プレイヤー１
         130.0f,                                                             //プレイヤー２
         -130.0f,                                                            //プレイヤー３
@@ -39,14 +39,14 @@ namespace //constant
     };
     const float BLOCK_POSITION_Y = -80.0f;                              //ブロックのY座標
     const float BLOCK_POSITION_Z = -250.0f;                             //ブロックのZ座標
-    const Vector3 BLOCK_START_POSITION[con::playerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
+    const Vector3 BLOCK_START_POSITION[con::PlayerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
         { 390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }, 	                //プレイヤー１
         { 130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                    //プレイヤー２
         { -130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                //プレイヤー３
         { -390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }	                    //プレイヤー４
     };
 
-    const Vector2 PLAYER_BLOCK_POSITION_FONT_POSITION[con::playerNumberMax] = {	//スコアタイムの表示位置
+    const Vector2 PLAYER_BLOCK_POSITION_FONT_POSITION[con::PlayerNumberMax] = {	//スコアタイムの表示位置
     { -390.0f, -200.0f },										        //プレイヤー１
     { -130.0f, -200.0f },												//プレイヤー２
     { 130.0f, -200.0f },												//プレイヤー３
@@ -96,7 +96,7 @@ Stage::Stage()
 
 Stage::~Stage()
 {
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         //for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
         //    DeleteGO(m_modelRender[playerNum][blockNum]);
         //}
@@ -127,7 +127,7 @@ bool Stage::Start()
     //黄色８個
 
     //モデルの作成
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
             m_modelGreenBlock[playerNum][blockNum]->Init(filePath::TKM_GREEN_BLOCK);
@@ -145,7 +145,7 @@ bool Stage::Start()
     }
 
     //モデルの描画
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         DrawBlock(playerNum);
     }
 
@@ -160,7 +160,7 @@ bool Stage::Start()
     m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
     m_testEffect->Play();
 
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
         m_fontPlayerBlockPosition[playerNum]->Init(L"", PLAYER_BLOCK_POSITION_FONT_POSITION[playerNum]);
         m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
@@ -232,7 +232,7 @@ void Stage::StageCreate()
     }
 
     //プレイヤー１でセットしたものを他のプレイヤーのところにもセットする。
-    for (int playerNum = con::player_2; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
             m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
         }
@@ -272,7 +272,7 @@ void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowN
 void Stage::Update()
 {
     //プレイヤーごとの処理
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         CheckBlock(playerNum);
 
         if (stop == false) {    //黄色に乗った時にずっと操作不能にするかどうか
@@ -576,7 +576,7 @@ void Stage::GoalBlock()
     bool addNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
     int nextRank = con::INIT_ZERO; //次のプレイヤーの順位
 
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         //プレイヤーの順位を確定
         if (m_player->GetActivePlayer(playerNum) == true && m_playerBlockPosition[playerNum] == m_MAX_BLOCK - 1) {
             //プレイヤーの操作をできないようにする。

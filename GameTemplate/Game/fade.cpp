@@ -29,7 +29,7 @@ void Fade::Update()
 
 void Fade::ChangeAmountOfFade()
 {
-    switch (m_stateFade) {
+    switch (m_statusFade) {
     case CurrentFadeState::wait:
 
         break;
@@ -52,7 +52,7 @@ void Fade::FadeOut()
 
     if (m_amountOfFade >= 1.0f) {
         m_amountOfFade = 1.0f;
-        m_stateFade = CurrentFadeState::wait;
+        m_statusFade = CurrentFadeState::wait;
     }
 
     m_spriteFade->SetMulColorW(m_amountOfFade);
@@ -64,7 +64,7 @@ void Fade::FadeIn()
     
     if (m_amountOfFade <= 0.0f) {
         m_amountOfFade = 0.0f;
-        m_stateFade = CurrentFadeState::wait;
+        m_statusFade = CurrentFadeState::wait;
     }
 
     m_spriteFade->SetMulColorW(m_amountOfFade);

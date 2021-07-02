@@ -12,7 +12,7 @@ namespace //constant
     // 位置情報
     ////////////////////////////////////////////////////////////
 
-    const Vector2 SCORE_TIME_FONT_POSITION[con::playerNumberMax] = {	//スコアタイムの表示位置
+    const Vector2 SCORE_TIME_FONT_POSITION[con::PlayerNumberMax] = {	//スコアタイムの表示位置
         { -390.0f, -290.0f },										        //プレイヤー１
         { -130.0f, -290.0f },												//プレイヤー２
         { 130.0f, -290.0f },												//プレイヤー３
@@ -39,14 +39,14 @@ Score::Score()
 
 Score::~Score()
 {
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         DeleteGO(m_fontScoreTime[playerNum]);
     }
 }
 
 bool Score::Start()
 {
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
         m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
     }
@@ -67,7 +67,7 @@ void Score::Update()
         return;
     }
 
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         if (m_flagProcessing[playerNum] == true) {
             AddTime(playerNum);
             FinishTime(playerNum);
