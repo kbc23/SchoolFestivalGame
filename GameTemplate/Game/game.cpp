@@ -49,6 +49,11 @@ bool Game::Start()
     m_title = NewGO<Title>(igo::PRIORITY_CLASS);
     m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
 
+    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
+    m_bgmTitle->Init(filePath::bgm::TITLE);
+    m_bgmTitle->SetVolume(0.5f);
+    m_bgmTitle->Play(true);
+
     m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seCancel->Init(filePath::se::CANCEL);
 

@@ -97,7 +97,8 @@ namespace filePath
 
 	namespace bgm
 	{
-		constexpr const wchar_t* STAGE1 = L"Assets/Sound/Stage1.wav";
+		constexpr const wchar_t* STAGE1 = L"Assets/Sound/BGM/Stage1.wav";
+		constexpr const wchar_t* TITLE = L"Assets/Sound/BGM/Title.wav";
 	}
 
 	////////////////////////////////////////////////////////////
@@ -106,9 +107,9 @@ namespace filePath
 	
 	namespace se
 	{
-		constexpr const wchar_t* DECISION = L"Assets/Sound/Decision.wav";
-		constexpr const wchar_t* CANCEL = L"Assets/Sound/Cancel.wav";
-		constexpr const wchar_t* MOVE_CURSOR = L"Assets/Sound/Move_cursor.wav";
+		constexpr const wchar_t* DECISION = L"Assets/Sound/SE/Decision.wav";
+		constexpr const wchar_t* CANCEL = L"Assets/Sound/SE/Cancel.wav";
+		constexpr const wchar_t* MOVE_CURSOR = L"Assets/Sound/SE/Move_cursor.wav";
 	}
 
 
