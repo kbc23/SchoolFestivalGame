@@ -1,6 +1,7 @@
 #pragma once
 #include "font_render.h"
 #include "sprite_render.h"
+#include "sound_SE.h"
 
 class Game;
 
@@ -48,6 +49,8 @@ private: //data menber
 
     Game* m_game = nullptr;
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
+    SoundSE* m_seDecision = nullptr;
+    SoundSE* m_seMoveCursor = nullptr;
 
     ////////////////////////////////////////////////////////////
     // その他
@@ -64,6 +67,4 @@ private: //data menber
     bool m_flagDecision = false;    //人数を決定したかのフラグ
 
     bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
-
-    bool m_flagInput = false;       //前のフレームで入力しているかどうかのフラグ
 };

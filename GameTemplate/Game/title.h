@@ -1,5 +1,6 @@
 #pragma once
 #include "sprite_render.h"
+#include "sound_SE.h"
 
 class Title : public IGameObject
 {
@@ -26,6 +27,7 @@ private: //data menber
 	////////////////////////////////////////////////////////////
 
 	SpriteRender* m_spritePressAButton = nullptr;
+	SoundSE* m_seDecision = nullptr;
 
 	////////////////////////////////////////////////////////////
 	// ƒtƒ‰ƒOŠÖ˜A

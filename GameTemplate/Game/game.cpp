@@ -49,6 +49,9 @@ bool Game::Start()
     m_title = NewGO<Title>(igo::PRIORITY_CLASS);
     m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
 
+    m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCancel->Init(filePath::se::CANCEL);
+
     return true;
 }
 
@@ -130,6 +133,8 @@ void Game::NewGOPlayerSelectScene()
 
 void Game::ReturnTitleScene()
 {
+    m_seCancel->Play(false);
+
     m_title = NewGO<Title>(igo::PRIORITY_CLASS);
 
     DeleteGO(m_modeSelect);
@@ -166,6 +171,8 @@ void Game::NewGOCPUStrengthSelectScene()
 
 void Game::ReturnModeSelectScene()
 {
+    m_seCancel->Play(false);
+
     m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_CLASS);
 
     DeleteGO(m_playerSelect);
@@ -203,6 +210,8 @@ void Game::NewGOGameScene()
 
 void Game::ReturnPlayerSelectScene()
 {
+    m_seCancel->Play(false);
+
     m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_CLASS);
 
     DeleteGO(m_CPUStrengthSelect);

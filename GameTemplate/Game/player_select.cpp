@@ -63,6 +63,10 @@ bool PlayerSelect::Start()
     m_spriteChoices[3]->SetPosition(CHOICES_POSITION[3]);
     m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
 
+    m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seDecision->Init(filePath::se::DECISION);
+    m_seMoveCursor = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seMoveCursor->Init(filePath::se::MOVE_CURSOR);
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
@@ -80,21 +84,16 @@ void PlayerSelect::Update()
 
 void PlayerSelect::SelectTheNumberOfPlayers()
 {
-    if (g_pad[con::player_1]->GetLStickXF() == con::FLOAT_ZERO) {
-        m_flagInput = false;
-    }
-
-    //前フレームから入力し続けていたら処理をしない。
-    if (m_flagInput == true) {
-        return;
-    }
-
     //決定
     if (g_pad[con::player_1]->IsTrigger(enButtonA)) {
+        m_seDecision->Play(false);
+
         m_flagDecision = true;
     }
     //左に移動
-    else if (g_pad[con::player_1]->GetLStickXF() < con::FLOAT_ZERO) {
+    else if (g_pad[con::player_1]->IsTrigger(enButtonLeft) == true) {
+        m_seMoveCursor->Play(false);
+
         if (m_cursorPosition == LEFT_END) {
             return;
         }
@@ -104,11 +103,11 @@ void PlayerSelect::SelectTheNumberOfPlayers()
         --m_cursorPosition;
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
-
-        m_flagInput = true;
     }
     //右に移動
-    else if (g_pad[con::player_1]->GetLStickXF() > con::FLOAT_ZERO) {
+    else if (g_pad[con::player_1]->IsTrigger(enButtonRight) == true) {
+        m_seMoveCursor->Play(false);
+
         if (m_cursorPosition == RIGHT_END) {
             return;
         }
@@ -118,8 +117,6 @@ void PlayerSelect::SelectTheNumberOfPlayers()
         ++m_cursorPosition;
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
-
-        m_flagInput = true;
     }
 }
 

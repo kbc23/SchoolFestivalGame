@@ -2,6 +2,7 @@
 #include "font_render.h"
 #include "sprite_render.h"
 #include "fade.h"
+#include "sound_SE.h"
 
 class Title;
 class ModeSelect;
@@ -204,6 +205,7 @@ private: //data menber
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
     SpriteRender* m_spriteBackground = nullptr;
     Fade* m_fade = nullptr;
+    SoundSE* m_seCancel = nullptr;
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
