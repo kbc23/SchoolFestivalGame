@@ -48,18 +48,18 @@ bool PlayerSelect::Start()
 {
 
     m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteChoices[0]->Init(filePath::DDS_NUMBER_OF_PLAYERS_1);
+    m_spriteChoices[0]->Init(filePath::dds::NUMBER_OF_PLAYERS_1);
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
     m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteChoices[1]->Init(filePath::DDS_NUMBER_OF_PLAYERS_2);
+    m_spriteChoices[1]->Init(filePath::dds::NUMBER_OF_PLAYERS_2);
     m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
     m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
     m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteChoices[2]->Init(filePath::DDS_NUMBER_OF_PLAYERS_3);
+    m_spriteChoices[2]->Init(filePath::dds::NUMBER_OF_PLAYERS_3);
     m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
     m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
     m_spriteChoices[3] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteChoices[3]->Init(filePath::DDS_NUMBER_OF_PLAYERS_4);
+    m_spriteChoices[3]->Init(filePath::dds::NUMBER_OF_PLAYERS_4);
     m_spriteChoices[3]->SetPosition(CHOICES_POSITION[3]);
     m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
 

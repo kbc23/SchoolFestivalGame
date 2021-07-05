@@ -85,7 +85,7 @@ void Player::DeleteIndividual(const int pNum)
 bool Player::Start()
 {
 	//アニメーションの設定
-	m_animationPlayer[Animation_idle].Load(filePath::TKA_IDLE);
+	m_animationPlayer[Animation_idle].Load(filePath::tka::IDLE);
 	//ループ再生をtrueにする
 	m_animationPlayer[Animation_idle].SetLoopFlag(true);
 	//アニメーションの設定
@@ -120,7 +120,7 @@ bool Player::StartIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-	m_modelRender[pNum]->Init(filePath::TKM_CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
+	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
 	m_modelRender[pNum]->PlayAnimation(Animation_idle);

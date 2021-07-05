@@ -16,7 +16,7 @@ Fade::~Fade()
 bool Fade::Start()
 {
     m_spriteFade = NewGO<SpriteRender>(igo::PRIORITY_FADE);
-    m_spriteFade->Init(filePath::DDS_FADE);
+    m_spriteFade->Init(filePath::dds::FADE);
     m_spriteFade->SetMulColorW(m_amountOfFade);
 
     return true;

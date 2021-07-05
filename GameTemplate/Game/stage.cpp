@@ -120,7 +120,7 @@ Stage::~Stage()
 bool Stage::Start()
 {
     m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground->Init(filePath::DDS_BACKGROUND_SKY);
+    m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
 
     //ステージを作成
     StageCreate();
@@ -133,7 +133,7 @@ bool Stage::Start()
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-            m_modelGreenBlock[playerNum][blockNum]->Init(filePath::TKM_GREEN_BLOCK);
+            m_modelGreenBlock[playerNum][blockNum]->Init(filePath::tkm::GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
@@ -142,7 +142,7 @@ bool Stage::Start()
             //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
             m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-            m_modelYellowBlock[playerNum][blockNum]->Init(filePath::TKM_YELLOW_BLOCK);
+            m_modelYellowBlock[playerNum][blockNum]->Init(filePath::tkm::YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
     }
@@ -154,7 +154,7 @@ bool Stage::Start()
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
-    m_bgm->Init(filePath::WAV_STAGE1);
+    m_bgm->Init(filePath::bgm::STAGE1);
     m_bgm->Play(true);
 
     //エフェクトの再生

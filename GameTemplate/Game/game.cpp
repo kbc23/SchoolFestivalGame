@@ -45,7 +45,7 @@ Game::~Game()
 bool Game::Start()
 {
     m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground->Init(filePath::DDS_BACKGROUND);
+    m_spriteBackground->Init(filePath::dds::BACKGROUND);
     m_title = NewGO<Title>(igo::PRIORITY_CLASS);
     m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
 

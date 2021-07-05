@@ -42,14 +42,14 @@ CPUStrengthSelect::~CPUStrengthSelect()
 bool CPUStrengthSelect::Start()
 {
     m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteChoices[0]->Init(filePath::DDS_CPU_WEAK);
+    m_spriteChoices[0]->Init(filePath::dds::CPU_WEAK);
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
     m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteChoices[1]->Init(filePath::DDS_CPU_USUALLY);
+    m_spriteChoices[1]->Init(filePath::dds::CPU_USUALLY);
     m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
     m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
     m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteChoices[2]->Init(filePath::DDS_CPU_STRONG);
+    m_spriteChoices[2]->Init(filePath::dds::CPU_STRONG);
     m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
     m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
 
