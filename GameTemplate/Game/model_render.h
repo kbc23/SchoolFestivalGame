@@ -165,6 +165,11 @@ public: //Setä÷êî
 		m_position.y -= f;
 	}
 
+	void ResetPositionY()
+	{
+		m_position.y = 0.0f;
+	}
+
 	void SetRotation(const Quaternion q)
 	{
 		m_rotation = q;

@@ -44,7 +44,7 @@ namespace //constant
 	// その他
 	////////////////////////////////////////////////////////////
 
-	const float JUMP_MOVE = 3.0f;
+	const float JUMP_MOVE = 2.0f;
 }
 
 
@@ -85,9 +85,14 @@ void Player::DeleteIndividual(const int pNum)
 bool Player::Start()
 {
 	//アニメーションの設定
-	m_animationPlayer[Animation_idle].Load(filePath::tka::IDLE);
+	m_animationPlayer[idle].Load(filePath::tka::IDLE);
+	m_animationPlayer[jump].Load(filePath::tka::JUMP);
+	m_animationPlayer[drown].Load(filePath::tka::DROWN);
+	m_animationPlayer[srip].Load(filePath::tka::SRIP);
+	m_animationPlayer[win].Load(filePath::tka::WIN);
+	m_animationPlayer[lose].Load(filePath::tka::LOSE);
 	//ループ再生をtrueにする
-	m_animationPlayer[Animation_idle].SetLoopFlag(true);
+	m_animationPlayer[idle].SetLoopFlag(true);
 	//アニメーションの設定
 	//m_animationPlayer[Animation_jump].Load("Assets/animData/UnityChanJump.tka");
 	//ループ再生をtrueにする
@@ -123,7 +128,7 @@ bool Player::StartIndividual(const int pNum)
 	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
-	m_modelRender[pNum]->PlayAnimation(Animation_idle);
+	m_modelRender[pNum]->PlayAnimation(idle);
 
 	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
@@ -152,7 +157,6 @@ void Player::Update()
 	if (m_maxPlayer == m_goalPlayer) {
 		m_fontEnd->Activate();
 	}
-	m_modelRender[0]->PlayAnimation(Animation_idle);
 
 	bool check[4] = { false,false,false,false };
 
@@ -191,6 +195,7 @@ void Player::Controller(const int pNum)
 			return;
 		}
 		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_modelRender[pNum]->PlayAnimation(jump);
 		m_flagAnimationJump[pNum] = true;
 	}
 	//１マス進む
@@ -199,6 +204,8 @@ void Player::Controller(const int pNum)
 			return;
 		}
 		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_modelRender[pNum]->PlayAnimation(jump);
+
 		m_flagAnimationJump[pNum] = true;
 	}
 }
@@ -234,6 +241,7 @@ void Player::JumpAnimation(const int pNum)
 	if (m_timerAnimation[pNum] >= TIME_ANIMATION) {
 		m_flagAnimationJump[pNum] = false;
 		m_timerAnimation[pNum] = TIMER_RESET;
+		m_modelRender[pNum]->PlayAnimation(idle);
 	}
 }
 

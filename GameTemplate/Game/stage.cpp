@@ -485,7 +485,7 @@ void Stage::ReturnOperationTimer(const int pNum)
         m_resistanceImpossibleOperation[pNum] = true;
 
         //モデルの回転を元に戻す。
-        m_player->SetRotationX(pNum, con::FLOAT_ZERO);
+        m_player->SetAnimationIdle(pNum);
     }
 }
 
@@ -515,8 +515,8 @@ void Stage::CheckBlock(const int pNum)
             //黄色ブロックを緑ブロックに変更
             m_stageData[pNum][m_playerBlockPosition[pNum]] = greenBlock;
             DrawBlock(pNum);
-            //モデルを回転させる。
-            m_player->SetRotationX(pNum, -90.0f);
+            //こけたアニメーションを再生
+            m_player->SetAnimationSrip(pNum);
         }
     }
 }
@@ -530,8 +530,8 @@ void Stage::BlueBlock(const int pNum)
     if (m_flagAnimationBlueBlock[pNum] == false) {
         m_flagAnimationBlueBlock[pNum] = true;
         m_activeOperationVersionBlue[pNum] = false;
-        //モデルを回転させる。
-        m_player->SetRotationX(pNum, -90.0f);
+        //溺れているアニメーションを再生
+        m_player->SetAnimationDorwn(pNum);
     }
 
     if (stop == false) {
@@ -544,6 +544,7 @@ void Stage::BlueBlock(const int pNum)
 void Stage::BlueBlockAnimation(const int pNum)
 {
     ++m_timerAnimationBlueBlock[pNum];
+    m_player->DownPositionY(pNum, 30.0f);
 
     //前の位置に戻すためにフラグをfalseにする。
     if (m_timerAnimationBlueBlock[pNum] >= TIME_BLUE_BLOCK_ANIMATION) {
@@ -552,7 +553,8 @@ void Stage::BlueBlockAnimation(const int pNum)
         //プレイヤーを操作できるようにする。
         m_activeOperationVersionBlue[pNum] = true;
         //モデルを元に戻す。
-        m_player->SetRotationX(pNum, con::FLOAT_ZERO);
+        m_player->ResetPositionY(pNum);
+        m_player->SetAnimationIdle(pNum);
     }
 }
 

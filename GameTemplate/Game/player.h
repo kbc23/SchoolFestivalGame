@@ -105,12 +105,23 @@ public: //Get関数
 
 
 public: //Set関数
+
+	void DownPositionY(const int& pNum, const float& f)
+	{
+		m_modelRender[pNum]->DownPositionY(f);
+	}
+
+	void ResetPositionY(const int& pNum)
+	{
+		m_modelRender[pNum]->ResetPositionY();
+	}
+
 	/**
 	 * @brief m_modelRender[pNum]のX軸の回転量を設定するSet関数
 	 * @param pNum プレイヤー番号
 	 * @param f 回転量
 	*/
-	void SetRotationX(const int pNum, float f) {
+	void SetRotationX(const int& pNum, const float& f) {
 		m_modelRender[pNum]->SetRotationX(f);
 	}
 
@@ -119,7 +130,7 @@ public: //Set関数
 	 * @param pNum プレイヤー番号
 	 * @param b 操作できるかどうか
 	*/
-	void SetActivePlayer(const int pNum, const bool b) {
+	void SetActivePlayer(const int& pNum, const bool& b) {
 		m_activePlayer[pNum] = b;
 	}
 
@@ -128,7 +139,7 @@ public: //Set関数
 	 * @param pNum プレイヤー番号
 	 * @param rank 順位
 	*/
-	void SetGoalRanking(const int pNum, const int rank) {
+	void SetGoalRanking(const int& pNum, const int& rank) {
 		m_goalRanking[pNum] = rank;
 
 		SetAndActivateGoalRankFont(pNum, rank);
@@ -139,7 +150,7 @@ public: //Set関数
 	 * @param pNum プレイヤー番号
 	 * @param rank 順位
 	*/
-	void SetAndActivateGoalRankFont(const int pNum, const int rank)
+	void SetAndActivateGoalRankFont(const int& pNum, const int& rank)
 	{
 		m_fontGoalRank[pNum]->SetText(rank);
 		m_fontGoalRank[pNum]->Activate();
@@ -151,7 +162,7 @@ public: //Set関数
 	 * @param pNum プレイヤー番号
 	 * @param b ゴールしたかどうか
 	*/
-	void SetFlagGoal(const int pNum, const bool b)
+	void SetFlagGoal(const int& pNum, const bool& b)
 	{
 		m_flagGoal[pNum] = b;
 	}
@@ -160,17 +171,37 @@ public: //Set関数
 	 * @brief 操作するプレイヤーの人数を保存する変数のSet関数
 	 * @param i 操作するプレイヤーの人数
 	*/
-	void SetMaxPlayer(const int i)
+	void SetMaxPlayer(const int& i)
 	{
 		m_maxPlayer = i;
 	}
+
+	void SetAnimationIdle(const int& pNum)
+	{
+		m_modelRender[pNum]->PlayAnimation(idle);
+	}
+
+	void SetAnimationDorwn(const int& pNum)
+	{
+		m_modelRender[pNum]->PlayAnimation(drown);
+	}
+
+	void SetAnimationSrip(const int& pNum)
+	{
+		m_modelRender[pNum]->PlayAnimation(srip);
+	}
+
 
 
 private:
 	enum AnimationEnum
 	{
-		Animation_idle,
-		//Animation_jump,
+		idle,
+		jump,
+		drown,
+		srip,
+		win,
+		lose,
 		Animation_Max
 	};
 
