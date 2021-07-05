@@ -40,6 +40,8 @@ Game::~Game()
     DeleteGO(m_gameCamera);
     DeleteGO(m_score);
     DeleteGO(m_fontStartCountdown);
+
+    DeleteGO(m_seCancel);
 }
 
 bool Game::Start()
@@ -273,6 +275,7 @@ void Game::Loading()
 
     //‘I‘ğ‰æ–Ê‚Ì”wŒi‚ğíœ
     DeleteGO(m_spriteBackground);
+    DeleteGO(m_bgmTitle);
 
     m_loadStatus = LoadingStatus::endOfLoading;
 }

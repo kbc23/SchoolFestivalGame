@@ -35,6 +35,13 @@ ModeSelect::~ModeSelect()
 {
     DeleteGO(m_spriteChoices[0]);
     DeleteGO(m_spriteChoices[1]);
+
+    DeleteGO(m_fontChoices[0]);
+    DeleteGO(m_fontChoices[1]);
+    DeleteGO(m_font);
+
+    DeleteGO(m_seDecision);
+    DeleteGO(m_seMoveCursor);
 }
 
 bool ModeSelect::Start()
@@ -46,6 +53,15 @@ bool ModeSelect::Start()
     m_spriteChoices[1]->Init(filePath::dds::COMMAND_RACE);
     m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
     m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+
+    m_fontChoices[0] = NewGO<FontRender>(igo::PRIORITY_FONT);
+    m_fontChoices[0]->Init(L"誰が最初にゴールにたどり着けるかを競うレース!", { -400.0f,-200.0f });
+    m_fontChoices[1] = NewGO<FontRender>(igo::PRIORITY_FONT);
+    m_fontChoices[1]->Init(L"一回ミスをしたらそこで終了!ハラハラドキドキのレース!", { -400.0f,-200.0f });
+    m_fontChoices[1]->Deactivate();
+
+    m_font = NewGO<FontRender>(igo::PRIORITY_FONT);
+    m_font->Init(L"プレイするモードを選択してください", { -400.0f,300.0f });
 
     m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seDecision->Init(filePath::se::DECISION);
@@ -81,10 +97,12 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
         }
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_fontChoices[m_cursorPosition]->Deactivate();
 
         --m_cursorPosition;
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+        m_fontChoices[m_cursorPosition]->Activate();
     }
     //右に移動
     else if (g_pad[con::player_1]->IsTrigger(enButtonRight) == true) {
@@ -95,10 +113,12 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
         }
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_fontChoices[m_cursorPosition]->Deactivate();
 
         ++m_cursorPosition;
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+        m_fontChoices[m_cursorPosition]->Activate();
     }
 }
 

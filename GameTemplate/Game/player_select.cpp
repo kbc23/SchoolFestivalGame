@@ -42,6 +42,10 @@ PlayerSelect::~PlayerSelect()
         DeleteGO(m_spriteChoices[choicesNum]);
     }
 
+    DeleteGO(m_font);
+
+    DeleteGO(m_seDecision);
+    DeleteGO(m_seMoveCursor);
 }
 
 bool PlayerSelect::Start()
@@ -62,6 +66,9 @@ bool PlayerSelect::Start()
     m_spriteChoices[3]->Init(filePath::dds::NUMBER_OF_PLAYERS_4);
     m_spriteChoices[3]->SetPosition(CHOICES_POSITION[3]);
     m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
+
+    m_font = NewGO<FontRender>(igo::PRIORITY_FONT);
+    m_font->Init(L"プレイする人数を選択してください", { -400.0f,300.0f });
 
     m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seDecision->Init(filePath::se::DECISION);

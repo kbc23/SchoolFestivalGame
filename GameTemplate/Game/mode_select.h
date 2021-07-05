@@ -1,5 +1,6 @@
 #pragma once
 #include "sprite_render.h"
+#include "font_render.h"
 #include "sound_SE.h"
 
 class ModeSelect : public IGameObject
@@ -46,6 +47,8 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
+    FontRender* m_fontChoices[m_NUMBER_OF_CHOICES] = { nullptr };
+    FontRender* m_font = nullptr;
     SoundSE* m_seDecision = nullptr;
     SoundSE* m_seMoveCursor = nullptr;
 

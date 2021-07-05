@@ -52,6 +52,11 @@ namespace filePath
 	namespace tka
 	{
 		constexpr const char* IDLE = "Assets/animData/UnityChanIdle.tka";
+		constexpr const char* JUMP = "Assets/animData/UnityChanJump.tka";
+		constexpr const char* DROWN = "Assets/animData/UnityChanOboreru.tka";
+		constexpr const char* SRIP = "Assets/animData/UnityChanSrip.tka";
+		constexpr const char* WIN = "Assets/animData/UnityChanWin.tka";
+		constexpr const char* LOSE = "Assets/animData/UnityChanLose.tka";
 	}
 
 	////////////////////////////////////////////////////////////

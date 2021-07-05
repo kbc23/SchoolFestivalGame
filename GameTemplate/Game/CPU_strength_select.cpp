@@ -37,6 +37,9 @@ CPUStrengthSelect::~CPUStrengthSelect()
     DeleteGO(m_spriteChoices[0]);
     DeleteGO(m_spriteChoices[1]);
     DeleteGO(m_spriteChoices[2]);
+
+    DeleteGO(m_seDecision);
+    DeleteGO(m_seMoveCursor);
 }
 
 bool CPUStrengthSelect::Start()
