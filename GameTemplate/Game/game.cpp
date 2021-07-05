@@ -71,7 +71,7 @@ void Game::Update()
     case GameStatus::modeSelect:
         ModeSelectScene();
         break;
-    case GameStatus::playerSelect:
+    case GameStatus::playerSelect: //プレイヤーの人数が４人のとき、CPUの強さの選択画面をスキップする処理を追加すること。
         PlayerSelectScene();
         break;
     case GameStatus::CPUStrengthSelect:

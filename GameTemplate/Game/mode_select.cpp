@@ -55,13 +55,14 @@ bool ModeSelect::Start()
     m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
 
     m_fontChoices[0] = NewGO<FontRender>(igo::PRIORITY_FONT);
-    m_fontChoices[0]->Init(L"誰が最初にゴールにたどり着けるかを競うレース!", { -400.0f,-200.0f });
+    m_fontChoices[0]->Init(L"誰が最初にゴールにたどり着けるかを競うレース!", { -500.0f,-200.0f });
     m_fontChoices[1] = NewGO<FontRender>(igo::PRIORITY_FONT);
-    m_fontChoices[1]->Init(L"一回ミスをしたらそこで終了!ハラハラドキドキのレース!", { -400.0f,-200.0f });
+    m_fontChoices[1]->Init(L"一回ミスをしたらそこで終了!ハラハラドキドキのサドンデス!", { -600.0f,-200.0f });
     m_fontChoices[1]->Deactivate();
 
     m_font = NewGO<FontRender>(igo::PRIORITY_FONT);
-    m_font->Init(L"プレイするモードを選択してください", { -400.0f,300.0f });
+    m_font->Init(L"プレイするモードを選択してください", { -500.0f,300.0f }, 1.3f);
+    
 
     m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seDecision->Init(filePath::se::DECISION);

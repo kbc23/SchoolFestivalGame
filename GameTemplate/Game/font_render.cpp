@@ -31,9 +31,9 @@ void FontRender::Update()
 void FontRender::Init(
 	const wchar_t* text,
 	const Vector2 position,
+	const float scale,
 	const Vector4 color,
 	const float rotation,
-	const float scale,
 	const Vector2 pivot
 )
 {

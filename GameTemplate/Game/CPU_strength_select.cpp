@@ -38,6 +38,8 @@ CPUStrengthSelect::~CPUStrengthSelect()
     DeleteGO(m_spriteChoices[1]);
     DeleteGO(m_spriteChoices[2]);
 
+    DeleteGO(m_font);
+
     DeleteGO(m_seDecision);
     DeleteGO(m_seMoveCursor);
 }
@@ -55,6 +57,9 @@ bool CPUStrengthSelect::Start()
     m_spriteChoices[2]->Init(filePath::dds::CPU_STRONG);
     m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
     m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+
+    m_font = NewGO<FontRender>(igo::PRIORITY_CLASS);
+    m_font->Init(L"CPU‚Ì‹­‚³‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢", { -400.0f,300.0f }, 1.3f);
 
     m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seDecision->Init(filePath::se::DECISION);

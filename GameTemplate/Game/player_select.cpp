@@ -68,7 +68,7 @@ bool PlayerSelect::Start()
     m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
 
     m_font = NewGO<FontRender>(igo::PRIORITY_FONT);
-    m_font->Init(L"プレイする人数を選択してください", { -400.0f,300.0f });
+    m_font->Init(L"プレイする人数を選択してください", { -450.0f,300.0f }, 1.3f);
 
     m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seDecision->Init(filePath::se::DECISION);
