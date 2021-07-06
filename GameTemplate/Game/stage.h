@@ -139,6 +139,7 @@ public: //enum
         greenBlock,
         blueBlock,
         yellowBlock,
+        goalBlock,
         stageDataMax
     };
 
@@ -152,6 +153,7 @@ private: //constant
     
     static const int m_MAX_GREEN_BLOCK = 20;            //作成する緑ブロックのモデルの数
     static const int m_MAX_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
+    static const int m_MAX_GOAL_BLOCK = 1;      //作成するゴールブロックのモデルの数
 
 private: //data menber
 
@@ -164,6 +166,7 @@ private: //data menber
     ModelRender* m_modelGreenBlock[con::PlayerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
     //ModelRender* m_modelBlueBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
     ModelRender* m_modelYellowBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
+    ModelRender* m_modelGoalBlock[con::PlayerNumberMax][m_MAX_GOAL_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
     EffectRender* m_testEffect = nullptr;
     FontRender* m_fontPlayerBlockPosition[con::PlayerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示

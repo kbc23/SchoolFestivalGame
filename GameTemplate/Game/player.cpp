@@ -249,9 +249,9 @@ void Player::JumpAnimation(const int pNum)
 			if (m_goalRanking[pNum] == 1) {
 				m_modelRender[pNum]->PlayAnimation(win);
 			}
-			else if (m_goalRanking[pNum] == 4) {
+			/*else if (m_goalRanking[pNum] == 4) {
 				m_modelRender[pNum]->PlayAnimation(lose);
-			}
+			}*/
 		}
 	}
 }

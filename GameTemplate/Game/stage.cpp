@@ -146,6 +146,12 @@ bool Stage::Start()
             m_modelYellowBlock[playerNum][blockNum]->Init(filePath::tkm::YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
+
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+            m_modelGoalBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+            m_modelGoalBlock[playerNum][blockNum]->Init(filePath::tkm::GOAL_BLOCK);
+            m_modelGoalBlock[playerNum][blockNum]->Deactivate();
+        }
     }
 
     //モデルの描画
@@ -198,7 +204,7 @@ void Stage::StageCreate()
 
         //ゴールの位置のブロックは緑
         if (blockNum == m_MAX_BLOCK - 1) {
-            m_stageData[con::player_1][blockNum] = greenBlock;
+            m_stageData[con::player_1][blockNum] = goalBlock;
             continue;
         }
 
@@ -301,11 +307,15 @@ void Stage::DrawBlock(const int pNum)
         //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+        m_modelGoalBlock[pNum][blockNum]->Deactivate();
+    }
 
     //モデルの描画
     int numberOfUsesGreenBlock = 0;
     int numberOfUsesBlueBlock = 0;
     int numberOfUsesYellowBlock = 0;
+    const int numberOfUsesGoalBlock = 0;
 
     for (int blockNum = -6; blockNum < 15; blockNum++) {
         //スタート地点より前のブロックを描画しない
@@ -344,6 +354,14 @@ void Stage::DrawBlock(const int pNum)
             m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->Activate();
             ++numberOfUsesYellowBlock;
         }
+        else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == goalBlock) {
+            m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->SetPosition({
+               BLOCK_POSITION_X[pNum],
+               BLOCK_POSITION_Y,
+               BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
+                });
+            m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->Activate();
+        }
     }
 
 }
@@ -356,6 +374,7 @@ void Stage::DrawMoveBlock(const int pNum)
 
     ++m_timerAnimation[pNum];
 
+    //モデルを全部非表示にする。
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
@@ -363,12 +382,16 @@ void Stage::DrawMoveBlock(const int pNum)
         //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+        m_modelGoalBlock[pNum][blockNum]->Deactivate();
+    }
 
 
     //モデルの描画
     int numberOfUsesGreenBlock = 0;
     int numberOfUsesBlueBlock = 0;
     int numberOfUsesYellowBlock = 0;
+    const int numberOfUsesGoalBlock = 0;
 
     double moveCorrection = 0;
 
@@ -418,6 +441,14 @@ void Stage::DrawMoveBlock(const int pNum)
                     });
                 m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->Activate();
                 ++numberOfUsesYellowBlock;
+            }
+            else if (m_stageData[pNum][playerBlockPosition + blockNum] == goalBlock) {
+                m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->SetPosition({
+                   BLOCK_POSITION_X[pNum],
+                   BLOCK_POSITION_Y,
+                   BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - float(moveCorrection)
+                    });
+                m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->Activate();
             }
         }
     }

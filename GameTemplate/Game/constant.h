@@ -43,6 +43,7 @@ namespace filePath
 		constexpr const char* GREEN_BLOCK = "Assets/modelData/green.tkm";
 		//const char* TKM_BLUE_BLOCK = "Assets/modelData/blue.tkm";
 		constexpr const char* YELLOW_BLOCK = "Assets/modelData/yellow.tkm";
+		constexpr const char* GOAL_BLOCK = "Assets/modelData/goal.tkm";
 	}
 
 	////////////////////////////////////////////////////////////
