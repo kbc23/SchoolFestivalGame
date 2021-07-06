@@ -35,5 +35,5 @@ private: //data menber
 	////////////////////////////////////////////////////////////
 
 	bool m_flagFinish = false; //このクラスでするべき処理が終わったか
-
+	bool m_flagBlinking = true; //m_pressAButtonの透過処理に使用
 };
