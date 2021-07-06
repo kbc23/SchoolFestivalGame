@@ -241,7 +241,18 @@ void Player::JumpAnimation(const int pNum)
 	if (m_timerAnimation[pNum] >= TIME_ANIMATION) {
 		m_flagAnimationJump[pNum] = false;
 		m_timerAnimation[pNum] = TIMER_RESET;
-		m_modelRender[pNum]->PlayAnimation(idle);
+
+		if (m_flagGoal[pNum] == false) {
+			m_modelRender[pNum]->PlayAnimation(idle);
+		}
+		else {
+			if (m_goalRanking[pNum] == 1) {
+				m_modelRender[pNum]->PlayAnimation(win);
+			}
+			else if (m_goalRanking[pNum] == 4) {
+				m_modelRender[pNum]->PlayAnimation(lose);
+			}
+		}
 	}
 }
 
