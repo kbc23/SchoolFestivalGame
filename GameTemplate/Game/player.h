@@ -193,7 +193,7 @@ public: //Set関数
 
 
 
-private:
+private: //enum
 	enum AnimationEnum
 	{
 		idle,
@@ -204,6 +204,8 @@ private:
 		lose,
 		Animation_Max
 	};
+
+	AnimationClip m_animationPlayer[Animation_Max];
 
 
 
@@ -218,8 +220,6 @@ private: //data menber
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
 	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
-
-	AnimationClip m_animationPlayer[Animation_Max];
 
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報

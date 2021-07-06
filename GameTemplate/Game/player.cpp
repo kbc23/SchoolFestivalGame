@@ -64,6 +64,8 @@ Player::~Player()
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
+
+	DeleteGO(m_fontEnd);
 }
 
 

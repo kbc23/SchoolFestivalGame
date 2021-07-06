@@ -107,8 +107,13 @@ Stage::~Stage()
         for (int blockNum = 0; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
             DeleteGO(m_modelYellowBlock[playerNum][blockNum]);
         }
+        for (int blockNum = 0; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+            DeleteGO(m_modelGoalBlock[playerNum][blockNum]);
+        }
         DeleteGO(m_fontPlayerBlockPosition[playerNum]);
     }
+
+    DeleteGO(m_spriteBackground);
 
     DeleteGO(m_bgm);
     DeleteGO(m_testEffect);
