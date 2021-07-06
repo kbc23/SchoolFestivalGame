@@ -67,15 +67,18 @@ namespace filePath
 	{
 		//選択画面系の背景
 		constexpr const char* BACKGROUND = "Assets/Image/Background.dds";
-		//CPUの強さを選択する画面のUI
-		constexpr const char* CPU_WEAK = "Assets/Image/CPU_weak.dds";
-		constexpr const char* CPU_USUALLY = "Assets/Image/CPU_usually.dds";
-		constexpr const char* CPU_STRONG = "Assets/Image/CPU_strong.dds";
+		//モード選択画面のUI
+		constexpr const char* MODE_RACE = "Assets/Image/Command_race.dds";
+		constexpr const char* MODE_SUDDEN_DEATH = "Assets/Image/Command_sudden_death.dds";
 		//プレイヤー数選択画面のUI
 		constexpr const char* NUMBER_OF_PLAYERS_1 = "Assets/Image/Number_of_players_1.dds";
 		constexpr const char* NUMBER_OF_PLAYERS_2 = "Assets/Image/Number_of_players_2.dds";
 		constexpr const char* NUMBER_OF_PLAYERS_3 = "Assets/Image/Number_of_players_3.dds";
 		constexpr const char* NUMBER_OF_PLAYERS_4 = "Assets/Image/Number_of_players_4.dds";
+		//CPUの強さを選択する画面のUI
+		constexpr const char* CPU_WEAK = "Assets/Image/CPU_weak.dds";
+		constexpr const char* CPU_USUALLY = "Assets/Image/CPU_usually.dds";
+		constexpr const char* CPU_STRONG = "Assets/Image/CPU_strong.dds";
 		//ポーズ画面のUI
 		constexpr const char* PAUSE_RETURN_TO_GAME = "Assets/Image/Pause_return_to_game.dds";
 		constexpr const char* PAUSE_RETRY = "Assets/Image/Pause_retry.dds";
@@ -85,8 +88,6 @@ namespace filePath
 		//ゲーム画面のUI
 		constexpr const char* SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
 		constexpr const char* BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
-		//ルール選択画面のUI
-		constexpr const char* COMMAND_RACE = "Assets/Image/Command_race.dds";
 		//結果画面後の選択画面のUI
 		constexpr const char* COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
 		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players";
