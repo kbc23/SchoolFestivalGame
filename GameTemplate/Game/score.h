@@ -1,4 +1,5 @@
 #pragma once
+#include "sprite_render.h"
 #include "font_render.h"
 #include "constant.h"
 
@@ -45,6 +46,7 @@ private: //data menber
     
     Player* m_player = nullptr;
     Game* m_game = nullptr;
+    SpriteRender* m_spriteUI = nullptr;
     FontRender* m_fontScoreTime[con::PlayerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
 
     ////////////////////////////////////////////////////////////
