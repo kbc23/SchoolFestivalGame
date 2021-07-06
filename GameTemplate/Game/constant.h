@@ -65,6 +65,8 @@ namespace filePath
 
 	namespace dds
 	{
+		//タイトル
+		constexpr const char* TITLE = "Assets/Image/Title.dds";
 		//選択画面系の背景
 		constexpr const char* BACKGROUND = "Assets/Image/Background.dds";
 		//モード選択画面のUI

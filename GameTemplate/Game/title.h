@@ -26,6 +26,7 @@ private: //data menber
 	// クラスのオブジェクト
 	////////////////////////////////////////////////////////////
 
+	SpriteRender* m_spriteTitle = nullptr;
 	SpriteRender* m_spritePressAButton = nullptr;
 	SoundSE* m_seDecision = nullptr;
 

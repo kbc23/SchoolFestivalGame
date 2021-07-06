@@ -245,9 +245,6 @@
     <ClCompile Include="stage_select.cpp">
       <Filter>MyCode</Filter>
     </ClCompile>
-    <ClCompile Include="title.cpp">
-      <Filter>MyCode</Filter>
-    </ClCompile>
     <ClCompile Include="model_render.cpp">
       <Filter>MyCode\エンジン\モデル</Filter>
     </ClCompile>
@@ -312,6 +309,9 @@
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
     <ClCompile Include="CPU_strength_select.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
   </ItemGroup>
@@ -499,9 +499,6 @@
     <ClInclude Include="stage_select.h">
       <Filter>MyCode</Filter>
     </ClInclude>
-    <ClInclude Include="title.h">
-      <Filter>MyCode</Filter>
-    </ClInclude>
     <ClInclude Include="model_render.h">
       <Filter>MyCode\エンジン\モデル</Filter>
     </ClInclude>
@@ -578,6 +575,9 @@
       <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
     <ClInclude Include="CPU_strength_select.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
       <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
