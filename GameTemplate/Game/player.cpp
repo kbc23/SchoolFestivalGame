@@ -92,9 +92,13 @@ bool Player::Start()
 	m_animationPlayer[drown].Load(filePath::tka::DROWN);
 	m_animationPlayer[srip].Load(filePath::tka::SRIP);
 	m_animationPlayer[win].Load(filePath::tka::WIN);
+	m_animationPlayer[stand].Load(filePath::tka::STAND);
 	m_animationPlayer[lose].Load(filePath::tka::LOSE);
 	//ループ再生をtrueにする
 	m_animationPlayer[idle].SetLoopFlag(true);
+	//m_animationPlayer[win].SetLoopFlag(true);
+	m_animationPlayer[stand].SetLoopFlag(true);
+	//m_animationPlayer[lose].SetLoopFlag(true);
 	//アニメーションの設定
 	//m_animationPlayer[Animation_jump].Load("Assets/animData/UnityChanJump.tka");
 	//ループ再生をtrueにする
@@ -251,9 +255,12 @@ void Player::JumpAnimation(const int pNum)
 			if (m_goalRanking[pNum] == 1) {
 				m_modelRender[pNum]->PlayAnimation(win);
 			}
-			/*else if (m_goalRanking[pNum] == 4) {
+			else if (m_goalRanking[pNum] == 4) {
 				m_modelRender[pNum]->PlayAnimation(lose);
-			}*/
+			}
+			else {
+				m_modelRender[pNum]->PlayAnimation(stand);
+			}
 		}
 	}
 }

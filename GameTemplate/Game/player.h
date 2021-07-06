@@ -201,6 +201,7 @@ private: //enum
 		drown,
 		srip,
 		win,
+		stand,
 		lose,
 		Animation_Max
 	};
