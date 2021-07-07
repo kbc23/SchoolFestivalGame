@@ -129,7 +129,6 @@ Stage::~Stage()
     DeleteGO(m_spriteBackground);
 
     DeleteGO(m_bgm);
-    DeleteGO(m_testEffect);
 }
 
 ////////////////////////////////////////////////////////////
@@ -181,12 +180,6 @@ bool Stage::Start()
     m_bgm = NewGO<SoundBGM>(0);
     InitBGM();
     m_bgm->Play(true);
-
-    //エフェクトの再生
-    m_testEffect = NewGO<EffectRender>(0);
-    m_testEffect->Init(u"Assets/Effect/goal.efk");
-    m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
-    m_testEffect->Play();
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
