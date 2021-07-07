@@ -68,6 +68,7 @@ Player::~Player()
 
 	DeleteGO(m_enemyAI);
 	DeleteGO(m_fontEnd);
+	DeleteGO(m_seFall);
 }
 
 
@@ -91,7 +92,7 @@ bool Player::Start()
 	//アニメーションの設定
 	m_animationPlayer[idle].Load(filePath::tka::IDLE);
 	m_animationPlayer[jump].Load(filePath::tka::JUMP);
-	m_animationPlayer[drown].Load(filePath::tka::DROWN);
+	m_animationPlayer[fall].Load(filePath::tka::FALL);
 	m_animationPlayer[srip].Load(filePath::tka::SRIP);
 	m_animationPlayer[win].Load(filePath::tka::WIN);
 	m_animationPlayer[stand].Load(filePath::tka::STAND);
@@ -119,6 +120,10 @@ bool Player::Start()
 	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontEnd->Init(L"終了!");
 	m_fontEnd->Deactivate();
+
+	m_seFall = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+	m_seFall->Init(filePath::se::FALL);
+	m_seFall->SetVolume(2.0f);
 
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);

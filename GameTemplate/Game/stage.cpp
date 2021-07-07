@@ -72,6 +72,10 @@ namespace //constant
     // 確率関連
     ////////////////////////////////////////////////////////////
 
+    //////////////////////////////
+    // ブロックの並びの生成
+    //////////////////////////////
+
     const int UPPER_LIMIT_CONTINUOUS_GREEN_BLOCK = 6;   //連続で作成する緑ブロックの上限
     const int PROBABILITY_CREATE_GREEN_BLOCK[UPPER_LIMIT_CONTINUOUS_GREEN_BLOCK] = {    //緑ブロックを作成するかの確率
         80,                                                                                 //０個
@@ -86,6 +90,15 @@ namespace //constant
 
     const int MINIMUM_RANDOM_NUMBER = 1;  
     const int MAXIMUM_RANDOM_NUMBER = 100;
+
+    //////////////////////////////
+    // BGMの確率
+    //////////////////////////////
+
+    const int MAX_PROBABILITY_BGM = 6;
+    const int PROBABILITY_BGM[MAX_PROBABILITY_BGM] = {
+        19,19,19,19,19,5
+    };
 }
 
 
@@ -116,7 +129,6 @@ Stage::~Stage()
     DeleteGO(m_spriteBackground);
 
     DeleteGO(m_bgm);
-    DeleteGO(m_testEffect);
 }
 
 ////////////////////////////////////////////////////////////
@@ -166,14 +178,8 @@ bool Stage::Start()
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
-    m_bgm->Init(filePath::bgm::STAGE1);
+    InitBGM();
     m_bgm->Play(true);
-
-    //エフェクトの再生
-    m_testEffect = NewGO<EffectRender>(0);
-    m_testEffect->Init(u"Assets/Effect/goal.efk");
-    m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
-    m_testEffect->Play();
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
@@ -277,6 +283,24 @@ void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowN
     else {
         //黄色ブロックを作成
         m_stageData[con::player_1][blockNum] = yellowBlock;
+    }
+}
+
+void Stage::InitBGM()
+{
+    std::mt19937 mt{ std::random_device{}() };
+    std::uniform_int_distribution<int> random(MINIMUM_RANDOM_NUMBER, MAXIMUM_RANDOM_NUMBER);
+
+    int randomNum = random(mt);
+    int checkRandom = 0;
+
+    for (int check = 0; check < MAX_PROBABILITY_BGM; check++) {
+        checkRandom += PROBABILITY_BGM[check];
+
+        if (randomNum <= checkRandom) {
+            m_bgm->Init(filePath::bgm::STAGE[check]);
+            return;
+        }
     }
 }
 
@@ -568,7 +592,7 @@ void Stage::BlueBlock(const int pNum)
         m_flagAnimationBlueBlock[pNum] = true;
         m_activeOperationVersionBlue[pNum] = false;
         //溺れているアニメーションを再生
-        m_player->SetAnimationDorwn(pNum);
+        m_player->SetAnimationFall(pNum);
     }
 
     if (stop == false) {

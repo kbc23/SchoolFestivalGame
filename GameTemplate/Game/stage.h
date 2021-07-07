@@ -42,6 +42,11 @@ private:
     */
     void CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowNum);
 
+    /**
+     * @brief 再生するBGMの決定
+    */
+    void InitBGM();
+
     ////////////////////////////////////////////////////////////
     // 毎フレームの処理
     ////////////////////////////////////////////////////////////
@@ -181,7 +186,6 @@ private: //data menber
     ModelRender* m_modelYellowBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
     ModelRender* m_modelGoalBlock[con::PlayerNumberMax][m_MAX_GOAL_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
-    EffectRender* m_testEffect = nullptr;
     FontRender* m_fontPlayerBlockPosition[con::PlayerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示
     SpriteRender* m_spriteBackground = nullptr;
 
