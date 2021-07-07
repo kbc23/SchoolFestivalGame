@@ -67,6 +67,7 @@ Player::~Player()
 
 	DeleteGO(m_fontEnd);
 	DeleteGO(m_seFall);
+	DeleteGO(m_seSrip);
 }
 
 
@@ -122,6 +123,10 @@ bool Player::Start()
 	m_seFall = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seFall->Init(filePath::se::FALL);
 	m_seFall->SetVolume(2.0f);
+
+	m_seSrip = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+	m_seSrip->Init(filePath::se::SRIP);
+	m_seSrip->SetVolume(0.7f);
 
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);

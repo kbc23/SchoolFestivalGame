@@ -191,6 +191,7 @@ public: //Set関数
 	void SetAnimationSrip(const int& pNum)
 	{
 		m_modelRender[pNum]->PlayAnimation(srip);
+		m_seSrip->Play(false);
 	}
 
 
@@ -224,6 +225,7 @@ private: //data menber
 	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
 	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
 	SoundSE* m_seFall = nullptr;
+	SoundSE* m_seSrip = nullptr;
 
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報
