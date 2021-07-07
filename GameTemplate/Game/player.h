@@ -5,6 +5,7 @@
 
 class Game;
 class Stage;
+class Rule1;
 
 class Player : public IGameObject
 {
@@ -173,6 +174,13 @@ public: //Set関数
 		m_maxPlayer = i;
 	}
 
+	void SetGoalPlayer(const int o)
+	{
+		m_goalPlayer = o;
+	}
+
+	bool rule1NewGO = false;
+
 
 private:
 	enum AnimationEnum
@@ -198,6 +206,8 @@ private: //data menber
 
 	AnimationClip m_animationPlayer[Animation_Max];
 
+	Rule1* m_rule1 = nullptr;
+
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報
 	////////////////////////////////////////////////////////////
@@ -208,6 +218,7 @@ private: //data menber
 	int m_goalRanking[con::playerNumberMax] = { 0, 0, 0, 0 };				//プレイヤーのゴール順位
 	bool m_flagGoal[con::playerNumberMax] = { false, false, false, false };	//ゴールしたか
 	int m_goalPlayer = 0;												//ゴールしたプレイヤーの人数
+	int fontDeavtive = 0;
 
 	////////////////////////////////////////////////////////////
 	// タイマー関連
@@ -215,4 +226,7 @@ private: //data menber
 
 	bool m_flagAnimationJump[con::playerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
 	int m_timerAnimation[con::playerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
+
+
+	int m_goalPlayerZero = 0;
 };

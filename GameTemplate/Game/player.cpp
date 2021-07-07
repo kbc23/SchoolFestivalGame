@@ -3,6 +3,7 @@
 
 #include "game.h"
 #include "stage.h"
+#include "rule1.h"
 
 namespace //constant
 {
@@ -109,7 +110,7 @@ bool Player::Start()
 
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
-
+	m_rule1 = FindGO<Rule1>(igo::CLASS_NAME_RULE1);
 
 
 	return true;
@@ -124,7 +125,7 @@ bool Player::StartIndividual(const int pNum)
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
 	m_modelRender[pNum]->PlayAnimation(Animation_idle);
-
+	
 	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
 	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
 	m_fontGoalRank[pNum]->Deactivate();
@@ -165,7 +166,6 @@ void Player::Update()
 	}
 
 	int a = 10;
-
 
 }
 
@@ -246,19 +246,33 @@ void Player::ImpossibleOperationAnimation(const int pNum)
 
 void Player::NextRound()
 {
-	if (m_stage->goal == true) {
-		//アニメーションの設定
-		m_animationPlayer[Animation_idle].Load("Assets/animData/UnityChanIdle.tka");
-		//ループ再生をtrueにする
-		m_animationPlayer[Animation_idle].SetLoopFlag(true);
-
-		//プレイヤーごとに処理
-		for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::playerNumberMax; playerNum++) {
-			bool check = StartIndividual(playerNum);
-
-		}
-
-		m_fontEnd->Init(L"終了！");
-		m_fontEnd->Deactivate();
+	while (fontDeavtive<120)
+	{
+		fontDeavtive += 1;
 	}
+	
+	if (fontDeavtive >= 120) {
+		m_fontEnd->Deactivate();
+		m_goalPlayer = 0;
+		for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
+			m_flagGoal[playerNum] = false;
+		}
+		fontDeavtive = 0;
+		for (int i = 0; i < con::playerNumberMax; i++) {
+			m_fontGoalRank[i]->Deactivate();
+		}
+	}
+
+	for (int i = 0; i < con::playerNumberMax; i++) {
+
+		m_activePlayer[i] = true;	
+		//m_maxPlayer = i;		
+		m_goalRanking[i] = 0;
+		m_flagGoal[i] = false;
+		m_flagAnimationJump[i] = false;	
+		m_timerAnimation[i] = 0;
+	}
+	m_goalPlayer = 0;												
+	fontDeavtive = 0;
+	m_goalPlayerZero = 0;
 }

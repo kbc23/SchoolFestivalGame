@@ -101,8 +101,12 @@ public: //SetŠÖ”
         m_maxPlayer = i;
     }
 
+
+
 public:
-    bool goal1 = false;
+    //bool goal1 = false;
+
+    void NextRound();
 
 private: //constant
     static const int m_INIT_COUNT_START_COUNTDOWN = 180;        //m_countStartCountdown‚Ì‰Šú’l

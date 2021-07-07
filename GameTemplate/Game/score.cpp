@@ -144,12 +144,14 @@ void Score::DrawTime(const int pNum)
 
 void Score::NextRound()
 {
+    for (int i = 0; i < con::playerNumberMax; i++) {
+        m_scoreTime[i] = 0;
+        m_flagProcessing[i] = true;
+        m_scoreTimeMinutes[i] = 0;
+        m_scoreTimeSeconds[i] = 0;
+        m_scoreTimeCommaSeconds[i] = 0;
 
-    if (m_stage->goal == true) {
-        for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
-            m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
-            m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
-        }
+        DrawTime(i);
     }
-
+    
 }

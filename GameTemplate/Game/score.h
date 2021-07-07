@@ -5,6 +5,7 @@
 class Game;
 class Player;
 class Stage;
+class Rule1;
 
 class Score : public IGameObject
 {

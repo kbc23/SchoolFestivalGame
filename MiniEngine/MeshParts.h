@@ -26,7 +26,7 @@ struct SMesh {
 /// <summary>
 /// メッシュパーツ。
 /// </summary>
-class MeshParts {
+class MeshParts { 
 public:
 	/// <summary>
 	/// デストラクタ。
