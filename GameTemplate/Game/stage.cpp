@@ -592,7 +592,7 @@ void Stage::BlueBlock(const int pNum)
         m_flagAnimationBlueBlock[pNum] = true;
         m_activeOperationVersionBlue[pNum] = false;
         //溺れているアニメーションを再生
-        m_player->SetAnimationDorwn(pNum);
+        m_player->SetAnimationFall(pNum);
     }
 
     if (stop == false) {

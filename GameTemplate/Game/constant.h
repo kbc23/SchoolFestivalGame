@@ -54,7 +54,7 @@ namespace filePath
 	{
 		constexpr const char* IDLE = "Assets/animData/UnityChanIdle.tka";
 		constexpr const char* JUMP = "Assets/animData/UnityChanJump.tka";
-		constexpr const char* DROWN = "Assets/animData/UnityChanOboreru.tka";
+		constexpr const char* FALL = "Assets/animData/UnityChanFall.tka";
 		constexpr const char* SRIP = "Assets/animData/UnityChanSrip.tka";
 		constexpr const char* WIN = "Assets/animData/UnityChanWin.tka";
 		constexpr const char* STAND = "Assets/animData/UnityChanStand.tka";
@@ -126,11 +126,15 @@ namespace filePath
 	
 	namespace se
 	{
+		//選択画面系
 		constexpr const wchar_t* DECISION = L"Assets/Sound/SE/Decision.wav";
 		constexpr const wchar_t* CANCEL = L"Assets/Sound/SE/Cancel.wav";
 		constexpr const wchar_t* MOVE_CURSOR = L"Assets/Sound/SE/Move_cursor.wav";
+		//カウントダウン
 		constexpr const wchar_t* COUNT = L"Assets/Sound/SE/Count.wav";
 		constexpr const wchar_t* GAME_START = L"Assets/Sound/SE/Game_start.wav";
+		//ゲーム画面のSE
+		constexpr const wchar_t* FALL = L"Assets/Sound/SE/Fall.wav";
 	}
 
 

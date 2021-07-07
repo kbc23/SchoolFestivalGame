@@ -1,6 +1,7 @@
 #pragma once
 #include "model_render.h"
 #include "font_render.h"
+#include "sound_SE.h"
 #include "constant.h"
 
 class Game;
@@ -181,9 +182,10 @@ public: //Set関数
 		m_modelRender[pNum]->PlayAnimation(idle);
 	}
 
-	void SetAnimationDorwn(const int& pNum)
+	void SetAnimationFall(const int& pNum)
 	{
-		m_modelRender[pNum]->PlayAnimation(drown);
+		m_modelRender[pNum]->PlayAnimation(fall);
+		m_seFall->Play(false);
 	}
 
 	void SetAnimationSrip(const int& pNum)
@@ -198,7 +200,7 @@ private: //enum
 	{
 		idle,
 		jump,
-		drown,
+		fall,
 		srip,
 		win,
 		stand,
@@ -221,6 +223,7 @@ private: //data menber
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
 	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
+	SoundSE* m_seFall = nullptr;
 
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報
