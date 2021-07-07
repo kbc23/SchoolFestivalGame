@@ -86,7 +86,7 @@ namespace filePath
 		//ポーズ画面のUI
 		constexpr const char* PAUSE_RETURN_TO_GAME = "Assets/Image/Pause_return_to_game.dds";
 		constexpr const char* PAUSE_RETRY = "Assets/Image/Pause_retry.dds";
-		constexpr const char* PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game";
+		constexpr const char* PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game.dds";
 		//タイトル画面のUI
 		constexpr const char* PRESS_A_BUTTON = "Assets/Image/Press_A_Button.dds";
 		//ゲーム画面のUI
