@@ -4,6 +4,8 @@
 #include "fade.h"
 #include "sound_BGM.h"
 #include "sound_SE.h"
+#include "constant.h"
+
 
 class Title;
 class ModeSelect;
@@ -13,7 +15,9 @@ class Player;
 class GameCamera;
 class Stage;
 class Score;
-class Rule1;
+class Rule1; 
+class EnemyAI;
+class Result;
 
 class Game : public IGameObject
 {
@@ -122,6 +126,18 @@ private:
     */
     void StartCountdown();
 
+    /**
+ * @brief リザルトシーンで使用するオブジェクトのNewGO
+*/
+    void NewGOResultScene();
+
+    ////////////////////////////////////////////////////////////
+// リザルトシーンの処理
+////////////////////////////////////////////////////////////
+ /**
+* @brief リザルトシーンの処理
+*/
+    void ResultScene();
 
 public: //Get関数
     /**
@@ -132,6 +148,7 @@ public: //Get関数
     {
         return m_StopOperation;
     }
+
 
 
 
@@ -163,6 +180,14 @@ public: //Set関数
         m_maxPlayer = i;
     }
 
+    void SetRank(int pNum, int rank) {//順位受け取りtuika
+        m_rank[pNum] = rank;
+    }
+    void SetDiLevel(const int i)//難易度受け取りtuika
+    {
+        m_dilevel = i;
+    }
+
 
 private: //enum
     enum class GameStatus
@@ -173,6 +198,7 @@ private: //enum
         CPUStrengthSelect,
         loadingGame,
         game,
+        result,
         GameStatusMax
     };
 
@@ -210,6 +236,8 @@ private: //data menber
     SoundSE* m_seCancel = nullptr;
     SoundSE* m_seCount = nullptr;
     SoundSE* m_seGameStart = nullptr;
+    EnemyAI* m_enemyAI = nullptr;
+    Result* m_result = nullptr;
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
@@ -218,7 +246,8 @@ private: //data menber
     int m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;       //カウントダウンで使用されるタイマー
     bool m_flagStartCountdown = true;                               //カウントダウンをおこなっているかのフラグ
     bool m_StopOperation = true;                                    //プレイヤーの操作ができるか
-
+    bool m_gameSceneFlagFinish = false;//ゲームシーンでやることが終わっているかtuika
+    
     ////////////////////////////////////////////////////////////
     // フラグ関連
     ////////////////////////////////////////////////////////////
@@ -233,5 +262,7 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     int m_maxPlayer = 0;                        //操作しているプレイヤーの数
+    int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
+    int m_dilevel = 0;
 };
 
