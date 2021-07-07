@@ -94,7 +94,7 @@ namespace filePath
 		constexpr const char* BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
 		//結果画面後の選択画面のUI
 		constexpr const char* COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
-		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players";
+		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players.dds";
 		constexpr const char* COMMAND_CHOOSE_A_RULE = "Assets/Image/Command_choose_a_rule.dds";
 		constexpr const char* COMMAND_EXIT_GAME = "Assets/Image/Command_exit_game.dds";
 		//フェード
