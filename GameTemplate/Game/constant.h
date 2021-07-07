@@ -107,8 +107,17 @@ namespace filePath
 
 	namespace bgm
 	{
-		constexpr const wchar_t* STAGE1 = L"Assets/Sound/BGM/Stage1.wav";
 		constexpr const wchar_t* TITLE = L"Assets/Sound/BGM/Title.wav";
+		//ÉQÅ[ÉÄâÊñ 
+		constexpr const wchar_t* STAGE[6] =
+		{
+			L"Assets/Sound/BGM/Stage_1.wav",
+			L"Assets/Sound/BGM/Stage_2.wav",
+			L"Assets/Sound/BGM/Stage_3.wav",
+			L"Assets/Sound/BGM/Stage_4.wav",
+			L"Assets/Sound/BGM/Stage_5.wav",
+			L"Assets/Sound/BGM/Stage_6.wav"
+		};
 	}
 
 	////////////////////////////////////////////////////////////

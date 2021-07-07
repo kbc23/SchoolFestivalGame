@@ -42,6 +42,11 @@ private:
     */
     void CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowNum);
 
+    /**
+     * @brief Ä¶‚·‚éBGM‚ÌŒˆ’è
+    */
+    void InitBGM();
+
     ////////////////////////////////////////////////////////////
     // –ˆƒtƒŒ[ƒ€‚Ìˆ—
     ////////////////////////////////////////////////////////////
