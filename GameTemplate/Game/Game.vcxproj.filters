@@ -251,9 +251,6 @@
     <ClCompile Include="model_render.cpp">
       <Filter>MyCode\エンジン\モデル</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
@@ -315,6 +312,9 @@
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
     <ClCompile Include="title.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
   </ItemGroup>
@@ -505,9 +505,6 @@
     <ClInclude Include="model_render.h">
       <Filter>MyCode\エンジン\モデル</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="player.h">
       <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
@@ -582,6 +579,9 @@
     </ClInclude>
     <ClInclude Include="constant.h">
       <Filter>MyCode\その他</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

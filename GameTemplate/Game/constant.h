@@ -129,6 +129,8 @@ namespace filePath
 		constexpr const wchar_t* DECISION = L"Assets/Sound/SE/Decision.wav";
 		constexpr const wchar_t* CANCEL = L"Assets/Sound/SE/Cancel.wav";
 		constexpr const wchar_t* MOVE_CURSOR = L"Assets/Sound/SE/Move_cursor.wav";
+		constexpr const wchar_t* COUNT = L"Assets/Sound/SE/Count.wav";
+		constexpr const wchar_t* GAME_START = L"Assets/Sound/SE/Game_start.wav";
 	}
 
 

@@ -42,6 +42,8 @@ Game::~Game()
     DeleteGO(m_fontStartCountdown);
 
     DeleteGO(m_seCancel);
+    DeleteGO(m_seCount);
+    DeleteGO(m_seGameStart);
 }
 
 bool Game::Start()
@@ -58,6 +60,10 @@ bool Game::Start()
 
     m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seCancel->Init(filePath::se::CANCEL);
+    m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCount->Init(filePath::se::COUNT);
+    m_seGameStart = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seGameStart->Init(filePath::se::GAME_START);
 
     return true;
 }
@@ -311,25 +317,29 @@ void Game::StartCountdown()
     --m_countStartCountdown;
 
     //カウントダウンフォントを非表示
-    if (m_countStartCountdown <= COUNTDOWN_DEACTIVATE) {
+    if (m_countStartCountdown == COUNTDOWN_DEACTIVATE) {
         m_fontStartCountdown->Deactivate();
         m_flagStartCountdown = false;
     }
     //カウント０
-    else if (m_countStartCountdown <= COUNTDOWN_0) {
+    else if (m_countStartCountdown == COUNTDOWN_0) {
         m_fontStartCountdown->SetText(L"Start!");
         m_StopOperation = false;
+        m_seGameStart->Play(false);
     }
     //カウント１
-    else if (m_countStartCountdown <= COUNTDOWN_1) {
+    else if (m_countStartCountdown == COUNTDOWN_1) {
         m_fontStartCountdown->SetText(1);
+        m_seCount->Play(false);
     }
     //カウント２
-    else if (m_countStartCountdown <= COUNTDOWN_2) {
+    else if (m_countStartCountdown == COUNTDOWN_2) {
         m_fontStartCountdown->SetText(2);
+        m_seCount->Play(false);
     }
     //カウント３
-    else if (m_countStartCountdown <= COUNTDOWN_3) {
+    else if (m_countStartCountdown == COUNTDOWN_3) {
         m_fontStartCountdown->SetText(3);
+        m_seCount->Play(false);
     }
 }

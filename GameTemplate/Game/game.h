@@ -187,7 +187,7 @@ private: //enum
 
 
 private: //constant
-    static const int m_INIT_COUNT_START_COUNTDOWN = 180;        //m_countStartCountdownの初期値
+    static const int m_INIT_COUNT_START_COUNTDOWN = 240;        //m_countStartCountdownの初期値
 
 private: //data menber
     ////////////////////////////////////////////////////////////
@@ -208,6 +208,8 @@ private: //data menber
     Fade* m_fade = nullptr;
     SoundBGM* m_bgmTitle = nullptr;
     SoundSE* m_seCancel = nullptr;
+    SoundSE* m_seCount = nullptr;
+    SoundSE* m_seGameStart = nullptr;
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
