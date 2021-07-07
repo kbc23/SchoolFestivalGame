@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CPU_strength_select.h"
 
+#include "game.h"
 #include "constant.h"
 
 
@@ -65,7 +66,7 @@ bool CPUStrengthSelect::Start()
     m_seDecision->Init(filePath::se::DECISION);
     m_seMoveCursor = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seMoveCursor->Init(filePath::se::MOVE_CURSOR);
-
+    m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
     return true;
 }
 
@@ -74,6 +75,7 @@ void CPUStrengthSelect::Update()
     SelectTheNumberOfCPUStrength();
 
     if (m_flagDecision == true && m_flagFinish == false) {
+        m_game->SetDiLevel(m_cursorPosition);
         FinishCPUStrengthSelect();
     }
 }

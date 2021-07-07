@@ -2,6 +2,7 @@
 #include "player.h"
 
 #include "game.h"
+#include "EnemyAI.h"
 #include "stage.h"
 
 namespace //constant
@@ -65,6 +66,7 @@ Player::~Player()
 		DeleteIndividual(playerNum);
 	}
 
+	DeleteGO(m_enemyAI);
 	DeleteGO(m_fontEnd);
 }
 
@@ -120,6 +122,7 @@ bool Player::Start()
 
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+	m_enemyAI = FindGO<EnemyAI>(igo::CLASS_NAME_ENEMYAI);//tuika
 
 
 
@@ -150,19 +153,34 @@ bool Player::StartIndividual(const int pNum)
 void Player::Update()
 {
 	//ÉvÉåÉCÉÑÅ[Ç≤Ç∆Ç…ëÄçÏ
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
-		if (m_flagGoal[playerNum] == false) {
-			Controller(playerNum);
-			Animation(playerNum);
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		if (m_maxPlayer > playerNum) {
+			if (m_flagGoal[playerNum] == false) {
+				Controller(playerNum);
+				Animation(playerNum);
+			}
+			else {
+				Animation(playerNum);
+			}
 		}
 		else {
-			Animation(playerNum);
+			if (m_flagGoal[playerNum] == false) {
+				m_enemyAI->Move(playerNum);
+			}
 		}
-	}
 
-	if (m_maxPlayer == m_goalPlayer) {
+	}//henkou
+
+	if (con::PlayerNumberMax == m_goalPlayer) {
 		m_fontEnd->Activate();
-	}
+		m_endTimer++;
+		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+			m_game->SetRank(playerNum, m_goalRanking[playerNum]);
+		}
+		if (m_endTimer > 180) {
+			m_gameEnd = true;
+		}
+	}//henkou
 
 	bool check[4] = { false,false,false,false };
 

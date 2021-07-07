@@ -317,6 +317,12 @@
     <ClCompile Include="title.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyAI.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -582,6 +588,12 @@
     </ClInclude>
     <ClInclude Include="constant.h">
       <Filter>MyCode\その他</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAI.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

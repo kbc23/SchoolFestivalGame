@@ -2,6 +2,7 @@
 #include "sprite_render.h"
 #include "font_render.h"
 #include "sound_SE.h"
+class Game;
 
 class CPUStrengthSelect : public IGameObject
 {
@@ -42,9 +43,11 @@ private: //constant
 
 
 private: //data menber
+
     ////////////////////////////////////////////////////////////
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
+    Game* m_game = nullptr;
 
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     FontRender* m_font = nullptr;

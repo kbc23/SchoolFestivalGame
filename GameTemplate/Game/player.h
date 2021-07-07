@@ -5,6 +5,9 @@
 
 class Game;
 class Stage;
+class EnemyAI;//tuika
+
+
 
 class Player : public IGameObject
 {
@@ -103,6 +106,10 @@ public: //Get関数
 		return m_flagAnimationJump[pNum];
 	}
 
+	bool GetGameEnd()//ゲーム終了
+	{
+		return m_gameEnd;
+	}
 
 public: //Set関数
 
@@ -191,7 +198,14 @@ public: //Set関数
 		m_modelRender[pNum]->PlayAnimation(srip);
 	}
 
-
+	/**
+* @brief cpuがジャンプ中か判定する変数のSet関数
+* @param i ジャンプ中か真偽判定
+*/
+	void SetFlagAnimationJump(int pNum, const bool i)
+	{
+		m_flagAnimationJump[pNum] = i;
+	}//tuika
 
 private: //enum
 	enum AnimationEnum
@@ -217,6 +231,7 @@ private: //data menber
 
 	Stage* m_stage = nullptr;
 	Game* m_game = nullptr;
+	EnemyAI* m_enemyAI = nullptr;//tuika
 
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
@@ -231,7 +246,11 @@ private: //data menber
 
 	int m_goalRanking[con::PlayerNumberMax] = { 0, 0, 0, 0 };				//プレイヤーのゴール順位
 	bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
-	int m_goalPlayer = 0;												//ゴールしたプレイヤーの人数
+	int m_goalPlayer = 0;					
+	
+	int m_endTimer = 0;//ゴールしてからの時間tuika
+
+	bool m_gameEnd = false;//ゴールしたプレイヤーの人数tuika
 
 	////////////////////////////////////////////////////////////
 	// タイマー関連
