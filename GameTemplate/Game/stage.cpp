@@ -720,17 +720,4 @@ void Stage::DegreeOfProgress(const int& pNum)
     m_spritePlayerMark[pNum]->SetPositionX(
         MAX_DEGREE_OF_PROGRESS_POSITION * test2
     );
-
-
-
-    float test = float(MAX_DEGREE_OF_PROGRESS_POSITION * float(m_playerBlockPosition[pNum] / m_MAX_BLOCK));
-
-    int a = 0;
-    
-    //m_spritePlayerMark[0]->SetPositionX(825.0f);
-    //m_spritePlayerMark[0]->SetPositionY(-50.0f);
-
-    //m_spritePlayerMark[1]->SetPositionY(-50.0f);
-    //m_spritePlayerMark[2]->SetPositionY(-50.0f);
-    //m_spritePlayerMark[3]->SetPositionY(-50.0f);
 }
