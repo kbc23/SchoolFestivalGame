@@ -144,6 +144,12 @@ public:
     */
     bool MoveBlock(const int pNum, const int moveNum);
 
+    //////////////////////////////
+    // êiçsìx
+    //////////////////////////////
+
+    void DegreeOfProgress(const int& pNum);
+
 
 
 public: //Getä÷êî
@@ -228,6 +234,9 @@ private: //data menber
     SpriteRender* m_spriteBackgroundSky = nullptr;
     SpriteRender* m_spriteBackgroundCloud_1 = nullptr;
     SpriteRender* m_spriteBackgroundCloud_2 = nullptr;
+    
+    SpriteRender* m_spriteDegreeOfProgress = nullptr;
+    SpriteRender* m_spritePlayerMark[con::PlayerNumberMax] = { nullptr };
 
     Game* m_game = nullptr;
 
