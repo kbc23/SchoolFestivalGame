@@ -136,6 +136,7 @@ namespace filePath
 		constexpr const wchar_t* COUNT = L"Assets/Sound/SE/Count.wav";
 		constexpr const wchar_t* GAME_START = L"Assets/Sound/SE/Game_start.wav";
 		//ÉQÅ[ÉÄâÊñ ÇÃSE
+		constexpr const wchar_t* JUMP = L"Assets/Sound/SE/Jump.wav";
 		constexpr const wchar_t* FALL = L"Assets/Sound/SE/Fall.wav";
 		constexpr const wchar_t* SRIP = L"Assets/Sound/SE/Srip.wav";
 	}

@@ -128,7 +128,9 @@ void Game::Update()
         return;
     }
 
-    DrawBackground();
+    if (m_flagGameStart == false) {
+        DrawBackground();
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -348,6 +350,7 @@ void Game::Loading()
     DeleteGO(m_bgmTitle);
 
     m_loadStatus = LoadingStatus::endOfLoading;
+    m_flagGameStart = true;
 }
 
 void Game::EndOfLoading()

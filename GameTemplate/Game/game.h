@@ -262,6 +262,7 @@ private: //data menber
     LoadingStatus m_loadStatus = LoadingStatus::doNothing;
     bool m_startPreparingForLoading = false;
     bool m_startEndOfLoading = false;
+    bool m_flagGameStart = false;
 
     ////////////////////////////////////////////////////////////
     // ‚»‚Ì‘¼
