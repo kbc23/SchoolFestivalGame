@@ -470,11 +470,6 @@ void Game::NewGOResultScene() {
     m_bgmTitle->SetVolume(0.5f);
     m_bgmTitle->Play(true);
 
-    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
-    m_bgmTitle->Init(filePath::bgm::TITLE);
-    m_bgmTitle->SetVolume(0.5f);
-    m_bgmTitle->Play(true);
-
     m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seCancel->Init(filePath::se::CANCEL);
     m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
