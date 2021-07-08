@@ -112,10 +112,7 @@ public: //Get関数
 		return m_gameEnd;
 	}
 
-	bool GetModel(int pNum)//ゲーム終了
-	{
-		return m_modelRender[pNum];
-	}
+
 
 public: //Set関数
 
@@ -216,6 +213,10 @@ public: //Set関数
 		m_seJump->Play(false);
 	}//tuika
 
+
+	void SetCPUJumpFlag(int pNum,bool i) {
+		m_EJumpFlag[pNum] = i;
+	}
 private: //enum
 	enum AnimationEnum
 	{
@@ -264,6 +265,8 @@ private: //data menber
 
 	bool m_gameEnd = false;//ゴールしたプレイヤーの人数tuika
 
+	bool m_EJumpFlag[con::PlayerNumberMax] = { false };//cpuジャンプフラグ
+	
 	////////////////////////////////////////////////////////////
 	// タイマー関連
 	////////////////////////////////////////////////////////////
