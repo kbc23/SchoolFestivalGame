@@ -200,7 +200,7 @@ public: //enum
         
 
 private: //constant
-    static const int m_MAX_BLOCK = 100;      //１レーンのブロックの最大数
+    static const int m_MAX_BLOCK = 20;      //１レーンのブロックの最大数
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
     

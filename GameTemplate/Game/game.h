@@ -18,6 +18,7 @@ class Score;
 class Rule1; 
 class EnemyAI;
 class Result;
+class Mode_select;
 
 class Game : public IGameObject
 {
@@ -149,8 +150,10 @@ public: //Get関数
         return m_StopOperation;
     }
 
-
-
+    /*const bool& GetRuleSelect()
+    {
+        return m_ruleSelect;
+    }*/
 
 public: //Set関数
     ///**
@@ -183,11 +186,18 @@ public: //Set関数
     void SetRank(int pNum, int rank) {//順位受け取りtuika
         m_rank[pNum] = rank;
     }
-    void SetDiLevel(const int i)//難易度受け取りtuika
+    void SetDiLevel(const int& i)//難易度受け取りtuika
     {
         m_dilevel = i;
     }
 
+    /*void SetRuleSelect(const bool o)
+    {
+        m_ruleSelect = o;
+    }*/
+
+    public:
+        bool m_ruleSelect = false;
 
 private: //enum
     enum class GameStatus
@@ -243,6 +253,7 @@ private: //data menber
     SoundSE* m_seGameStart = nullptr;
     EnemyAI* m_enemyAI = nullptr;
     Result* m_result = nullptr;
+    
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
@@ -269,5 +280,6 @@ private: //data menber
     int m_maxPlayer = 0;                        //操作しているプレイヤーの数
     int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
     int m_dilevel = 0;
+    //bool m_ruleSelect = false;
 };
 

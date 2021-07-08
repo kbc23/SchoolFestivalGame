@@ -3,6 +3,8 @@
 #include "font_render.h"
 #include "sound_SE.h"
 
+class Game;
+
 class ModeSelect : public IGameObject
 {
 public:
@@ -35,7 +37,6 @@ public: //Get関数
         return m_flagFinish;
     }
 
-
 private: //constant
     static const int m_NUMBER_OF_CHOICES = 2;     //選択肢の数
 
@@ -51,6 +52,7 @@ private: //data menber
     FontRender* m_font = nullptr;
     SoundSE* m_seDecision = nullptr;
     SoundSE* m_seMoveCursor = nullptr;
+    Game* m_game = nullptr;
 
     ////////////////////////////////////////////////////////////
     // その他
@@ -60,11 +62,14 @@ private: //data menber
 
     int m_numberOfPlayer = 0;       //プレイヤーの人数
 
+
+
     ////////////////////////////////////////////////////////////
     // フラグ
     ////////////////////////////////////////////////////////////
 
     bool m_flagDecision = false;    //人数を決定したかのフラグ
 
-    bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
+    bool m_flagFinish = false;      //このクラスでするべき処理が終わったか      
+
 };

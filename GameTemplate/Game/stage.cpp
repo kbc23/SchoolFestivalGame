@@ -335,6 +335,8 @@ void Stage::Update()
     GoalBlock();
 
     Length();
+
+    /*NextRound();*/
     
 }
 

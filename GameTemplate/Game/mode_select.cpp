@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "mode_select.h"
 
+#include "game.h"
 #include "constant.h"
-
 
 
 namespace //constant
@@ -69,6 +69,8 @@ bool ModeSelect::Start()
     m_seMoveCursor = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seMoveCursor->Init(filePath::se::MOVE_CURSOR);
 
+    m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+
     return true;
 }
 
@@ -97,6 +99,8 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
             return;
         }
 
+        m_game->m_ruleSelect = false;
+
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
         m_fontChoices[m_cursorPosition]->Deactivate();
 
@@ -112,6 +116,8 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
         if (m_cursorPosition == RIGHT_END) {
             return;
         }
+
+        m_game->m_ruleSelect = true;
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
         m_fontChoices[m_cursorPosition]->Deactivate();

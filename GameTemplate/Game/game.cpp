@@ -12,6 +12,7 @@
 #include "rule1.h"
 #include "EnemyAI.h"
 #include "Result.h"
+#include "mode_select.h"
 
 
 
@@ -278,7 +279,9 @@ void Game::PreparingForLoading()
 void Game::Loading()
 {
     m_stage = NewGO<Stage>(igo::PRIORITY_CLASS, igo::CLASS_NAME_STAGE);
-    m_rule1 = NewGO<Rule1>(igo::PRIORITY_CLASS, igo::CLASS_NAME_RULE1);
+    if (m_ruleSelect==true) {
+        m_rule1 = NewGO<Rule1>(igo::PRIORITY_CLASS, igo::CLASS_NAME_RULE1);
+    }
     m_player = NewGO<Player>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PLAYER);
     m_enemyAI = NewGO<EnemyAI>(igo::PRIORITY_CLASS, igo::CLASS_NAME_ENEMYAI);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
@@ -288,6 +291,7 @@ void Game::Loading()
 
     //Playerクラスに選択されたプレイヤー人数を渡す。
     m_player->SetMaxPlayer(m_maxPlayer);
+    m_stage->SetMaxPlayer(m_maxPlayer);
     m_enemyAI->SetDifficultyLevel(m_dilevel);
 
     //選択画面の背景を削除
