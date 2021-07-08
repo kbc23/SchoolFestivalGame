@@ -231,7 +231,7 @@ private: //data menber
 
     Game* m_game = nullptr;
 
-    FontRender* m_fontPlayerBlockPosition[con::PlayerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示
+    
 
     Rule1* m_rule1 = nullptr;
 

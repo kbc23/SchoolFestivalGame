@@ -292,7 +292,6 @@ private: //data menber
     int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
     int m_dilevel = 0;//難易度受け取り受け渡し用
     int m_resultselect = 0;//リザルトで何選んだか
-    int m_dilevel = 0;
     //bool m_ruleSelect = false;
 };
 

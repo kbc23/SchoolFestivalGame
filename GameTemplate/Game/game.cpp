@@ -499,3 +499,14 @@ void Game::ResultScene() {
     m_flagStartCountdown = true;
 
 }
+
+void Game::NextRound()
+{
+    m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
+    m_flagStartCountdown = true;
+    m_StopOperation = true;
+    //m_flagTitleScene = true;
+    //m_flagPlayerSelectScene = false;
+    //m_flagGameScene = false;
+    //m_maxPlayer = 0;
+}
