@@ -52,8 +52,36 @@ Game::~Game()
 
 bool Game::Start()
 {
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[1] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[1]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[2] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[2]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[3] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[3]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[4] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[4]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[5] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[5]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[6] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[6]->Init(filePath::dds::BACKGROUND);
+
+    //画像の配列番号と表示位置（0の位置が画面）
+    //0 1
+    //2 3 4
+    //  5 6
+
+    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+
+
+
+
     m_title = NewGO<Title>(igo::PRIORITY_CLASS);
     m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
 
@@ -100,7 +128,34 @@ void Game::Update()
         MessageBoxA(nullptr, "ゲームの遷移にてエラーが発生しました。", "エラー", MB_OK);
         return;
     }
-    
+
+    if (m_flagGameStart == false) {
+        DrawBackground();
+    }
+}
+
+////////////////////////////////////////////////////////////
+// 毎フレームする処理
+////////////////////////////////////////////////////////////
+
+void Game::DrawBackground()
+{
+    for (int i = 0; i < 7; i++) {
+        m_spriteBackground[i]->SetPosition({ m_spriteBackground[i]->GetPosition().x - 1280.0f / 1010.0f,
+                                                m_spriteBackground[i]->GetPosition().y + 720.0f / 1010.0f }
+        );
+    }
+
+
+    if (m_spriteBackground[6]->GetPosition().x <= 0.0f) {
+        m_spriteBackground[0]->SetPosition({ 0.0f,0.0f });
+        m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+        m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+        m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+        m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+        m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+        m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -295,10 +350,13 @@ void Game::Loading()
     m_enemyAI->SetDifficultyLevel(m_dilevel);
 
     //選択画面の背景を削除
-    DeleteGO(m_spriteBackground);
+    for (int i = 0; i < 7; i++) {
+        DeleteGO(m_spriteBackground[i]);
+    }
     DeleteGO(m_bgmTitle);
 
     m_loadStatus = LoadingStatus::endOfLoading;
+    m_flagGameStart = true;
 }
 
 void Game::EndOfLoading()
@@ -381,25 +439,63 @@ void Game::StartCountdown()
 
 void Game::NewGOResultScene() {
     m_result = NewGO<Result>(igo::PRIORITY_CLASS);
+
+    m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[1] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[1]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[2] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[2]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[3] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[3]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[4] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[4]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[5] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[5]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[6] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[6]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+
+    m_flagGameStart = false;
+
+    m_startPreparingForLoading = false;
+    m_startEndOfLoading = false;
+
+    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
+    m_bgmTitle->Init(filePath::bgm::TITLE);
+    m_bgmTitle->SetVolume(0.5f);
+    m_bgmTitle->Play(true);
+
+    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
+    m_bgmTitle->Init(filePath::bgm::TITLE);
+    m_bgmTitle->SetVolume(0.5f);
+    m_bgmTitle->Play(true);
+
+    m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCancel->Init(filePath::se::CANCEL);
+    m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCount->Init(filePath::se::COUNT);
+    m_seGameStart = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seGameStart->Init(filePath::se::GAME_START);
 }
 ////////////////////////////////////////////////////////////
 // リザルトシーンの処理
 ////////////////////////////////////////////////////////////
 void Game::ResultScene() {
-    /*if (m_result->GetFlagFinish() == false) {
+    if (m_result->GetFlagFinish() == false) {
         return;
     }
-    */
-
-}
-
-void Game::NextRound()
-{
+   // m_resultselect = m_result->GetSelect();
+    DeleteGO(m_result);
+   // m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+  //  m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
+    m_StopOperation = true;
     m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
     m_flagStartCountdown = true;
-    m_StopOperation = true;
-    //m_flagTitleScene = true;
-    //m_flagPlayerSelectScene = false;
-    //m_flagGameScene = false;
-    //m_maxPlayer = 0;
+
 }

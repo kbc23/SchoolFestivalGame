@@ -31,6 +31,12 @@ public:
 
 private:
     ////////////////////////////////////////////////////////////
+    // 毎フレームする処理
+    ////////////////////////////////////////////////////////////
+
+    void DrawBackground();
+
+    ////////////////////////////////////////////////////////////
     // タイトルシーンの処理
     ////////////////////////////////////////////////////////////
 
@@ -128,16 +134,16 @@ private:
     void StartCountdown();
 
     /**
- * @brief リザルトシーンで使用するオブジェクトのNewGO
-*/
+     * @brief リザルトシーンで使用するオブジェクトのNewGO
+    */
     void NewGOResultScene();
 
     ////////////////////////////////////////////////////////////
-// リザルトシーンの処理
-////////////////////////////////////////////////////////////
- /**
-* @brief リザルトシーンの処理
-*/
+    // リザルトシーンの処理
+    ////////////////////////////////////////////////////////////
+    /**
+     * @brief リザルトシーンの処理
+    */
     void ResultScene();
 
 public: //Get関数
@@ -189,6 +195,10 @@ public: //Set関数
     void SetDiLevel(const int& i)//難易度受け取りtuika
     {
         m_dilevel = i;
+    }
+    void SetResultSelect(const int i)//リザルト選択受け取りtuika
+    {
+        m_resultselect = i;
     }
 
     /*void SetRuleSelect(const bool o)
@@ -245,7 +255,7 @@ private: //data menber
     Rule1* m_rule1 = nullptr;
     Score* m_score = nullptr;
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
-    SpriteRender* m_spriteBackground = nullptr;
+    SpriteRender* m_spriteBackground[7] = { nullptr };
     Fade* m_fade = nullptr;
     SoundBGM* m_bgmTitle = nullptr;
     SoundSE* m_seCancel = nullptr;
@@ -272,6 +282,7 @@ private: //data menber
     LoadingStatus m_loadStatus = LoadingStatus::doNothing;
     bool m_startPreparingForLoading = false;
     bool m_startEndOfLoading = false;
+    bool m_flagGameStart = false;
 
     ////////////////////////////////////////////////////////////
     // その他
@@ -279,6 +290,8 @@ private: //data menber
 
     int m_maxPlayer = 0;                        //操作しているプレイヤーの数
     int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
+    int m_dilevel = 0;//難易度受け取り受け渡し用
+    int m_resultselect = 0;//リザルトで何選んだか
     int m_dilevel = 0;
     //bool m_ruleSelect = false;
 };

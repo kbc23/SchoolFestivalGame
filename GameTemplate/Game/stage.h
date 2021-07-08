@@ -62,6 +62,8 @@ private:
 
     void DrawFontPlayerBlockPosition(const int pNum);
 
+    void DrawBackground();
+
     //////////////////////////////
     // タイマー
     //////////////////////////////
@@ -222,8 +224,10 @@ private: //data menber
     ModelRender* m_modelYellowBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
     ModelRender* m_modelGoalBlock[con::PlayerNumberMax][m_MAX_GOAL_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
-    EffectRender* m_testEffect = nullptr;
-    SpriteRender* m_spriteBackground = nullptr;
+    FontRender* m_fontPlayerBlockPosition[con::PlayerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示
+    SpriteRender* m_spriteBackgroundSky = nullptr;
+    SpriteRender* m_spriteBackgroundCloud_1 = nullptr;
+    SpriteRender* m_spriteBackgroundCloud_2 = nullptr;
 
     Game* m_game = nullptr;
 

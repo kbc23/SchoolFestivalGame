@@ -122,6 +122,11 @@ public: //Get関数
 		return m_gameEnd;
 	}
 
+	bool GetModel(int pNum)//ゲーム終了
+	{
+		return m_modelRender[pNum];
+	}
+
 public: //Set関数
 
 	void DownPositionY(const int& pNum, const float& f)
@@ -218,12 +223,13 @@ public: //Set関数
 	}
 
 	/**
-* @brief cpuがジャンプ中か判定する変数のSet関数
-* @param i ジャンプ中か真偽判定
-*/
+	 * @brief cpuがジャンプ中か判定する変数のSet関数
+	 * @param i ジャンプ中か真偽判定
+	*/
 	void SetFlagAnimationJump(int pNum, const bool i)
 	{
 		m_flagAnimationJump[pNum] = i;
+		m_seJump->Play(false);
 	}//tuika
 
 private: //enum
@@ -255,6 +261,7 @@ private: //data menber
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
 	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
+	SoundSE* m_seJump = nullptr;
 	SoundSE* m_seFall = nullptr;
 	SoundSE* m_seSrip = nullptr;
 

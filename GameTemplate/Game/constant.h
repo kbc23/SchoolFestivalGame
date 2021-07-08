@@ -71,6 +71,7 @@ namespace filePath
 		constexpr const char* TITLE = "Assets/Image/Title.dds";
 		//選択画面系の背景
 		constexpr const char* BACKGROUND = "Assets/Image/Background.dds";
+		constexpr const char* BACKGROUND_2 = "Assets/Image/Background_2.dds";
 		//モード選択画面のUI
 		constexpr const char* MODE_RACE = "Assets/Image/Command_race.dds";
 		constexpr const char* MODE_SUDDEN_DEATH = "Assets/Image/Command_sudden_death.dds";
@@ -92,11 +93,17 @@ namespace filePath
 		//ゲーム画面のUI
 		constexpr const char* SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
 		constexpr const char* BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
+		constexpr const char* BACKGROUND_CLOUD = "Assets/Image/Background_cloud.dds";
 		//結果画面後の選択画面のUI
 		constexpr const char* COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
 		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players.dds";
 		constexpr const char* COMMAND_CHOOSE_A_RULE = "Assets/Image/Command_choose_a_rule.dds";
 		constexpr const char* COMMAND_EXIT_GAME = "Assets/Image/Command_exit_game.dds";
+		//順位表示
+		constexpr const char* RANKONE = "Assets/Image/juni1.dds";
+		constexpr const char* RANKTWO = "Assets/Image/juni2.dds";
+		constexpr const char* RANKTHREE = "Assets/Image/juni3.dds";
+		constexpr const char* RANKFOUR = "Assets/Image/juni4.dds";
 		//フェード
 		constexpr const char* FADE = "Assets/Image/Fade.dds";
 	}
@@ -134,6 +141,7 @@ namespace filePath
 		constexpr const wchar_t* COUNT = L"Assets/Sound/SE/Count.wav";
 		constexpr const wchar_t* GAME_START = L"Assets/Sound/SE/Game_start.wav";
 		//ゲーム画面のSE
+		constexpr const wchar_t* JUMP = L"Assets/Sound/SE/Jump.wav";
 		constexpr const wchar_t* FALL = L"Assets/Sound/SE/Fall.wav";
 		constexpr const wchar_t* SRIP = L"Assets/Sound/SE/Srip.wav";
 	}
