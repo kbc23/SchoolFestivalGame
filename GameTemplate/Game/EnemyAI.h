@@ -48,4 +48,7 @@ private:
 	bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
 	bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
 	bool m_bluemiss = false;//青ブロックでミスしたか
+
+	bool m_JumpFlag[con::PlayerNumberMax] = { false };//ジャンプフラグ
+	
 };
