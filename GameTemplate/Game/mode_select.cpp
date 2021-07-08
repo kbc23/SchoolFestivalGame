@@ -91,6 +91,13 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
     if (g_pad[con::player_1]->IsTrigger(enButtonA) == true) {
         m_seDecision->Play(false);
 
+        if (m_cursorPosition == 0) {
+            m_game->SetRuleSelect(false);
+        }
+        else if (m_cursorPosition == 1) {
+            m_game->SetRuleSelect(true);
+        }
+
         m_flagDecision = true;
     }
     //¶‚ÉˆÚ“®
@@ -100,8 +107,6 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
         if (m_cursorPosition == LEFT_END) {
             return;
         }
-
-        m_game->SetRuleSelect(false);
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
@@ -120,8 +125,6 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
         if (m_cursorPosition == RIGHT_END) {
             return;
         }
-
-        m_game->SetRuleSelect(true);
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
