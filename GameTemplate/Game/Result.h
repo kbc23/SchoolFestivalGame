@@ -40,10 +40,14 @@ private:
 	static const int m_NUMBER_OF_CHOICES = 4;     //選択肢の数
 	enum AnimationEnum
 	{
-		Animation_idle,
-		//Animation_jump,
+		
+		win,
+		stand,
+		lose,
 		Animation_Max
 	};
+
+	AnimationClip m_animationPlayer[Animation_Max];
 	Game* m_game = nullptr;
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示する
@@ -51,9 +55,6 @@ private:
 	SpriteRender* m_spriteBackground =  nullptr ;	//選択肢UI表示
 	SoundSE* m_seDecision = nullptr;
 	SoundSE* m_seMoveCursor = nullptr;
-
-
-	AnimationClip m_animationPlayer[Animation_Max];
 
 	int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
 	bool m_spriteChoicesNewGO = false;

@@ -61,9 +61,13 @@ bool Result::Start() {
 	m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
 	m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
 	//アニメーションの設定
-	m_animationPlayer[Animation_idle].Load(filePath::tka::IDLE);
-	//ループ再生をtrueにする
-	m_animationPlayer[Animation_idle].SetLoopFlag(false);
+	m_animationPlayer[win].Load(filePath::tka::WIN);
+	m_animationPlayer[stand].Load(filePath::tka::STAND);
+	m_animationPlayer[lose].Load(filePath::tka::LOSE);
+	//ループ再生
+	m_animationPlayer[stand].SetLoopFlag(true);
+	m_animationPlayer[win].SetLoopFlag(false);
+	m_animationPlayer[lose].SetLoopFlag(false);
 
 	//プレイヤーごとに処理
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
@@ -97,7 +101,7 @@ bool Result::StartIndividual(const int pNum) {
 	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.2f,0.2f,0.2f });
-	m_modelRender[pNum]->PlayAnimation(Animation_idle);
+
 
 
 	switch (m_rank[pNum]) {
@@ -106,24 +110,28 @@ bool Result::StartIndividual(const int pNum) {
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKONE);
 		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
+		m_modelRender[pNum]->PlayAnimation(win);
 		break;
 	case 2:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTWO);
 		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
+		m_modelRender[pNum]->PlayAnimation(stand);
 		break;
 	case 3:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTHREE);
 		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
+		m_modelRender[pNum]->PlayAnimation(stand);
 		break;
 	case 4:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKFOUR);
 		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
+		m_modelRender[pNum]->PlayAnimation(lose);
 		break;
 	}
 
