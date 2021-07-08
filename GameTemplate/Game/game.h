@@ -30,6 +30,12 @@ public:
 
 private:
     ////////////////////////////////////////////////////////////
+    // 毎フレームする処理
+    ////////////////////////////////////////////////////////////
+
+    void DrawBackground();
+
+    ////////////////////////////////////////////////////////////
     // タイトルシーンの処理
     ////////////////////////////////////////////////////////////
 
@@ -127,16 +133,16 @@ private:
     void StartCountdown();
 
     /**
- * @brief リザルトシーンで使用するオブジェクトのNewGO
-*/
+     * @brief リザルトシーンで使用するオブジェクトのNewGO
+    */
     void NewGOResultScene();
 
     ////////////////////////////////////////////////////////////
-// リザルトシーンの処理
-////////////////////////////////////////////////////////////
- /**
-* @brief リザルトシーンの処理
-*/
+    // リザルトシーンの処理
+    ////////////////////////////////////////////////////////////
+    /**
+     * @brief リザルトシーンの処理
+    */
     void ResultScene();
 
 public: //Get関数
@@ -234,7 +240,7 @@ private: //data menber
     Rule1* m_rule1 = nullptr;
     Score* m_score = nullptr;
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
-    SpriteRender* m_spriteBackground = nullptr;
+    SpriteRender* m_spriteBackground[7] = { nullptr };
     Fade* m_fade = nullptr;
     SoundBGM* m_bgmTitle = nullptr;
     SoundSE* m_seCancel = nullptr;
@@ -260,6 +266,7 @@ private: //data menber
     LoadingStatus m_loadStatus = LoadingStatus::doNothing;
     bool m_startPreparingForLoading = false;
     bool m_startEndOfLoading = false;
+    bool m_flagGameStart = false;
 
     ////////////////////////////////////////////////////////////
     // その他

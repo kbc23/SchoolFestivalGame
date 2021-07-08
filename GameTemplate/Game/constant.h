@@ -71,6 +71,7 @@ namespace filePath
 		constexpr const char* TITLE = "Assets/Image/Title.dds";
 		//選択画面系の背景
 		constexpr const char* BACKGROUND = "Assets/Image/Background.dds";
+		constexpr const char* BACKGROUND_2 = "Assets/Image/Background_2.dds";
 		//モード選択画面のUI
 		constexpr const char* MODE_RACE = "Assets/Image/Command_race.dds";
 		constexpr const char* MODE_SUDDEN_DEATH = "Assets/Image/Command_sudden_death.dds";
@@ -86,12 +87,13 @@ namespace filePath
 		//ポーズ画面のUI
 		constexpr const char* PAUSE_RETURN_TO_GAME = "Assets/Image/Pause_return_to_game.dds";
 		constexpr const char* PAUSE_RETRY = "Assets/Image/Pause_retry.dds";
-		constexpr const char* PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game";
+		constexpr const char* PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game.dds";
 		//タイトル画面のUI
 		constexpr const char* PRESS_A_BUTTON = "Assets/Image/Press_A_Button.dds";
 		//ゲーム画面のUI
 		constexpr const char* SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
 		constexpr const char* BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
+		constexpr const char* BACKGROUND_CLOUD = "Assets/Image/Background_cloud.dds";
 		//結果画面後の選択画面のUI
 		constexpr const char* COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
 		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players.dds";
@@ -139,6 +141,7 @@ namespace filePath
 		constexpr const wchar_t* COUNT = L"Assets/Sound/SE/Count.wav";
 		constexpr const wchar_t* GAME_START = L"Assets/Sound/SE/Game_start.wav";
 		//ゲーム画面のSE
+		constexpr const wchar_t* JUMP = L"Assets/Sound/SE/Jump.wav";
 		constexpr const wchar_t* FALL = L"Assets/Sound/SE/Fall.wav";
 		constexpr const wchar_t* SRIP = L"Assets/Sound/SE/Srip.wav";
 	}

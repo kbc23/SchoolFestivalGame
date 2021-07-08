@@ -23,6 +23,8 @@ private:
      * @brief このクラスの処理の終了処理
     */
     void FinishCPUStrengthSelect();
+    
+    void DrawMove();
 
 
 public: //Get関数
@@ -67,4 +69,6 @@ private: //data menber
     bool m_flagDecision = false;    //人数を決定したかのフラグ
 
     bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
+
+    bool m_flagMove = true;
 };

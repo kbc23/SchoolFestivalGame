@@ -68,6 +68,7 @@ Player::~Player()
 
 	DeleteGO(m_enemyAI);
 	DeleteGO(m_fontEnd);
+	DeleteGO(m_seJump);
 	DeleteGO(m_seFall);
 	DeleteGO(m_seSrip);
 }
@@ -121,6 +122,10 @@ bool Player::Start()
 	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontEnd->Init(L"終了!");
 	m_fontEnd->Deactivate();
+
+	m_seJump = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+	m_seJump->Init(filePath::se::JUMP);
+	m_seJump->SetVolume(0.3f);
 
 	m_seFall = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seFall->Init(filePath::se::FALL);
@@ -205,8 +210,6 @@ void Player::Update()
 
 		check2[playerNum] = m_modelRender[playerNum]->IsPlayingAnimation();
 	}
-
-	int a = 10;
 }
 
 //////////////////////////////
@@ -233,6 +236,7 @@ void Player::Controller(const int pNum)
 			return;
 		}
 		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_seJump->Play(false);
 		m_modelRender[pNum]->PlayAnimation(jump);
 		m_flagAnimationJump[pNum] = true;
 	}
@@ -242,8 +246,8 @@ void Player::Controller(const int pNum)
 			return;
 		}
 		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_seJump->Play(false);
 		m_modelRender[pNum]->PlayAnimation(jump);
-
 		m_flagAnimationJump[pNum] = true;
 	}
 }
