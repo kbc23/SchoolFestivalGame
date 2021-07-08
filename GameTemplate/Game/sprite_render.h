@@ -21,17 +21,6 @@ public:
 
 
 public:
-	/// <summary>
-	/// 初期化用関数
-	/// 最初に呼んでね。
-	/// </summary>
-	/// <param name="texFilePath">ddsファイルパス</param>
-	/// <param name="w">スプライトの横幅</param>
-	/// <param name="h">スプライトの縦幅</param>
-	/// <param name="pivot">ピボット（基点）</param>
-	/// <param name="alphaBlendMode">アルファブレンディングモード</param>
-
-
 	/**
 	 * @brief 初期化
 	 * @param texFilePath ddsファイルパス
@@ -52,6 +41,11 @@ public:
 	void SetPosition(const Vector3& pos)
 	{
 		m_position = pos;
+	}
+
+	void SetPositionX(const float& f)
+	{
+		m_position.x = f;
 	}
 
 	/**

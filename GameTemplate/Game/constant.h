@@ -92,6 +92,7 @@ namespace filePath
 		//ƒQ[ƒ€‰æ–Ê‚ÌUI
 		constexpr const char* SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
 		constexpr const char* BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
+		constexpr const char* BACKGROUND_CLOUD = "Assets/Image/Background_cloud.dds";
 		//Œ‹‰Ê‰æ–ÊŒã‚Ì‘I‘ğ‰æ–Ê‚ÌUI
 		constexpr const char* COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
 		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players.dds";

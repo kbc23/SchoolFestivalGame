@@ -126,7 +126,9 @@ Stage::~Stage()
         DeleteGO(m_fontPlayerBlockPosition[playerNum]);
     }
 
-    DeleteGO(m_spriteBackground);
+    DeleteGO(m_spriteBackgroundSky);
+    DeleteGO(m_spriteBackgroundCloud_1);
+    DeleteGO(m_spriteBackgroundCloud_2);
 
     DeleteGO(m_bgm);
 }
@@ -137,9 +139,6 @@ Stage::~Stage()
 
 bool Stage::Start()
 {
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
-
     //ÉXÉeÅ[ÉWÇçÏê¨
     StageCreate();
 
@@ -175,6 +174,15 @@ bool Stage::Start()
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         DrawBlock(playerNum);
     }
+
+    //îwåiÇÃï`âÊ
+    m_spriteBackgroundSky = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackgroundSky->Init(filePath::dds::BACKGROUND_SKY);
+    m_spriteBackgroundCloud_1 = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackgroundCloud_1->Init(filePath::dds::BACKGROUND_CLOUD);
+    m_spriteBackgroundCloud_2 = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackgroundCloud_2->Init(filePath::dds::BACKGROUND_CLOUD);
+    m_spriteBackgroundCloud_2->SetPositionX(1280.0f);
 
     //BGMÇÃçƒê∂
     m_bgm = NewGO<SoundBGM>(0);
@@ -322,6 +330,9 @@ void Stage::Update()
 
         DrawFontPlayerBlockPosition(playerNum);
     }
+
+    //îwåiÇÃï`âÊ
+    DrawBackground();
 
     //ÉSÅ[ÉãéûÇÃèàóù
     GoalBlock();
@@ -491,6 +502,17 @@ void Stage::DrawMoveBlock(const int pNum)
 void Stage::DrawFontPlayerBlockPosition(const int pNum)
 {
     m_fontPlayerBlockPosition[pNum]->SetText(m_playerBlockPosition[pNum] + 1);
+}
+
+void Stage::DrawBackground()
+{
+    m_spriteBackgroundCloud_1->SetPositionX(m_spriteBackgroundCloud_1->GetPosition().x - 1.0f);
+    m_spriteBackgroundCloud_2->SetPositionX(m_spriteBackgroundCloud_2->GetPosition().x - 1.0f);
+
+    if (m_spriteBackgroundCloud_1->GetPosition().x <= -1280.0f) {
+        m_spriteBackgroundCloud_1->SetPositionX(0.0f);
+        m_spriteBackgroundCloud_2->SetPositionX(1280.0f);
+    }
 }
 
 //////////////////////////////
