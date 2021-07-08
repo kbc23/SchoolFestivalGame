@@ -11,9 +11,9 @@ namespace //constant
     // ˆÊ’uî•ñ
     ////////////////////////////////////////////////////////////
 
-    const Vector3 CHOICES_POSITION[2] = {
-        {-150.0f,0.0f,0.0f},
-        {150.0f,0.0f,0.0f}
+    const Vector2 CHOICES_POSITION[2] = {
+        {-150.0f,0.0f},
+        {150.0f,0.0f}
     };
 
     ////////////////////////////////////////////////////////////
@@ -79,6 +79,8 @@ void ModeSelect::Update()
     if (m_flagDecision == true && m_flagFinish == false) {
         FinishCPUStrengthSelect();
     }
+
+    DrawMove();
 }
 
 void ModeSelect::SelectTheNumberOfCPUStrength()
@@ -98,12 +100,14 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
         }
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
         m_fontChoices[m_cursorPosition]->Deactivate();
 
         --m_cursorPosition;
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
         m_fontChoices[m_cursorPosition]->Activate();
+        m_flagMove = true;
     }
     //‰E‚ÉˆÚ“®
     else if (g_pad[con::player_1]->IsTrigger(enButtonRight) == true) {
@@ -114,16 +118,36 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
         }
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
         m_fontChoices[m_cursorPosition]->Deactivate();
 
         ++m_cursorPosition;
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
         m_fontChoices[m_cursorPosition]->Activate();
+        m_flagMove = true;
     }
 }
 
 void ModeSelect::FinishCPUStrengthSelect()
 {
     m_flagFinish = true;
+}
+
+void ModeSelect::DrawMove()
+{
+    if (m_flagMove == true) {
+        m_spriteChoices[m_cursorPosition]->SetPositionY(m_spriteChoices[m_cursorPosition]->GetPosition().y + 0.5f);
+        if (m_spriteChoices[m_cursorPosition]->GetPosition().y >= 10.0f) {
+            m_spriteChoices[m_cursorPosition]->SetPositionY(10.0f);
+            m_flagMove = false;
+        }
+    }
+    else {
+        m_spriteChoices[m_cursorPosition]->SetPositionY(m_spriteChoices[m_cursorPosition]->GetPosition().y - 0.5f);
+        if (m_spriteChoices[m_cursorPosition]->GetPosition().y <= -10.0f) {
+            m_spriteChoices[m_cursorPosition]->SetPositionY(-10.0f);
+            m_flagMove = true;
+        }
+    }
 }

@@ -71,6 +71,7 @@ namespace filePath
 		constexpr const char* TITLE = "Assets/Image/Title.dds";
 		//‘I‘ğ‰æ–ÊŒn‚Ì”wŒi
 		constexpr const char* BACKGROUND = "Assets/Image/Background.dds";
+		constexpr const char* BACKGROUND_2 = "Assets/Image/Background_2.dds";
 		//ƒ‚[ƒh‘I‘ğ‰æ–Ê‚ÌUI
 		constexpr const char* MODE_RACE = "Assets/Image/Command_race.dds";
 		constexpr const char* MODE_SUDDEN_DEATH = "Assets/Image/Command_sudden_death.dds";

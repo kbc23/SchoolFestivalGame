@@ -38,14 +38,20 @@ public:
 	 * @brief êŠ‚ğİ’èi{0.0f,0.0f}‚ª’†Sj
 	 * @param pos êŠ
 	*/
-	void SetPosition(const Vector3& pos)
+	void SetPosition(const Vector2& pos)
 	{
-		m_position = pos;
+		m_position.x = pos.x;
+		m_position.y = pos.y;
 	}
 
 	void SetPositionX(const float& f)
 	{
 		m_position.x = f;
+	}
+
+	void SetPositionY(const float& f)
+	{
+		m_position.y = f;
 	}
 
 	/**

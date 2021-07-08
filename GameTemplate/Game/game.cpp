@@ -51,8 +51,36 @@ Game::~Game()
 
 bool Game::Start()
 {
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[1] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[1]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[2] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[2]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[3] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[3]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[4] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[4]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[5] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[5]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[6] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[6]->Init(filePath::dds::BACKGROUND);
+
+    //画像の配列番号と表示位置（0の位置が画面）
+    //0 1
+    //2 3 4
+    //  5 6
+
+    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+
+
+
+
     m_title = NewGO<Title>(igo::PRIORITY_CLASS);
     m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
 
@@ -98,6 +126,32 @@ void Game::Update()
     default:
         MessageBoxA(nullptr, "ゲームの遷移にてエラーが発生しました。", "エラー", MB_OK);
         return;
+    }
+
+    DrawBackground();
+}
+
+////////////////////////////////////////////////////////////
+// 毎フレームする処理
+////////////////////////////////////////////////////////////
+
+void Game::DrawBackground()
+{
+    for (int i = 0; i < 7; i++) {
+        m_spriteBackground[i]->SetPosition({ m_spriteBackground[i]->GetPosition().x - 1280.0f / 1010.0f,
+                                                m_spriteBackground[i]->GetPosition().y + 720.0f / 1010.0f }
+        );
+    }
+
+
+    if (m_spriteBackground[6]->GetPosition().x <= 0.0f) {
+        m_spriteBackground[0]->SetPosition({ 0.0f,0.0f });
+        m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+        m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+        m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+        m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+        m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+        m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
     }
 }
 
@@ -288,7 +342,9 @@ void Game::Loading()
     m_enemyAI->SetDifficultyLevel(m_dilevel);
 
     //選択画面の背景を削除
-    DeleteGO(m_spriteBackground);
+    for (int i = 0; i < 7; i++) {
+        DeleteGO(m_spriteBackground[i]);
+    }
     DeleteGO(m_bgmTitle);
 
     m_loadStatus = LoadingStatus::endOfLoading;
