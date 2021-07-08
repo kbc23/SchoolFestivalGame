@@ -441,8 +441,8 @@ void Game::ResultScene() {
     }
    // m_resultselect = m_result->GetSelect();
     DeleteGO(m_result);
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground->Init(filePath::dds::BACKGROUND);
+   // m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+  //  m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
     m_StopOperation = true;
     m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
     m_flagStartCountdown = true;

@@ -8,18 +8,18 @@ const Vector3 PLAYER_POSITION[con::PlayerNumberMax] = {	//プレイヤーの初期座標
 	{ -400.0f, -1300.0f, -240.0f },											//プレイヤー３
 	{ -1200.0f, -1300.0f, -240.0f }											//プレイヤー４
 };
-const Vector3 PLAYER_RANK_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの初期座標
-	{ -420.0f, -200.0f, 0.0f },											//プレイヤー１
-	{ -140.0f, -200.0f, 0.0f },											//プレイヤー２
-	{ 140.0f, -200.0f, -0.0f },											//プレイヤー３
-	{ 420.0f,-200.0f, 0.0f }											//プレイヤー４
+const Vector2 PLAYER_RANK_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの初期座標
+	{ -420.0f, -200.0f},											//プレイヤー１
+	{ -140.0f, -200.0f },											//プレイヤー２
+	{ 140.0f, -200.0f },											//プレイヤー３
+	{ 420.0f,-200.0f }											//プレイヤー４
 };
 
-const Vector3 MODE_SELECT_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの初期座標
-	{ 0.0f, 200.0f, 0.0f },											//プレイヤー１
-	{ 0.0f, 100.0f, 0.0f },											//プレイヤー２
-	{ 0.0f, 0.0f, 0.0f },											//プレイヤー３
-	{ 0.0f, -100.0f, 0.0f }											//プレイヤー４
+const Vector2 MODE_SELECT_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの初期座標
+	{ 0.0f, 200.0f },											//プレイヤー１
+	{ 0.0f, 100.0f },											//プレイヤー２
+	{ 0.0f, 0.0f },											//プレイヤー３
+	{ 0.0f, -100.0f }											//プレイヤー４
 };
 
 const int UP_END = 0;     //一番上
