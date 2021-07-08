@@ -230,9 +230,14 @@ void EnemyAI::AutoController11(const int pNum)
 		return;
 	}
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+	m_JumpFlag[pNum] = true;
+	
 	m_flagAnimationJump[pNum] = true;
+	
+	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
-
+	m_JumpFlag[pNum] = false;
+	
 }
 
 /*void EnemyAI::AutoController2(const int pNum)
@@ -283,6 +288,11 @@ void EnemyAI::AutoController3(const int pNum)
 	}
 
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+	m_JumpFlag[pNum] = true;
+
 	m_flagAnimationJump[pNum] = true;
+
+	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
+	m_JumpFlag[pNum] = false;
 }

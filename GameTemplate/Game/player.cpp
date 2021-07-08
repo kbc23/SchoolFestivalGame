@@ -182,6 +182,10 @@ void Player::Update()
 		else {
 			if (m_flagGoal[playerNum] == false) {
 				m_enemyAI->Move(playerNum);
+				if (m_EJumpFlag[playerNum] == true) {
+					m_seJump->Play(false);
+					m_modelRender[playerNum]->PlayAnimation(jump);
+				}
 				Animation(playerNum);
 			}
 			else {
