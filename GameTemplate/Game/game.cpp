@@ -431,6 +431,49 @@ void Game::StartCountdown()
 
 void Game::NewGOResultScene() {
     m_result = NewGO<Result>(igo::PRIORITY_CLASS);
+
+    m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[1] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[1]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[2] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[2]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[3] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[3]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[4] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[4]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[5] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[5]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[6] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[6]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+
+    m_flagGameStart = false;
+
+    m_startPreparingForLoading = false;
+    m_startEndOfLoading = false;
+
+    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
+    m_bgmTitle->Init(filePath::bgm::TITLE);
+    m_bgmTitle->SetVolume(0.5f);
+    m_bgmTitle->Play(true);
+
+    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
+    m_bgmTitle->Init(filePath::bgm::TITLE);
+    m_bgmTitle->SetVolume(0.5f);
+    m_bgmTitle->Play(true);
+
+    m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCancel->Init(filePath::se::CANCEL);
+    m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCount->Init(filePath::se::COUNT);
+    m_seGameStart = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seGameStart->Init(filePath::se::GAME_START);
 }
 ////////////////////////////////////////////////////////////
 // リザルトシーンの処理
@@ -446,6 +489,7 @@ void Game::ResultScene() {
     m_StopOperation = true;
     m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
     m_flagStartCountdown = true;
+
     switch (m_resultselect) {
     case 0:
         NewGOGameScene();
