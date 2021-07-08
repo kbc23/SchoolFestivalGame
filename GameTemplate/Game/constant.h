@@ -106,6 +106,11 @@ namespace filePath
 		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players.dds";
 		constexpr const char* COMMAND_CHOOSE_A_RULE = "Assets/Image/Command_choose_a_rule.dds";
 		constexpr const char* COMMAND_EXIT_GAME = "Assets/Image/Command_exit_game.dds";
+		//順位表示
+		constexpr const char* RANKONE = "Assets/Image/juni1.dds";
+		constexpr const char* RANKTWO = "Assets/Image/juni2.dds";
+		constexpr const char* RANKTHREE = "Assets/Image/juni3.dds";
+		constexpr const char* RANKFOUR = "Assets/Image/juni4.dds";
 		//フェード
 		constexpr const char* FADE = "Assets/Image/Fade.dds";
 	}
