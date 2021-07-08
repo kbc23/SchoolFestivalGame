@@ -99,6 +99,12 @@ namespace //constant
     const int PROBABILITY_BGM[MAX_PROBABILITY_BGM] = {
         19,19,19,19,19,5
     };
+
+    ////////////////////////////////////////////////////////////
+    // 進行度関連
+    ////////////////////////////////////////////////////////////
+
+    const float MAX_DEGREE_OF_PROGRESS_POSITION = 835.0f;
 }
 
 
@@ -124,11 +130,14 @@ Stage::~Stage()
             DeleteGO(m_modelGoalBlock[playerNum][blockNum]);
         }
         DeleteGO(m_fontPlayerBlockPosition[playerNum]);
+        DeleteGO(m_spritePlayerMark[playerNum]);
     }
 
     DeleteGO(m_spriteBackgroundSky);
     DeleteGO(m_spriteBackgroundCloud_1);
     DeleteGO(m_spriteBackgroundCloud_2);
+
+    DeleteGO(m_spriteDegreeOfProgress);
 
     DeleteGO(m_bgm);
 }
@@ -183,6 +192,14 @@ bool Stage::Start()
     m_spriteBackgroundCloud_2 = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
     m_spriteBackgroundCloud_2->Init(filePath::dds::BACKGROUND_CLOUD);
     m_spriteBackgroundCloud_2->SetPositionX(1280.0f);
+
+    //進行度のUIを作成
+    m_spriteDegreeOfProgress = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteDegreeOfProgress->Init(filePath::dds::DEGREE_OF_PROGRESS);
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_spritePlayerMark[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+        m_spritePlayerMark[playerNum]->Init(filePath::dds::PLAYER_MARK[playerNum]);
+    }
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
@@ -329,6 +346,9 @@ void Stage::Update()
         DrawMoveBlock(playerNum);
 
         DrawFontPlayerBlockPosition(playerNum);
+
+        //進行度の描画
+        DegreeOfProgress(playerNum);
     }
 
     //背景の描画
@@ -685,4 +705,32 @@ void Stage::GoalBlock()
         //次の順位を設定
         m_nowRank += nextRank;
     }
+}
+
+//////////////////////////////
+// 進行度
+//////////////////////////////
+
+void Stage::DegreeOfProgress(const int& pNum)
+{
+    float test2 = m_playerBlockPosition[pNum];
+
+    test2 = test2 / m_MAX_BLOCK;
+
+    m_spritePlayerMark[pNum]->SetPositionX(
+        MAX_DEGREE_OF_PROGRESS_POSITION * test2
+    );
+
+
+
+    float test = float(MAX_DEGREE_OF_PROGRESS_POSITION * float(m_playerBlockPosition[pNum] / m_MAX_BLOCK));
+
+    int a = 0;
+    
+    //m_spritePlayerMark[0]->SetPositionX(825.0f);
+    //m_spritePlayerMark[0]->SetPositionY(-50.0f);
+
+    //m_spritePlayerMark[1]->SetPositionY(-50.0f);
+    //m_spritePlayerMark[2]->SetPositionY(-50.0f);
+    //m_spritePlayerMark[3]->SetPositionY(-50.0f);
 }
