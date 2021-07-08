@@ -1,6 +1,7 @@
 #pragma once
 #include "font_render.h"
 #include "sprite_render.h"
+#include "sound_SE.h"
 
 class Game;
 
@@ -10,13 +11,10 @@ public:
     PlayerSelect();
     ~PlayerSelect();
     bool Start() override final;
-    
-    ////////////////////////////////////////////////////////////
-    // 毎フレームの処理
-    ////////////////////////////////////////////////////////////
-
     void Update() override final;
+    
 
+private:
     /**
      * @brief 操作するプレイヤーの人数の選択
     */
@@ -41,7 +39,7 @@ public: //Get関数
 
 
 private: //constant
-    static const int m_NUMBER_OF_FONTS = 3;     //フォントの数
+    static const int m_NUMBER_OF_CHOICES = 4;     //選択肢の数
 
 
 private: //data menber
@@ -50,9 +48,10 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     Game* m_game = nullptr;
-    FontRender* m_fontNumberOfPlayer[m_NUMBER_OF_FONTS] = { nullptr };      //操作するプレイヤーの人数を選択するフォント
-    FontRender* m_fontCursor = nullptr;                     //カーソルのフォント
-    SpriteRender* m_spriteBackground = nullptr;
+    SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
+    FontRender* m_font = nullptr;
+    SoundSE* m_seDecision = nullptr;
+    SoundSE* m_seMoveCursor = nullptr;
 
     ////////////////////////////////////////////////////////////
     // その他
@@ -69,6 +68,4 @@ private: //data menber
     bool m_flagDecision = false;    //人数を決定したかのフラグ
 
     bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
-
-    bool m_flagInput = false;       //前のフレームで入力しているかどうかのフラグ
 };

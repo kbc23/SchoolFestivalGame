@@ -1,5 +1,6 @@
 #pragma once
 #include "sprite_render.h"
+#include "sound_SE.h"
 
 class Title : public IGameObject
 {
@@ -25,13 +26,14 @@ private: //data menber
 	// クラスのオブジェクト
 	////////////////////////////////////////////////////////////
 
-	SpriteRender* m_spriteBackground = nullptr;
+	SpriteRender* m_spriteTitle = nullptr;
 	SpriteRender* m_spritePressAButton = nullptr;
+	SoundSE* m_seDecision = nullptr;
 
 	////////////////////////////////////////////////////////////
 	// フラグ関連
 	////////////////////////////////////////////////////////////
 
 	bool m_flagFinish = false; //このクラスでするべき処理が終わったか
-
+	bool m_flagBlinking = true; //m_pressAButtonの透過処理に使用
 };

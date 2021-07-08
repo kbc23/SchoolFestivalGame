@@ -3,6 +3,7 @@
 #include "sound_BGM.h"
 #include "effect_render.h"
 #include "font_render.h"
+#include "sprite_render.h"
 #include "constant.h"
 
 class Player;
@@ -43,6 +44,11 @@ private:
      * @param randomBlueOrYellowNum 青ブロックと黄色ブロックのどちらを作成するかの乱数
     */
     void CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowNum);
+
+    /**
+     * @brief 再生するBGMの決定
+    */
+    void InitBGM();
 
     ////////////////////////////////////////////////////////////
     // 毎フレームの処理
@@ -148,6 +154,19 @@ public: //Get関数
     {
         return m_activeOperation[pNum];
     }
+    /**
+* @brief m_stageDataの2個先のGet関数
+* @param pNum プレイヤー番号
+* @return m_stageDataの2個先のブロック
+*/
+    int GetStageDatePuls2(const int pNum)
+    {
+        /* int plus = m_playerBlockPosition[pNum] + 2;
+          if (plus >= 99) {
+              plus = 99;
+          }*/
+        return m_stageData[pNum][m_playerBlockPosition[pNum] + 2];//ここ怪しい
+    }
 
     const int Getm(const int o)
     {
@@ -161,6 +180,7 @@ public: //enum
         greenBlock,
         blueBlock,
         yellowBlock,
+        goalBlock,
         stageDataMax
     };
 
@@ -180,12 +200,13 @@ public: //enum
         
 
 private: //constant
-    static const int m_MAX_BLOCK = 10;      //１レーンのブロックの最大数
+    static const int m_MAX_BLOCK = 100;      //１レーンのブロックの最大数
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
-
+    
     static const int m_MAX_GREEN_BLOCK = 20;            //作成する緑ブロックのモデルの数
     static const int m_MAX_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
+    static const int m_MAX_GOAL_BLOCK = 1;      //作成するゴールブロックのモデルの数
 
 private: //data menber
 
@@ -195,16 +216,18 @@ private: //data menber
 
     Player* m_player = nullptr;
     Score* m_score = nullptr;
-    //ModelRender* m_modelRender[con::playerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
-    ModelRender* m_modelGreenBlock[con::playerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
-    //ModelRender* m_modelBlueBlock[con::playerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
-    ModelRender* m_modelYellowBlock[con::playerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
+    //ModelRender* m_modelRender[con::PlayerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
+    ModelRender* m_modelGreenBlock[con::PlayerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
+    //ModelRender* m_modelBlueBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
+    ModelRender* m_modelYellowBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
+    ModelRender* m_modelGoalBlock[con::PlayerNumberMax][m_MAX_GOAL_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
     EffectRender* m_testEffect = nullptr;
+    SpriteRender* m_spriteBackground = nullptr;
 
     Game* m_game = nullptr;
 
-    FontRender* m_fontPlayerBlockPosition[con::playerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示
+    FontRender* m_fontPlayerBlockPosition[con::PlayerNumberMax] = { nullptr }; //プレイヤーが何個目のブロックにいるかの表示
 
     Rule1* m_rule1 = nullptr;
 
@@ -212,45 +235,45 @@ private: //data menber
     // ブロックのデータ
     ////////////////////////////////////////////////////////////
 
-    int m_stageData[con::playerNumberMax][m_MAX_BLOCK] = { greenBlock }; //ステージのデータを保存する配列
-    int m_playerBlockPosition[con::playerNumberMax] = {                  //プレイヤーが何個目のブロックにいるか
+    int m_stageData[con::PlayerNumberMax][m_MAX_BLOCK] = { greenBlock }; //ステージのデータを保存する配列
+    int m_playerBlockPosition[con::PlayerNumberMax] = {                  //プレイヤーが何個目のブロックにいるか
         m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
-    int m_playerBeforeBlockPosition[con::playerNumberMax] = {            //プレイヤーの前にいたブロックの番号
+    int m_playerBeforeBlockPosition[con::PlayerNumberMax] = {            //プレイヤーの前にいたブロックの番号
         m_START_BLOCK,m_START_BLOCK,m_START_BLOCK,m_START_BLOCK };
 
     ////////////////////////////////////////////////////////////
     // プレイヤーの操作状況
     ////////////////////////////////////////////////////////////
 
-    bool m_activeOperation[con::playerNumberMax] = { true, true, true, true };   //プレイヤーが操作可能か
-    int m_timerReturnOperation[con::playerNumberMax] = { 0, 0, 0, 0 };           //プレイヤーの操作復帰のタイマー
-    bool m_resistanceImpossibleOperation[con::playerNumberMax] = {               //プレイヤーの操作不可状態に対する耐性があるか
+    bool m_activeOperation[con::PlayerNumberMax] = { true, true, true, true };   //プレイヤーが操作可能か
+    int m_timerReturnOperation[con::PlayerNumberMax] = { 0, 0, 0, 0 };           //プレイヤーの操作復帰のタイマー
+    bool m_resistanceImpossibleOperation[con::PlayerNumberMax] = {               //プレイヤーの操作不可状態に対する耐性があるか
         false, false, false, false };
 
 
-    bool m_flagAnimationBlueBlock[con::playerNumberMax] = {                 //青いブロックに行ったときのアニメーションをおこなっているか
+    bool m_flagAnimationBlueBlock[con::PlayerNumberMax] = {                 //青いブロックに行ったときのアニメーションをおこなっているか
         false, false, false, false };
-    int m_timerAnimationBlueBlock[con::playerNumberMax] = { 0, 0, 0, 0 };   //青いブロックに行ったときのアニメーションのタイマー
-    bool m_activeOperationVersionBlue[con::playerNumberMax] = {             //プレイヤーが操作可能か（青色のブロックVer）
+    int m_timerAnimationBlueBlock[con::PlayerNumberMax] = { 0, 0, 0, 0 };   //青いブロックに行ったときのアニメーションのタイマー
+    bool m_activeOperationVersionBlue[con::PlayerNumberMax] = {             //プレイヤーが操作可能か（青色のブロックVer）
         true, true, true, true };
 
     int m_nowRank = m_INIT_RANK;            //プレイヤーの順位データに渡すデータ
 
-    int m_amountOfMovement[con::playerNumberMax] = { 0, 0, 0, 0 };
+    int m_amountOfMovement[con::PlayerNumberMax] = { 0, 0, 0, 0 };
 
     ////////////////////////////////////////////////////////////
     // タイマー関連
     ////////////////////////////////////////////////////////////
 
-    bool m_flagAnimationJump[con::playerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
-    int m_timerAnimation[con::playerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
+    bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
+    int m_timerAnimation[con::PlayerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
 
     int Playermember = 0;
 
     ///////////////////////////////////////////////////////////
     // NextRound
     ///////////////////////////////////////////////////////////
-    int m_maxPlayer = con::playerNumberMax;	//プレイヤーの最大数
+    int m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
     int n = 0;          //ゴールしたプレイヤーの数
     int m = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
 

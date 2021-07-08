@@ -13,11 +13,11 @@ namespace //constant
     // 位置情報
     ////////////////////////////////////////////////////////////
 
-    const Vector2 SCORE_TIME_FONT_POSITION[con::playerNumberMax] = {	//スコアタイムの表示位置
-        { -390.0f, -290.0f },										        //プレイヤー１
-        { -130.0f, -290.0f },												//プレイヤー２
-        { 130.0f, -290.0f },												//プレイヤー３
-        { 390.0f, -290.0f }													//プレイヤー４
+    const Vector2 SCORE_TIME_FONT_POSITION[con::PlayerNumberMax] = {	//スコアタイムの表示位置
+        { -570.0f, -300.0f },										        //プレイヤー１
+        { -250.0f, -300.0f },												//プレイヤー２
+        { 70.0f, -300.0f },												//プレイヤー３
+        { 400.0f, -300.0f }													//プレイヤー４
     };
 
     ////////////////////////////////////////////////////////////
@@ -40,17 +40,22 @@ Score::Score()
 
 Score::~Score()
 {
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         DeleteGO(m_fontScoreTime[playerNum]);
     }
+
+    DeleteGO(m_spriteUI);
 }
 
 bool Score::Start()
 {
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
-        m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
         m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
     }
+
+    m_spriteUI = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteUI->Init(filePath::dds::SCORE_TIME_UI);
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
@@ -68,7 +73,7 @@ void Score::Update()
         return;
     }
 
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         if (m_flagProcessing[playerNum] == true) {
             AddTime(playerNum);
             FinishTime(playerNum);
@@ -144,7 +149,7 @@ void Score::DrawTime(const int pNum)
 
 void Score::NextRound()
 {
-    for (int i = 0; i < con::playerNumberMax; i++) {
+    for (int i = 0; i < con::PlayerNumberMax; i++) {
         m_scoreTime[i] = 0;
         m_flagProcessing[i] = true;
         m_scoreTimeMinutes[i] = 0;

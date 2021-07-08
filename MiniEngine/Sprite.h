@@ -151,6 +151,11 @@ public:		//ÉÅÉìÉoä÷êî
 		m_constantBufferCPU.mulColor = mulColor;
 	}
 
+	void SetMulColorW(const float& mulColorW)
+	{
+		m_constantBufferCPU.mulColor.w = mulColorW;
+	}
+
 	float GetMulColorW()
 	{
 		return m_constantBufferCPU.mulColor.w;

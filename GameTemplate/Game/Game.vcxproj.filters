@@ -81,6 +81,9 @@
     <Filter Include="MyCode\エンジン\スプライト">
       <UniqueIdentifier>{323f9224-8d02-4c27-929a-272ae79a9216}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\その他">
+      <UniqueIdentifier>{2e9fe057-f5ae-4427-a98c-f7f6def4f4ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -245,14 +248,8 @@
     <ClCompile Include="stage_select.cpp">
       <Filter>MyCode</Filter>
     </ClCompile>
-    <ClCompile Include="title.cpp">
-      <Filter>MyCode</Filter>
-    </ClCompile>
     <ClCompile Include="model_render.cpp">
       <Filter>MyCode\エンジン\モデル</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>MyCode\ゲーム</Filter>
@@ -303,6 +300,21 @@
       <Filter>MyCode\エンジン\スプライト</Filter>
     </ClCompile>
     <ClCompile Include="rule1.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="fade.cpp">
+      <Filter>MyCode\エンジン\スプライト</Filter>
+    </ClCompile>
+    <ClCompile Include="mode_select.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU_strength_select.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
   </ItemGroup>
@@ -490,14 +502,8 @@
     <ClInclude Include="stage_select.h">
       <Filter>MyCode</Filter>
     </ClInclude>
-    <ClInclude Include="title.h">
-      <Filter>MyCode</Filter>
-    </ClInclude>
     <ClInclude Include="model_render.h">
       <Filter>MyCode\エンジン\モデル</Filter>
-    </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>MyCode\ゲーム</Filter>
@@ -513,9 +519,6 @@
     </ClInclude>
     <ClInclude Include="score.h">
       <Filter>MyCode\ゲーム</Filter>
-    </ClInclude>
-    <ClInclude Include="constant.h">
-      <Filter>MyCode\エンジン\その他</Filter>
     </ClInclude>
     <ClInclude Include="player_select.h">
       <Filter>MyCode\ゲーム</Filter>
@@ -560,6 +563,24 @@
       <Filter>MyCode\エンジン\スプライト</Filter>
     </ClInclude>
     <ClInclude Include="rule1.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>MyCode\エンジン\スプライト</Filter>
+    </ClInclude>
+    <ClInclude Include="mode_select.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU_strength_select.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="constant.h">
+      <Filter>MyCode\その他</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
       <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>

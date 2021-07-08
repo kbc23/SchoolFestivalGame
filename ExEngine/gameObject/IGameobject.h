@@ -168,12 +168,17 @@ namespace igo //constant
 	constexpr const char* CLASS_NAME_GAME = "game";
 	constexpr const char* CLASS_NAME_STAGE = "stage";
 	constexpr const char* CLASS_NAME_RULE1 = "rule1";
+	constexpr const char* CLASS_NAME_ENEMYAI = "enemyAI";
 	constexpr const char* CLASS_NAME_SCORE = "score";
 
 	////////////////////////////////////////////////////////////
 	// óDêÊìx
 	////////////////////////////////////////////////////////////
 
-	const int PRIORITY_FIRST = 0;
-	const int PRIORITY_SECOND = 1;
+	const int PRIORITY_CLASS = 0;
+	const int PRIORITY_BACKGROUND = 0;
+	const int PRIORITY_MODEL = 1;
+	const int PRIORITY_UI = 2;
+	const int PRIORITY_FONT = 3;
+	const int PRIORITY_FADE = 4;
 }

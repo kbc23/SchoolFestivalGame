@@ -23,10 +23,10 @@ public:
     void Init(
         const wchar_t* text,
         const Vector2 position = { 0.0f,0.0f },
-        const Vector4 color = { 1.0f,1.0f,1.0f,1.0f },
-        const float rotation = 0.0f,
         const float scale = 1.0f,
-        const Vector2 pivot = { 0.0f,0.0f }
+        const Vector4 color = { 0.0f,0.0f,0.0f,1.0f },
+        const float rotation = 0.0f,
+        const Vector2 pivot = { 0.5f,0.5f }
     );
 
 
@@ -59,6 +59,11 @@ public: //Set関数
         m_position = vec;
     }
 
+    void SetScale(const float& f)
+    {
+        m_scale = f;
+    }
+
     /**
      * @brief 表示するテキストのピボットを設定
      * @param vec ピボット
@@ -66,6 +71,16 @@ public: //Set関数
     void SetPivot(const Vector2 vec)
     {
         m_pivot = vec;
+    }
+
+    void SetPositionX(const float& f)
+    {
+        m_position.x = f;
+    }
+
+    const float& GetPositionX()
+    {
+        return m_position.x;
     }
 
 
@@ -77,10 +92,10 @@ private: //data menber
     Font m_font;
     wchar_t m_text[m_MAX_TEXT_SIZE] = L""; //表示するテキスト
     Vector2 m_position = { 0.0f,0.0f }; //表示する場所
-    Vector4 m_color = { 1.0f,1.0f,1.0f,1.0f }; //文字のカラー（白色）
+    Vector4 m_color = { 0.0f,0.0f,0.0f,1.0f }; //文字のカラー（黒色）
     float m_rotation = 0.0f; //回転
     float m_scale = 1.0f; //拡大率
-    Vector2 m_pivot = { 0.0f,0.0f }; //ピボット（基点）
+    Vector2 m_pivot = { 0.5f,0.5f }; //ピボット（基点）
 
 
 };

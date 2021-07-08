@@ -2,6 +2,7 @@
 #include "player.h"
 
 #include "game.h"
+#include "EnemyAI.h"
 #include "stage.h"
 #include "rule1.h"
 
@@ -11,14 +12,14 @@ namespace //constant
 	// 位置情報
 	////////////////////////////////////////////////////////////
 
-	const Vector3 PLAYER_START_POSITION[con::playerNumberMax] = {	//プレイヤーの初期座標
+	const Vector3 PLAYER_START_POSITION[con::PlayerNumberMax] = {	//プレイヤーの初期座標
 		{ 390.0f, 0.0f, -240.0f },											//プレイヤー１
 		{ 130.0f, 0.0f, -240.0f },											//プレイヤー２
 		{ -130.0f, 0.0f, -240.0f },											//プレイヤー３
 		{ -390.0f, 0.0f, -240.0f }											//プレイヤー４
 	};
 	
-	const Vector2 GOAL_RANK_FONT_POSITION[con::playerNumberMax] = {	//ゴール順位の表示座標
+	const Vector2 GOAL_RANK_FONT_POSITION[con::PlayerNumberMax] = {	//ゴール順位の表示座標
 		{ -390.0f, 0.0f },													//プレイヤー１
 		{ -130.0f, 0.0f },													//プレイヤー２
 		{ 130.0f, 0.0f },													//プレイヤー３
@@ -45,7 +46,7 @@ namespace //constant
 	// その他
 	////////////////////////////////////////////////////////////
 
-	const float JUMP_MOVE = 3.0f;
+	const float JUMP_MOVE = 2.0f;
 }
 
 
@@ -62,9 +63,14 @@ Player::Player()
 Player::~Player()
 {
 	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::playerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
+
+	DeleteGO(m_enemyAI);
+	DeleteGO(m_fontEnd);
+	DeleteGO(m_seFall);
+	DeleteGO(m_seSrip);
 }
 
 
@@ -86,16 +92,25 @@ void Player::DeleteIndividual(const int pNum)
 bool Player::Start()
 {
 	//アニメーションの設定
-	m_animationPlayer[Animation_idle].Load(filePath::TKA_IDLE);
+	m_animationPlayer[idle].Load(filePath::tka::IDLE);
+	m_animationPlayer[jump].Load(filePath::tka::JUMP);
+	m_animationPlayer[fall].Load(filePath::tka::FALL);
+	m_animationPlayer[srip].Load(filePath::tka::SRIP);
+	m_animationPlayer[win].Load(filePath::tka::WIN);
+	m_animationPlayer[stand].Load(filePath::tka::STAND);
+	m_animationPlayer[lose].Load(filePath::tka::LOSE);
 	//ループ再生をtrueにする
-	m_animationPlayer[Animation_idle].SetLoopFlag(true);
+	m_animationPlayer[idle].SetLoopFlag(true);
+	//m_animationPlayer[win].SetLoopFlag(true);
+	m_animationPlayer[stand].SetLoopFlag(true);
+	//m_animationPlayer[lose].SetLoopFlag(true);
 	//アニメーションの設定
 	//m_animationPlayer[Animation_jump].Load("Assets/animData/UnityChanJump.tka");
 	//ループ再生をtrueにする
 	//m_animationPlayer[Animation_jump].SetLoopFlag(true);
 
 	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::playerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		bool check = StartIndividual(playerNum);
 
 		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。
@@ -104,12 +119,21 @@ bool Player::Start()
 		}
 	}
 
-	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FIRST);
+	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontEnd->Init(L"終了!");
 	m_fontEnd->Deactivate();
 
+	m_seFall = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+	m_seFall->Init(filePath::se::FALL);
+	m_seFall->SetVolume(2.0f);
+
+	m_seSrip = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+	m_seSrip->Init(filePath::se::SRIP);
+	m_seSrip->SetVolume(0.7f);
+
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+	m_enemyAI = FindGO<EnemyAI>(igo::CLASS_NAME_ENEMYAI);//tuika
 	m_rule1 = FindGO<Rule1>(igo::CLASS_NAME_RULE1);
 
 
@@ -120,13 +144,13 @@ bool Player::StartIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-	m_modelRender[pNum]->Init(filePath::TKM_CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
+	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
-	m_modelRender[pNum]->PlayAnimation(Animation_idle);
+	m_modelRender[pNum]->PlayAnimation(idle);
 	
-	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
 	m_fontGoalRank[pNum]->Deactivate();
 
@@ -140,20 +164,34 @@ bool Player::StartIndividual(const int pNum)
 void Player::Update()
 {
 	//プレイヤーごとに操作
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
-		if (m_flagGoal[playerNum] == false) {
-			Controller(playerNum);
-			Animation(playerNum);
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		if (m_maxPlayer > playerNum) {
+			if (m_flagGoal[playerNum] == false) {
+				Controller(playerNum);
+				Animation(playerNum);
+			}
+			else {
+				Animation(playerNum);
+			}
 		}
 		else {
-			Animation(playerNum);
+			if (m_flagGoal[playerNum] == false) {
+				m_enemyAI->Move(playerNum);
+			}
 		}
-	}
 
-	if (m_maxPlayer == m_goalPlayer) {
+	}//henkou
+
+	if (con::PlayerNumberMax == m_goalPlayer) {
 		m_fontEnd->Activate();
-	}
-	m_modelRender[0]->PlayAnimation(Animation_idle);
+		m_endTimer++;
+		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+			m_game->SetRank(playerNum, m_goalRanking[playerNum]);
+		}
+		if (m_endTimer > 180) {
+			m_gameEnd = true;
+		}
+	}//henkou
 
 	bool check[4] = { false,false,false,false };
 
@@ -193,6 +231,7 @@ void Player::Controller(const int pNum)
 			return;
 		}
 		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_modelRender[pNum]->PlayAnimation(jump);
 		m_flagAnimationJump[pNum] = true;
 	}
 	//１マス進む
@@ -201,6 +240,8 @@ void Player::Controller(const int pNum)
 			return;
 		}
 		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+		m_modelRender[pNum]->PlayAnimation(jump);
+
 		m_flagAnimationJump[pNum] = true;
 	}
 }
@@ -236,6 +277,21 @@ void Player::JumpAnimation(const int pNum)
 	if (m_timerAnimation[pNum] >= TIME_ANIMATION) {
 		m_flagAnimationJump[pNum] = false;
 		m_timerAnimation[pNum] = TIMER_RESET;
+
+		if (m_flagGoal[pNum] == false) {
+			m_modelRender[pNum]->PlayAnimation(idle);
+		}
+		else {
+			if (m_goalRanking[pNum] == 1) {
+				m_modelRender[pNum]->PlayAnimation(win);
+			}
+			else if (m_goalRanking[pNum] == 4) {
+				m_modelRender[pNum]->PlayAnimation(lose);
+			}
+			else {
+				m_modelRender[pNum]->PlayAnimation(stand);
+			}
+		}
 	}
 }
 
@@ -258,12 +314,12 @@ void Player::NextRound()
 			m_flagGoal[playerNum] = false;
 		}
 		fontDeavtive = 0;
-		for (int i = 0; i < con::playerNumberMax; i++) {
+		for (int i = 0; i < con::PlayerNumberMax; i++) {
 			m_fontGoalRank[i]->Deactivate();
 		}
 	}
 
-	for (int i = 0; i < con::playerNumberMax; i++) {
+	for (int i = 0; i < con::PlayerNumberMax; i++) {
 
 		m_activePlayer[i] = true;	
 		//m_maxPlayer = i;		

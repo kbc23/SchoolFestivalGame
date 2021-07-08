@@ -4,38 +4,29 @@
 #include "constant.h"
 #include "game.h"
 
-namespace
+
+
+namespace //constant
 {
     ////////////////////////////////////////////////////////////
     // 位置情報
     ////////////////////////////////////////////////////////////
 
-    const Vector2 FONT_POSITION[3] = {          //フォントの位置情報
-        {-100.0f,0.0f},                             //２人
-        {0.0f,0.0f},                                //３人
-        {100.0f,0.0f}                               //４人
-    };
-
-    const Vector2 CURSOR_POSITION[3] = {        //フォントの位置情報
-        {-100.0f,-60.0f},                           //２人
-        {0.0f,-60.0f},                              //３人
-        {100.0f,-60.0f}                             //４人
-    };
-
-    const wchar_t* FONT_DISPLAY[3] = {          //フォントの表示内容
-        L"2人",
-        L"3人",
-        L"4人"
+    const Vector3 CHOICES_POSITION[4] = {
+        {-300.0f,0.0f,0.0f},
+        {-100.0f,0.0f,0.0f},
+        {100.0f,0.0f,0.0f},
+        {300.0f,0.0f,0.0f}
     };
 
     ////////////////////////////////////////////////////////////
     // その他
     ////////////////////////////////////////////////////////////
 
-    const int ADD_TWO = 2;      //プレイ人数の値を渡すときの数合わせ
+    const int ADD_ONE = 1;      //プレイ人数の値を渡すときの数合わせ
 
     const int LEFT_END = 0;     //左端
-    const int RIGHT_END = 2;    //右端
+    const int RIGHT_END = 3;    //右端
 }
 
 
@@ -47,26 +38,42 @@ PlayerSelect::PlayerSelect()
 
 PlayerSelect::~PlayerSelect()
 {
-    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_FONTS; fontNum++) {
-        DeleteGO(m_fontNumberOfPlayer[fontNum]);
+    for (int choicesNum = con::FIRST_OF_THE_ARRAY; choicesNum < m_NUMBER_OF_CHOICES; choicesNum++) {
+        DeleteGO(m_spriteChoices[choicesNum]);
     }
 
-    DeleteGO(m_fontCursor);
-    DeleteGO(m_spriteBackground);
+    DeleteGO(m_font);
+
+    DeleteGO(m_seDecision);
+    DeleteGO(m_seMoveCursor);
 }
 
 bool PlayerSelect::Start()
 {
-    for (int fontNum = con::FIRST_OF_THE_ARRAY; fontNum < m_NUMBER_OF_FONTS; fontNum++) {
-        m_fontNumberOfPlayer[fontNum] = NewGO<FontRender>(igo::PRIORITY_SECOND);
-        m_fontNumberOfPlayer[fontNum]->Init(FONT_DISPLAY[fontNum], FONT_POSITION[fontNum]);
-    }
 
-    m_fontCursor = NewGO<FontRender>(igo::PRIORITY_SECOND);
-    m_fontCursor->Init(L"^\n|", CURSOR_POSITION[LEFT_END]);
+    m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteChoices[0]->Init(filePath::dds::NUMBER_OF_PLAYERS_1);
+    m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
+    m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteChoices[1]->Init(filePath::dds::NUMBER_OF_PLAYERS_2);
+    m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
+    m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteChoices[2]->Init(filePath::dds::NUMBER_OF_PLAYERS_3);
+    m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
+    m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[3] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteChoices[3]->Init(filePath::dds::NUMBER_OF_PLAYERS_4);
+    m_spriteChoices[3]->SetPosition(CHOICES_POSITION[3]);
+    m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
 
-    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_FIRST);
-    m_spriteBackground->Init(filePath::DDS_BACKGROUND);
+    m_font = NewGO<FontRender>(igo::PRIORITY_FONT);
+    m_font->Init(L"プレイする人数を選択してください", { -450.0f,300.0f }, 1.3f);
+
+    m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seDecision->Init(filePath::se::DECISION);
+    m_seMoveCursor = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seMoveCursor->Init(filePath::se::MOVE_CURSOR);
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
@@ -84,48 +91,45 @@ void PlayerSelect::Update()
 
 void PlayerSelect::SelectTheNumberOfPlayers()
 {
-    if (g_pad[con::player_1]->GetLStickXF() == con::FLOAT_ZERO) {
-        m_flagInput = false;
-    }
-
-    //前フレームから入力し続けていたら処理をしない。
-    if (m_flagInput == true) {
-        return;
-    }
-
     //決定
     if (g_pad[con::player_1]->IsTrigger(enButtonA)) {
+        m_seDecision->Play(false);
+
         m_flagDecision = true;
     }
     //左に移動
-    else if (g_pad[con::player_1]->GetLStickXF() < con::FLOAT_ZERO) {
+    else if (g_pad[con::player_1]->IsTrigger(enButtonLeft) == true) {
+        m_seMoveCursor->Play(false);
+
         if (m_cursorPosition == LEFT_END) {
             return;
         }
 
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+
         --m_cursorPosition;
 
-        m_fontCursor->SetPosition(CURSOR_POSITION[m_cursorPosition]);
-
-        m_flagInput = true;
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
     }
     //右に移動
-    else if (g_pad[con::player_1]->GetLStickXF() > con::FLOAT_ZERO) {
+    else if (g_pad[con::player_1]->IsTrigger(enButtonRight) == true) {
+        m_seMoveCursor->Play(false);
+
         if (m_cursorPosition == RIGHT_END) {
             return;
         }
 
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+
         ++m_cursorPosition;
 
-        m_fontCursor->SetPosition(CURSOR_POSITION[m_cursorPosition]);
-
-        m_flagInput = true;
+        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
     }
 }
 
 void PlayerSelect::FinishPlayerSelect()
 {
-    m_game->SetMaxPlayer(m_cursorPosition + ADD_TWO);
+    m_game->SetMaxPlayer(m_cursorPosition + ADD_ONE);
 
     m_flagFinish = true;
 }

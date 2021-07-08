@@ -15,7 +15,6 @@
 
 //メモ
 //バナナでこけたときに、バナナが飛ぶようにした方がいいとのこと（重要度：中）
-//青ブロックの水がアニメーションする方がいいとのこと（重要度：低）
 
 
 
@@ -33,7 +32,7 @@ namespace //constant
     // 位置情報
     ////////////////////////////////////////////////////////////
 
-    const float BLOCK_POSITION_X[con::playerNumberMax] = {           //ブロックのX座標
+    const float BLOCK_POSITION_X[con::PlayerNumberMax] = {           //ブロックのX座標
         390.0f,                                                             //プレイヤー１
         130.0f,                                                             //プレイヤー２
         -130.0f,                                                            //プレイヤー３
@@ -41,18 +40,18 @@ namespace //constant
     };
     const float BLOCK_POSITION_Y = -80.0f;                              //ブロックのY座標
     const float BLOCK_POSITION_Z = -250.0f;                             //ブロックのZ座標
-    const Vector3 BLOCK_START_POSITION[con::playerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
+    const Vector3 BLOCK_START_POSITION[con::PlayerNumberMax] = {     //プレイヤーごとのスタート位置のブロックの座標
         { 390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }, 	                //プレイヤー１
         { 130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                    //プレイヤー２
         { -130.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z },	                //プレイヤー３
         { -390.0f, BLOCK_POSITION_Y, BLOCK_POSITION_Z }	                    //プレイヤー４
     };
 
-    const Vector2 PLAYER_BLOCK_POSITION_FONT_POSITION[con::playerNumberMax] = {	//スコアタイムの表示位置
-    { -390.0f, -200.0f },										        //プレイヤー１
-    { -130.0f, -200.0f },												//プレイヤー２
-    { 130.0f, -200.0f },												//プレイヤー３
-    { 390.0f, -200.0f }													//プレイヤー４
+    const Vector2 PLAYER_BLOCK_POSITION_FONT_POSITION[con::PlayerNumberMax] = {	//スコアタイムの表示位置
+    { -520.0f, -215.0f },										        //プレイヤー１
+    { -200.0f, -215.0f },												//プレイヤー２
+    { 120.0f, -215.0f },												//プレイヤー３
+    { 440.0f, -215.0f }													//プレイヤー４
     };
 
     ////////////////////////////////////////////////////////////
@@ -65,13 +64,19 @@ namespace //constant
     const int TIME_BLUE_BLOCK_ANIMATION = 30;   //青色のブロックに行ったときのアニメーションの時間
 
     ////////////////////////////////////////////////////////////
-    // 入力関係
+    // 入力関連
     ////////////////////////////////////////////////////////////
 
     const int MOVE_BUTTON_A = 2;		//Aボタンを押したときの移動量
     const int MOVE_BUTTON_B = 1;		//Bボタンを押したときの移動量
 
+    ////////////////////////////////////////////////////////////
+    // 確率関連
+    ////////////////////////////////////////////////////////////
 
+    //////////////////////////////
+    // ブロックの並びの生成
+    //////////////////////////////
 
     const int UPPER_LIMIT_CONTINUOUS_GREEN_BLOCK = 6;   //連続で作成する緑ブロックの上限
     const int PROBABILITY_CREATE_GREEN_BLOCK[UPPER_LIMIT_CONTINUOUS_GREEN_BLOCK] = {    //緑ブロックを作成するかの確率
@@ -87,6 +92,15 @@ namespace //constant
 
     const int MINIMUM_RANDOM_NUMBER = 1;  
     const int MAXIMUM_RANDOM_NUMBER = 100;
+
+    //////////////////////////////
+    // BGMの確率
+    //////////////////////////////
+
+    const int MAX_PROBABILITY_BGM = 6;
+    const int PROBABILITY_BGM[MAX_PROBABILITY_BGM] = {
+        19,19,19,19,19,5
+    };
 }
 
 
@@ -98,7 +112,7 @@ Stage::Stage()
 
 Stage::~Stage()
 {
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         //for (int blockNum = 0; blockNum < m_MAX_BLOCK; blockNum++) {
         //    DeleteGO(m_modelRender[playerNum][blockNum]);
         //}
@@ -108,11 +122,15 @@ Stage::~Stage()
         for (int blockNum = 0; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
             DeleteGO(m_modelYellowBlock[playerNum][blockNum]);
         }
+        for (int blockNum = 0; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+            DeleteGO(m_modelGoalBlock[playerNum][blockNum]);
+        }
         DeleteGO(m_fontPlayerBlockPosition[playerNum]);
     }
 
+    DeleteGO(m_spriteBackground);
+
     DeleteGO(m_bgm);
-    DeleteGO(m_testEffect);
 }
 
 ////////////////////////////////////////////////////////////
@@ -121,6 +139,9 @@ Stage::~Stage()
 
 bool Stage::Start()
 {
+    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
+
     //ステージを作成
     StageCreate();
 
@@ -129,10 +150,10 @@ bool Stage::Start()
     //黄色８個
 
     //モデルの作成
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
-            m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelGreenBlock[playerNum][blockNum]->Init(filePath::TKM_GREEN_BLOCK);
+            m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+            m_modelGreenBlock[playerNum][blockNum]->Init(filePath::tkm::GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
@@ -140,30 +161,30 @@ bool Stage::Start()
             //m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
             //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
-            m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            m_modelYellowBlock[playerNum][blockNum]->Init(filePath::TKM_YELLOW_BLOCK);
+            m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+            m_modelYellowBlock[playerNum][blockNum]->Init(filePath::tkm::YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
+        }
+
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+            m_modelGoalBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+            m_modelGoalBlock[playerNum][blockNum]->Init(filePath::tkm::GOAL_BLOCK);
+            m_modelGoalBlock[playerNum][blockNum]->Deactivate();
         }
     }
 
     //モデルの描画
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         DrawBlock(playerNum);
     }
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
-    m_bgm->Init(filePath::WAV_STAGE1);
+    InitBGM();
     m_bgm->Play(true);
 
-    //エフェクトの再生
-    m_testEffect = NewGO<EffectRender>(0);
-    m_testEffect->Init(u"Assets/Effect/goal.efk");
-    m_testEffect->SetScale({ 20.0f,20.0f,20.0f });
-    m_testEffect->Play();
-
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
-        m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FIRST);
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
         m_fontPlayerBlockPosition[playerNum]->Init(L"", PLAYER_BLOCK_POSITION_FONT_POSITION[playerNum]);
         m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
     }
@@ -202,7 +223,7 @@ void Stage::StageCreate()
 
         //ゴールの位置のブロックは緑
         if (blockNum == m_MAX_BLOCK - 1) {
-            m_stageData[con::player_1][blockNum] = greenBlock;
+            m_stageData[con::player_1][blockNum] = goalBlock;
             continue;
         }
 
@@ -240,7 +261,7 @@ void Stage::StageCreate()
     }
 
     //プレイヤー１でセットしたものを他のプレイヤーのところにもセットする。
-    for (int playerNum = con::player_2; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
             m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
         }
@@ -273,6 +294,24 @@ void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowN
     }
 }
 
+void Stage::InitBGM()
+{
+    std::mt19937 mt{ std::random_device{}() };
+    std::uniform_int_distribution<int> random(MINIMUM_RANDOM_NUMBER, MAXIMUM_RANDOM_NUMBER);
+
+    int randomNum = random(mt);
+    int checkRandom = 0;
+
+    for (int check = 0; check < MAX_PROBABILITY_BGM; check++) {
+        checkRandom += PROBABILITY_BGM[check];
+
+        if (randomNum <= checkRandom) {
+            m_bgm->Init(filePath::bgm::STAGE[check]);
+            return;
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////
 // 毎フレームの処理
 ////////////////////////////////////////////////////////////
@@ -280,7 +319,7 @@ void Stage::CreateBlueOrYellow(const int blockNum, const int randomBlueOrYellowN
 void Stage::Update()
 {
     //プレイヤーごとの処理
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         CheckBlock(playerNum);
 
         if (stop == false) {    //黄色に乗った時にずっと操作不能にするかどうか
@@ -308,11 +347,15 @@ void Stage::DrawBlock(const int pNum)
         //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+        m_modelGoalBlock[pNum][blockNum]->Deactivate();
+    }
 
     //モデルの描画
     int numberOfUsesGreenBlock = 0;
     int numberOfUsesBlueBlock = 0;
     int numberOfUsesYellowBlock = 0;
+    const int numberOfUsesGoalBlock = 0;
 
     for (int blockNum = -6; blockNum < 15; blockNum++) {
         //スタート地点より前のブロックを描画しない
@@ -351,6 +394,14 @@ void Stage::DrawBlock(const int pNum)
             m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->Activate();
             ++numberOfUsesYellowBlock;
         }
+        else if (m_stageData[pNum][m_playerBlockPosition[pNum] + blockNum] == goalBlock) {
+            m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->SetPosition({
+               BLOCK_POSITION_X[pNum],
+               BLOCK_POSITION_Y,
+               BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
+                });
+            m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->Activate();
+        }
     }
 
 }
@@ -363,6 +414,7 @@ void Stage::DrawMoveBlock(const int pNum)
 
     ++m_timerAnimation[pNum];
 
+    //モデルを全部非表示にする。
     for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
@@ -370,12 +422,16 @@ void Stage::DrawMoveBlock(const int pNum)
         //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
+    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+        m_modelGoalBlock[pNum][blockNum]->Deactivate();
+    }
 
 
     //モデルの描画
     int numberOfUsesGreenBlock = 0;
     int numberOfUsesBlueBlock = 0;
     int numberOfUsesYellowBlock = 0;
+    const int numberOfUsesGoalBlock = 0;
 
     double moveCorrection = 0;
 
@@ -425,6 +481,14 @@ void Stage::DrawMoveBlock(const int pNum)
                     });
                 m_modelYellowBlock[pNum][numberOfUsesYellowBlock]->Activate();
                 ++numberOfUsesYellowBlock;
+            }
+            else if (m_stageData[pNum][playerBlockPosition + blockNum] == goalBlock) {
+                m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->SetPosition({
+                   BLOCK_POSITION_X[pNum],
+                   BLOCK_POSITION_Y,
+                   BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - float(moveCorrection)
+                    });
+                m_modelGoalBlock[pNum][numberOfUsesGoalBlock]->Activate();
             }
         }
     }
@@ -493,7 +557,7 @@ void Stage::ReturnOperationTimer(const int pNum)
         m_resistanceImpossibleOperation[pNum] = true;
 
         //モデルの回転を元に戻す。
-        m_player->SetRotationX(pNum, con::FLOAT_ZERO);
+        m_player->SetAnimationIdle(pNum);
     }
 }
 
@@ -523,8 +587,8 @@ void Stage::CheckBlock(const int pNum)
             //黄色ブロックを緑ブロックに変更
             m_stageData[pNum][m_playerBlockPosition[pNum]] = greenBlock;
             DrawBlock(pNum);
-            //モデルを回転させる。
-            m_player->SetRotationX(pNum, -90.0f);
+            //こけたアニメーションを再生
+            m_player->SetAnimationSrip(pNum);
         }
     }
 }
@@ -538,8 +602,8 @@ void Stage::BlueBlock(const int pNum)
     if (m_flagAnimationBlueBlock[pNum] == false) {
         m_flagAnimationBlueBlock[pNum] = true;
         m_activeOperationVersionBlue[pNum] = false;
-        //モデルを回転させる。
-        m_player->SetRotationX(pNum, -90.0f);
+        //溺れているアニメーションを再生
+        m_player->SetAnimationFall(pNum);
     }
 
     if (stop == false) {
@@ -552,6 +616,7 @@ void Stage::BlueBlock(const int pNum)
 void Stage::BlueBlockAnimation(const int pNum)
 {
     ++m_timerAnimationBlueBlock[pNum];
+    m_player->DownPositionY(pNum, 30.0f);
 
     //前の位置に戻すためにフラグをfalseにする。
     if (m_timerAnimationBlueBlock[pNum] >= TIME_BLUE_BLOCK_ANIMATION) {
@@ -560,7 +625,8 @@ void Stage::BlueBlockAnimation(const int pNum)
         //プレイヤーを操作できるようにする。
         m_activeOperationVersionBlue[pNum] = true;
         //モデルを元に戻す。
-        m_player->SetRotationX(pNum, con::FLOAT_ZERO);
+        m_player->ResetPositionY(pNum);
+        m_player->SetAnimationIdle(pNum);
     }
 }
 
@@ -587,7 +653,7 @@ void Stage::GoalBlock()
     bool addNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
     int nextRank = con::INIT_ZERO; //次のプレイヤーの順位
 
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         //プレイヤーの順位を確定
         if (m_player->GetActivePlayer(playerNum) == true && m_playerBlockPosition[playerNum] == m_MAX_BLOCK - 1) {
             //プレイヤーの操作をできないようにする。
@@ -639,7 +705,7 @@ void Stage::NextRound()
     //黄色８個
 
     //モデルの作成
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             //m_modelGreenBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
@@ -654,7 +720,7 @@ void Stage::NextRound()
     }
 
     //モデルの描画
-    for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_playerBlockPosition[playerNum] = 0;
         DrawBlock(playerNum);
     }
@@ -666,12 +732,12 @@ void Stage::NextRound()
     //BGMの再生
     m_bgm->Play(true);
 
-    /*for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+    /*for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_player->SetFlagGoal(playerNum, false);
     }*/
 
     //変数の値のリセット
-    for (int i = 0; i < con::playerNumberMax; i++) {
+    for (int i = 0; i < con::PlayerNumberMax; i++) {
         m_playerBlockPosition[i] = m_START_BLOCK;
         m_playerBeforeBlockPosition[i] = m_START_BLOCK;
         //m_stageData[i][m_MAX_BLOCK] = greenBlock; 
@@ -795,7 +861,7 @@ void Stage::Length()
         }
 
         if (j - t >= 20) {
-            for (int playerNum = con::player_1; playerNum < con::playerNumberMax; playerNum++) {
+            for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
                 m_player->SetFlagGoal(playerNum, true);
             }
         }
