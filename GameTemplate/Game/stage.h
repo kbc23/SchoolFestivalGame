@@ -208,7 +208,7 @@ public: //enum
         
 
 private: //constant
-    static const int m_MAX_BLOCK = 20;      //１レーンのブロックの最大数
+    static const int m_MAX_BLOCK = 40;      //１レーンのブロックの最大数
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
     static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
     
@@ -289,6 +289,7 @@ private: //data menber
     int m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
     int n = 0;          //ゴールしたプレイヤーの数
     int m = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
+    bool m_allMiss = false;     //プレイヤー全員がミスをしているか
 
     ///////////////////////////////////////////////////////////
     // Length

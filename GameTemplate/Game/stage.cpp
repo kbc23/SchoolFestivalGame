@@ -728,11 +728,52 @@ void Stage::GoalBlock()
     
     if (rule1NewGO == true) {
         if (1 <= n) {
+            //プレイヤーの操作をできないようにする。
+            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+                m_player->SetActivePlayer(playerNum, false);
+            }
             ++m;
             if (m == 120) {
                 NextRound();
                 n = 0;
                 m = 0;
+            }
+        }
+        //他のプレイヤーが全員ミスをしているとき
+        else {
+            int count = 0;
+
+            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+                if (m_activeOperation[playerNum] == false || m_activeOperationVersionBlue[playerNum] == false) {
+                    ++count;
+                }
+            }
+
+            //３人ミスのとき
+            if (count == 3) {
+                for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+                    if (m_activeOperation[playerNum] == true && m_activeOperationVersionBlue[playerNum] == true) {
+                        //順位を確定
+                        m_player->SetGoalRanking(playerNum, 1);
+
+                        if (rule1NewGO == true) {
+                            n += 1;
+                        }
+                    }
+
+                    m_player->SetActivePlayer(playerNum, false);
+                    //ゴールした状態にする。
+                    m_player->SetFlagGoal(playerNum, true);
+                }
+            }
+
+            //４人ミスのとき
+            if (count == 4) {
+                //次のラウンドにいく
+                if (rule1NewGO == true) {
+                    n += 1;
+                    m_allMiss = true;
+                }
             }
         }
     }
@@ -744,17 +785,20 @@ void Stage::GoalBlock()
 
 void Stage::NextRound()
 {  
-    //プレイヤーのラウンド勝利ポイント
-    for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-        if (m_player->GetGoalRanking(playerNum) == 1) {
-            m_player->AddRoundPoint(playerNum);
+
+    if (m_allMiss == false) {
+        //プレイヤーのラウンド勝利ポイント
+        for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+            if (m_player->GetGoalRanking(playerNum) == 1) {
+                m_player->AddRoundPoint(playerNum);
+            }
         }
     }
-
     
     if (m_player->GetFinishSuddenDeath() == true) {
         return;
     }
+
 
 
     //ステージを作成
@@ -821,10 +865,12 @@ void Stage::NextRound()
     Playermember = 0;
 
     
-    n = 0;         
-    m = 0;          
-    j = 0;          
-    t = 0;          
+    n = 0;
+    m = 0;
+    j = 0;
+    t = 0;
+
+    m_allMiss = false;
 
     //別のクラスのNextRound()を呼び出す。
     m_score = FindGO<Score>(igo::CLASS_NAME_SCORE);
@@ -836,97 +882,215 @@ void Stage::NextRound()
 
 void Stage::Length()
 {
-    if (rule1NewGO == true) {
+    if (rule1NewGO == false) {
+        return;
+    }
 
-        if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
-            if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
-                if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
+    if (1 <= n) {
+        return;
+    }
 
-                    j = m_playerBlockPosition[0];   //player_1が1番進んでいる
-
-                    if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
-                        if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
-                            t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
-                        }
-                    }
-                    else {
-                        if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
-                            t = m_playerBlockPosition[2];   //player_3が二番目に進んでいる
-                        }
-                        else {
-                            t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
-                        }
-                    }
-
-                }
-
-            }
-        }
-        else {
-            if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
-                if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
-                    j = m_playerBlockPosition[1];   //player_2が1番進んでいる
-
-                    if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
-                        if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
-                            t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
-                        }
-                    }
-                    else {
-                        if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
-                            t = m_playerBlockPosition[2];   //player_3が二番目に進んでいる
-                        }
-                        else {
-                            t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
-                        }
-                    }
-
-                }
-            }
-            else {
-                if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
-                    j = m_playerBlockPosition[2]; //player_3が1番進んでいる
-
-                    if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
-                        if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
-                            t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
-                        }
-                    }
-                    else {
-                        if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
-                            t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
-                        }
-                        else {
-                            t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
-                        }
-                    }
-                }
-                else {
-                    j = m_playerBlockPosition[3];
-
-                    if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
-                        if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
-                            t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
-                        }
-                    }
-                    else {
-                        if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
-                            t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
-                        }
-                        else {
-                            t = m_playerBlockPosition[2];   //player_4が二番目に進んでいる
-                        }
-                    }
-                }
-            }
-        }
-
-        if (j - t >= 20) {
-            for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+    if (m_playerBlockPosition[con::player_1] > m_playerBlockPosition[con::player_2] &&
+        m_playerBlockPosition[con::player_1] > m_playerBlockPosition[con::player_3] &&
+        m_playerBlockPosition[con::player_1] > m_playerBlockPosition[con::player_4])
+    {
+        //player_1の判定
+        if ((m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_2] >= 20 ||
+            m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_2] <= -20) &&
+            (m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_3] >= 20 ||
+                m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_3] <= -20) &&
+            (m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_4] >= 20 ||
+                m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_4] <= -20))
+        {
+            //プレイヤーの操作をできないようにする。
+            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+                m_player->SetActivePlayer(playerNum, false);
+                //ゴールした状態にする。
                 m_player->SetFlagGoal(playerNum, true);
+            }
+
+            //順位を確定
+            m_player->SetGoalRanking(con::player_1, 1);
+
+            if (rule1NewGO == true) {
+                n += 1;
             }
         }
     }
+    else if (m_playerBlockPosition[con::player_2] > m_playerBlockPosition[con::player_1] &&
+                m_playerBlockPosition[con::player_2] > m_playerBlockPosition[con::player_3] &&
+                m_playerBlockPosition[con::player_2] > m_playerBlockPosition[con::player_4])
+    {
+        //player_2の判定
+        if ((m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_1] >= 20 ||
+            m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_1] <= -20) &&
+            (m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_3] >= 20 ||
+                m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_3] <= -20) &&
+            (m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_4] >= 20 ||
+                m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_4] <= -20))
+        {
+            //プレイヤーの操作をできないようにする。
+            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+                m_player->SetActivePlayer(playerNum, false);
+                //ゴールした状態にする。
+                m_player->SetFlagGoal(playerNum, true);
+            }
+
+            //順位を確定
+            m_player->SetGoalRanking(con::player_2, 1);
+
+            if (rule1NewGO == true) {
+                n += 1;
+            }
+        }
+    }
+    else if (m_playerBlockPosition[con::player_3] > m_playerBlockPosition[con::player_1] &&
+                m_playerBlockPosition[con::player_3] > m_playerBlockPosition[con::player_2] &&
+                m_playerBlockPosition[con::player_3] > m_playerBlockPosition[con::player_4])
+    {
+        //player_3の判定
+        if ((m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_1] >= 20 ||
+            m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_1] <= -20) &&
+            (m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_2] >= 20 ||
+                m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_2] <= -20) &&
+            (m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_4] >= 20 ||
+                m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_4] <= -20))
+        {
+            //プレイヤーの操作をできないようにする。
+            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+                m_player->SetActivePlayer(playerNum, false);
+                //ゴールした状態にする。
+                m_player->SetFlagGoal(playerNum, true);
+            }
+
+            //順位を確定
+            m_player->SetGoalRanking(con::player_3, 1);
+
+            if (rule1NewGO == true) {
+                n += 1;
+            }
+        }
+    }
+    else if (m_playerBlockPosition[con::player_4] > m_playerBlockPosition[con::player_1] &&
+                m_playerBlockPosition[con::player_4] > m_playerBlockPosition[con::player_2] &&
+                m_playerBlockPosition[con::player_4] > m_playerBlockPosition[con::player_3])
+    {
+        //player_4の判定
+        if ((m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_1] >= 20 ||
+            m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_1] <= -20) &&
+            (m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_2] >= 20 ||
+                m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_2] <= -20) &&
+            (m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_3] >= 20 ||
+                m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_3] <= -20))
+        {
+            //プレイヤーの操作をできないようにする。
+            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+                m_player->SetActivePlayer(playerNum, false);
+                //ゴールした状態にする。
+                m_player->SetFlagGoal(playerNum, true);
+            }
+
+            //順位を確定
+            m_player->SetGoalRanking(con::player_4, 1);
+
+            if (rule1NewGO == true) {
+                n += 1;
+            }
+        }
+    }
+
+
+
+    //if (rule1NewGO == true) {
+    //    if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
+    //        if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
+    //            if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
+
+    //                j = m_playerBlockPosition[0];   //player_1が1番進んでいる
+
+    //                if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
+    //                    if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
+    //                        t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
+    //                    }
+    //                }
+    //                else {
+    //                    if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
+    //                        t = m_playerBlockPosition[2];   //player_3が二番目に進んでいる
+    //                    }
+    //                    else {
+    //                        t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
+    //                    }
+    //                }
+
+    //            }
+
+    //        }
+    //    }
+    //    else {
+    //        if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
+    //            if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
+    //                j = m_playerBlockPosition[1];   //player_2が1番進んでいる
+
+    //                if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
+    //                    if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
+    //                        t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
+    //                    }
+    //                }
+    //                else {
+    //                    if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
+    //                        t = m_playerBlockPosition[2];   //player_3が二番目に進んでいる
+    //                    }
+    //                    else {
+    //                        t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
+    //                    }
+    //                }
+
+    //            }
+    //        }
+    //        else {
+    //            if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
+    //                j = m_playerBlockPosition[2]; //player_3が1番進んでいる
+
+    //                if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
+    //                    if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
+    //                        t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
+    //                    }
+    //                }
+    //                else {
+    //                    if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
+    //                        t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
+    //                    }
+    //                    else {
+    //                        t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
+    //                    }
+    //                }
+    //            }
+    //            else {
+    //                j = m_playerBlockPosition[3];
+
+    //                if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
+    //                    if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
+    //                        t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
+    //                    }
+    //                }
+    //                else {
+    //                    if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
+    //                        t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
+    //                    }
+    //                    else {
+    //                        t = m_playerBlockPosition[2];   //player_4が二番目に進んでいる
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    if (j - t >= 20) {
+    //        for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+    //            m_player->SetFlagGoal(playerNum, true);
+    //        }
+    //    }
+    //}
 }
 
 //////////////////////////////

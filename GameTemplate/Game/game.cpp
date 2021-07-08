@@ -492,6 +492,24 @@ void Game::ResultScene() {
     m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
     m_flagStartCountdown = true;
 
+    switch (m_resultselect) {
+    case 0:
+        NewGOGameScene();
+        m_gameStatus = GameStatus::loadingGame;
+        m_loadStatus = LoadingStatus::preparingForLoading;
+        break;
+    case 1:
+        NewGOPlayerSelectScene();
+        m_gameStatus = GameStatus::playerSelect;
+        break;
+    case 2:
+        NewGOModeSelectScene();
+        m_gameStatus = GameStatus::modeSelect;
+        break;
+    case 3:
+        exit(EXIT_SUCCESS);
+        break;
+    }
 }
 
 void Game::NextRound()
