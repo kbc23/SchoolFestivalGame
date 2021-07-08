@@ -340,7 +340,7 @@ void Game::Loading()
     m_player = NewGO<Player>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PLAYER);
     m_enemyAI = NewGO<EnemyAI>(igo::PRIORITY_CLASS, igo::CLASS_NAME_ENEMYAI);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
-    m_score = NewGO<Score>(igo::PRIORITY_CLASS);
+    m_score = NewGO<Score>(igo::PRIORITY_CLASS, igo::CLASS_NAME_SCORE);
     m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FONT);
     m_fontStartCountdown->Init(L"");
 
@@ -387,7 +387,6 @@ void Game::GameScene()
         StartCountdown();
         return;
     }
-
     NewGOResultScene();
     for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
         m_result->SetRank(playerNum, m_rank[playerNum]);

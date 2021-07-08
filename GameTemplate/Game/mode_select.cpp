@@ -101,7 +101,7 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
             return;
         }
 
-        m_game->m_ruleSelect = false;
+        m_game->SetRuleSelect(false);
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
@@ -121,7 +121,7 @@ void ModeSelect::SelectTheNumberOfCPUStrength()
             return;
         }
 
-        m_game->m_ruleSelect = true;
+        m_game->SetRuleSelect(true);
 
         m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);

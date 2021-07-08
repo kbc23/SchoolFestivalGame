@@ -78,6 +78,11 @@ public:
 	*/
 	void NextRound();
 
+	////////////////////////////////////////////////////////////
+	// サドンデスモードの関数
+	////////////////////////////////////////////////////////////
+	void SuddenDeathRank();
+
 
 public: //Get関数
 	/**
@@ -125,6 +130,21 @@ public: //Get関数
 	bool GetModel(int pNum)//ゲーム終了
 	{
 		return m_modelRender[pNum];
+	}
+
+	const int& GetGoalRanking(const int& pNum)
+	{
+		return m_goalRanking[pNum];
+	}
+
+	const int& GetRoundPoint(const int& pNum)
+	{
+		return m_roundPoint[pNum];
+	}
+
+	const bool& GetFinishSuddenDeath()
+	{
+		return m_finishSuddenDeath;
 	}
 
 public: //Set関数
@@ -232,6 +252,21 @@ public: //Set関数
 		m_seJump->Play(false);
 	}//tuika
 
+
+	void AddRoundPoint(const int& pNum)
+	{
+		++m_roundPoint[pNum];
+
+		if (m_roundPoint[pNum] == 3) {
+			m_finishSuddenDeath = true;
+		}
+	}
+
+	//void SetFinishSuddenDeath(const bool& b)
+	//{
+	//	m_finishSuddenDeath = b;
+	//}
+
 private: //enum
 	enum AnimationEnum
 	{
@@ -293,6 +328,14 @@ private: //data menber
 
 	int m_goalPlayerZero = 0;
 
+
+
+	////////////////////////////////////////////////////////////
+	// サドンデスモードのメンバ変数
+	////////////////////////////////////////////////////////////
+
+	int m_roundPoint[con::PlayerNumberMax] = { 0,0,0,0 };		//プレイヤーのラウンドのポイント
+	bool m_finishSuddenDeath = false;							//サドンデスモードが終了したか
 
 public:
 	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、

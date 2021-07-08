@@ -201,13 +201,16 @@ public: //Set関数
         m_resultselect = i;
     }
 
-    /*void SetRuleSelect(const bool o)
+    void SetRuleSelect(const bool& b)
     {
-        m_ruleSelect = o;
-    }*/
+        m_ruleSelect = b;
+    }
 
-    public:
-        bool m_ruleSelect = false;
+    const bool& GetRuleSelect()
+    {
+        return m_ruleSelect;
+    }
+
 
 private: //enum
     enum class GameStatus
@@ -293,5 +296,7 @@ private: //data menber
     int m_dilevel = 0;//難易度受け取り受け渡し用
     int m_resultselect = 0;//リザルトで何選んだか
     //bool m_ruleSelect = false;
+
+    bool m_ruleSelect = false;
 };
 

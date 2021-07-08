@@ -203,8 +203,6 @@ bool Stage::Start()
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
-    m_score = FindGO<Score>(igo::CLASS_NAME_SCORE);
-
     return true;
 }
 
@@ -674,6 +672,11 @@ void Stage::ReturnBlock(const int pNum)
 
 void Stage::GoalBlock()
 {
+    //仮設置
+    if (m_player->GetFinishSuddenDeath() == true) {
+        return;
+    }
+
     bool addNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
     int nextRank = con::INIT_ZERO; //次のプレイヤーの順位
 
@@ -704,8 +707,8 @@ void Stage::GoalBlock()
     }
     
     if (rule1NewGO == true) {
-        if (m_maxPlayer <= n) {
-            m += 1;
+        if (1 <= n) {
+            ++m;
             if (m == 120) {
                 NextRound();
                 n = 0;
@@ -721,6 +724,19 @@ void Stage::GoalBlock()
 
 void Stage::NextRound()
 {  
+    //プレイヤーのラウンド勝利ポイント
+    for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+        if (m_player->GetGoalRanking(playerNum) == 1) {
+            m_player->AddRoundPoint(playerNum);
+        }
+    }
+
+    
+    if (m_player->GetFinishSuddenDeath() == true) {
+        return;
+    }
+
+
     //ステージを作成
     StageCreate();
 
@@ -749,12 +765,12 @@ void Stage::NextRound()
         DrawBlock(playerNum);
     }
 
-    if (m_bgm->IsPlaying()) {
-        m_bgm->Stop();
-    }
+    //if (m_bgm->IsPlaying()) {
+    //    m_bgm->Stop();
+    //}
 
     //BGMの再生
-    m_bgm->Play(true);
+    //m_bgm->Play(true);
 
     /*for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_player->SetFlagGoal(playerNum, false);
@@ -791,6 +807,7 @@ void Stage::NextRound()
     t = 0;          
 
     //別のクラスのNextRound()を呼び出す。
+    m_score = FindGO<Score>(igo::CLASS_NAME_SCORE);
     m_game->NextRound();
     m_score->NextRound();
     m_player->NextRound();

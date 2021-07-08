@@ -191,13 +191,19 @@ void Player::Update()
 
 	}//henkou
 
-	if (con::PlayerNumberMax == m_goalPlayer) {
+	if (con::PlayerNumberMax == m_goalPlayer || m_finishSuddenDeath == true) {
 		m_fontEnd->Activate();
 		m_endTimer++;
-		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-			m_game->SetRank(playerNum, m_goalRanking[playerNum]);
-		}
 		if (m_endTimer > 180) {
+			//サドンデスモードのとき所持ラウンド勝利数に応じて順位を確定
+			if (rule1NewGO == true) {
+				SuddenDeathRank();
+			}
+
+			for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+				m_game->SetRank(playerNum, m_goalRanking[playerNum]);
+			}
+
 			m_gameEnd = true;
 		}
 	}//henkou
@@ -338,4 +344,23 @@ void Player::NextRound()
 	m_goalPlayer = 0;												
 	fontDeavtive = 0;
 	m_goalPlayerZero = 0;
+}
+
+////////////////////////////////////////////////////////////
+// サドンデスモードの関数
+////////////////////////////////////////////////////////////
+
+void Player::SuddenDeathRank()
+{
+	int Ranking = 1;
+
+	for (int roundPointNum = 3; roundPointNum >= 0; roundPointNum--) {
+		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+			if (m_roundPoint[playerNum] == roundPointNum) {
+				m_goalRanking[playerNum] = Ranking;
+			}
+		}
+
+		++Ranking;
+	}
 }
