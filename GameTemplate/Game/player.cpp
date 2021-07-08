@@ -176,6 +176,10 @@ void Player::Update()
 		else {
 			if (m_flagGoal[playerNum] == false) {
 				m_enemyAI->Move(playerNum);
+				Animation(playerNum);
+			}
+			else {
+				Animation(playerNum);
 			}
 		}
 

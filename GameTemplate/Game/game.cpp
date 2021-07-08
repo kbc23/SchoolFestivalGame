@@ -377,9 +377,32 @@ void Game::NewGOResultScene() {
 // リザルトシーンの処理
 ////////////////////////////////////////////////////////////
 void Game::ResultScene() {
-    /*if (m_result->GetFlagFinish() == false) {
+    if (m_result->GetFlagFinish() == false) {
         return;
     }
-    */
-
+   // m_resultselect = m_result->GetSelect();
+    DeleteGO(m_result);
+    m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground->Init(filePath::dds::BACKGROUND);
+    m_StopOperation = true;
+    m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
+    m_flagStartCountdown = true;
+    switch (m_resultselect) {
+    case 0:
+        NewGOGameScene();
+        m_gameStatus = GameStatus::loadingGame;
+        m_loadStatus = LoadingStatus::preparingForLoading;
+        break;
+    case 1:
+        NewGOPlayerSelectScene();
+        m_gameStatus = GameStatus::playerSelect;
+        break;
+    case 2:
+        NewGOModeSelectScene();
+        m_gameStatus = GameStatus::modeSelect;
+        break;
+    case 3:
+        exit(EXIT_SUCCESS);
+        break;
+    }
 }

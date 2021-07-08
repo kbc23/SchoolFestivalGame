@@ -34,11 +34,11 @@ void EnemyAI::Move(const int pNum) {
 	if (m_player->GetFlagGoal(pNum) == false) {
 
 		DifficultyMove(pNum);
-		m_player->Animation(pNum);
+	//	m_player->Animation(pNum);
 	}
-	else {
+	/*else {
 		m_player->Animation(pNum);
-	}
+	}*/
 }
 
 void EnemyAI::Moverule1(const int pNum) {
@@ -192,11 +192,15 @@ void EnemyAI::AutoController1(const int pNum)
 			return;
 		}
 	}*/
+	
+	
+	m_flagAnimationJump[pNum] = true;
 	//２マス進む
 	if (m_stage->MoveBlock(pNum, MOVE_2) == false) {
 		return;
 	}
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+	
 	m_flagAnimationJump[pNum] = true;
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
 

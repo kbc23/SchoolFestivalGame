@@ -112,6 +112,11 @@ public: //GetŠÖ”
 		return m_gameEnd;
 	}
 
+	bool GetModel(int pNum)//ƒQ[ƒ€I—¹
+	{
+		return m_modelRender[pNum];
+	}
+
 public: //SetŠÖ”
 
 	void DownPositionY(const int& pNum, const float& f)

@@ -187,6 +187,10 @@ public: //Set関数
     {
         m_dilevel = i;
     }
+    void SetResultSelect(const int i)//リザルト選択受け取りtuika
+    {
+        m_resultselect = i;
+    }
 
 
 private: //enum
@@ -263,6 +267,7 @@ private: //data menber
 
     int m_maxPlayer = 0;                        //操作しているプレイヤーの数
     int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
-    int m_dilevel = 0;
+    int m_dilevel = 0;//難易度受け取り受け渡し用
+    int m_resultselect = 0;//リザルトで何選んだか
 };
 
