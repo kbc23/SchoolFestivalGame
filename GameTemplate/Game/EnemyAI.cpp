@@ -88,7 +88,7 @@ void EnemyAI::DifficultyMove(const int pNum) {
 		}
 		break;
 	case 2:
-		if (ran1 < 0) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
+		if (ran1 <= 2) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
 			AutoController1(pNum);
 		}
 		//	else if (ran1 <= 2) {//1割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
