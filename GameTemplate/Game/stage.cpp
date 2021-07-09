@@ -5,7 +5,7 @@
 
 #include "player.h"
 #include "score.h"
-#include "game.h"
+#include "main_processing.h"
 #include "rule1.h"
 
 
@@ -150,9 +150,6 @@ Stage::~Stage()
 
 bool Stage::Start()
 {
-    //ステージを作成
-    StageCreate();
-
     //緑１６個
     //青８個
     //黄色８個
@@ -181,46 +178,154 @@ bool Stage::Start()
         }
     }
 
-    //モデルの描画
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        DrawBlock(playerNum);
-    }
 
     //背景の描画
     m_spriteBackgroundSky = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
     m_spriteBackgroundSky->Init(filePath::dds::BACKGROUND_SKY);
+    m_spriteBackgroundSky->Deactivate();
     m_spriteBackgroundCloud_1 = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
     m_spriteBackgroundCloud_1->Init(filePath::dds::BACKGROUND_CLOUD);
+    m_spriteBackgroundCloud_1->Deactivate();
     m_spriteBackgroundCloud_2 = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
     m_spriteBackgroundCloud_2->Init(filePath::dds::BACKGROUND_CLOUD);
-    m_spriteBackgroundCloud_2->SetPositionX(1280.0f);
+    m_spriteBackgroundCloud_2->Deactivate();
 
     //進行度のUIを作成
     m_spriteDegreeOfProgress = NewGO<SpriteRender>(igo::PRIORITY_UI);
     m_spriteDegreeOfProgress->Init(filePath::dds::DEGREE_OF_PROGRESS);
+    m_spriteDegreeOfProgress->Deactivate();
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_spritePlayerMark[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
         m_spritePlayerMark[playerNum]->Init(filePath::dds::PLAYER_MARK[playerNum]);
+        m_spritePlayerMark[playerNum]->Deactivate();
     }
 
     //BGMの再生
     m_bgm = NewGO<SoundBGM>(0);
-    InitBGM();
-    m_bgm->Play(true);
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
         m_fontPlayerBlockPosition[playerNum]->Init(L"", PLAYER_BLOCK_POSITION_FONT_POSITION[playerNum]);
-        m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
+        m_fontPlayerBlockPosition[playerNum]->Deactivate();
     }
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
     m_rule1 = FindGO<Rule1>(igo::CLASS_NAME_RULE1);
 
-    m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+    m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 
     return true;
+}
+
+void Stage::Init()
+{
+    m_flagProcessing = true;
+
+
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_playerBlockPosition[playerNum] = m_START_BLOCK;
+        m_playerBeforeBlockPosition[playerNum] = m_START_BLOCK;
+        m_activeOperation[playerNum] = true;
+        m_timerReturnOperation[playerNum] = 0;
+        m_resistanceImpossibleOperation[playerNum] = false;
+        m_flagAnimationBlueBlock[playerNum] = false;
+        m_timerAnimationBlueBlock[playerNum] = 0;
+        m_activeOperationVersionBlue[playerNum] = true;
+        m_amountOfMovement[playerNum] = 0;
+        m_flagAnimationJump[playerNum] = false;
+        m_timerAnimation[playerNum] = 0;
+    }
+
+    m_nowRank = m_INIT_RANK;            //プレイヤーの順位データに渡すデータ
+
+    Playermember = 0;
+
+    m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
+    n = 0;          //ゴールしたプレイヤーの数
+    m = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
+    m_allMiss = false;     //プレイヤー全員がミスをしているか
+
+    j = 0;          //一番進んでいる人のブロック数
+    t = 0;          //2番目に進んでいる人のブロック数
+
+
+
+    //ステージを作成
+    StageCreate();
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+            m_modelGreenBlock[playerNum][blockNum]->Deactivate();
+        }
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+            m_modelYellowBlock[playerNum][blockNum]->Deactivate();
+        }
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+            m_modelGoalBlock[playerNum][blockNum]->Deactivate();
+        }
+    }
+
+    //モデルの描画
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        DrawBlock(playerNum);
+    }
+
+    //背景の描画
+    m_spriteBackgroundSky->Activate();
+    m_spriteBackgroundCloud_1->Activate();
+    m_spriteBackgroundCloud_2->Activate();
+    m_spriteBackgroundCloud_1->SetPositionX(0.0f);
+    m_spriteBackgroundCloud_2->SetPositionX(1280.0f);
+
+    //進行度のUIを作成
+    m_spriteDegreeOfProgress->Activate();
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_spritePlayerMark[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+        m_spritePlayerMark[playerNum]->Init(filePath::dds::PLAYER_MARK[playerNum]);
+        m_spritePlayerMark[playerNum]->SetPositionX(0.0f);
+        m_spritePlayerMark[playerNum]->Activate();
+    }
+
+    //BGMの再生
+    InitBGM();
+    m_bgm->Play(true);
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
+        m_fontPlayerBlockPosition[playerNum]->Activate();
+    }
+}
+
+void Stage::Finish()
+{
+    m_flagProcessing = false;
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+            m_modelGreenBlock[playerNum][blockNum]->Deactivate();
+        }
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+            m_modelYellowBlock[playerNum][blockNum]->Deactivate();
+        }
+        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+            m_modelGoalBlock[playerNum][blockNum]->Deactivate();
+        }
+    }
+
+    m_spriteDegreeOfProgress->Deactivate();
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_spritePlayerMark[playerNum]->Deactivate();
+        m_fontPlayerBlockPosition[playerNum]->Deactivate();
+    }
+
+    m_spriteBackgroundSky->Deactivate();
+    m_spriteBackgroundCloud_1->Deactivate();
+    m_spriteBackgroundCloud_2->Deactivate();
+
+    m_bgm->Stop();
 }
 
 void Stage::StageCreate()
@@ -341,6 +446,10 @@ void Stage::InitBGM()
 
 void Stage::Update()
 {
+    if (m_flagProcessing == false) {
+        return;
+    }
+
     //プレイヤーごとの処理
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         CheckBlock(playerNum);

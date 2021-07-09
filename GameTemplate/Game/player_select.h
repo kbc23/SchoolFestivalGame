@@ -3,7 +3,7 @@
 #include "sprite_render.h"
 #include "sound_SE.h"
 
-class Game;
+class MainProcessing;
 
 class PlayerSelect : public IGameObject
 {
@@ -11,6 +11,8 @@ public:
     PlayerSelect();
     ~PlayerSelect();
     bool Start() override final;
+    void Init() override final;
+    void Finish() override final;
     void Update() override final;
     
 
@@ -49,7 +51,7 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
-    Game* m_game = nullptr;
+    MainProcessing* m_game = nullptr;
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     FontRender* m_font = nullptr;
     SoundSE* m_seDecision = nullptr;

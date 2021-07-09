@@ -3,7 +3,7 @@
 #include "font_render.h"
 #include "sound_SE.h"
 
-class Game;
+class MainProcessing;
 
 class ModeSelect : public IGameObject
 {
@@ -12,6 +12,8 @@ public:
     ModeSelect();
     ~ModeSelect();
     bool Start() override final;
+    void Init() override final;
+    void Finish() override final;
     void Update() override final;
 
 
@@ -54,7 +56,7 @@ private: //data menber
     FontRender* m_font = nullptr;
     SoundSE* m_seDecision = nullptr;
     SoundSE* m_seMoveCursor = nullptr;
-    Game* m_game = nullptr;
+    MainProcessing* m_game = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ‚»‚Ì‘¼

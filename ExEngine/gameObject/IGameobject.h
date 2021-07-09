@@ -32,10 +32,21 @@ public:
 	* 適切に初期化を行ってください。
 	*/
 	virtual bool Start() { return true; }
+	virtual void Init()
+	{
+
+	}
+	virtual void Finish()
+	{
+
+	}
 	/*!
 		*@brief	更新
 		*/
-	virtual void Update() {}
+	virtual void Update()
+	{
+
+	}
 	/*!
 	 *@brief	描画
 	*/
@@ -46,11 +57,17 @@ public:
 	/// <summary>
 	/// ポーズ中でも呼ばれるUpdate（更新）
 	/// </summary>
-	virtual void AlwaysUpdate() {};
+	virtual void AlwaysUpdate()
+	{
+
+	};
 	/// <summary>
 	/// ポーズ中にだけ呼ばれるUpdate（更新）
 	/// </summary>
-	virtual void UpdateOnlyPaused() {};
+	virtual void UpdateOnlyPaused()
+	{
+
+	};
 
 public:
 	/*!
@@ -184,7 +201,21 @@ protected:
 	bool m_isNewFromGameObjectManager;	//GameObjectManagerでnewされた。
 	bool m_isRegist = false;							//GameObjectManagerに登録されている？
 	bool m_isActive = true;							//Activeフラグ。
+	
+	
+	//追加
+protected:
+	bool m_flagProcessing = false; //このクラスが毎フレームの処理をおこなうか
+public:
+	const bool& GetFlagProcessing()
+	{
+		return m_flagProcessing;
+	}
 
+	//void SetFlagProcessing(const bool& b)
+	//{
+	//	m_flagProcessing = b;
+	//}
 };
 
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Result.h"
-#include "game.h"
+#include "main_processing.h"
 
 
 
@@ -68,6 +68,8 @@ bool Result::Start() {
 	//背景
 	m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
 	m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
+	m_spriteBackground->Deactivate();
+
 	//アニメーションの設定
 	m_animationPlayer[win].Load(filePath::tka::WIN);
 	m_animationPlayer[stand].Load(filePath::tka::STAND);
@@ -92,25 +94,69 @@ bool Result::Start() {
 	m_seMoveCursor = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seMoveCursor->Init(filePath::se::MOVE_CURSOR);
 
-	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+	//選択肢
+	m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spriteChoices[0]->Init(filePath::dds::COMMAND_PLAY_ONE_MORE_TIME);
+	m_spriteChoices[0]->SetPosition(MODE_SELECT_SPRITE[0]);
+	m_spriteChoices[0]->Deactivate();
+
+	m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spriteChoices[1]->Init(filePath::dds::COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS);
+	m_spriteChoices[1]->SetPosition(MODE_SELECT_SPRITE[1]);
+	m_spriteChoices[1]->Deactivate();
+
+	m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spriteChoices[2]->Init(filePath::dds::COMMAND_CHOOSE_A_RULE);
+	m_spriteChoices[2]->SetPosition(MODE_SELECT_SPRITE[2]);
+	m_spriteChoices[2]->Deactivate();
+
+	m_spriteChoices[3] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spriteChoices[3]->Init(filePath::dds::COMMAND_EXIT_GAME);
+	m_spriteChoices[3]->SetPosition(MODE_SELECT_SPRITE[3]);
+	m_spriteChoices[3]->Deactivate();
+
+	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 	return true;
 }
 
-void Result::Update() {
-	m_spriteChoicesNewGORE = m_spriteChoicesNewGO;
-	SelectDisplay();
-	if (m_flagDecision == true && m_flagFinish == false) {
-		FinishResult();
+void Result::Init()
+{
+	m_flagProcessing = true;
+
+	m_spriteBackground->Activate();
+
+	m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
+	m_spriteChoices[0]->Deactivate();
+	m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[1]->Deactivate();
+	m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[2]->Deactivate();
+	m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[3]->Deactivate();
+
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		InitIndividual(playerNum);
 	}
+
+
+
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_rank[playerNum] = 0;
+	}
+
+	m_spriteChoicesNewGO = false;
+	m_spriteChoicesNewGORE = false;
+
+	m_flagDecision = false;    //決定したかのフラグ
+	m_cursorPosition = 0;//カーソルの場所
+	m_flagFinish = false;      //このクラスでするべき処理が終わったか
 }
 
-bool Result::StartIndividual(const int pNum) {
-	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
+void Result::InitIndividual(const int& pNum)
+{
 	m_modelRender[pNum]->SetPosition(PLAYER_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.2f,0.2f,0.2f });
-
-
+	m_modelRender[pNum]->Activate();
 
 	switch (m_rank[pNum]) {
 	case 1:
@@ -142,6 +188,46 @@ bool Result::StartIndividual(const int pNum) {
 		m_modelRender[pNum]->PlayAnimation(lose);
 		break;
 	}
+}
+
+void Result::Finish()
+{
+	m_flagProcessing = false;
+
+	m_spriteChoices[0]->Deactivate();
+	m_spriteChoices[1]->Deactivate();
+	m_spriteChoices[2]->Deactivate();
+	m_spriteChoices[3]->Deactivate();
+
+	m_spriteBackground->Deactivate();
+
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_modelRender[playerNum]->Deactivate();
+		DeleteGO(m_spriteGoalRank[playerNum]);
+	}
+}
+
+void Result::Update()
+{
+	if (m_flagProcessing == false) {
+		return;
+	}
+
+	m_spriteChoicesNewGORE = m_spriteChoicesNewGO;
+	SelectDisplay();
+	if (m_flagDecision == true && m_flagFinish == false) {
+		FinishResult();
+	}
+}
+
+bool Result::StartIndividual(const int pNum) {
+	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
+	m_modelRender[pNum]->Deactivate();
+
+
+
+
 
 	
 

@@ -2,15 +2,17 @@
 #include "model_render.h"
 #include "constant.h"
 class Player;
-class Game;
+class MainProcessing;
 class Stage;
 class EnemyAI : public IGameObject
 {
 public:
 	EnemyAI();
 	~EnemyAI();
-	bool Start();
-	void Update();
+	bool Start() override final;
+	void Init() override final;
+	void Finish() override final;
+	void Update() override final;
 	void Move(const int pNum);
 	void Moverule1(const int pNum);
 
@@ -36,8 +38,10 @@ public://Set関数
 	}
 private:
 	Player* m_player = nullptr;
-	Game* m_game = nullptr;
+	MainProcessing* m_game = nullptr;
 	Stage* m_stage = nullptr;
+
+
 	int m_difficultyLevel = 0;//難易度1簡単2普通3難しい
 	int m_stopCount = 0;//stopのカウント一定でstopがtrue
 

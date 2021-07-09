@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "mode_select.h"
 
-#include "game.h"
+#include "main_processing.h"
 #include "constant.h"
 
 
@@ -48,34 +48,73 @@ bool ModeSelect::Start()
 {
     m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
     m_spriteChoices[0]->Init(filePath::dds::MODE_RACE);
-    m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
+    m_spriteChoices[0]->Deactivate();
+
     m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
     m_spriteChoices[1]->Init(filePath::dds::MODE_SUDDEN_DEATH);
-    m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
-    m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[1]->Deactivate();
 
     m_fontChoices[0] = NewGO<FontRender>(igo::PRIORITY_FONT);
     m_fontChoices[0]->Init(L"誰が最初にゴールにたどり着けるかを競うレース!", { -500.0f,-200.0f });
+    m_fontChoices[0]->Deactivate();
+
     m_fontChoices[1] = NewGO<FontRender>(igo::PRIORITY_FONT);
     m_fontChoices[1]->Init(L"一回ミスをしたらそこで終了!ハラハラドキドキのサドンデス!", { -600.0f,-200.0f });
     m_fontChoices[1]->Deactivate();
 
     m_font = NewGO<FontRender>(igo::PRIORITY_FONT);
     m_font->Init(L"プレイするモードを選択してください", { -500.0f,300.0f }, 1.3f);
-    
+    m_font->Deactivate();
 
     m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seDecision->Init(filePath::se::DECISION);
     m_seMoveCursor = NewGO<SoundSE>(igo::PRIORITY_CLASS);
     m_seMoveCursor->Init(filePath::se::MOVE_CURSOR);
 
-    m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+    m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 
     return true;
 }
 
+void ModeSelect::Init()
+{
+    m_flagProcessing = true;
+
+    m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
+    m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
+    m_spriteChoices[0]->Activate();
+
+    m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
+    m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[1]->Activate();
+
+    m_fontChoices[0]->Activate();
+    m_font->Activate();
+
+    m_cursorPosition = 0;       //カーソルの場所
+    m_numberOfPlayer = 0;       //プレイヤーの人数
+    m_flagDecision = false;    //人数を決定したかのフラグ
+    m_flagFinish = false;      //このクラスでするべき処理が終わったか
+    m_flagMove = true;
+}
+
+void ModeSelect::Finish()
+{
+    m_flagProcessing = false;
+
+    m_spriteChoices[0]->Deactivate();
+    m_spriteChoices[1]->Deactivate();
+    m_fontChoices[0]->Deactivate();
+    m_fontChoices[1]->Deactivate();
+    m_font->Deactivate();
+}
+
 void ModeSelect::Update()
 {
+    if (m_flagProcessing == false) {
+        return;
+    }
+
     SelectTheNumberOfCPUStrength();
 
     if (m_flagDecision == true && m_flagFinish == false) {

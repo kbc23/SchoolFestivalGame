@@ -294,8 +294,9 @@
     <ClCompile Include="EnemyAI.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="font_render.cpp" />
-    <ClCompile Include="game.cpp" />
+    <ClCompile Include="main_processing.cpp" />
     <ClCompile Include="game_camera.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_render.cpp" />
     <ClCompile Include="mode_select.cpp" />
@@ -393,8 +394,9 @@
     <ClInclude Include="EnemyAI.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="font_render.h" />
-    <ClInclude Include="game.h" />
+    <ClInclude Include="main_processing.h" />
     <ClInclude Include="game_camera.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="model_render.h" />
     <ClInclude Include="mode_select.h" />
     <ClInclude Include="Noncopyable.h" />

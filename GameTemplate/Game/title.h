@@ -8,6 +8,8 @@ public:
 	Title();
 	~Title();
 	bool Start() override final;
+	void Init();
+	void Finish();
 	void Update() override final;
 
 private:

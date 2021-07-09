@@ -4,16 +4,19 @@
 #include "font_render.h"
 #include "sound_SE.h"
 #include "constant.h"
-class Game;
+class MainProcessing;
 class Result : public IGameObject
 {
 public:
 	Result();
 	~Result();
-	bool Start();
+	bool Start() override final;
 	bool StartIndividual(const int pNum);
 	void DeleteIndividual(const int pNum);
-	void Update();
+	void Init() override final;
+	void InitIndividual(const int& pNum);
+	void Finish() override final;
+	void Update() override final;
 
 
 	void Display();
@@ -48,7 +51,7 @@ private:
 	};
 
 	AnimationClip m_animationPlayer[Animation_Max];
-	Game* m_game = nullptr;
+	MainProcessing* m_game = nullptr;
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示する
 	SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };	//選択肢UI表示

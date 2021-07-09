@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "game.h"
+#include "main_processing.h"
 #include "player.h"
 #include "stage.h"
 
@@ -52,15 +52,49 @@ bool Score::Start()
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
         m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
+        m_fontScoreTime[playerNum]->Deactivate();
     }
 
     m_spriteUI = NewGO<SpriteRender>(igo::PRIORITY_UI);
     m_spriteUI->Init(filePath::dds::SCORE_TIME_UI);
+    m_spriteUI->Deactivate();
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
-    m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+    m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 
     return true;
+}
+
+void Score::Init()
+{
+    m_flagProcessing = true;
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_fontScoreTime[playerNum]->Activate();
+    }
+
+    m_spriteUI->Activate();
+
+
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_scoreTime[playerNum] = 0;
+        m_flagScoreTimeProcessing[playerNum] = true;
+        m_scoreTimeMinutes[playerNum] = 0;
+        m_scoreTimeSeconds[playerNum] = 0;
+        m_scoreTimeCommaSeconds[playerNum] = 0;
+    }
+}
+
+void Score::Finish()
+{
+    m_flagProcessing = false;
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_fontScoreTime[playerNum]->Deactivate();
+    }
+
+    m_spriteUI->Deactivate();
 }
 
 ////////////////////////////////////////////////////////////
@@ -69,12 +103,16 @@ bool Score::Start()
 
 void Score::Update()
 {
+    if (m_flagProcessing == false) {
+        return;
+    }
+
     if (m_game->GetStopOperation() == true) {
         return;
     }
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        if (m_flagProcessing[playerNum] == true) {
+        if (m_flagScoreTimeProcessing[playerNum] == true) {
             AddTime(playerNum);
             FinishTime(playerNum);
             DrawTime(playerNum);
@@ -93,7 +131,7 @@ void Score::FinishTime(const int pNum)
         return;
     }
 
-    m_flagProcessing[pNum] = false;
+    m_flagScoreTimeProcessing[pNum] = false;
 }
 
 void Score::DrawTime(const int pNum)
@@ -151,7 +189,7 @@ void Score::NextRound()
 {
     for (int i = 0; i < con::PlayerNumberMax; i++) {
         m_scoreTime[i] = 0;
-        m_flagProcessing[i] = true;
+        m_flagScoreTimeProcessing[i] = true;
         m_scoreTimeMinutes[i] = 0;
         m_scoreTimeSeconds[i] = 0;
         m_scoreTimeCommaSeconds[i] = 0;
