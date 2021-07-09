@@ -865,7 +865,9 @@ void Stage::NextRound()
         m_activeOperationVersionBlue[i] = true;
         m_amountOfMovement[i] = 0;
         m_flagAnimationJump[i] = false;
-        m_timerAnimation[i] = 0;	
+        m_timerAnimation[i] = 0;
+
+        m_enemyAI->SetmissInvalidCount(i, 0);
         //m_maxPlayer = i;	
     }
 
