@@ -250,14 +250,14 @@ public: //Set関数
 	 * @brief cpuがジャンプ中か判定する変数のSet関数
 	 * @param i ジャンプ中か真偽判定
 	*/
-	void SetFlagAnimationJump(int pNum, const bool i)
+	void SetFlagAnimationJump(const int& pNum, const bool& i)
 	{
 		m_flagAnimationJump[pNum] = i;
 		m_seJump->Play(false);
 	}//tuika
 
 
-	void SetCPUJumpFlag(int pNum,bool i) {
+	void SetCPUJumpFlag(const int& pNum, const bool& i) {
 		m_EJumpFlag[pNum] = i;
 	}
 
@@ -269,11 +269,11 @@ public: //Set関数
 			m_finishSuddenDeath = true;
 		}
 	}
-	void SetDifficultyLevel(int i) {//難易度
+	void SetDifficultyLevel(const int& i) {//難易度
 		m_difficultyLevel = i;
 	}
 
-	void SetBlueMiss(int pNum, bool i) {
+	void SetBlueMiss(const int& pNum,const  bool& i) {
 		m_bluemiss[pNum] = i;
 	}
 private: //enum

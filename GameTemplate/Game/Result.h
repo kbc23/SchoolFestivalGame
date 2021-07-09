@@ -29,14 +29,14 @@ public:
 
 
 public://GetŠÖ”
-	bool GetFlagFinish() {
+	bool& GetFlagFinish() {
 		return m_flagFinish;
 	}
 	bool GetSelect() {
 		return m_cursorPosition;
 	}
 public://SetŠÖ”
-	void SetRank(int pNum, int rank) {
+	void SetRank(const int& pNum, const int& rank) {
 		m_rank[pNum] = rank;
 	}
 private:

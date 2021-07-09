@@ -31,10 +31,10 @@ public: //Get関数
 	}*/
 public://Set関数
 	//難易度受け取り
-	void SetDifficultyLevel(int i) {
+	void SetDifficultyLevel(const int& i) {
 		m_difficultyLevel = i;
 	}
-	void SetmissInvalidCount(int pNum,int i) {
+	void SetmissInvalidCount(const int& pNum, const int& i) {
 		m_missInvalidCount[pNum] = i;
 	}
 	//青ブロックでミスしたか受け取り
