@@ -7,6 +7,7 @@ class Game;
 class Player;
 class Stage;
 class Rule1;
+class Pause;
 
 class Score : public IGameObject
 {
@@ -58,6 +59,7 @@ private: //data menber
     SpriteRender* m_spriteUI = nullptr;
     FontRender* m_fontScoreTime[con::PlayerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
     Stage* m_stage = nullptr;
+    Pause* m_pause = nullptr;
 
     ////////////////////////////////////////////////////////////
     // スコアタイム関連

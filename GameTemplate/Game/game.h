@@ -19,6 +19,7 @@ class Rule1;
 class EnemyAI;
 class Result;
 class Mode_select;
+class Pause;
 
 class Game : public IGameObject
 {
@@ -266,6 +267,7 @@ private: //data menber
     SoundSE* m_seGameStart = nullptr;
     EnemyAI* m_enemyAI = nullptr;
     Result* m_result = nullptr;
+    Pause* m_pause = nullptr;
     
 
     ////////////////////////////////////////////////////////////

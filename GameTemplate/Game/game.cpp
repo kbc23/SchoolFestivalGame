@@ -13,6 +13,7 @@
 #include "EnemyAI.h"
 #include "Result.h"
 #include "mode_select.h"
+#include "pause.h"
 
 
 
@@ -333,6 +334,7 @@ void Game::PreparingForLoading()
 
 void Game::Loading()
 {
+    m_pause = NewGO<Pause>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PAUSE);
     m_stage = NewGO<Stage>(igo::PRIORITY_CLASS, igo::CLASS_NAME_STAGE);
     if (m_ruleSelect==true) {
         m_rule1 = NewGO<Rule1>(igo::PRIORITY_CLASS, igo::CLASS_NAME_RULE1);

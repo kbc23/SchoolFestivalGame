@@ -6,6 +6,7 @@
 #include "game.h"
 #include "player.h"
 #include "stage.h"
+#include "pause.h"
 
 namespace //constant
 {
@@ -59,6 +60,7 @@ bool Score::Start()
 
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+    m_pause = FindGO<Pause>(igo::CLASS_NAME_PAUSE);
 
     return true;
 }
@@ -69,15 +71,17 @@ bool Score::Start()
 
 void Score::Update()
 {
-    if (m_game->GetStopOperation() == true) {
-        return;
-    }
+    if (m_pause->GetPauseFlag() == false) {
+        if (m_game->GetStopOperation() == true) {
+            return;
+        }
 
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        if (m_flagProcessing[playerNum] == true) {
-            AddTime(playerNum);
-            FinishTime(playerNum);
-            DrawTime(playerNum);
+        for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+            if (m_flagProcessing[playerNum] == true) {
+                AddTime(playerNum);
+                FinishTime(playerNum);
+                DrawTime(playerNum);
+            }
         }
     }
 }
