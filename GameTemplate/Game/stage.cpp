@@ -210,6 +210,16 @@ bool Stage::Start()
         m_fontPlayerBlockPosition[playerNum]->Deactivate();
     }
 
+    //ラウンドのUI
+    for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int roundNum = 0; roundNum < 3; roundNum++) {
+            m_spriteRoundWin[playerNum][roundNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+            m_spriteRoundWin[playerNum][roundNum]->Init(filePath::dds::ROUND_WIN[playerNum][roundNum]);
+            m_spriteRoundWin[playerNum][roundNum]->Deactivate();
+        }
+    }
+    
+
     m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
     m_rule1 = FindGO<Rule1>(igo::CLASS_NAME_RULE1);
@@ -285,7 +295,6 @@ void Stage::Init()
 
     //進行度のUIを作成
     m_spriteDegreeOfProgress->Activate();
-
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_spritePlayerMark[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
         m_spritePlayerMark[playerNum]->Init(filePath::dds::PLAYER_MARK[playerNum]);
@@ -301,6 +310,14 @@ void Stage::Init()
         m_fontPlayerBlockPosition[playerNum]->SetText(m_playerBlockPosition[playerNum] + 1);
         m_fontPlayerBlockPosition[playerNum]->Activate();
     }
+
+    //ラウンドのUI
+    for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int roundNum = 0; roundNum < 3; roundNum++) {
+            m_spriteRoundWin[playerNum][roundNum]->Deactivate();
+        }
+    }
+
 }
 
 void Stage::Finish()
@@ -324,6 +341,14 @@ void Stage::Finish()
         m_spritePlayerMark[playerNum]->Deactivate();
         m_fontPlayerBlockPosition[playerNum]->Deactivate();
     }
+
+    //ラウンドのUI
+    for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int roundNum = 0; roundNum < 3; roundNum++) {
+            m_spriteRoundWin[playerNum][roundNum]->Deactivate();
+        }
+    }
+
 
     m_spriteBackgroundSky->Deactivate();
     m_spriteBackgroundCloud_1->Deactivate();
@@ -474,6 +499,9 @@ void Stage::Update()
 
     //背景の描画
     DrawBackground();
+
+    //ラウンド勝利数の描画
+    DrawRoundWin();
 
     //ゴール時の処理
     GoalBlock();
@@ -658,6 +686,21 @@ void Stage::DrawBackground()
     if (m_spriteBackgroundCloud_1->GetPosition().x <= -1280.0f) {
         m_spriteBackgroundCloud_1->SetPositionX(0.0f);
         m_spriteBackgroundCloud_2->SetPositionX(1280.0f);
+    }
+}
+
+void Stage::DrawRoundWin()
+{
+    if (rule1NewGO == false) {
+        return;
+    }
+
+    //ラウンドのUI
+    for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+        for (int roundNum = 0; roundNum < 3; roundNum++) {
+            if(roundNum < m_player->GetRoundPoint(playerNum))
+            m_spriteRoundWin[playerNum][roundNum]->Activate();
+        }
     }
 }
 
@@ -1120,99 +1163,6 @@ void Stage::Length()
             }
         }
     }
-
-
-
-    //if (rule1NewGO == true) {
-    //    if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
-    //        if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
-    //            if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
-
-    //                j = m_playerBlockPosition[0];   //player_1が1番進んでいる
-
-    //                if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
-    //                    if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
-    //                        t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
-    //                    }
-    //                }
-    //                else {
-    //                    if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
-    //                        t = m_playerBlockPosition[2];   //player_3が二番目に進んでいる
-    //                    }
-    //                    else {
-    //                        t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
-    //                    }
-    //                }
-
-    //            }
-
-    //        }
-    //    }
-    //    else {
-    //        if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
-    //            if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
-    //                j = m_playerBlockPosition[1];   //player_2が1番進んでいる
-
-    //                if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
-    //                    if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
-    //                        t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
-    //                    }
-    //                }
-    //                else {
-    //                    if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
-    //                        t = m_playerBlockPosition[2];   //player_3が二番目に進んでいる
-    //                    }
-    //                    else {
-    //                        t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
-    //                    }
-    //                }
-
-    //            }
-    //        }
-    //        else {
-    //            if (m_playerBlockPosition[2] > m_playerBlockPosition[3]) {
-    //                j = m_playerBlockPosition[2]; //player_3が1番進んでいる
-
-    //                if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
-    //                    if (m_playerBlockPosition[0] > m_playerBlockPosition[3]) {
-    //                        t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
-    //                    }
-    //                }
-    //                else {
-    //                    if (m_playerBlockPosition[1] > m_playerBlockPosition[3]) {
-    //                        t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
-    //                    }
-    //                    else {
-    //                        t = m_playerBlockPosition[3];   //player_4が二番目に進んでいる
-    //                    }
-    //                }
-    //            }
-    //            else {
-    //                j = m_playerBlockPosition[3];
-
-    //                if (m_playerBlockPosition[0] > m_playerBlockPosition[1]) {
-    //                    if (m_playerBlockPosition[0] > m_playerBlockPosition[2]) {
-    //                        t = m_playerBlockPosition[0];   //player_1が二番目に進んでいる
-    //                    }
-    //                }
-    //                else {
-    //                    if (m_playerBlockPosition[1] > m_playerBlockPosition[2]) {
-    //                        t = m_playerBlockPosition[1];   //player_2が二番目に進んでいる
-    //                    }
-    //                    else {
-    //                        t = m_playerBlockPosition[2];   //player_4が二番目に進んでいる
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    if (j - t >= 20) {
-    //        for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-    //            m_player->SetFlagGoal(playerNum, true);
-    //        }
-    //    }
-    //}
 }
 
 //////////////////////////////

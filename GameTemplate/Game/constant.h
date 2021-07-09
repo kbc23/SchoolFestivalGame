@@ -101,6 +101,29 @@ namespace filePath
 			"Assets/Image/Player_mark_3.dds",
 			"Assets/Image/Player_mark_4.dds"
 		};
+		//ƒ‰ƒEƒ“ƒh
+		constexpr const char* ROUND_WIN[con::PlayerNumberMax][3] = {
+			{
+			"Assets/Image/round_p1_1.dds",
+			"Assets/Image/round_p1_2.dds",
+			"Assets/Image/round_p1_3.dds",
+			},
+			{
+			"Assets/Image/round_p2_1.dds",
+			"Assets/Image/round_p2_2.dds",
+			"Assets/Image/round_p2_3.dds",
+			},
+			{
+			"Assets/Image/round_p3_1.dds",
+			"Assets/Image/round_p3_2.dds",
+			"Assets/Image/round_p3_3.dds",
+			},
+			{
+			"Assets/Image/round_p4_1.dds",
+			"Assets/Image/round_p4_2.dds",
+			"Assets/Image/round_p4_3.dds",
+			}
+		};
 		//Œ‹‰Ê‰æ–ÊŒã‚Ì‘I‘ð‰æ–Ê‚ÌUI
 		constexpr const char* COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
 		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players.dds";

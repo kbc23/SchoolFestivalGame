@@ -67,6 +67,8 @@ private:
 
     void DrawBackground();
 
+    void DrawRoundWin();
+
     //////////////////////////////
     // タイマー
     //////////////////////////////
@@ -246,6 +248,8 @@ private: //data menber
     
     SpriteRender* m_spriteDegreeOfProgress = nullptr;
     SpriteRender* m_spritePlayerMark[con::PlayerNumberMax] = { nullptr };
+
+    SpriteRender* m_spriteRoundWin[con::PlayerNumberMax][3] = { nullptr };
 
     MainProcessing* m_game = nullptr;
 
