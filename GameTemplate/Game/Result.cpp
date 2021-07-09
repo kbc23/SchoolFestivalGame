@@ -57,7 +57,7 @@ Result::~Result() {
 void Result::DeleteIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
-
+	DeleteGO(m_spritePressAButton);
 	DeleteGO(m_modelRender[pNum]);
 	DeleteGO(m_spriteGoalRank[pNum]);
 	DeleteGO(m_spriteChoices[pNum]);
@@ -102,9 +102,28 @@ void Result::Update() {
 	if (m_flagDecision == true && m_flagFinish == false) {
 		FinishResult();
 	}
+	//Press_A_Buttonの点滅処理
+	if (m_flagBlinking == true) {
+		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() - 0.02f);
+
+		if (m_spritePressAButton->GetMulColorW() <= 0.0f) {
+			m_flagBlinking = false;
+		}
+	}
+	else {
+		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() + 0.02f);
+
+		if (m_spritePressAButton->GetMulColorW() >= 0.8f) {
+			m_flagBlinking = true;
+		}
+	}
 }
 
 bool Result::StartIndividual(const int pNum) {
+	m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spritePressAButton->Init(filePath::dds::PRESS_A_BUTTON);
+	m_spritePressAButton->SetPosition({ 0.0f,200.0f });
+	m_spritePressAButton->SetMulColorW(0.0f);
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
 	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_POSITION[pNum]);
@@ -160,6 +179,8 @@ void Result::AnimationDisplay() {
 void Result::SelectDisplay() {
 	if (g_pad[0]->IsTrigger(enButtonA) == true && m_spriteChoicesNewGO == false) {
 		m_spriteChoicesNewGO = true;
+
+		DeleteGO(m_spritePressAButton);
 
 
 		m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
