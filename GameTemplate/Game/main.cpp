@@ -2,7 +2,7 @@
 #include "system/system.h"
 #include "sound_engine.h"
 
-#include "game.h"
+#include "main_processing.h"
 
 //作業が終わったら、Get関数、Set関数をconst参照に変更しておくこと
 
@@ -36,7 +36,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	SoundEngine::CreateInstance(); //サウンドエンジン
 	EffectEngine::CreateInstance(); //エフェクトエンジン
 
-	Game* game = NewGO<Game>(igo::PRIORITY_CLASS, igo::CLASS_NAME_GAME);
+	MainProcessing* game = NewGO<MainProcessing>(igo::PRIORITY_CLASS, igo::CLASS_NAME_GAME);
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

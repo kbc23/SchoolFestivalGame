@@ -8,7 +8,7 @@
 
 class Player;
 class Score;
-class Game;
+class MainProcessing;
 class Rule1;
 class EnemyAI;
 class Pause;
@@ -19,6 +19,8 @@ public:
     Stage();
     ~Stage();
     bool Start() override final;
+    void Init() override final;
+    void Finish() override final;
     void Update() override final;
 
 
@@ -246,7 +248,7 @@ private: //data menber
     SpriteRender* m_spriteDegreeOfProgress = nullptr;
     SpriteRender* m_spritePlayerMark[con::PlayerNumberMax] = { nullptr };
 
-    Game* m_game = nullptr;
+    MainProcessing* m_game = nullptr;
 
     
 

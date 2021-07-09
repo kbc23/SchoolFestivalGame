@@ -14,6 +14,8 @@ Pause::~Pause()
 bool Pause::Start()
 {
 	return true;
+
+    return true;
 }
 
 void Pause::Update()

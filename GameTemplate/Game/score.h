@@ -3,7 +3,7 @@
 #include "font_render.h"
 #include "constant.h"
 
-class Game;
+class MainProcessing;
 class Player;
 class Stage;
 class Rule1;
@@ -15,6 +15,8 @@ public:
     Score();
     ~Score();
     bool Start() override final;
+    void Init() override final;
+    void Finish() override final;
 
     ////////////////////////////////////////////////////////////
     // 毎フレームの処理
@@ -55,7 +57,7 @@ private: //data menber
     ////////////////////////////////////////////////////////////
     
     Player* m_player = nullptr;
-    Game* m_game = nullptr;
+    MainProcessing* m_game = nullptr;
     SpriteRender* m_spriteUI = nullptr;
     FontRender* m_fontScoreTime[con::PlayerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
     Stage* m_stage = nullptr;
@@ -67,7 +69,7 @@ private: //data menber
 
     int m_scoreTime[con::PlayerNumberMax] = { 0,0,0,0 };                     //スコアタイムのカウント
 
-    bool m_flagProcessing[con::PlayerNumberMax] = { true,true,true,true };   //スコアタイムのカウントの処理をおこなっているか
+    bool m_flagScoreTimeProcessing[con::PlayerNumberMax] = { true,true,true,true };   //スコアタイムのカウントの処理をおこなっているか
 
     int m_scoreTimeMinutes[con::PlayerNumberMax] = { 0,0,0,0 };              //分
     int m_scoreTimeSeconds[con::PlayerNumberMax] = { 0,0,0,0 };              //秒

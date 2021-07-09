@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "player.h"
 
-#include "game.h"
+#include "main_processing.h"
 #include "EnemyAI.h"
 #include "stage.h"
 #include "rule1.h"
@@ -138,7 +138,7 @@ bool Player::Start()
 	m_seSrip->SetVolume(0.7f);
 
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
-	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 	m_enemyAI = FindGO<EnemyAI>(igo::CLASS_NAME_ENEMYAI);//tuika
 	m_rule1 = FindGO<Rule1>(igo::CLASS_NAME_RULE1);
 
@@ -151,9 +151,7 @@ bool Player::StartIndividual(const int pNum)
 
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
 	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
-	m_modelRender[pNum]->SetPosition(PLAYER_START_POSITION[pNum]);
-	m_modelRender[pNum]->SetScale({ 0.03f,0.03f,0.03f });
-	m_modelRender[pNum]->PlayAnimation(idle);
+	m_modelRender[pNum]->Deactivate();
 	
 	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
 	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
@@ -162,12 +160,73 @@ bool Player::StartIndividual(const int pNum)
 	return true;
 }
 
+void Player::Init()
+{
+	m_flagProcessing = true;
+
+	m_fontEnd->Deactivate();
+
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_modelRender[playerNum]->SetPosition(PLAYER_START_POSITION[playerNum]);
+		m_modelRender[playerNum]->SetScale({ 0.03f,0.03f,0.03f });
+		m_modelRender[playerNum]->PlayAnimation(idle);
+		m_modelRender[playerNum]->Activate();
+
+		m_fontGoalRank[playerNum]->Deactivate();
+	}
+
+	
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_activePlayer[playerNum] = true;
+		m_goalRanking[playerNum] = 0;
+		m_flagGoal[playerNum] = false;
+		m_flagAnimationJump[playerNum] = false;
+		m_timerAnimation[playerNum] = 0;
+		m_roundPoint[playerNum] = 0;
+		m_EJumpFlag[playerNum] = false;
+	}
+
+	m_maxPlayer = con::PlayerNumberMax;									//プレイヤーの最大数
+
+	m_goalPlayer = 0;
+
+	m_endTimer = 0;//ゴールしてからの時間tuika
+	fontDeavtive = 0;
+
+	m_gameEnd = false;//ゴールしたプレイヤーの人数tuika
+
+	m_goalPlayerZero = 0;
+
+	m_finishSuddenDeath = false;							//サドンデスモードが終了したか
+
+	rule1NewGO = false;
+
+
+}
+
+void Player::Finish()
+{
+	m_flagProcessing = false;
+
+	m_fontEnd->Deactivate();
+
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_modelRender[playerNum]->Deactivate();
+
+		m_fontGoalRank[playerNum]->Deactivate();
+	}
+}
+
 ////////////////////////////////////////////////////////////
 // 毎フレームの処理
 ////////////////////////////////////////////////////////////
 
 void Player::Update()
 {
+	if (m_flagProcessing == false) {
+		return;
+	}
+
 	//プレイヤーごとに操作
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		if (m_maxPlayer > playerNum) {
@@ -226,6 +285,7 @@ void Player::Update()
 			}
 
 			m_gameEnd = true;
+			m_game->SetGameEnd(m_gameEnd);
 		}
 	}//henkou
 
@@ -375,14 +435,19 @@ void Player::NextRound()
 void Player::SuddenDeathRank()
 {
 	int Ranking = 1;
+	bool checkAddRank = false;
 
 	for (int roundPointNum = 3; roundPointNum >= 0; roundPointNum--) {
 		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
 			if (m_roundPoint[playerNum] == roundPointNum) {
 				m_goalRanking[playerNum] = Ranking;
+				checkAddRank = true;
 			}
 		}
 
-		++Ranking;
+		if (checkAddRank == true) {
+			++Ranking;
+			checkAddRank = false;
+		}
 	}
 }

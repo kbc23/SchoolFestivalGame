@@ -4,7 +4,7 @@
 #include "sound_SE.h"
 #include "constant.h"
 
-class Game;
+class MainProcessing;
 class Stage;
 class EnemyAI;//tuika
 class Rule1;
@@ -29,6 +29,9 @@ public:
 	 * @return 処理が正常に終了したかどうか
 	*/
 	bool StartIndividual(const int pNum);
+
+	void Init() override final;
+	void Finish() override final;
 
 	////////////////////////////////////////////////////////////
 	// 毎フレームの処理
@@ -289,7 +292,7 @@ private: //data menber
 	////////////////////////////////////////////////////////////
 
 	Stage* m_stage = nullptr;
-	Game* m_game = nullptr;
+	MainProcessing* m_game = nullptr;
 	EnemyAI* m_enemyAI = nullptr;//tuika
 
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
@@ -339,16 +342,5 @@ private: //data menber
 	bool m_finishSuddenDeath = false;							//サドンデスモードが終了したか
 
 public:
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-	//privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、privateにしろ、
-
 	bool rule1NewGO = false;
 };

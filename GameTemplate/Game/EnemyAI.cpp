@@ -2,7 +2,7 @@
 #include "EnemyAI.h"
 #include "player.h"
 #include "stage.h"
-#include "game.h"
+#include "main_processing.h"
 #include <stdio.h>
 #include <stdlib.h> // rand, srand関数
 #include <time.h>   // time関数
@@ -20,14 +20,40 @@ EnemyAI::~EnemyAI() {
 }
 bool EnemyAI::Start() {
 	m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
-	m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
+	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 
 	return true;
 }
-void EnemyAI::Update() {
 
+void EnemyAI::Init()
+{
+	m_flagProcessing == true;
 
+	for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_activePlayer[playerNum] = false;
+		m_activeOperation[playerNum] = true;
+		m_flagAnimationJump[playerNum] = false;
+		m_flagGoal[playerNum] = false;
+		m_JumpFlag[playerNum] = false;
+	}
+
+	m_difficultyLevel = 0;//難易度1簡単2普通3難しい
+
+	m_maxPlayer = 0;//プレイヤー最大数
+	m_addEnemyNumber = 2;//CPU用番号=2
+}
+
+void EnemyAI::Finish()
+{
+	m_flagProcessing = false;
+}
+
+void EnemyAI::Update()
+{
+	if (m_flagProcessing == false) {
+		return;
+	}
 }
 void EnemyAI::Move(const int pNum) {
 	m_JumpFlag[pNum] = false;
