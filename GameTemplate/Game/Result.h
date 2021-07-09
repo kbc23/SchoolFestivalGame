@@ -56,7 +56,6 @@ private:
 	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示する
 	SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };	//選択肢UI表示
 	SpriteRender* m_spriteBackground =  nullptr ;
-	SpriteRender* m_spritePressAButton = nullptr;	//選択肢UI表示
 	SoundSE* m_seDecision = nullptr;
 	SoundSE* m_seMoveCursor = nullptr;
 
