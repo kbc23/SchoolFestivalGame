@@ -43,6 +43,14 @@ public:
 	{
 		(void)renderContext;
 	}
+	/// <summary>
+	/// ポーズ中でも呼ばれるUpdate（更新）
+	/// </summary>
+	virtual void AlwaysUpdate() {};
+	/// <summary>
+	/// ポーズ中にだけ呼ばれるUpdate（更新）
+	/// </summary>
+	virtual void UpdateOnlyPaused() {};
 
 public:
 	/*!
@@ -111,6 +119,17 @@ public:
 		}
 		return false;
 	}
+
+	static void SetGamePaused(const bool paused)
+	{
+		m_gamePaused = paused;
+	}
+	static const bool GetGamePaused()
+	{
+		return m_gamePaused;
+	}
+
+
 public:
 
 	void RenderWrapper(RenderContext& renderContext)
@@ -135,9 +154,28 @@ public:
 			}
 		}
 	}
+	void AlwaysUpdateWrapper()
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			AlwaysUpdate();
+		}
+	}
+	void UpdateOnlyPausedWrapper()
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			UpdateOnlyPaused();
+		}
+	}
 
 
 	friend class CGameObjectManager;
+
+
+private: //static
+	static bool m_gamePaused;				//ゲームがポーズ中。Updateが呼ばれない。
+
+
+
 protected:
 	std::string m_name;								//ゲームオブジェクトの名前
 	bool m_isStart = false;							//Startの開始フラグ。

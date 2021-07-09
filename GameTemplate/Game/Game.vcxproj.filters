@@ -317,6 +317,15 @@
     <ClCompile Include="game.cpp">
       <Filter>MyCode\ゲーム</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyAI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\system.h">
@@ -581,6 +590,15 @@
       <Filter>MyCode\その他</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
+      <Filter>MyCode\ゲーム</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
       <Filter>MyCode\ゲーム</Filter>
     </ClInclude>
   </ItemGroup>
