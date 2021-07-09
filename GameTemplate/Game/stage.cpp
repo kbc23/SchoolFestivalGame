@@ -7,6 +7,7 @@
 #include "score.h"
 #include "game.h"
 #include "rule1.h"
+#include "EnemyAI.h"
 
 
 //モデルの読み込みで時間がかかっているので、
@@ -220,6 +221,9 @@ bool Stage::Start()
 
     m_game = FindGO<Game>(igo::CLASS_NAME_GAME);
 
+    m_enemyAI = FindGO<EnemyAI>(igo::CLASS_NAME_ENEMYAI);
+
+
     return true;
 }
 
@@ -341,9 +345,12 @@ void Stage::InitBGM()
 
 void Stage::Update()
 {
+   
     //プレイヤーごとの処理
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        
         CheckBlock(playerNum);
+       
 
         if (stop == false) {    //黄色に乗った時にずっと操作不能にするかどうか
             ReturnOperationTimer(playerNum);
@@ -552,6 +559,7 @@ void Stage::DrawBackground()
 
 bool Stage::MoveBlock(const int pNum, const int moveNum)
 {
+  
     if (m_activeOperation[pNum] == false || m_activeOperationVersionBlue[pNum] == false) {
         return false;
     }
@@ -609,6 +617,8 @@ void Stage::ReturnOperationTimer(const int pNum)
 
 void Stage::CheckBlock(const int pNum)
 {
+    m_blueMiss[pNum] = false;
+   
     //自キャラがいるブロックによって処理をおこなう。
 
     //ジャンプアニメーション中は処理をおこなわない。
@@ -652,7 +662,10 @@ void Stage::BlueBlock(const int pNum)
     BlueBlockAnimation(pNum);
 
     ReturnBlock(pNum);
+    m_blueMiss [pNum]= true;
     }
+  //  m_blueMiss[pNum] = true;
+
 }
 
 void Stage::BlueBlockAnimation(const int pNum)
