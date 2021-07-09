@@ -10,6 +10,7 @@ class Player;
 class Score;
 class Game;
 class Rule1;
+class EnemyAI;
 
 class Stage : public IGameObject
 {
@@ -176,6 +177,11 @@ public: //Get関数
         return m_stageData[pNum][m_playerBlockPosition[pNum] + 2];//ここ怪しい
     }
 
+    int GetBlueMiss(const int pNum)
+    {
+        return m_blueMiss[pNum];
+    }
+
     const int Getm(const int o)
     {
         return m;
@@ -223,6 +229,7 @@ private: //data menber
     ////////////////////////////////////////////////////////////
 
     Player* m_player = nullptr;
+    EnemyAI* m_enemyAI = nullptr;
     Score* m_score = nullptr;
     //ModelRender* m_modelRender[con::PlayerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
     ModelRender* m_modelGreenBlock[con::PlayerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
@@ -273,7 +280,7 @@ private: //data menber
     int m_nowRank = m_INIT_RANK;            //プレイヤーの順位データに渡すデータ
 
     int m_amountOfMovement[con::PlayerNumberMax] = { 0, 0, 0, 0 };
-
+    bool m_blueMiss[con::PlayerNumberMax] = { false };
     ////////////////////////////////////////////////////////////
     // タイマー関連
     ////////////////////////////////////////////////////////////
