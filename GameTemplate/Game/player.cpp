@@ -147,6 +147,19 @@ bool Player::Start()
 
 bool Player::StartIndividual(const int pNum)
 {
+	switch (m_difficultyLevel) {
+	case 0:
+		m_moveStop[pNum] = 40;
+		break;
+	case 1:
+		m_moveStop[pNum] = 25;
+
+		break;
+	case 2:
+		m_moveStop[pNum] = 0;
+
+		break;
+	}
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
@@ -239,13 +252,23 @@ void Player::Update()
 			}
 		}
 		else {
+			m_moveStopCount[playerNum]++;
 		if (rule1NewGO == true) {
 			if (m_flagGoal[playerNum] == false) {
-				m_enemyAI->Moverule1(playerNum);
-				//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
-				if (m_EJumpFlag[playerNum] == true) {
-					//m_seJump->Play(false);				
-					m_modelRender[playerNum]->PlayAnimation(jump);
+				if (m_moveStop[playerNum] < m_moveStopCount[playerNum]) {
+					m_moveStopBool[playerNum] = true;
+				}
+				if (m_moveStopBool[playerNum] == true) {
+					m_enemyAI->Moverule1(playerNum);
+					//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
+					if (m_EJumpFlag[playerNum] == true) {
+						//m_seJump->Play(false);				
+						m_modelRender[playerNum]->PlayAnimation(jump);
+					}
+					m_moveStopCount[playerNum] = 0;
+					if (m_moveStopCount[playerNum] == 0) {
+						m_moveStopBool[playerNum] = false;
+					}
 				}
 				Animation(playerNum);
 			}
@@ -255,12 +278,22 @@ void Player::Update()
 			}
 		else {
 			if (m_flagGoal[playerNum] == false) {
-			m_enemyAI->Move(playerNum);
-			//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
-			if (m_EJumpFlag[playerNum] == true) {
-				//m_seJump->Play(false);				
-				m_modelRender[playerNum]->PlayAnimation(jump);
-			}
+				if (m_moveStop[playerNum] < m_moveStopCount[playerNum]) {
+					m_moveStopBool[playerNum] = true;
+				}
+				if (m_moveStopBool[playerNum] == true) {
+					m_enemyAI->Move(playerNum);
+					m_bluemiss[playerNum] = false;
+					//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
+					if (m_EJumpFlag[playerNum] == true) {
+						//m_seJump->Play(false);				
+						m_modelRender[playerNum]->PlayAnimation(jump);
+					}
+					m_moveStopCount[playerNum] = 0;
+					if (m_moveStopCount[playerNum] == 0) {
+						m_moveStopBool[playerNum] = false;
+					}
+				}
 			Animation(playerNum);
 			}
 			else {

@@ -172,7 +172,7 @@ public: //Get関数
 * @param pNum プレイヤー番号
 * @return m_stageDataの2個先のブロック
 */
-    int GetStageDatePuls2(const int pNum)
+    int& GetStageDatePuls2(const int& pNum)
     {
         /* int plus = m_playerBlockPosition[pNum] + 2;
           if (plus >= 99) {

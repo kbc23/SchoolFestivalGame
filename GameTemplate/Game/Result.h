@@ -29,14 +29,14 @@ public:
 
 
 public://Get関数
-	bool GetFlagFinish() {
+	bool& GetFlagFinish() {
 		return m_flagFinish;
 	}
 	bool GetSelect() {
 		return m_cursorPosition;
 	}
 public://Set関数
-	void SetRank(int pNum, int rank) {
+	void SetRank(const int& pNum, const int& rank) {
 		m_rank[pNum] = rank;
 	}
 private:
@@ -55,6 +55,7 @@ private:
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示する
 	SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };	//選択肢UI表示
+	SpriteRender* m_spritePressAButton = nullptr;
 	SpriteRender* m_spriteBackground =  nullptr ;
 	SoundSE* m_seDecision = nullptr;
 	SoundSE* m_seMoveCursor = nullptr;

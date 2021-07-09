@@ -770,6 +770,7 @@ void Stage::CheckBlock(const int pNum)
 {
     m_blueMiss[pNum] = false;
    
+   
     //自キャラがいるブロックによって処理をおこなう。
 
     //ジャンプアニメーション中は処理をおこなわない。
@@ -814,6 +815,7 @@ void Stage::BlueBlock(const int pNum)
 
     ReturnBlock(pNum);
     m_blueMiss [pNum]= true;
+    m_player->SetBlueMiss(pNum, m_blueMiss);
     }
 
 }
