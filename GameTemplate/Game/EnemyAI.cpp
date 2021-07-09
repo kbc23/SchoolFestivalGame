@@ -30,10 +30,13 @@ void EnemyAI::Update() {
 
 }
 void EnemyAI::Move(const int pNum) {
+	m_JumpFlag[pNum] = false;
+
 	m_flagAnimationJump[pNum] = m_player->GetmFlagAnimationJump(pNum);
 	if (m_player->GetFlagGoal(pNum) == false) {
 
 		DifficultyMove(pNum);
+		m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	//	m_player->Animation(pNum);
 	}
 	/*else {
@@ -205,9 +208,9 @@ void EnemyAI::AutoController1(const int pNum)
 
 	m_flagAnimationJump[pNum] = true;
 
-	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
+//	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
-	m_JumpFlag[pNum] = false;
+
 
 }
 void EnemyAI::AutoController11(const int pNum)
@@ -236,12 +239,11 @@ void EnemyAI::AutoController11(const int pNum)
 	}
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
 	m_JumpFlag[pNum] = true;
-	
+
 	m_flagAnimationJump[pNum] = true;
-	
-	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
+
+	//	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
-	m_JumpFlag[pNum] = false;
 	
 }
 
@@ -293,11 +295,12 @@ void EnemyAI::AutoController3(const int pNum)
 	}
 
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+	
+
 	m_JumpFlag[pNum] = true;
 
 	m_flagAnimationJump[pNum] = true;
 
-	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
+	//	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
-	m_JumpFlag[pNum] = false;
 }

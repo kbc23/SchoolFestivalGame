@@ -24,7 +24,9 @@ public:
 
 
 public: //GetŠÖ”
-
+	bool GetJampFlag(int pNum) {
+		return m_JumpFlag[pNum];
+	}
 public://SetŠÖ”
 	//“ïˆÕ“xó‚¯æ‚è
 	void SetDifficultyLevel(int i) {

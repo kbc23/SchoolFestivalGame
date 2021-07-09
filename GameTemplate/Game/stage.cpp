@@ -664,7 +664,6 @@ void Stage::BlueBlock(const int pNum)
     ReturnBlock(pNum);
     m_blueMiss [pNum]= true;
     }
-  //  m_blueMiss[pNum] = true;
 
 }
 
