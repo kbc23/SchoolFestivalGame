@@ -119,6 +119,10 @@ bool Result::Start() {
 	m_spriteChoices[3]->SetPosition(MODE_SELECT_SPRITE[3]);
 	m_spriteChoices[3]->Deactivate();
 
+	m_spritePressANext = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spritePressANext->Init(filePath::dds::PRESS_A_NEXT);
+	m_spritePressANext->Deactivate();
+
 	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 	return true;
 }
@@ -138,6 +142,8 @@ void Result::Init()
 	m_spriteChoices[2]->Deactivate();
 	m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
 	m_spriteChoices[3]->Deactivate();
+
+	m_spritePressANext->Activate();
 
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		InitIndividual(playerNum);
@@ -206,6 +212,8 @@ void Result::Finish()
 	m_spriteChoices[2]->Deactivate();
 	m_spriteChoices[3]->Deactivate();
 
+	m_spritePressANext->Deactivate();
+
 	m_spriteBackground->Deactivate();
 
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
@@ -270,6 +278,8 @@ void Result::SelectDisplay() {
 		m_spriteChoicesNewGO = true;
 
 		//m_spritePressAButton->Deactivate();
+
+		m_spritePressANext->Deactivate();
 
 
 		m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);

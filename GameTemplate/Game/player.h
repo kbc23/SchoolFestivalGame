@@ -1,5 +1,6 @@
 #pragma once
 #include "model_render.h"
+#include "sprite_render.h"
 #include "font_render.h"
 #include "sound_SE.h"
 #include "constant.h"
@@ -303,8 +304,8 @@ private: //data menber
 	EnemyAI* m_enemyAI = nullptr;//tuika
 
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
+	SpriteRender* m_spriteGameEnd = nullptr;
 	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
-	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
 	SoundSE* m_seJump = nullptr;
 	SoundSE* m_seFall = nullptr;
 	SoundSE* m_seSrip = nullptr;

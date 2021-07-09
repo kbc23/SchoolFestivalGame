@@ -108,6 +108,7 @@ namespace filePath
 			"Assets/Image/Player_mark_3.dds",
 			"Assets/Image/Player_mark_4.dds"
 		};
+		constexpr const char* GAME_END = "Assets/Image/Game_end.dds";
 		//ラウンド
 		constexpr const char* ROUND_WIN[con::PlayerNumberMax][3] = {
 			{
@@ -141,6 +142,7 @@ namespace filePath
 		constexpr const char* RANKTWO = "Assets/Image/juni2.dds";
 		constexpr const char* RANKTHREE = "Assets/Image/juni3.dds";
 		constexpr const char* RANKFOUR = "Assets/Image/juni4.dds";
+		constexpr const char* PRESS_A_NEXT = "Assets/Image/Press_A_Next.dds";
 		//フェード
 		constexpr const char* FADE = "Assets/Image/Fade.dds";
 	}

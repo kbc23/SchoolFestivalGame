@@ -68,7 +68,7 @@ Player::~Player()
 	}
 
 	DeleteGO(m_enemyAI);
-	DeleteGO(m_fontEnd);
+	DeleteGO(m_spriteGameEnd);
 	DeleteGO(m_seJump);
 	DeleteGO(m_seFall);
 	DeleteGO(m_seSrip);
@@ -120,9 +120,9 @@ bool Player::Start()
 		}
 	}
 
-	m_fontEnd = NewGO<FontRender>(igo::PRIORITY_FONT);
-	m_fontEnd->Init(L"終了!");
-	m_fontEnd->Deactivate();
+	m_spriteGameEnd = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spriteGameEnd->Init(filePath::dds::GAME_END);
+	m_spriteGameEnd->Deactivate();
 
 	m_seJump = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seJump->Init(filePath::se::JUMP);
@@ -177,7 +177,7 @@ void Player::Init()
 {
 	m_flagProcessing = true;
 
-	m_fontEnd->Deactivate();
+	m_spriteGameEnd->Deactivate();
 
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelRender[playerNum]->SetPosition(PLAYER_START_POSITION[playerNum]);
@@ -221,7 +221,7 @@ void Player::Finish()
 {
 	m_flagProcessing = false;
 
-	m_fontEnd->Deactivate();
+	m_spriteGameEnd->Deactivate();
 
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelRender[playerNum]->Deactivate();
@@ -305,7 +305,7 @@ void Player::Update()
 	}//henkou
 
 	if (con::PlayerNumberMax == m_goalPlayer || m_finishSuddenDeath == true) {
-		m_fontEnd->Activate();
+		m_spriteGameEnd->Activate();
 		m_endTimer++;
 		if (m_endTimer > 180) {
 			//サドンデスモードのとき所持ラウンド勝利数に応じて順位を確定
@@ -435,7 +435,7 @@ void Player::NextRound()
 	}
 	
 	if (fontDeavtive >= 120) {
-		m_fontEnd->Deactivate();
+		m_spriteGameEnd->Deactivate();
 		m_goalPlayer = 0;
 		for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
 			m_flagGoal[playerNum] = false;

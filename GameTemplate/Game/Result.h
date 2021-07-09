@@ -57,6 +57,7 @@ private:
 	SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };	//‘I‘ðŽˆUI•\Ž¦
 	//SpriteRender* m_spritePressAButton = nullptr;
 	SpriteRender* m_spriteBackground =  nullptr ;
+	SpriteRender* m_spritePressANext = nullptr;
 	SoundSE* m_seDecision = nullptr;
 	SoundSE* m_seMoveCursor = nullptr;
 
