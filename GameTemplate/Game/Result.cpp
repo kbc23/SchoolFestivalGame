@@ -74,7 +74,7 @@ bool Result::Start() {
 	m_animationPlayer[stand].Load(filePath::tka::STAND);
 	m_animationPlayer[lose].Load(filePath::tka::LOSE);
 	//ÉãÅ[Évçƒê∂
-	m_animationPlayer[stand].SetLoopFlag(true);
+	m_animationPlayer[stand].SetLoopFlag(false);
 	m_animationPlayer[win].SetLoopFlag(false);
 	m_animationPlayer[lose].SetLoopFlag(false);
 
