@@ -44,7 +44,7 @@ Result::~Result() {
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
-
+	//DeleteGO(m_spritePressAButton);
 	DeleteGO(m_spriteBackground);
 	/*DeleteGO(m_spriteGoalRank[0]);
 	DeleteGO(m_spriteGoalRank[1]);
@@ -57,7 +57,6 @@ Result::~Result() {
 void Result::DeleteIndividual(const int pNum)
 {
 	//p_numはプレイヤーのコントローラー番号
-	DeleteGO(m_spritePressAButton);
 	DeleteGO(m_modelRender[pNum]);
 	DeleteGO(m_spriteGoalRank[pNum]);
 	DeleteGO(m_spriteChoices[pNum]);
@@ -66,6 +65,11 @@ void Result::DeleteIndividual(const int pNum)
 }
 bool Result::Start() {
 	//背景
+	//m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	//m_spritePressAButton->Init(filePath::dds::PRESS_A_BUTTON);
+	//m_spritePressAButton->SetPosition({ 0.0f,200.0f });
+	//m_spritePressAButton-> Deactivate();
+
 	m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
 	m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
 	m_spriteBackground->Deactivate();
@@ -75,7 +79,7 @@ bool Result::Start() {
 	m_animationPlayer[stand].Load(filePath::tka::STAND);
 	m_animationPlayer[lose].Load(filePath::tka::LOSE);
 	//ループ再生
-	m_animationPlayer[stand].SetLoopFlag(true);
+	m_animationPlayer[stand].SetLoopFlag(false);
 	m_animationPlayer[win].SetLoopFlag(false);
 	m_animationPlayer[lose].SetLoopFlag(false);
 
@@ -115,6 +119,10 @@ bool Result::Start() {
 	m_spriteChoices[3]->SetPosition(MODE_SELECT_SPRITE[3]);
 	m_spriteChoices[3]->Deactivate();
 
+	m_spritePressANext = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spritePressANext->Init(filePath::dds::PRESS_A_NEXT);
+	m_spritePressANext->Deactivate();
+
 	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 	return true;
 }
@@ -124,6 +132,7 @@ void Result::Init()
 	m_flagProcessing = true;
 
 	m_spriteBackground->Activate();
+	//m_spritePressAButton->Activate();
 
 	m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
 	m_spriteChoices[0]->Deactivate();
@@ -133,6 +142,8 @@ void Result::Init()
 	m_spriteChoices[2]->Deactivate();
 	m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
 	m_spriteChoices[3]->Deactivate();
+
+	m_spritePressANext->Activate();
 
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		InitIndividual(playerNum);
@@ -150,29 +161,10 @@ void Result::Init()
 	m_flagDecision = false;    //決定したかのフラグ
 	m_cursorPosition = 0;//カーソルの場所
 	m_flagFinish = false;      //このクラスでするべき処理が終わったか
-	//Press_A_Buttonの点滅処理
-	if (m_flagBlinking == true) {
-		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() - 0.02f);
-
-		if (m_spritePressAButton->GetMulColorW() <= 0.0f) {
-			m_flagBlinking = false;
-		}
-	}
-	else {
-		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() + 0.02f);
-
-		if (m_spritePressAButton->GetMulColorW() >= 0.8f) {
-			m_flagBlinking = true;
-		}
-	}
 }
 
 void Result::InitIndividual(const int& pNum)
 {
-	m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spritePressAButton->Init(filePath::dds::PRESS_A_BUTTON);
-	m_spritePressAButton->SetPosition({ 0.0f,200.0f });
-	m_spritePressAButton->SetMulColorW(0.0f);
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
 	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_POSITION[pNum]);
@@ -220,6 +212,8 @@ void Result::Finish()
 	m_spriteChoices[2]->Deactivate();
 	m_spriteChoices[3]->Deactivate();
 
+	m_spritePressANext->Deactivate();
+
 	m_spriteBackground->Deactivate();
 
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
@@ -229,7 +223,22 @@ void Result::Finish()
 }
 
 void Result::Update()
-{
+{//Press_A_Buttonの点滅処理
+	/*if (m_flagBlinking == true) {
+		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() - 0.02f);
+
+		if (m_spritePressAButton->GetMulColorW() <= 0.0f) {
+			m_flagBlinking = false;
+		}
+	}
+	else {
+		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() + 0.02f);
+
+		if (m_spritePressAButton->GetMulColorW() >= 0.8f) {
+			m_flagBlinking = true;
+		}
+	}*/
+
 	if (m_flagProcessing == false) {
 		return;
 	}
@@ -268,7 +277,9 @@ void Result::SelectDisplay() {
 	if (g_pad[0]->IsTrigger(enButtonA) == true && m_spriteChoicesNewGO == false) {
 		m_spriteChoicesNewGO = true;
 
-		DeleteGO(m_spritePressAButton);
+		//m_spritePressAButton->Deactivate();
+
+		m_spritePressANext->Deactivate();
 
 
 		m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
