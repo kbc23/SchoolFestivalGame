@@ -19,7 +19,6 @@ class GameCamera;
 
 
 
-
 class MainProcessing : public IGameObject
 {
 public:
@@ -216,7 +215,15 @@ public: //Setä÷êî
         m_gameEnd = b;
     }
 
+    void SetPause_Stage(const bool& b)
+    {
+        m_pause_stage = b;
+    }
 
+    void SetPause_Title(const bool& b)
+    {
+        m_pause_title = b;
+    }
 
 
 private: //enum
@@ -307,5 +314,10 @@ private: //data menber
     //bool m_ruleSelect = false;
 
     bool m_ruleSelect = false;
+
+    bool m_pause_stage = false;
+    
+    bool m_pause_title = false;
+
 };
 

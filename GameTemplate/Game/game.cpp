@@ -25,6 +25,7 @@ bool Game::Start()
     m_player = NewGO<Player>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PLAYER);
     m_enemyAI = NewGO<EnemyAI>(igo::PRIORITY_CLASS, igo::CLASS_NAME_ENEMYAI);
     m_score = NewGO<Score>(igo::PRIORITY_CLASS, igo::CLASS_NAME_SCORE);
+    m_pause = NewGO<Pause>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PAUSE);
 
     return true;
 }
@@ -41,6 +42,7 @@ void Game::Init()
     }
     m_enemyAI->Init();
     m_score->Init();
+    m_pause->Init();
 
     //Playerクラスに選択されたプレイヤー人数を渡す。
     m_player->SetMaxPlayer(m_maxPlayer);
@@ -59,6 +61,7 @@ void Game::Finish()
     m_player->Finish();
     m_enemyAI->Finish();
     m_score->Finish();
+    m_pause->Finish();
 }
 
 void Game::Update()

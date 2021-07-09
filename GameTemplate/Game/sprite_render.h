@@ -16,7 +16,7 @@ public:
     SpriteRender();
     ~SpriteRender();
     bool Start() override final;
-    void Update() override final;
+    void AlwaysUpdate() override final;
     void Render(RenderContext& renderContext) override final;
 
 

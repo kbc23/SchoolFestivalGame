@@ -240,6 +240,7 @@ namespace igo //constant
 	constexpr const char* CLASS_NAME_ENEMYAI = "enemyAI";
 	constexpr const char* CLASS_NAME_SCORE = "score";
 	constexpr const char* CLASS_NAME_PAUSE = "pause";
+	constexpr const char* CLASS_NAME_MAIN_PROCESSING = "pause";
 
 	////////////////////////////////////////////////////////////
 	// óDêÊìx

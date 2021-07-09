@@ -43,6 +43,7 @@ private: //data menber
     Score* m_score = nullptr;
     EnemyAI* m_enemyAI = nullptr;
     Rule1* m_rule1 = nullptr;
+    Pause* m_pause = nullptr;
 
 
     ////////////////////////////////////////////////////////////

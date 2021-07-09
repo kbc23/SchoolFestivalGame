@@ -35,7 +35,7 @@ void SpriteRender::Init(const char* texFilePath, float w, float h,
 	m_sprite.Init(initData);
 }
 
-void SpriteRender::Update()
+void SpriteRender::AlwaysUpdate()
 {
 	m_sprite.Update(m_position, m_rotation, m_scale, m_pivot);
 }

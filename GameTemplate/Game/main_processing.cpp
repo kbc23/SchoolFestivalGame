@@ -12,6 +12,7 @@
 
 #include "Result.h"
 #include "mode_select.h"
+#include "pause.h"
 
 
 
@@ -189,6 +190,41 @@ void MainProcessing::Update()
     if (m_flagGameStart == false) {
         DrawBackground();
     }
+
+    if (m_pause_stage==true)
+    {
+        m_fontStartCountdown->Deactivate();
+        m_game->Finish();
+        m_game->Init();
+        NextRound();
+        m_pause_stage = false;
+    }
+
+    if (m_pause_title==true)
+    {
+        m_fontStartCountdown->Deactivate();
+        m_game->Finish();
+        NextRound();
+        m_title->Init();
+        m_gameStatus = GameStatus::title;
+        m_pause_title = false();
+
+        //”wŒi‚ð‰Šúó‘Ô‚É–ß‚·
+        m_spriteBackground[0]->SetPosition({ 0.0f,0.0f });
+        m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+        m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+        m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+        m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+        m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+        m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+
+        //‘I‘ð‰æ–Ê‚Ì”wŒi‚ð•\Ž¦
+        for (int i = 0; i < 7; i++) {
+            m_spriteBackground[i]->Activate();
+        }
+
+        m_flagGameStart = false;
+    }
 }
 
 void MainProcessing::DrawBackground()
@@ -262,7 +298,7 @@ void MainProcessing::CancelModeSelectScene()
 {
     m_seCancel->Play(false);
 
-    m_title->Init();;
+    m_title->Init();
     m_modeSelect->Finish();
 
     m_gameStatus = GameStatus::title;
