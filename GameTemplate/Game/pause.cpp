@@ -18,20 +18,9 @@ bool Pause::Start()
 
 void Pause::Update()
 {
-	if (pauseFlag == false) {
-		if (g_pad[0]->IsTrigger(enButtonY))
-		{
-			pauseFlag = true;
-
-		}
-	}
-
-	if (pauseFlag == true)
+	if (g_pad[0]->IsTrigger(enButtonStart))
 	{
-		if (g_pad[0]->IsTrigger(enButtonY))
-		{
-			pauseFlag = false;
-		}
+		SetGamePaused(true);
 	}
 }
 
@@ -42,5 +31,8 @@ void Pause::AlwaysUpdate()
 
 void Pause::UpdateOnlyPaused()
 {
-
+	if (g_pad[0]->IsTrigger(enButtonStart))
+	{
+		SetGamePaused(false);
+	}
 }

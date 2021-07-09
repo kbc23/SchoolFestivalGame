@@ -8,6 +8,7 @@
 #include "game.h"
 #include "rule1.h"
 #include "EnemyAI.h"
+#include "pause.h"
 
 
 //モデルの読み込みで時間がかかっているので、
@@ -223,6 +224,7 @@ bool Stage::Start()
 
     m_enemyAI = FindGO<EnemyAI>(igo::CLASS_NAME_ENEMYAI);
 
+    m_pause = FindGO<Pause>(igo::CLASS_NAME_PAUSE);
 
     return true;
 }
@@ -345,12 +347,11 @@ void Stage::InitBGM()
 
 void Stage::Update()
 {
-   
     //プレイヤーごとの処理
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        
+
         CheckBlock(playerNum);
-       
+
 
         if (stop == false) {    //黄色に乗った時にずっと操作不能にするかどうか
             ReturnOperationTimer(playerNum);
@@ -373,7 +374,7 @@ void Stage::Update()
     Length();
 
     /*NextRound();*/
-    
+
 }
 
 void Stage::DrawBlock(const int pNum)

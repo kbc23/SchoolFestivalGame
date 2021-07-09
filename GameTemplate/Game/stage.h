@@ -11,6 +11,7 @@ class Score;
 class Game;
 class Rule1;
 class EnemyAI;
+class Pause;
 
 class Stage : public IGameObject
 {
@@ -250,6 +251,7 @@ private: //data menber
     
 
     Rule1* m_rule1 = nullptr;
+    Pause* m_pause = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ

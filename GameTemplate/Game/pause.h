@@ -18,25 +18,8 @@ public:
 	*/
 	void UpdateOnlyPaused()override final;
 
-public:
-	//Get関数
-
-	bool GetPauseFlag()
-	{
-		return pauseFlag;
-	}
-
-public:
-	//Set関数
-	
-	void SetPauseFlag(const bool b)
-	{
-		pauseFlag = b;
-	}
-
 private: //data menber
 	bool pauseActive = false;	//ポーズが有効か?
-	bool pauseFlag = false;		//ポーズ中か?
 
 	int keytouch = 0;			//ポーズ入力を受け付けるか
 

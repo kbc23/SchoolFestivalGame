@@ -10,7 +10,6 @@ class EnemyAI;//tuika
 class Rule1;
 
 
-
 class Player : public IGameObject
 {
 public:

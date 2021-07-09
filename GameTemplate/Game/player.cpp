@@ -5,6 +5,7 @@
 #include "EnemyAI.h"
 #include "stage.h"
 #include "rule1.h"
+#include "pause.h"
 
 namespace //constant
 {
@@ -141,7 +142,6 @@ bool Player::Start()
 	m_enemyAI = FindGO<EnemyAI>(igo::CLASS_NAME_ENEMYAI);//tuika
 	m_rule1 = FindGO<Rule1>(igo::CLASS_NAME_RULE1);
 
-
 	return true;
 }
 
@@ -180,33 +180,33 @@ void Player::Update()
 			}
 		}
 		else {
-		if (rule1NewGO == true) {
-			if (m_flagGoal[playerNum] == false) {
-				m_enemyAI->Moverule1(playerNum);
-				//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
-				if (m_EJumpFlag[playerNum] == true) {
-					//m_seJump->Play(false);				
-					m_modelRender[playerNum]->PlayAnimation(jump);
+			if (rule1NewGO == true) {
+				if (m_flagGoal[playerNum] == false) {
+					m_enemyAI->Moverule1(playerNum);
+					//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
+					if (m_EJumpFlag[playerNum] == true) {
+						//m_seJump->Play(false);				
+						m_modelRender[playerNum]->PlayAnimation(jump);
+					}
+					Animation(playerNum);
 				}
-				Animation(playerNum);
+				else {
+					Animation(playerNum);
+				}
 			}
 			else {
-				Animation(playerNum);
-			}
-			}
-		else {
-			if (m_flagGoal[playerNum] == false) {
-			m_enemyAI->Move(playerNum);
-			//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
-			if (m_EJumpFlag[playerNum] == true) {
-				//m_seJump->Play(false);				
-				m_modelRender[playerNum]->PlayAnimation(jump);
-			}
-			Animation(playerNum);
-			}
-			else {
-			Animation(playerNum);
-			}
+				if (m_flagGoal[playerNum] == false) {
+					m_enemyAI->Move(playerNum);
+					//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
+					if (m_EJumpFlag[playerNum] == true) {
+						//m_seJump->Play(false);				
+						m_modelRender[playerNum]->PlayAnimation(jump);
+					}
+					Animation(playerNum);
+				}
+				else {
+					Animation(playerNum);
+				}
 			}
 		}
 
@@ -232,12 +232,13 @@ void Player::Update()
 	bool check[4] = { false,false,false,false };
 
 	bool check2[4] = { false,false,false,false };
-	
+
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
 		check[playerNum] = m_modelRender[playerNum]->IsInited();
 
 		check2[playerNum] = m_modelRender[playerNum]->IsPlayingAnimation();
 	}
+
 }
 
 //////////////////////////////

@@ -71,19 +71,18 @@ bool Score::Start()
 
 void Score::Update()
 {
-    if (m_pause->GetPauseFlag() == false) {
-        if (m_game->GetStopOperation() == true) {
-            return;
-        }
+    if (m_game->GetStopOperation() == true) {
+        return;
+    }
 
-        for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-            if (m_flagProcessing[playerNum] == true) {
-                AddTime(playerNum);
-                FinishTime(playerNum);
-                DrawTime(playerNum);
-            }
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        if (m_flagProcessing[playerNum] == true) {
+            AddTime(playerNum);
+            FinishTime(playerNum);
+            DrawTime(playerNum);
         }
     }
+
 }
 
 void Score::AddTime(const int pNum)
