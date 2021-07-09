@@ -1,5 +1,6 @@
 #pragma once
 #include "model_render.h"
+#include "sprite_render.h"
 #include "font_render.h"
 #include "sound_SE.h"
 #include "constant.h"
@@ -130,6 +131,7 @@ public: //Get関数
 	}
 
 
+
 	const int& GetGoalRanking(const int& pNum)
 	{
 		return m_goalRanking[pNum];
@@ -143,6 +145,10 @@ public: //Get関数
 	const bool& GetFinishSuddenDeath()
 	{
 		return m_finishSuddenDeath;
+	}
+	int GetBlueMiss(const int pNum)
+	{
+		return m_bluemiss[pNum];
 	}
 
 public: //Set関数
@@ -244,14 +250,14 @@ public: //Set関数
 	 * @brief cpuがジャンプ中か判定する変数のSet関数
 	 * @param i ジャンプ中か真偽判定
 	*/
-	void SetFlagAnimationJump(int pNum, const bool i)
+	void SetFlagAnimationJump(const int& pNum, const bool& i)
 	{
 		m_flagAnimationJump[pNum] = i;
 		m_seJump->Play(false);
 	}//tuika
 
 
-	void SetCPUJumpFlag(int pNum,bool i) {
+	void SetCPUJumpFlag(const int& pNum, const bool& i) {
 		m_EJumpFlag[pNum] = i;
 	}
 
@@ -263,12 +269,13 @@ public: //Set関数
 			m_finishSuddenDeath = true;
 		}
 	}
+	void SetDifficultyLevel(const int& i) {//難易度
+		m_difficultyLevel = i;
+	}
 
-	//void SetFinishSuddenDeath(const bool& b)
-	//{
-	//	m_finishSuddenDeath = b;
-	//}
-
+	void SetBlueMiss(const int& pNum,const  bool& i) {
+		m_bluemiss[pNum] = i;
+	}
 private: //enum
 	enum AnimationEnum
 	{
@@ -296,8 +303,8 @@ private: //data menber
 	EnemyAI* m_enemyAI = nullptr;//tuika
 
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
+	SpriteRender* m_spriteGameEnd = nullptr;
 	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
-	FontRender* m_fontEnd = nullptr;							//「終了！」を表示するフォント
 	SoundSE* m_seJump = nullptr;
 	SoundSE* m_seFall = nullptr;
 	SoundSE* m_seSrip = nullptr;
@@ -307,6 +314,12 @@ private: //data menber
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報
 	////////////////////////////////////////////////////////////
+	int m_difficultyLevel = 0;//難易度
+	int m_moveStop[con::PlayerNumberMax] = { 0, 0, 0, 0 };//m_moveStopよりm_moveStopCountが大きかったらm_moveStopBoolはtrue
+	int m_moveStopCount[con::PlayerNumberMax]= { 0, 0, 0, 0 };//m_moveStopよりm_moveStopCountが大きかったらm_moveStopBoolはtrue
+	bool m_moveStopBool[con::PlayerNumberMax] = { false, false, false, false };//trueで移動処理
+	bool m_bluemiss[con::PlayerNumberMax]= { false, false, false, false };//前の移動で青ブロックに落ちたか
+
 
 	int m_activePlayer[con::PlayerNumberMax] = { true, true, true, true };	//このプレイヤーは操作しているか
 	int m_maxPlayer = con::PlayerNumberMax;									//プレイヤーの最大数

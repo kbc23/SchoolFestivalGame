@@ -215,7 +215,7 @@ void EnemyAI::AutoController1(const int pNum)
 		m_stage->GetmActiveOperation(pNum) == false) {
 		return;
 	}
-	m_bluemiss[pNum] = m_stage->GetBlueMiss(pNum);
+	m_bluemiss[pNum] = m_player->GetBlueMiss(pNum);
 	if (m_bluemiss[pNum] == true) {
 		m_bluemiss[pNum] = false;
 

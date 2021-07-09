@@ -68,6 +68,8 @@ private:
 
     void DrawBackground();
 
+    void DrawRoundWin();
+
     //////////////////////////////
     // タイマー
     //////////////////////////////
@@ -171,7 +173,7 @@ public: //Get関数
 * @param pNum プレイヤー番号
 * @return m_stageDataの2個先のブロック
 */
-    int GetStageDatePuls2(const int pNum)
+    int& GetStageDatePuls2(const int& pNum)
     {
         /* int plus = m_playerBlockPosition[pNum] + 2;
           if (plus >= 99) {
@@ -247,6 +249,8 @@ private: //data menber
     
     SpriteRender* m_spriteDegreeOfProgress = nullptr;
     SpriteRender* m_spritePlayerMark[con::PlayerNumberMax] = { nullptr };
+
+    SpriteRender* m_spriteRoundWin[con::PlayerNumberMax][3] = { nullptr };
 
     MainProcessing* m_game = nullptr;
 

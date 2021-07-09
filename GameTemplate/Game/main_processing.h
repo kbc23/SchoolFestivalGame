@@ -274,6 +274,7 @@ private: //data menber
     
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
     SpriteRender* m_spriteBackground[7] = { nullptr };
+    SpriteRender* m_spriteCountdown[4] = { nullptr };
     Fade* m_fade = nullptr;
     SoundBGM* m_bgmTitle = nullptr;
     SoundSE* m_seCancel = nullptr;

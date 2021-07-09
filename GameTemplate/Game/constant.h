@@ -90,6 +90,13 @@ namespace filePath
 		constexpr const char* PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game.dds";
 		//タイトル画面のUI
 		constexpr const char* PRESS_A_BUTTON = "Assets/Image/Press_A_Button.dds";
+		//カウントダウン
+		constexpr const char* COUNT[4] = {
+			"Assets/Image/Count_start.dds",
+			"Assets/Image/Count_1.dds",
+			"Assets/Image/Count_2.dds",
+			"Assets/Image/Count_3.dds"
+		};
 		//ゲーム画面のUI
 		constexpr const char* SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
 		constexpr const char* BACKGROUND_SKY = "Assets/Image/Background_sky.dds";
@@ -101,6 +108,30 @@ namespace filePath
 			"Assets/Image/Player_mark_3.dds",
 			"Assets/Image/Player_mark_4.dds"
 		};
+		constexpr const char* GAME_END = "Assets/Image/Game_end.dds";
+		//ラウンド
+		constexpr const char* ROUND_WIN[con::PlayerNumberMax][3] = {
+			{
+			"Assets/Image/round_p1_1.dds",
+			"Assets/Image/round_p1_2.dds",
+			"Assets/Image/round_p1_3.dds",
+			},
+			{
+			"Assets/Image/round_p2_1.dds",
+			"Assets/Image/round_p2_2.dds",
+			"Assets/Image/round_p2_3.dds",
+			},
+			{
+			"Assets/Image/round_p3_1.dds",
+			"Assets/Image/round_p3_2.dds",
+			"Assets/Image/round_p3_3.dds",
+			},
+			{
+			"Assets/Image/round_p4_1.dds",
+			"Assets/Image/round_p4_2.dds",
+			"Assets/Image/round_p4_3.dds",
+			}
+		};
 		//結果画面後の選択画面のUI
 		constexpr const char* COMMAND_PLAY_ONE_MORE_TIME = "Assets/Image/Command_play_one_more_time.dds";
 		constexpr const char* COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS = "Assets/Image/Command_choose_the_number_of_players.dds";
@@ -111,6 +142,7 @@ namespace filePath
 		constexpr const char* RANKTWO = "Assets/Image/juni2.dds";
 		constexpr const char* RANKTHREE = "Assets/Image/juni3.dds";
 		constexpr const char* RANKFOUR = "Assets/Image/juni4.dds";
+		constexpr const char* PRESS_A_NEXT = "Assets/Image/Press_A_Next.dds";
 		//フェード
 		constexpr const char* FADE = "Assets/Image/Fade.dds";
 	}
