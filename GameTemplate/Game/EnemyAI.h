@@ -16,8 +16,8 @@ public:
 	void Move(const int pNum);
 	void Moverule1(const int pNum);
 
-	void DifficultyMove(const int eNum);
-	void DifficultyMoverule1(const int eNum);
+	void DifficultyMove(const int pNum);
+	void DifficultyMoverule1(const int pNum);
 	void AutoController1(const int pNum);
 	void AutoController11(const int pNum);
 	//void AutoController2(const int pNum); 
