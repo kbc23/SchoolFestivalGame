@@ -90,6 +90,13 @@ namespace filePath
 		constexpr const char* PAUSE_QUIT_THE_GAME = "Assets/Image/Pause_quit_the_game.dds";
 		//タイトル画面のUI
 		constexpr const char* PRESS_A_BUTTON = "Assets/Image/Press_A_Button.dds";
+		//カウントダウン
+		constexpr const char* COUNT[4] = {
+			"Assets/Image/Count_start.dds",
+			"Assets/Image/Count_1.dds",
+			"Assets/Image/Count_2.dds",
+			"Assets/Image/Count_3.dds"
+		};
 		//ゲーム画面のUI
 		constexpr const char* SCORE_TIME_UI = "Assets/Image/Score_time_UI.dds";
 		constexpr const char* BACKGROUND_SKY = "Assets/Image/Background_sky.dds";

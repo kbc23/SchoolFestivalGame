@@ -141,6 +141,13 @@ bool MainProcessing::Start()
     //リザルトシーン
     m_result = NewGO<Result>(igo::PRIORITY_CLASS);
 
+    
+    for (int countNum = 0; countNum < 4; countNum++) {
+        m_spriteCountdown[countNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+        m_spriteCountdown[countNum]->Init(filePath::dds::COUNT[countNum]);
+        m_spriteCountdown[countNum]->Deactivate();
+    }
+
 
     //カウントダウンのSE
     m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
@@ -384,10 +391,6 @@ void MainProcessing::Loading()
 
 
 
-
-
-
-
     //選択画面の背景を非表示
     for (int i = 0; i < 7; i++) {
         m_spriteBackground[i]->Deactivate();
@@ -439,29 +442,31 @@ void MainProcessing::StartCountdown()
 
     //カウントダウンフォントを非表示
     if (m_countStartCountdown == COUNTDOWN_DEACTIVATE) {
-        m_fontStartCountdown->Deactivate();
+        m_spriteCountdown[0]->Deactivate();
         m_flagStartCountdown = false;
     }
     //カウント０
     else if (m_countStartCountdown == COUNTDOWN_0) {
-        m_fontStartCountdown->SetText(L"Start!");
+        m_spriteCountdown[1]->Deactivate();
+        m_spriteCountdown[0]->Activate();
         m_StopOperation = false;
         m_seGameStart->Play(false);
     }
     //カウント１
     else if (m_countStartCountdown == COUNTDOWN_1) {
-        m_fontStartCountdown->SetText(1);
+        m_spriteCountdown[2]->Deactivate();
+        m_spriteCountdown[1]->Activate();
         m_seCount->Play(false);
     }
     //カウント２
     else if (m_countStartCountdown == COUNTDOWN_2) {
-        m_fontStartCountdown->SetText(2);
+        m_spriteCountdown[3]->Deactivate();
+        m_spriteCountdown[2]->Activate();
         m_seCount->Play(false);
     }
     //カウント３
     else if (m_countStartCountdown == COUNTDOWN_3) {
-        m_fontStartCountdown->Activate();
-        m_fontStartCountdown->SetText(3);
+        m_spriteCountdown[3]->Activate();
         m_seCount->Play(false);
     }
 }
@@ -469,6 +474,11 @@ void MainProcessing::StartCountdown()
 void MainProcessing::FinishGameScene()
 {
     m_game->Finish();
+
+    m_spriteCountdown[0]->Deactivate();
+    m_spriteCountdown[1]->Deactivate();
+    m_spriteCountdown[2]->Deactivate();
+    m_spriteCountdown[3]->Deactivate();
 
     //背景を初期状態に戻す
     m_spriteBackground[0]->SetPosition({ 0.0f,0.0f });
