@@ -44,7 +44,7 @@ Result::~Result() {
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
-
+	DeleteGO(m_spritePressAButton);
 	DeleteGO(m_spriteBackground);
 	/*DeleteGO(m_spriteGoalRank[0]);
 	DeleteGO(m_spriteGoalRank[1]);
@@ -65,6 +65,11 @@ void Result::DeleteIndividual(const int pNum)
 }
 bool Result::Start() {
 	//”wŒi
+	m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spritePressAButton->Init(filePath::dds::PRESS_A_BUTTON);
+	m_spritePressAButton->SetPosition({ 0.0f,200.0f });
+	m_spritePressAButton-> Deactivate();
+
 	m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
 	m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
 	m_spriteBackground->Deactivate();
@@ -123,6 +128,7 @@ void Result::Init()
 	m_flagProcessing = true;
 
 	m_spriteBackground->Activate();
+	m_spritePressAButton->Activate();
 
 	m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
 	m_spriteChoices[0]->Deactivate();
@@ -209,7 +215,22 @@ void Result::Finish()
 }
 
 void Result::Update()
-{
+{//Press_A_Button‚Ì“_–Åˆ—
+	if (m_flagBlinking == true) {
+		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() - 0.02f);
+
+		if (m_spritePressAButton->GetMulColorW() <= 0.0f) {
+			m_flagBlinking = false;
+		}
+	}
+	else {
+		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() + 0.02f);
+
+		if (m_spritePressAButton->GetMulColorW() >= 0.8f) {
+			m_flagBlinking = true;
+		}
+	}
+
 	if (m_flagProcessing == false) {
 		return;
 	}
@@ -248,6 +269,7 @@ void Result::SelectDisplay() {
 	if (g_pad[0]->IsTrigger(enButtonA) == true && m_spriteChoicesNewGO == false) {
 		m_spriteChoicesNewGO = true;
 
+		m_spritePressAButton->Deactivate();
 
 
 		m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
