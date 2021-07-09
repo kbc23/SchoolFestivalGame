@@ -180,8 +180,11 @@ void Result::SelectDisplay() {
 		m_spriteChoices[3]->Init(filePath::dds::COMMAND_EXIT_GAME);
 		m_spriteChoices[3]->SetPosition(MODE_SELECT_SPRITE[3]);
 		m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
+	
+		
 	}
 	ResultSelect();
+
 }
 
 void Result::ResultSelect() {
@@ -193,7 +196,7 @@ void Result::ResultSelect() {
 		m_flagDecision = true;
 	}
 	//ã‚ÉˆÚ“®
-	else if (g_pad[con::player_1]->IsTrigger(enButtonUp) == true) {
+	else if (g_pad[con::player_1]->IsTrigger(enButtonUp) == true && m_spriteChoicesNewGORE == true) {
 		m_seMoveCursor->Play(false);
 
 		if (m_cursorPosition == UP_END) {
@@ -207,7 +210,7 @@ void Result::ResultSelect() {
 		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
 	}
 	//‰º‚ÉˆÚ“®
-	else if (g_pad[con::player_1]->IsTrigger(enButtonDown) == true) {
+	else if (g_pad[con::player_1]->IsTrigger(enButtonDown) == true && m_spriteChoicesNewGORE == true) {
 		m_seMoveCursor->Play(false);
 
 		if (m_cursorPosition == DOWN_END) {
