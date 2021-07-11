@@ -140,10 +140,16 @@ namespace filePath
 		constexpr const char* COMMAND_CHOOSE_A_RULE = "Assets/Image/Command_choose_a_rule.dds";
 		constexpr const char* COMMAND_EXIT_GAME = "Assets/Image/Command_exit_game.dds";
 		//順位表示
-		constexpr const char* RANKONE = "Assets/Image/juni1.dds";
-		constexpr const char* RANKTWO = "Assets/Image/juni2.dds";
-		constexpr const char* RANKTHREE = "Assets/Image/juni3.dds";
-		constexpr const char* RANKFOUR = "Assets/Image/juni4.dds";
+		constexpr const char* RANK[4] = {
+			"Assets/Image/Rank_1.dds",
+			"Assets/Image/Rank_2.dds",
+			"Assets/Image/Rank_3.dds",
+			"Assets/Image/Rank_4.dds"
+		};
+		constexpr const char* RANKONE = "Assets/Image/Rank_1.dds";
+		constexpr const char* RANKTWO = "Assets/Image/Rank_2.dds";
+		constexpr const char* RANKTHREE = "Assets/Image/Rank_3.dds";
+		constexpr const char* RANKFOUR = "Assets/Image/Rank_4.dds";
 		constexpr const char* PRESS_A_NEXT = "Assets/Image/Press_A_Next.dds";
 		//フェード
 		constexpr const char* FADE = "Assets/Image/Fade.dds";

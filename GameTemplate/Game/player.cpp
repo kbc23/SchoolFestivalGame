@@ -48,6 +48,13 @@ namespace //constant
 	////////////////////////////////////////////////////////////
 
 	const float JUMP_MOVE = 2.0f;
+
+	const Vector2 PLAYER_RANK_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの順位の初期座標
+		{ -490.0f, -70.0f},											//プレイヤー１
+		{ -180.0f, -70.0f },											//プレイヤー２
+		{ 140.0f, -70.0f },											//プレイヤー３
+		{ 460.0f, -70.0f }											//プレイヤー４
+	};
 }
 
 
@@ -82,7 +89,9 @@ void Player::DeleteIndividual(const int pNum)
 	//p_numはプレイヤーのコントローラー番号
 
 	DeleteGO(m_modelRender[pNum]);
-	DeleteGO(m_fontGoalRank[pNum]);
+	for (int i = 0; i < 4; i++) {
+		DeleteGO(m_spriteGoalRank[pNum][i]);
+	}
 
 	//DeleteGO(m_skinModelRender[pNum]);
 }
@@ -153,10 +162,13 @@ bool Player::StartIndividual(const int pNum)
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
 	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->Deactivate();
-	
-	m_fontGoalRank[pNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
-	m_fontGoalRank[pNum]->Init(L"", GOAL_RANK_FONT_POSITION[pNum]);
-	m_fontGoalRank[pNum]->Deactivate();
+
+	for (int i = 0; i < 4; i++) {
+		m_spriteGoalRank[pNum][i] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+		m_spriteGoalRank[pNum][i]->Init(filePath::dds::RANK[i]);
+		m_spriteGoalRank[pNum][i]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
+		m_spriteGoalRank[pNum][i]->Deactivate();
+	}
 
 	return true;
 }
@@ -173,7 +185,9 @@ void Player::Init()
 		m_modelRender[playerNum]->PlayAnimation(idle);
 		m_modelRender[playerNum]->Activate();
 
-		m_fontGoalRank[playerNum]->Deactivate();
+		for (int i = 0; i < 4; i++) {
+			m_spriteGoalRank[playerNum][i]->Deactivate();
+		}
 	}
 
 	
@@ -214,7 +228,9 @@ void Player::Finish()
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelRender[playerNum]->Deactivate();
 
-		m_fontGoalRank[playerNum]->Deactivate();
+		for (int i = 0; i < 4; i++) {
+			m_spriteGoalRank[playerNum][i]->Deactivate();
+		}
 	}
 }
 
@@ -460,8 +476,10 @@ void Player::NextRound()
 			m_flagGoal[playerNum] = false;
 		}
 		fontDeavtive = 0;
-		for (int i = 0; i < con::PlayerNumberMax; i++) {
-			m_fontGoalRank[i]->Deactivate();
+		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+			for (int i = 0; i < 4; i++) {
+				m_spriteGoalRank[playerNum][i]->Deactivate();
+			}
 		}
 	}
 

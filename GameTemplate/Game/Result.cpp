@@ -7,16 +7,16 @@
 namespace
 {
 	const Vector3 PLAYER_POSITION[con::PlayerNumberMax] = {	//プレイヤーの初期座標
-		{ 1200.0f, -1300.0f, -240.0f },											//プレイヤー１
-		{ 400.0f, -1300.0f, -240.0f },											//プレイヤー２
-		{ -400.0f, -1300.0f, -240.0f },											//プレイヤー３
-		{ -1200.0f, -1300.0f, -240.0f }											//プレイヤー４
+		{ 1200.0f, -1000.0f, -240.0f },											//プレイヤー１
+		{ 400.0f, -1000.0f, -240.0f },											//プレイヤー２
+		{ -400.0f, -1000.0f, -240.0f },											//プレイヤー３
+		{ -1200.0f, -1000.0f, -240.0f }											//プレイヤー４
 	};
 	const Vector2 PLAYER_RANK_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの初期座標
-		{ -420.0f, -200.0f},											//プレイヤー１
-		{ -140.0f, -200.0f },											//プレイヤー２
-		{ 140.0f, -200.0f },											//プレイヤー３
-		{ 420.0f,-200.0f }											//プレイヤー４
+		{ -420.0f, -170.0f},											//プレイヤー１
+		{ -140.0f, -170.0f },											//プレイヤー２
+		{ 140.0f, -170.0f },											//プレイヤー３
+		{ 420.0f,-170.0f }											//プレイヤー４
 	};
 
 	const Vector2 MODE_SELECT_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの初期座標
@@ -34,13 +34,15 @@ namespace
 
 
 
-Result::Result() {
+Result::Result()
+{
 	/*for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_rank[playerNum]=m_game->GetRank(playerNum);
 	}*/
 }
 
-Result::~Result() {
+Result::~Result()
+{
 	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
@@ -63,7 +65,8 @@ void Result::DeleteIndividual(const int pNum)
 
 	//DeleteGO(m_skinModelRender[pNum]);
 }
-bool Result::Start() {
+bool Result::Start()
+{
 	//背景
 	//m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_UI);
 	//m_spritePressAButton->Init(filePath::dds::PRESS_A_BUTTON);
@@ -127,6 +130,16 @@ bool Result::Start() {
 	return true;
 }
 
+bool Result::StartIndividual(const int pNum)
+{
+	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
+	m_modelRender[pNum]->Deactivate();
+	m_modelRender[pNum]->SetRotationX(0.5f);
+
+	return true;
+}
+
 void Result::Init()
 {
 	m_flagProcessing = true;
@@ -165,8 +178,6 @@ void Result::Init()
 
 void Result::InitIndividual(const int& pNum)
 {
-	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
 	m_modelRender[pNum]->SetPosition(PLAYER_POSITION[pNum]);
 	m_modelRender[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 	m_modelRender[pNum]->Activate();
@@ -175,28 +186,28 @@ void Result::InitIndividual(const int& pNum)
 	case 1:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKONE);
-		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
+		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(win);
 		break;
 	case 2:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTWO);
-		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
+		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(stand);
 		break;
 	case 3:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTHREE);
-		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
+		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(stand);
 		break;
 	case 4:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKFOUR);
-		m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
+		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(lose);
 		break;
@@ -248,20 +259,6 @@ void Result::Update()
 	if (m_flagDecision == true && m_flagFinish == false) {
 		FinishResult();
 	}
-}
-
-bool Result::StartIndividual(const int pNum) {
-	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
-	m_modelRender[pNum]->Deactivate();
-
-
-
-
-
-	
-
-	return true;
 }
 
 void Result::Display() {

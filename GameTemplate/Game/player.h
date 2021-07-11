@@ -204,8 +204,7 @@ public: //Set関数
 	*/
 	void SetAndActivateGoalRankFont(const int& pNum, const int& rank)
 	{
-		m_fontGoalRank[pNum]->SetText(rank);
-		m_fontGoalRank[pNum]->Activate();
+		m_spriteGoalRank[pNum][rank - 1]->Activate();
 		++m_goalPlayer;
 	}
 
@@ -318,7 +317,8 @@ private: //data menber
 
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	SpriteRender* m_spriteGameEnd = nullptr;
-	FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
+	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax][4] = { nullptr };
+	//FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
 	SoundSE* m_seJump = nullptr;
 	SoundSE* m_seFall = nullptr;
 	SoundSE* m_seSrip = nullptr;
