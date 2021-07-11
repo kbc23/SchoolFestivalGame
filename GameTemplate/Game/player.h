@@ -250,6 +250,11 @@ public: //Set関数
 		m_seSrip->Play(false);
 	}
 
+	void SetAnimationWin(const int& pNum)
+	{
+		m_modelRender[pNum]->PlayAnimation(win);
+	}
+
 	/**
 	 * @brief cpuがジャンプ中か判定する変数のSet関数
 	 * @param i ジャンプ中か真偽判定

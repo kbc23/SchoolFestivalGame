@@ -937,6 +937,7 @@ void Stage::GoalBlock()
                     if (m_activeOperation[playerNum] == true && m_activeOperationVersionBlue[playerNum] == true) {
                         //順位を確定
                         m_player->SetGoalRanking(playerNum, 1);
+                        m_player->SetAnimationWin(playerNum);
 
                         if (rule1NewGO == true) {
                             n += 1;
@@ -1095,6 +1096,7 @@ void Stage::Length()
 
             //順位を確定
             m_player->SetGoalRanking(con::player_1, 1);
+            m_player->SetAnimationWin(con::player_1);
 
             if (rule1NewGO == true) {
                 n += 1;
@@ -1122,6 +1124,7 @@ void Stage::Length()
 
             //順位を確定
             m_player->SetGoalRanking(con::player_2, 1);
+            m_player->SetAnimationWin(con::player_2);
 
             if (rule1NewGO == true) {
                 n += 1;
@@ -1149,6 +1152,7 @@ void Stage::Length()
 
             //順位を確定
             m_player->SetGoalRanking(con::player_3, 1);
+            m_player->SetAnimationWin(con::player_3);
 
             if (rule1NewGO == true) {
                 n += 1;
@@ -1176,6 +1180,7 @@ void Stage::Length()
 
             //順位を確定
             m_player->SetGoalRanking(con::player_4, 1);
+            m_player->SetAnimationWin(con::player_4);
 
             if (rule1NewGO == true) {
                 n += 1;
