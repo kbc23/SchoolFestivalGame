@@ -27,8 +27,6 @@ namespace
 	};
 
 	const int UP_END = 0;     //一番上
-	const int UP = 1;    //真ん中上
-	const int DOWN = 2;    //真ん中下
 	const int DOWN_END = 3;    //一番下
 }
 
@@ -82,7 +80,7 @@ bool Result::Start()
 	m_animationPlayer[stand].Load(filePath::tka::STAND);
 	m_animationPlayer[lose].Load(filePath::tka::LOSE);
 	//ループ再生
-	m_animationPlayer[stand].SetLoopFlag(false);
+	m_animationPlayer[stand].SetLoopFlag(true);
 	m_animationPlayer[win].SetLoopFlag(false);
 	m_animationPlayer[lose].SetLoopFlag(false);
 

@@ -298,8 +298,6 @@ void Stage::Init()
     //is“x‚ÌUI‚ðì¬
     m_spriteDegreeOfProgress->Activate();
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        m_spritePlayerMark[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-        m_spritePlayerMark[playerNum]->Init(filePath::dds::PLAYER_MARK[playerNum]);
         m_spritePlayerMark[playerNum]->SetPositionX(0.0f);
         m_spritePlayerMark[playerNum]->Activate();
     }
