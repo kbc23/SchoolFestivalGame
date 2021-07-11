@@ -445,6 +445,12 @@ void Player::NextRound()
 	{
 		fontDeavtive += 1;
 	}
+
+	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_modelRender[playerNum]->PlayAnimation(idle);
+		m_modelRender[playerNum]->ResetPositionY();
+		m_modelRender[playerNum]->Activate();
+	}
 	
 	if (fontDeavtive >= 120) {
 		m_spriteGameEnd->Deactivate();
