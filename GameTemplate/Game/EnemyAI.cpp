@@ -38,7 +38,7 @@ void EnemyAI::Init()
 		m_JumpFlag[playerNum] = false;
 	}
 
-	m_difficultyLevel = 0;//難易度1簡単2普通3難しい
+	//m_difficultyLevel = 0;//難易度1簡単2普通3難しい
 
 	m_maxPlayer = 0;//プレイヤー最大数
 	m_addEnemyNumber = 2;//CPU用番号=2

@@ -242,14 +242,14 @@ void Player::Update()
 		else {
 			switch (m_difficultyLevel) {
 			case 0:
-				m_moveStop[playerNum] = 40;
+				m_moveStop[playerNum] = 60;
 				break;
 			case 1:
-				m_moveStop[playerNum] = 25;
+				m_moveStop[playerNum] = 45;
 
 				break;
 			case 2:
-				m_moveStop[playerNum] = 0;
+				m_moveStop[playerNum] = 20;
 
 				break;
 			}
