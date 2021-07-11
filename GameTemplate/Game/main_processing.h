@@ -36,6 +36,21 @@ private:
     void DrawBackground();
 
     ////////////////////////////////////////////////////////////
+    // 最初の読み込み
+    ////////////////////////////////////////////////////////////
+
+    void StartLoadingScene();
+
+    /**
+     * @brief ロードの準備
+    */
+    void StartLoadingPreparation();
+
+    void StartLoading();
+
+    void StartLoadingFinish();
+
+    ////////////////////////////////////////////////////////////
     // タイトルシーンの処理
     ////////////////////////////////////////////////////////////
 
@@ -229,6 +244,7 @@ public: //Set関数
 private: //enum
     enum class GameStatus
     {
+        startLoading,
         title,
         modeSelect,
         playerSelect,
@@ -239,13 +255,21 @@ private: //enum
         GameStatusMax
     };
 
+    enum class StartLoadingStatus
+    {
+        preparation,    //ロードの準備
+        loading,        //ロード中
+        finish,         //ロード終了
+        StartLoadingStatusMax
+    };
+
     enum class LoadingStatus
     {
         doNothing,              //何もしていない
         preparingForLoading,    //ロードの準備
         loading,                //ロード中
         endOfLoading,           //ロード終了
-        LoadStatusMax
+        LoadingStatusMax
     };
 
 
@@ -275,6 +299,7 @@ private: //data menber
     FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
     SpriteRender* m_spriteBackground[7] = { nullptr };
     SpriteRender* m_spriteCountdown[4] = { nullptr };
+    SpriteRender* m_spriteLoading = nullptr;
     Fade* m_fade = nullptr;
     SoundBGM* m_bgmTitle = nullptr;
     SoundSE* m_seCancel = nullptr;
@@ -296,7 +321,8 @@ private: //data menber
     // フラグ関連
     ////////////////////////////////////////////////////////////
 
-    GameStatus m_gameStatus = GameStatus::title;
+    GameStatus m_gameStatus = GameStatus::startLoading;
+    StartLoadingStatus m_startLoadingStatus = StartLoadingStatus::preparation;
     LoadingStatus m_loadStatus = LoadingStatus::doNothing;
     bool m_startPreparingForLoading = false;
     bool m_startEndOfLoading = false;

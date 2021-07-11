@@ -71,7 +71,7 @@ bool Result::Start() {
 	//m_spritePressAButton-> Deactivate();
 
 	m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-	m_spriteBackground->Init(filePath::dds::BACKGROUND_SKY);
+	m_spriteBackground->Init(filePath::dds::BACKGROUND);
 	m_spriteBackground->Deactivate();
 
 	//アニメーションの設定

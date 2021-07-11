@@ -38,6 +38,8 @@ MainProcessing::MainProcessing()
 
 MainProcessing::~MainProcessing()
 {
+    DeleteGO(m_spriteLoading);
+
     //タイトルシーン
     DeleteGO(m_title);
 
@@ -74,89 +76,9 @@ bool MainProcessing::Start()
 {
     m_flagProcessing = true;
 
-    //背景の初期化
-    m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
-    m_spriteBackground[1] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[1]->Init(filePath::dds::BACKGROUND);
-    m_spriteBackground[2] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[2]->Init(filePath::dds::BACKGROUND_2);
-    m_spriteBackground[3] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[3]->Init(filePath::dds::BACKGROUND_2);
-    m_spriteBackground[4] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[4]->Init(filePath::dds::BACKGROUND_2);
-    m_spriteBackground[5] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[5]->Init(filePath::dds::BACKGROUND);
-    m_spriteBackground[6] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[6]->Init(filePath::dds::BACKGROUND);
-
-    //画像の配列番号と表示位置（0の位置が画面）
-    //0 1
-    //2 3 4
-    //  5 6
-
-    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
-    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
-    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
-    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
-    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
-    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
-
-    //フェードの処理をNewGO
-    m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
-
-    //選択画面のBGMを初期化、再生
-    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
-    m_bgmTitle->Init(filePath::bgm::TITLE);
-    m_bgmTitle->SetVolume(0.5f);
-    m_bgmTitle->Play(true);
-
-    //キャンセルのSEを初期化    
-    m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
-    m_seCancel->Init(filePath::se::CANCEL);
-
-    //////////////////////////////
-    // シーンごとの処理に使用するもののNewGO
-    //////////////////////////////
-
-    //タイトルシーン
-    m_title = NewGO<Title>(igo::PRIORITY_CLASS);
-
-    //モードセレクトシーン
-    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_CLASS);
-
-    //プレイヤーセレクトシーン
-    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_CLASS);
-
-    //CPUの難易度選択シーン
-    m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_CLASS);
-
-    //ゲームシーン
-    m_game = NewGO<Game>(igo::PRIORITY_CLASS);
-    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
-
-    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FONT);
-    m_fontStartCountdown->Init(L"");
-    m_fontStartCountdown->Deactivate();
-
-    //リザルトシーン
-    m_result = NewGO<Result>(igo::PRIORITY_CLASS);
-
-    
-    for (int countNum = 0; countNum < 4; countNum++) {
-        m_spriteCountdown[countNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-        m_spriteCountdown[countNum]->Init(filePath::dds::COUNT[countNum]);
-        m_spriteCountdown[countNum]->Deactivate();
-    }
-
-
-    //カウントダウンのSE
-    m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
-    m_seCount->Init(filePath::se::COUNT);
-    m_seGameStart = NewGO<SoundSE>(igo::PRIORITY_CLASS);
-    m_seGameStart->Init(filePath::se::GAME_START);
-
-    m_title->Init();
+    m_spriteLoading = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteLoading->Init(filePath::dds::START_LOADING);
+    m_spriteLoading->SetMulColorW(0.0f);
 
     return true;
 }
@@ -168,6 +90,9 @@ bool MainProcessing::Start()
 void MainProcessing::Update()
 {
     switch (m_gameStatus) {
+    case GameStatus::startLoading:
+        StartLoadingScene();
+        break;
     case GameStatus::title:
         TitleScene();
         break;
@@ -194,7 +119,7 @@ void MainProcessing::Update()
         return;
     }
 
-    if (m_flagGameStart == false) {
+    if (m_flagGameStart == false && m_gameStatus != GameStatus::startLoading) {
         DrawBackground();
     }
 
@@ -261,6 +186,154 @@ void MainProcessing::DrawBackground()
         m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
         m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
     }
+}
+
+////////////////////////////////////////////////////////////
+// 最初の読み込み
+////////////////////////////////////////////////////////////
+
+void MainProcessing::StartLoadingScene()
+{
+    switch (m_startLoadingStatus) {
+    case StartLoadingStatus::preparation:
+        StartLoadingPreparation();
+        break;
+    case StartLoadingStatus::loading:
+        StartLoading();
+        break;
+    case StartLoadingStatus::finish:
+        StartLoadingFinish();
+        break;
+    default:
+        MessageBoxA(nullptr, "読み込みにてエラーが発生しました。", "エラー", MB_OK);
+        return;
+
+    }
+}
+
+void MainProcessing::StartLoadingPreparation()
+{
+    m_spriteLoading->SetMulColorW(m_spriteLoading->GetMulColorW() + 0.05f);
+
+    if (m_spriteLoading->GetMulColorW() >= 1.0f) {
+        m_spriteLoading->SetMulColorW(1.0f);
+        m_startLoadingStatus = StartLoadingStatus::loading;
+    }
+}
+
+void MainProcessing::StartLoading()
+{
+    //背景の初期化
+    m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[1] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[1]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[2] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[2]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[3] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[3]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[4] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[4]->Init(filePath::dds::BACKGROUND_2);
+    m_spriteBackground[5] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[5]->Init(filePath::dds::BACKGROUND);
+    m_spriteBackground[6] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
+    m_spriteBackground[6]->Init(filePath::dds::BACKGROUND);
+
+    //画像の配列番号と表示位置（0の位置が画面）
+    //0 1
+    //2 3 4
+    //  5 6
+
+    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
+    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
+    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
+    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
+    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
+    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+
+    m_spriteBackground[0]->Deactivate();
+    m_spriteBackground[1]->Deactivate();
+    m_spriteBackground[2]->Deactivate();
+    m_spriteBackground[3]->Deactivate();
+    m_spriteBackground[4]->Deactivate();
+    m_spriteBackground[5]->Deactivate();
+    m_spriteBackground[6]->Deactivate();
+
+
+    //フェードの処理をNewGO
+    m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
+
+    //選択画面のBGMを初期化、再生
+    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
+    m_bgmTitle->Init(filePath::bgm::TITLE);
+    m_bgmTitle->SetVolume(0.5f);
+
+    //キャンセルのSEを初期化    
+    m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCancel->Init(filePath::se::CANCEL);
+
+    //////////////////////////////
+    // シーンごとの処理に使用するもののNewGO
+    //////////////////////////////
+
+    //タイトルシーン
+    m_title = NewGO<Title>(igo::PRIORITY_CLASS);
+
+    //モードセレクトシーン
+    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_CLASS);
+
+    //プレイヤーセレクトシーン
+    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_CLASS);
+
+    //CPUの難易度選択シーン
+    m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_CLASS);
+
+    //ゲームシーン
+    m_game = NewGO<Game>(igo::PRIORITY_CLASS);
+    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
+
+    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FONT);
+    m_fontStartCountdown->Init(L"");
+    m_fontStartCountdown->Deactivate();
+
+    //リザルトシーン
+    m_result = NewGO<Result>(igo::PRIORITY_CLASS);
+
+
+    for (int countNum = 0; countNum < 4; countNum++) {
+        m_spriteCountdown[countNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+        m_spriteCountdown[countNum]->Init(filePath::dds::COUNT[countNum]);
+        m_spriteCountdown[countNum]->Deactivate();
+    }
+
+
+    //カウントダウンのSE
+    m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seCount->Init(filePath::se::COUNT);
+    m_seGameStart = NewGO<SoundSE>(igo::PRIORITY_CLASS);
+    m_seGameStart->Init(filePath::se::GAME_START);
+
+    m_startLoadingStatus = StartLoadingStatus::finish;
+}
+
+void MainProcessing::StartLoadingFinish()
+{
+    m_spriteLoading->Deactivate();
+
+    m_spriteBackground[0]->Activate();
+    m_spriteBackground[1]->Activate();
+    m_spriteBackground[2]->Activate();
+    m_spriteBackground[3]->Activate();
+    m_spriteBackground[4]->Activate();
+    m_spriteBackground[5]->Activate();
+    m_spriteBackground[6]->Activate();
+
+    m_title->Init();
+
+    m_bgmTitle->Play(true);
+
+    m_gameStatus = GameStatus::title;
+
 }
 
 ////////////////////////////////////////////////////////////

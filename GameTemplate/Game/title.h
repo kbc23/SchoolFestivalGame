@@ -22,6 +22,11 @@ public: //GetŠÖ”
 		return m_flagFinish;
 	}
 
+public: //SetŠÖ”
+	void SetSpriteTitleMulColorW(const float& f)
+	{
+		m_spriteTitle->SetMulColorW(f);
+	}
 
 private: //data menber
 	////////////////////////////////////////////////////////////

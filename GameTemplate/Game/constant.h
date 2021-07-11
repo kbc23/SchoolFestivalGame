@@ -67,6 +67,8 @@ namespace filePath
 
 	namespace dds
 	{
+		//ローディング画面
+		constexpr const char* START_LOADING = "Assets/Image/Loading.dds";
 		//タイトル
 		constexpr const char* TITLE = "Assets/Image/Title.dds";
 		//選択画面系の背景
