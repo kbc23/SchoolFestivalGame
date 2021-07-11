@@ -22,7 +22,7 @@ bool Game::Start()
 {
     m_stage = NewGO<Stage>(igo::PRIORITY_CLASS, igo::CLASS_NAME_STAGE);
     m_rule1 = NewGO<Rule1>(igo::PRIORITY_CLASS, igo::CLASS_NAME_RULE1);
-    m_player = NewGO<Player>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PLAYER);
+    m_player =FindGO<Player>(igo::CLASS_NAME_PLAYER);
     m_enemyAI = NewGO<EnemyAI>(igo::PRIORITY_CLASS, igo::CLASS_NAME_ENEMYAI);
     m_score = NewGO<Score>(igo::PRIORITY_CLASS, igo::CLASS_NAME_SCORE);
     m_pause = NewGO<Pause>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PAUSE);

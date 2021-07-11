@@ -6,6 +6,8 @@
 #include "player_select.h"
 #include "CPU_strength_select.h"
 #include "game.h"
+#include "player.h"
+#include "EnemyAI.h"
 
 #include "game_camera.h"
 
@@ -134,6 +136,9 @@ bool MainProcessing::Start()
     //ゲームシーン
     m_game = NewGO<Game>(igo::PRIORITY_CLASS);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
+
+    m_player = NewGO<Player>(igo::PRIORITY_CLASS, igo::CLASS_NAME_PLAYER);
+    //m_enemyAI = NewGO<EnemyAI>(igo::PRIORITY_CLASS, igo::CLASS_NAME_ENEMYAI);
 
     m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FONT);
     m_fontStartCountdown->Init(L"");
@@ -427,6 +432,8 @@ void MainProcessing::Loading()
     //モードの選択情報を渡す
     m_game->SetRuleSuddenDeath(m_ruleSelect);
     m_game->SetMaxPlayer(m_maxPlayer);
+    m_player->SetDifficultyLevel(m_dilevel);
+ // m_enemyAI->SetDifficultyLevel(m_dilevel);
     m_game->SetDilevel(m_dilevel);
 
     m_game->Init();

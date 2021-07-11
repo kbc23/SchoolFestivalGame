@@ -147,19 +147,7 @@ bool Player::Start()
 
 bool Player::StartIndividual(const int pNum)
 {
-	switch (m_difficultyLevel) {
-	case 0:
-		m_moveStop[pNum] = 40;
-		break;
-	case 1:
-		m_moveStop[pNum] = 25;
-
-		break;
-	case 2:
-		m_moveStop[pNum] = 0;
-
-		break;
-	}
+	
 	//p_numはプレイヤーのコントローラー番号
 
 	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
@@ -252,6 +240,19 @@ void Player::Update()
 			}
 		}
 		else {
+			switch (m_difficultyLevel) {
+			case 0:
+				m_moveStop[playerNum] = 40;
+				break;
+			case 1:
+				m_moveStop[playerNum] = 25;
+
+				break;
+			case 2:
+				m_moveStop[playerNum] = 0;
+
+				break;
+			}
 			m_moveStopCount[playerNum]++;
 		if (rule1NewGO == true) {
 			if (m_flagGoal[playerNum] == false) {

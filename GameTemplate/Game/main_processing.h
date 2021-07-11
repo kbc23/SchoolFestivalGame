@@ -12,6 +12,8 @@ class ModeSelect;
 class PlayerSelect;
 class CPUStrengthSelect;
 class Game;
+class EnemyAI;
+class Player;
 class Result;
 
 class GameCamera;
@@ -268,6 +270,8 @@ private: //data menber
     CPUStrengthSelect* m_CPUStrengthSelect = nullptr;
     Game* m_game = nullptr;
     Result* m_result = nullptr;
+    Player* m_player = nullptr;
+    EnemyAI* m_enemyAI = nullptr;
 
     GameCamera* m_gameCamera = nullptr;
     
