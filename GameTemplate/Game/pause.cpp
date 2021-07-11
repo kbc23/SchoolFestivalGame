@@ -103,6 +103,10 @@ void Pause::PauseFinish()
 
 void Pause::Update()
 {
+	if (m_flagProcessing == false) {
+		return;
+	}
+
 	if (g_pad[0]->IsTrigger(enButtonStart))
 	{
 		SetGamePaused(true);

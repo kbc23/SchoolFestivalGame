@@ -206,7 +206,7 @@ void MainProcessing::Update()
         m_spriteCountdown[3]->Deactivate();
         m_game->Finish();
         m_game->Init();
-        NextRound();
+        NextRound(); //カウントダウンの初期化
         m_pause_stage = false;
     }
 
@@ -217,7 +217,7 @@ void MainProcessing::Update()
         m_spriteCountdown[2]->Deactivate();
         m_spriteCountdown[3]->Deactivate();
         m_game->Finish();
-        NextRound();
+        NextRound(); //カウントダウンの初期化
         m_title->Init();
         m_gameStatus = GameStatus::title;
         m_pause_title = false();
@@ -235,6 +235,9 @@ void MainProcessing::Update()
         for (int i = 0; i < 7; i++) {
             m_spriteBackground[i]->Activate();
         }
+
+        //BGMを再生
+        m_bgmTitle->Play(true);
 
         m_flagGameStart = false;
     }
