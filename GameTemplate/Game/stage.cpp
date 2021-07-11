@@ -497,6 +497,12 @@ void Stage::Update()
 
         //進行度の描画
         DegreeOfProgress(playerNum);
+
+        if (rule1NewGO == true) {
+            if (m_activeOperationVersionBlue[playerNum] == false && m_player->GetModelIsActive(playerNum) == true) {
+                SuddenDeathBlueBlockAnimation(playerNum);
+            }
+        }
     }
 
     //背景の描画
@@ -836,6 +842,17 @@ void Stage::BlueBlockAnimation(const int pNum)
         //モデルを元に戻す。
         m_player->ResetPositionY(pNum);
         m_player->SetAnimationIdle(pNum);
+    }
+}
+
+void Stage::SuddenDeathBlueBlockAnimation(const int& pNum)
+{
+    ++m_timerAnimationBlueBlock[pNum];
+    m_player->DownPositionY(pNum, 30.0f);
+
+    //プレイヤーを非表示にする。
+    if (m_timerAnimationBlueBlock[pNum] >= TIME_BLUE_BLOCK_ANIMATION) {
+        m_player->PlayerModelDeactivate(pNum);
     }
 }
 

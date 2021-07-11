@@ -151,6 +151,11 @@ public: //GetŠÖ”
 		return m_bluemiss[pNum];
 	}
 
+	bool GetModelIsActive(const int& pNum)
+	{
+		return m_modelRender[pNum]->IsActive();
+	}
+
 public: //SetŠÖ”
 
 	void DownPositionY(const int& pNum, const float& f)
@@ -273,9 +278,18 @@ public: //SetŠÖ”
 		m_difficultyLevel = i;
 	}
 
-	void SetBlueMiss(const int& pNum,const  bool& i) {
+	void SetBlueMiss(const int& pNum, const bool& i) {
 		m_bluemiss[pNum] = i;
 	}
+
+	void PlayerModelDeactivate(const int& pNum)
+	{
+		m_modelRender[pNum]->Deactivate();
+	}
+
+
+
+
 private: //enum
 	enum AnimationEnum
 	{

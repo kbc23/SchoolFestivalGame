@@ -106,6 +106,8 @@ private:
     */
     void BlueBlockAnimation(const int pNum);
 
+    void SuddenDeathBlueBlockAnimation(const int& pNum);
+
     /**
      * @brief 前にいた位置のブロックに戻る処理
      * @param pNum プレイヤーの番号
