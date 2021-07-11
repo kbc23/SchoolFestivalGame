@@ -99,9 +99,9 @@ namespace //constant
     // BGMÇÃämó¶
     //////////////////////////////
 
-    const int MAX_PROBABILITY_BGM = 6;
+    const int MAX_PROBABILITY_BGM = 5;
     const int PROBABILITY_BGM[MAX_PROBABILITY_BGM] = {
-        19,19,19,19,19,5
+        20,20,20,20,20
     };
 
     ////////////////////////////////////////////////////////////
@@ -143,7 +143,9 @@ Stage::~Stage()
 
     DeleteGO(m_spriteDegreeOfProgress);
 
-    DeleteGO(m_bgm);
+    if (m_bgm != nullptr) {
+        DeleteGO(m_bgm);
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -203,7 +205,7 @@ bool Stage::Start()
     }
 
     //BGMÇÃçƒê∂
-    m_bgm = NewGO<SoundBGM>(0);
+    //m_bgm = NewGO<SoundBGM>(0);
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontPlayerBlockPosition[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
@@ -355,6 +357,7 @@ void Stage::Finish()
     m_spriteBackgroundCloud_2->Deactivate();
 
     m_bgm->Stop();
+    DeleteGO(m_bgm);
 }
 
 void Stage::StageCreate()
@@ -463,6 +466,7 @@ void Stage::InitBGM()
         checkRandom += PROBABILITY_BGM[check];
 
         if (randomNum <= checkRandom) {
+            m_bgm = NewGO<SoundBGM>(0);
             m_bgm->Init(filePath::bgm::STAGE[check]);
             return;
         }
