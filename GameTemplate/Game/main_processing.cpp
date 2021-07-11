@@ -6,6 +6,8 @@
 #include "player_select.h"
 #include "CPU_strength_select.h"
 #include "game.h"
+#include "player.h"
+#include "EnemyAI.h"
 
 #include "game_camera.h"
 
@@ -503,11 +505,11 @@ void MainProcessing::Loading()
     //モードの選択情報を渡す
     m_game->SetRuleSuddenDeath(m_ruleSelect);
     m_game->SetMaxPlayer(m_maxPlayer);
+    //m_player->SetDifficultyLevel(m_dilevel);
+    // m_enemyAI->SetDifficultyLevel(m_dilevel);
     m_game->SetDilevel(m_dilevel);
 
     m_game->Init();
-
-
 
     //選択画面の背景を非表示
     for (int i = 0; i < 7; i++) {

@@ -47,6 +47,7 @@ void Game::Init()
     //Playerクラスに選択されたプレイヤー人数を渡す。
     m_player->SetMaxPlayer(m_maxPlayer);
     m_stage->SetMaxPlayer(m_maxPlayer);
+    m_player->SetDifficultyLevel(m_dilevel);
     m_enemyAI->SetDifficultyLevel(m_dilevel);
 }
 
