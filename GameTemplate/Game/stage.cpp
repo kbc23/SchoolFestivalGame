@@ -158,7 +158,25 @@ bool Stage::Start()
     //ê¬ÇWå¬
     //â©êFÇWå¬
 
+    const char* kari1 = "green";
+    const char* kari2 = "yellow";
+    const char* kari3 = "goal";
+
+
+
     //ÉÇÉfÉãÇÃçÏê¨
+    m_modelGreenBlock[con::player_1][con::FIRST_ELEMENT_ARRAY] = NewGO<ModelRender>(igo::PRIORITY_MODEL, kari1);
+    m_modelGreenBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Init(filePath::tkm::GREEN_BLOCK);
+    m_modelGreenBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Deactivate();
+
+    m_modelYellowBlock[con::player_1][con::FIRST_ELEMENT_ARRAY] = NewGO<ModelRender>(igo::PRIORITY_MODEL, kari2);
+    m_modelYellowBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Init(filePath::tkm::YELLOW_BLOCK);
+    m_modelYellowBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Deactivate();
+
+    m_modelGoalBlock[con::player_1][con::FIRST_ELEMENT_ARRAY] = NewGO<ModelRender>(igo::PRIORITY_MODEL, kari3);
+    m_modelGoalBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Init(filePath::tkm::GOAL_BLOCK);
+    m_modelGoalBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Deactivate();
+
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
@@ -167,9 +185,6 @@ bool Stage::Start()
         }
 
         for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
-            //m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
-            //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
-            //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
             m_modelYellowBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
             m_modelYellowBlock[playerNum][blockNum]->Init(filePath::tkm::YELLOW_BLOCK);
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
