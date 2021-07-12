@@ -189,11 +189,6 @@ public: //Get関数
         return m_blueMiss[pNum];
     }
 
-    const int Getm(const int o)
-    {
-        return m;
-    }
-
 public: //enum
     //ブロックの種類
     enum StageData
@@ -304,14 +299,8 @@ private: //data menber
     // NextRound
     ///////////////////////////////////////////////////////////
     int m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
-    int n = 0;          //ゴールしたプレイヤーの数
-    int m = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
+    int m_goalPlayer = 0;          //ゴールしたプレイヤーの数
+    int nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     bool m_allMiss = false;     //プレイヤー全員がミスをしているか
 
-    ///////////////////////////////////////////////////////////
-    // Length
-    ///////////////////////////////////////////////////////////
-
-    int j = 0;          //一番進んでいる人のブロック数
-    int t = 0;          //2番目に進んでいる人のブロック数
 };
