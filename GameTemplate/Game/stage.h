@@ -300,7 +300,7 @@ private: //data menber
     ///////////////////////////////////////////////////////////
     int m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
     int m_goalPlayer = 0;          //ゴールしたプレイヤーの数
-    int nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
+    int m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     bool m_allMiss = false;     //プレイヤー全員がミスをしているか
 
 };

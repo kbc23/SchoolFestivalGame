@@ -262,7 +262,7 @@ void Stage::Init()
 
     m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
     m_goalPlayer = 0;          //ゴールしたプレイヤーの数
-    nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
+    m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     m_allMiss = false;     //プレイヤー全員がミスをしているか
 
     //ステージを作成
@@ -913,11 +913,11 @@ void Stage::GoalBlock()
             for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
                 m_player->SetActivePlayer(playerNum, false);
             }
-            ++nextTime;
-            if (nextTime == 120) {
+            ++m_nextTime;
+            if (m_nextTime == 120) {
                 NextRound();
                 m_goalPlayer = 0;
-                nextTime = 0;
+                m_nextTime = 0;
             }
         }
         //他のプレイヤーが全員ミスをしているとき
@@ -1050,7 +1050,7 @@ void Stage::NextRound()
 
     
     m_goalPlayer = 0;
-    nextTime = 0;
+    m_nextTime = 0;
 
     m_allMiss = false;
 
