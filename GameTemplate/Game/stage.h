@@ -200,6 +200,7 @@ public: //enum
         stageDataMax
     };
 
+public: //Set関数
     /**
      * @brief 操作するプレイヤーの人数を保存する変数のSet関数
      * @param i 操作するプレイヤーの人数
@@ -207,13 +208,17 @@ public: //enum
     void SetMaxPlayer(const int i)
     {
         m_maxPlayer = i;
+    }   
+
+    void SetStop(const bool b)
+    {
+        stop = b;
     }
 
-    public:
-        
-        bool stop = false;  //黄色、青に乗った時の1ゲーム操作不可能フラグ
-        bool rule1NewGO = false;
-        
+    void SetRule1NewGO(const bool b)
+    {
+        rule1NewGO = b;
+    }
 
 private: //constant
     static const int m_MAX_BLOCK = 100;      //１レーンのブロックの最大数
@@ -303,4 +308,6 @@ private: //data menber
     int m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     bool m_allMiss = false;     //プレイヤー全員がミスをしているか
 
+    bool stop = false;  //黄色、青に乗った時の1ゲーム操作不可能フラグ
+    bool rule1NewGO = false;
 };
