@@ -30,18 +30,18 @@ void Rule1::Init()
 {
 	m_flagProcessing = true;
 
-	m_stage->stop = true;
-	m_stage->rule1NewGO = true;
-	m_player->rule1NewGO = true;
+	m_stage->SetStop(true);
+	m_stage->SetRule1NewGO(true);
+	m_player->SetRule1NewGO(true);
 }
 
 void Rule1::Finish()
 {
 	m_flagProcessing = false;
 
-	m_stage->stop = false;
-	m_stage->rule1NewGO = false;
-	m_player->rule1NewGO = false;
+	m_stage->SetStop(true);
+	m_stage->SetRule1NewGO(true);
+	m_player->SetRule1NewGO(true);
 }
 
 void Rule1::Update()

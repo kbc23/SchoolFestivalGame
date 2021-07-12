@@ -291,7 +291,10 @@ public: //Set関数
 		m_modelRender[pNum]->Deactivate();
 	}
 
-
+	void SetRule1NewGO(const bool b)
+	{
+		rule1NewGO = b;
+	}
 
 
 private: //enum
@@ -373,6 +376,5 @@ private: //data menber
 	int m_roundPoint[con::PlayerNumberMax] = { 0,0,0,0 };		//プレイヤーのラウンドのポイント
 	bool m_finishSuddenDeath = false;							//サドンデスモードが終了したか
 
-public:
 	bool rule1NewGO = false;
 };

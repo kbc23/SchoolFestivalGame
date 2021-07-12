@@ -276,14 +276,9 @@ void Stage::Init()
     Playermember = 0;
 
     m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
-    n = 0;          //ゴールしたプレイヤーの数
-    m = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
+    m_goalPlayer = 0;          //ゴールしたプレイヤーの数
+    m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     m_allMiss = false;     //プレイヤー全員がミスをしているか
-
-    j = 0;          //一番進んでいる人のブロック数
-    t = 0;          //2番目に進んでいる人のブロック数
-
-
 
     //ステージを作成
     StageCreate();
@@ -917,7 +912,7 @@ void Stage::GoalBlock()
             addNowRank = true;
 
             if (rule1NewGO == true) {
-                n += 1;
+                m_goalPlayer += 1;
             }
         }
     }
@@ -928,16 +923,16 @@ void Stage::GoalBlock()
     }
     
     if (rule1NewGO == true) {
-        if (1 <= n) {
+        if (1 <= m_goalPlayer) {
             //プレイヤーの操作をできないようにする。
             for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
                 m_player->SetActivePlayer(playerNum, false);
             }
-            ++m;
-            if (m == 120) {
+            ++m_nextTime;
+            if (m_nextTime == 120) {
                 NextRound();
-                n = 0;
-                m = 0;
+                m_goalPlayer = 0;
+                m_nextTime = 0;
             }
         }
         //他のプレイヤーが全員ミスをしているとき
@@ -959,7 +954,7 @@ void Stage::GoalBlock()
                         m_player->SetAnimationWin(playerNum);
 
                         if (rule1NewGO == true) {
-                            n += 1;
+                            m_goalPlayer += 1;
                         }
                     }
 
@@ -973,7 +968,7 @@ void Stage::GoalBlock()
             if (count == 4) {
                 //次のラウンドにいく
                 if (rule1NewGO == true) {
-                    n += 1;
+                    m_goalPlayer += 1;
                     m_allMiss = true;
                 }
             }
@@ -1069,10 +1064,8 @@ void Stage::NextRound()
     Playermember = 0;
 
     
-    n = 0;
-    m = 0;
-    j = 0;
-    t = 0;
+    m_goalPlayer = 0;
+    m_nextTime = 0;
 
     m_allMiss = false;
 
@@ -1090,7 +1083,7 @@ void Stage::Length()
         return;
     }
 
-    if (1 <= n) {
+    if (1 <= m_goalPlayer) {
         return;
     }
 
@@ -1118,7 +1111,7 @@ void Stage::Length()
             m_player->SetAnimationWin(con::player_1);
 
             if (rule1NewGO == true) {
-                n += 1;
+                m_goalPlayer += 1;
             }
         }
     }
@@ -1146,7 +1139,7 @@ void Stage::Length()
             m_player->SetAnimationWin(con::player_2);
 
             if (rule1NewGO == true) {
-                n += 1;
+                m_goalPlayer += 1;
             }
         }
     }
@@ -1174,7 +1167,7 @@ void Stage::Length()
             m_player->SetAnimationWin(con::player_3);
 
             if (rule1NewGO == true) {
-                n += 1;
+                m_goalPlayer += 1;
             }
         }
     }
@@ -1202,7 +1195,7 @@ void Stage::Length()
             m_player->SetAnimationWin(con::player_4);
 
             if (rule1NewGO == true) {
-                n += 1;
+                m_goalPlayer += 1;
             }
         }
     }

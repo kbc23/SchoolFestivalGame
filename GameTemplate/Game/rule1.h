@@ -16,6 +16,5 @@ public:
 private:	// data member
 	Stage* m_stage = nullptr;
 	Player* m_player = nullptr;
-	
 };
 
