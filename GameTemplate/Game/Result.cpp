@@ -41,7 +41,7 @@ Result::Result()
 
 Result::~Result()
 {
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
 	//DeleteGO(m_spritePressAButton);
@@ -85,7 +85,7 @@ bool Result::Start()
 	m_animationPlayer[lose].SetLoopFlag(false);
 
 	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		bool check = StartIndividual(playerNum);
 
 		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。
@@ -145,24 +145,24 @@ void Result::Init()
 	m_spriteBackground->Activate();
 	//m_spritePressAButton->Activate();
 
-	m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
+	m_spriteChoices[0]->SetMulColor(SRns::COLOR_NORMAL);
 	m_spriteChoices[0]->Deactivate();
-	m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
 	m_spriteChoices[1]->Deactivate();
-	m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
 	m_spriteChoices[2]->Deactivate();
-	m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[3]->SetMulColor(SRns::COLOR_GRAY);
 	m_spriteChoices[3]->Deactivate();
 
 	m_spritePressANext->Activate();
 
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		InitIndividual(playerNum);
 	}
 
 
 
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_rank[playerNum] = 0;
 	}
 
@@ -225,7 +225,7 @@ void Result::Finish()
 
 	m_spriteBackground->Deactivate();
 
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelRender[playerNum]->Deactivate();
 		DeleteGO(m_spriteGoalRank[playerNum]);
 	}
@@ -284,17 +284,17 @@ void Result::SelectDisplay() {
 		m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteChoices[1]->Init(filePath::dds::COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS);
 		m_spriteChoices[1]->SetPosition(MODE_SELECT_SPRITE[1]);
-		m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+		m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
 
 		m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteChoices[2]->Init(filePath::dds::COMMAND_CHOOSE_A_RULE);
 		m_spriteChoices[2]->SetPosition(MODE_SELECT_SPRITE[2]);
-		m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+		m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
 
 		m_spriteChoices[3] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteChoices[3]->Init(filePath::dds::COMMAND_EXIT_GAME);
 		m_spriteChoices[3]->SetPosition(MODE_SELECT_SPRITE[3]);
-		m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
+		m_spriteChoices[3]->SetMulColor(SRns::COLOR_GRAY);
 	
 		
 	}
@@ -318,11 +318,11 @@ void Result::ResultSelect() {
 			return;
 		}
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
 
 		--m_cursorPosition;
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
 	}
 	//下に移動
 	else if (g_pad[con::player_1]->IsTrigger(enButtonDown) == true && m_spriteChoicesNewGORE == true) {
@@ -332,11 +332,11 @@ void Result::ResultSelect() {
 			return;
 		}
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
 
 		++m_cursorPosition;
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
 	}
 
 }

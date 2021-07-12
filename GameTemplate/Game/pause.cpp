@@ -75,15 +75,15 @@ void Pause::Finish()
 void Pause::PauseInit()
 {
 	m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
-	m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
+	m_spriteChoices[0]->SetMulColor(SRns::COLOR_NORMAL);
 	m_spriteChoices[0]->Activate();
 
 	m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
-	m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
 	m_spriteChoices[1]->Activate();
 
 	m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
-	m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+	m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
 	m_spriteChoices[2]->Activate();
 
 	m_cursorPosition = 0;       //ƒJ[ƒ\ƒ‹‚ÌêŠ
@@ -154,11 +154,11 @@ void Pause::UpdateOnlyPaused()
 			return;
 		}
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
 
 		--m_cursorPosition;
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
 	}
 	//‰º‚ÉˆÚ“®
 	else if (g_pad[con::player_1]->IsTrigger(enButtonDown) == true)
@@ -167,11 +167,11 @@ void Pause::UpdateOnlyPaused()
 			return;
 		}
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
 
 		++m_cursorPosition;
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
 	}
 	if (g_pad[0]->IsTrigger(enButtonStart))
 	{

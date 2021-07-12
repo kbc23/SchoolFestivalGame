@@ -282,6 +282,13 @@ public:
 
 private: //constant
     static const int m_INIT_COUNT_START_COUNTDOWN = 240;        //m_countStartCountdownの初期値
+    static const int m_MAX_COUNTDOWN = 4;               //カウントダウンに使用する画像の最大枚数
+
+
+public: //constant
+    static const int m_MAX_BACKGROUND = 7;                  //背景画像の最大枚数
+
+
 
 private: //data menber
     ////////////////////////////////////////////////////////////
@@ -300,9 +307,8 @@ private: //data menber
     GameCamera* m_gameCamera = nullptr;
     
     
-    FontRender* m_fontStartCountdown = nullptr;     //カウントダウンのフォント
-    SpriteRender* m_spriteBackground[7] = { nullptr };
-    SpriteRender* m_spriteCountdown[4] = { nullptr };
+    SpriteRender* m_spriteBackground[m_MAX_BACKGROUND] = { nullptr };
+    SpriteRender* m_spriteCountdown[m_MAX_COUNTDOWN] = { nullptr };
     SpriteRender* m_spriteLoading = nullptr;
     Fade* m_fade = nullptr;
     SoundBGM* m_bgmTitle = nullptr;

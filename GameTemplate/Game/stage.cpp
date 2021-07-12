@@ -160,13 +160,13 @@ bool Stage::Start()
 
     //モデルの作成
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
             m_modelGreenBlock[playerNum][blockNum]->Init(filePath::tkm::GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
             //m_modelBlueBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_FIRST);
             //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
@@ -175,7 +175,7 @@ bool Stage::Start()
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
 
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
             m_modelGoalBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
             m_modelGoalBlock[playerNum][blockNum]->Init(filePath::tkm::GOAL_BLOCK);
             m_modelGoalBlock[playerNum][blockNum]->Deactivate();
@@ -274,13 +274,13 @@ void Stage::Init()
     StageCreate();
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
             m_modelGoalBlock[playerNum][blockNum]->Deactivate();
         }
     }
@@ -327,13 +327,13 @@ void Stage::Finish()
     m_flagProcessing = false;
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
             m_modelYellowBlock[playerNum][blockNum]->Deactivate();
         }
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
             m_modelGoalBlock[playerNum][blockNum]->Deactivate();
         }
     }
@@ -373,9 +373,9 @@ void Stage::StageCreate()
     int continuousGreenBlock = 0;   //緑のブロックが何回連続で出ているか。
     bool lastTimeBlockBlueOrYellow = false; //前回のブロックが青色か黄色だったか
 
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+    for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
         //最初のブロックは緑
-        if (blockNum == con::FIRST_OF_THE_ARRAY) {
+        if (blockNum == con::FIRST_ELEMENT_ARRAY) {
             m_stageData[con::player_1][blockNum] = greenBlock;
             ++continuousGreenBlock;
             continue;
@@ -422,7 +422,7 @@ void Stage::StageCreate()
 
     //プレイヤー１でセットしたものを他のプレイヤーのところにもセットする。
     for (int playerNum = con::player_2; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_BLOCK; blockNum++) {
             m_stageData[playerNum][blockNum] = m_stageData[con::player_1][blockNum];
         }
     }
@@ -524,14 +524,14 @@ void Stage::Update()
 
 void Stage::DrawBlock(const int pNum)
 {
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+    for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+    for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
         //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+    for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
         m_modelGoalBlock[pNum][blockNum]->Deactivate();
     }
 
@@ -599,14 +599,14 @@ void Stage::DrawMoveBlock(const int pNum)
     ++m_timerAnimation[pNum];
 
     //モデルを全部非表示にする。
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+    for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
         m_modelGreenBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+    for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
         //m_modelBlueBlock[pNum][blockNum]->Deactivate();
         m_modelYellowBlock[pNum][blockNum]->Deactivate();
     }
-    for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
+    for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GOAL_BLOCK; blockNum++) {
         m_modelGoalBlock[pNum][blockNum]->Deactivate();
     }
 
@@ -997,12 +997,12 @@ void Stage::NextRound()
 
     //モデルの作成
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             //m_modelGreenBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_GREEN_BLOCK);
             m_modelGreenBlock[playerNum][blockNum]->Deactivate();
         }
 
-        for (int blockNum = con::FIRST_OF_THE_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
+        for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_YELLOW_BLOCK; blockNum++) {
             //m_modelBlueBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_BLUE_BLOCK);
             //m_modelBlueBlock[playerNum][blockNum]->Deactivate();
             //m_modelYellowBlock[playerNum][blockNum]->Init(FILE_PATH_TKM_YELLOW_BLOCK);

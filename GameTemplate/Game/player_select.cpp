@@ -38,7 +38,7 @@ PlayerSelect::PlayerSelect()
 
 PlayerSelect::~PlayerSelect()
 {
-    for (int choicesNum = con::FIRST_OF_THE_ARRAY; choicesNum < m_NUMBER_OF_CHOICES; choicesNum++) {
+    for (int choicesNum = con::FIRST_ELEMENT_ARRAY; choicesNum < m_NUMBER_OF_CHOICES; choicesNum++) {
         DeleteGO(m_spriteChoices[choicesNum]);
     }
 
@@ -86,19 +86,19 @@ void PlayerSelect::Init()
     m_flagProcessing = true;
 
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
-    m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
+    m_spriteChoices[0]->SetMulColor(SRns::COLOR_NORMAL);
     m_spriteChoices[0]->Activate();
 
     m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
-    m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
     m_spriteChoices[1]->Activate();
 
     m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
-    m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
     m_spriteChoices[2]->Activate();
 
     m_spriteChoices[3]->SetPosition(CHOICES_POSITION[3]);
-    m_spriteChoices[3]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[3]->SetMulColor(SRns::COLOR_GRAY);
     m_spriteChoices[3]->Activate();
 
     m_font->Activate();
@@ -155,12 +155,12 @@ void PlayerSelect::SelectTheNumberOfPlayers()
             return;
         }
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
 
         --m_cursorPosition;
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
         m_flagMove = true;
     }
     //‰E‚ÉˆÚ“®
@@ -171,12 +171,12 @@ void PlayerSelect::SelectTheNumberOfPlayers()
             return;
         }
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
 
         ++m_cursorPosition;
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
         m_flagMove = true;
     }
 }

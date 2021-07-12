@@ -9,8 +9,11 @@ namespace con //constant
 	//const int ZERO = 0;
 	const int INIT_ZERO = 0;
 	const float FLOAT_ZERO = 0.0f;
-	const int FIRST_OF_THE_ARRAY = 0;
+	const int FIRST_ELEMENT_ARRAY = 0;		//配列の最初の要素
 	const int TIME_RESET_ZERO = 0;
+
+	const float GAME_SCREEN_W = 1280.0f;	//画面の横幅
+	const float GAME_SCREEN_H = 720.0f;		//画面の縦幅
 
 
 	//プレイヤーの番号
@@ -21,6 +24,15 @@ namespace con //constant
 		player_3,
 		player_4,
 		PlayerNumberMax
+	};
+
+	//難易度
+	const enum Difficulty
+	{
+		easy,
+		normal,
+		hard,
+		DifficultyMax
 	};
 
 	//モデルの上方向の軸

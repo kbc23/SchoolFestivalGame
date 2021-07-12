@@ -71,7 +71,7 @@ Player::Player()
 Player::~Player()
 {
 	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteIndividual(playerNum);
 	}
 
@@ -121,7 +121,7 @@ bool Player::Start()
 	//m_animationPlayer[Animation_jump].SetLoopFlag(true);
 
 	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		bool check = StartIndividual(playerNum);
 
 		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。
@@ -179,7 +179,7 @@ void Player::Init()
 
 	m_spriteGameEnd->Deactivate();
 
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelRender[playerNum]->SetPosition(PLAYER_START_POSITION[playerNum]);
 		m_modelRender[playerNum]->SetScale({ 0.03f,0.03f,0.03f });
 		m_modelRender[playerNum]->PlayAnimation(idle);
@@ -191,7 +191,7 @@ void Player::Init()
 	}
 
 	
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_activePlayer[playerNum] = true;
 		m_goalRanking[playerNum] = 0;
 		m_flagGoal[playerNum] = false;
@@ -225,7 +225,7 @@ void Player::Finish()
 
 	m_spriteGameEnd->Deactivate();
 
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelRender[playerNum]->Deactivate();
 
 		for (int i = 0; i < 4; i++) {
@@ -245,7 +245,7 @@ void Player::Update()
 	}
 
 	//プレイヤーごとに操作
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		if (m_maxPlayer > playerNum) {
 			if (m_flagGoal[playerNum] == false) {
 				Controller(playerNum);
@@ -354,7 +354,7 @@ void Player::Update()
 
 	bool check2[4] = { false,false,false,false };
 
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < m_maxPlayer; playerNum++) {
 		check[playerNum] = m_modelRender[playerNum]->IsInited();
 
 		check2[playerNum] = m_modelRender[playerNum]->IsPlayingAnimation();
@@ -463,7 +463,7 @@ void Player::NextRound()
 		fontDeavtive += 1;
 	}
 
-	for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelRender[playerNum]->PlayAnimation(idle);
 		m_modelRender[playerNum]->ResetPositionY();
 		m_modelRender[playerNum]->Activate();
@@ -472,7 +472,7 @@ void Player::NextRound()
 	if (fontDeavtive >= 120) {
 		m_spriteGameEnd->Deactivate();
 		m_goalPlayer = 0;
-		for (int playerNum = con::FIRST_OF_THE_ARRAY; playerNum < m_maxPlayer; playerNum++) {
+		for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < m_maxPlayer; playerNum++) {
 			m_flagGoal[playerNum] = false;
 		}
 		fontDeavtive = 0;

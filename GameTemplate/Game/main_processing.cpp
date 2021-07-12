@@ -29,6 +29,34 @@ namespace
     const int COUNTDOWN_1 = 60;
     const int COUNTDOWN_0 = 0;
     const int COUNTDOWN_DEACTIVATE = -60;
+
+    const int SPRITE_COUNTDOWN_0 = 0;
+    const int SPRITE_COUNTDOWN_1 = 1;
+    const int SPRITE_COUNTDOWN_2 = 2;
+    const int SPRITE_COUNTDOWN_3 = 3;
+
+    ////////////////////////////////////////////////////////////
+    // 位置情報
+    ////////////////////////////////////////////////////////////
+
+    const Vector2 BACKGROUND_START_POSITION[MainProcessing::m_MAX_BACKGROUND] =
+    {
+        { 0.0f,0.0f },
+        { 1280.0f,0.0f },
+        { 0.0f,-720.0f },
+        { 1280.0f,-720.0f },
+        { 2560.0f,-720.0f },
+        { 1280.0f,-1440.0f },
+        { 2560.0f,-1440.0f }
+    };
+
+
+    ////////////////////////////////////////////////////////////
+    // その他
+    ////////////////////////////////////////////////////////////
+
+    const float MOVE_BACKGROUND = 1010.0f;      //背景の移動量
+    const float TITLE_BGM_VOLUME = 0.5f;
 }
 
 
@@ -55,14 +83,13 @@ MainProcessing::~MainProcessing()
     DeleteGO(m_CPUStrengthSelect);
 
     //選択画面の背景を削除
-    for (int i = 0; i < 7; i++) {
-        DeleteGO(m_spriteBackground[i]);
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        DeleteGO(m_spriteBackground[backgroundNum]);
     }
     DeleteGO(m_bgmTitle);
 
     //ゲームシーン
     DeleteGO(m_game);
-    DeleteGO(m_fontStartCountdown);
 
     //リザルトシーン
     DeleteGO(m_result);
@@ -80,7 +107,7 @@ bool MainProcessing::Start()
 
     m_spriteLoading = NewGO<SpriteRender>(igo::PRIORITY_UI);
     m_spriteLoading->Init(filePath::dds::START_LOADING);
-    m_spriteLoading->SetMulColorW(0.0f);
+    m_spriteLoading->SetMulColorW(SRns::TRANSPARENCY_0);
 
     return true;
 }
@@ -125,42 +152,36 @@ void MainProcessing::Update()
         DrawBackground();
     }
 
-    if (m_pause_stage==true)
+    // TODO: この下にあるポーズ関連の処理をPauseクラスで処理をおこなうように変更すること
+
+    if (m_pause_stage == true)
     {
-        m_spriteCountdown[0]->Deactivate();
-        m_spriteCountdown[1]->Deactivate();
-        m_spriteCountdown[2]->Deactivate();
-        m_spriteCountdown[3]->Deactivate();
+        for (int countdownNum = con::FIRST_ELEMENT_ARRAY; countdownNum < m_MAX_COUNTDOWN; countdownNum++) {
+            m_spriteCountdown[countdownNum]->Deactivate();
+        }
+
         m_game->Finish();
         m_game->Init();
         NextRound(); //カウントダウンの初期化
         m_pause_stage = false;
     }
 
-    if (m_pause_title==true)
+    if (m_pause_title == true)
     {
-        m_spriteCountdown[0]->Deactivate();
-        m_spriteCountdown[1]->Deactivate();
-        m_spriteCountdown[2]->Deactivate();
-        m_spriteCountdown[3]->Deactivate();
+        for (int countdownNum = con::FIRST_ELEMENT_ARRAY; countdownNum < m_MAX_COUNTDOWN; countdownNum++) {
+            m_spriteCountdown[countdownNum]->Deactivate();
+        }
+
         m_game->Finish();
         NextRound(); //カウントダウンの初期化
         m_title->Init();
         m_gameStatus = GameStatus::title;
         m_pause_title = false();
 
-        //背景を初期状態に戻す
-        m_spriteBackground[0]->SetPosition({ 0.0f,0.0f });
-        m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
-        m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
-        m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
-        m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
-        m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
-        m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
-
-        //選択画面の背景を表示
-        for (int i = 0; i < 7; i++) {
-            m_spriteBackground[i]->Activate();
+        //背景を初期状態に戻して、表示
+        for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+            m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]);
+            m_spriteBackground[backgroundNum]->Activate();
         }
 
         //BGMを再生
@@ -168,25 +189,25 @@ void MainProcessing::Update()
 
         m_flagGameStart = false;
     }
+
+    // TODO END
 }
 
 void MainProcessing::DrawBackground()
 {
-    for (int i = 0; i < 7; i++) {
-        m_spriteBackground[i]->SetPosition({ m_spriteBackground[i]->GetPosition().x - 1280.0f / 1010.0f,
-                                                m_spriteBackground[i]->GetPosition().y + 720.0f / 1010.0f }
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        m_spriteBackground[backgroundNum]->SetPosition(
+            { m_spriteBackground[backgroundNum]->GetPosition().x - con::GAME_SCREEN_W / MOVE_BACKGROUND,
+              m_spriteBackground[backgroundNum]->GetPosition().y + con::GAME_SCREEN_H / MOVE_BACKGROUND
+            }
         );
     }
 
-
+    //背景を初期位置にリセット
     if (m_spriteBackground[6]->GetPosition().x <= 0.0f) {
-        m_spriteBackground[0]->SetPosition({ 0.0f,0.0f });
-        m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
-        m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
-        m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
-        m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
-        m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
-        m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
+        for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+            m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]);
+        }
     }
 }
 
@@ -217,8 +238,8 @@ void MainProcessing::StartLoadingPreparation()
 {
     m_spriteLoading->SetMulColorW(m_spriteLoading->GetMulColorW() + 0.05f);
 
-    if (m_spriteLoading->GetMulColorW() >= 1.0f) {
-        m_spriteLoading->SetMulColorW(1.0f);
+    if (m_spriteLoading->GetMulColorW() >= SRns::TRANSPARENCY_100) {
+        m_spriteLoading->SetMulColorW(SRns::TRANSPARENCY_100);
         m_startLoadingStatus = StartLoadingStatus::loading;
     }
 }
@@ -246,20 +267,11 @@ void MainProcessing::StartLoading()
     //2 3 4
     //  5 6
 
-    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
-    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
-    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
-    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
-    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
-    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
-
-    m_spriteBackground[0]->Deactivate();
-    m_spriteBackground[1]->Deactivate();
-    m_spriteBackground[2]->Deactivate();
-    m_spriteBackground[3]->Deactivate();
-    m_spriteBackground[4]->Deactivate();
-    m_spriteBackground[5]->Deactivate();
-    m_spriteBackground[6]->Deactivate();
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]);
+        m_spriteBackground[backgroundNum]->Deactivate();
+    }
+    
 
 
     //フェードの処理をNewGO
@@ -268,7 +280,7 @@ void MainProcessing::StartLoading()
     //選択画面のBGMを初期化、再生
     m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
     m_bgmTitle->Init(filePath::bgm::TITLE);
-    m_bgmTitle->SetVolume(0.5f);
+    m_bgmTitle->SetVolume(TITLE_BGM_VOLUME);
 
     //キャンセルのSEを初期化    
     m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
@@ -294,18 +306,14 @@ void MainProcessing::StartLoading()
     m_game = NewGO<Game>(igo::PRIORITY_CLASS);
     m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
 
-    m_fontStartCountdown = NewGO<FontRender>(igo::PRIORITY_FONT);
-    m_fontStartCountdown->Init(L"");
-    m_fontStartCountdown->Deactivate();
-
     //リザルトシーン
     m_result = NewGO<Result>(igo::PRIORITY_CLASS);
 
-
-    for (int countNum = 0; countNum < 4; countNum++) {
-        m_spriteCountdown[countNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-        m_spriteCountdown[countNum]->Init(filePath::dds::COUNT[countNum]);
-        m_spriteCountdown[countNum]->Deactivate();
+    //カウントダウンのUIの初期化
+    for (int countdownNum = con::FIRST_ELEMENT_ARRAY; countdownNum < m_MAX_COUNTDOWN; countdownNum++) {
+        m_spriteCountdown[countdownNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+        m_spriteCountdown[countdownNum]->Init(filePath::dds::COUNT[countdownNum]);
+        m_spriteCountdown[countdownNum]->Deactivate();
     }
 
 
@@ -322,13 +330,9 @@ void MainProcessing::StartLoadingFinish()
 {
     m_spriteLoading->Deactivate();
 
-    m_spriteBackground[0]->Activate();
-    m_spriteBackground[1]->Activate();
-    m_spriteBackground[2]->Activate();
-    m_spriteBackground[3]->Activate();
-    m_spriteBackground[4]->Activate();
-    m_spriteBackground[5]->Activate();
-    m_spriteBackground[6]->Activate();
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        m_spriteBackground[backgroundNum]->Activate();
+    }
 
     m_title->Init();
 
@@ -512,9 +516,10 @@ void MainProcessing::Loading()
     m_game->Init();
 
     //選択画面の背景を非表示
-    for (int i = 0; i < 7; i++) {
-        m_spriteBackground[i]->Deactivate();
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        m_spriteBackground[backgroundNum]->Deactivate();
     }
+
     //BGMを止める
     m_bgmTitle->Stop();
 
@@ -600,18 +605,10 @@ void MainProcessing::FinishGameScene()
     m_spriteCountdown[2]->Deactivate();
     m_spriteCountdown[3]->Deactivate();
 
-    //背景を初期状態に戻す
-    m_spriteBackground[0]->SetPosition({ 0.0f,0.0f });
-    m_spriteBackground[1]->SetPosition({ 1280.0f,0.0f });
-    m_spriteBackground[2]->SetPosition({ 0.0f,-720.0f });
-    m_spriteBackground[3]->SetPosition({ 1280.0f,-720.0f });
-    m_spriteBackground[4]->SetPosition({ 2560.0f,-720.0f });
-    m_spriteBackground[5]->SetPosition({ 1280.0f,-1440.0f });
-    m_spriteBackground[6]->SetPosition({ 2560.0f,-1440.0f });
-
-    //選択画面の背景を表示
-    for (int i = 0; i < 7; i++) {
-        m_spriteBackground[i]->Activate();
+    //背景を初期状態に戻して、表示
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]);
+        m_spriteBackground[backgroundNum]->Activate();
     }
 
     m_flagGameStart = false;
@@ -619,7 +616,7 @@ void MainProcessing::FinishGameScene()
     m_startPreparingForLoading = false;
     m_startEndOfLoading = false;
 
-    for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
         m_result->SetRank(playerNum, m_rank[playerNum]);
     }
 

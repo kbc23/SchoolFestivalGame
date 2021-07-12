@@ -76,15 +76,15 @@ void CPUStrengthSelect::Init()
     m_flagProcessing = true;
 
     m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
-    m_spriteChoices[0]->SetMulColor(srName::COLOR_NORMAL);
+    m_spriteChoices[0]->SetMulColor(SRns::COLOR_NORMAL);
     m_spriteChoices[0]->Activate();
 
     m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
-    m_spriteChoices[1]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
     m_spriteChoices[1]->Activate();
 
     m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
-    m_spriteChoices[2]->SetMulColor(srName::COLOR_GRAY);
+    m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
     m_spriteChoices[2]->Activate();
 
     m_font->Activate();
@@ -139,12 +139,12 @@ void CPUStrengthSelect::SelectTheNumberOfCPUStrength()
             return;
         }
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
 
         --m_cursorPosition;
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
         m_flagMove = true;
     }
     //‰E‚ÉˆÚ“®
@@ -155,12 +155,12 @@ void CPUStrengthSelect::SelectTheNumberOfCPUStrength()
             return;
         }
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_GRAY);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
         m_spriteChoices[m_cursorPosition]->SetPositionY(0.0f);
 
         ++m_cursorPosition;
 
-        m_spriteChoices[m_cursorPosition]->SetMulColor(srName::COLOR_NORMAL);
+        m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
         m_flagMove = true;
     }
 }
