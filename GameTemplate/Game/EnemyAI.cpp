@@ -28,7 +28,7 @@ bool EnemyAI::Start() {
 
 void EnemyAI::Init()
 {
-	m_flagProcessing == true;
+	m_flagProcessing = true;
 
 	for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_activePlayer[playerNum] = false;

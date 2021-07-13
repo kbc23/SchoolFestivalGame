@@ -3,6 +3,7 @@
 #include "HID/GamePad.h"
 #include "TResourceBank.h"
 #include "tkFile/TkmFile.h"
+#include "Shader.h"
 #include "../MiniEngine/time/GameTime.h"
 
 class GraphicsEngine;
@@ -43,11 +44,37 @@ public:
 	{
 		m_tkmFileBank.Regist(filePath, tkmFile);
 	}
+
+	/// <summary>
+	/// シェーダーファイルバンクからシェーダーを取得。
+	/// </summary>
+	/// <param name="filePath"></param>
+	/// <returns></returns>
+	Shader* GetShaderFromBank(const char* filePath, const char* entryPointFuncName)
+	{
+		std::string programName = filePath;
+		programName += entryPointFuncName;
+		return m_shaderBank.Get(programName.c_str());
+	}
+	/// <summary>
+	/// シェーダーファイルをバンクに登録
+	/// </summary>
+	/// <param name="filePath"></param>
+	/// <param name="shader"></param>
+	void RegistShaderToBank(const char* filePath, const char* entryPointFuncName, Shader* shader)
+	{
+		std::string programName = filePath;
+		programName += entryPointFuncName;
+		m_shaderBank.Regist(programName.c_str(), shader);
+	}
+
+
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 	GameTime m_gameTime;							//ゲームタイム。
 	TResourceBank<TkmFile> m_tkmFileBank;			//tkmファイルバンク。
+	TResourceBank<Shader> m_shaderBank;				//シェーダーバンク
 };
 
 extern TkEngine* g_engine;	//TKエンジン。

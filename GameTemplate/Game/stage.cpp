@@ -165,18 +165,6 @@ bool Stage::Start()
 
 
     //ÉÇÉfÉãÇÃçÏê¨
-    m_modelGreenBlock[con::player_1][con::FIRST_ELEMENT_ARRAY] = NewGO<ModelRender>(igo::PRIORITY_MODEL, kari1);
-    m_modelGreenBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Init(filePath::tkm::GREEN_BLOCK);
-    m_modelGreenBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Deactivate();
-
-    m_modelYellowBlock[con::player_1][con::FIRST_ELEMENT_ARRAY] = NewGO<ModelRender>(igo::PRIORITY_MODEL, kari2);
-    m_modelYellowBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Init(filePath::tkm::YELLOW_BLOCK);
-    m_modelYellowBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Deactivate();
-
-    m_modelGoalBlock[con::player_1][con::FIRST_ELEMENT_ARRAY] = NewGO<ModelRender>(igo::PRIORITY_MODEL, kari3);
-    m_modelGoalBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Init(filePath::tkm::GOAL_BLOCK);
-    m_modelGoalBlock[con::player_1][con::FIRST_ELEMENT_ARRAY]->Deactivate();
-
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         for (int blockNum = con::FIRST_ELEMENT_ARRAY; blockNum < m_MAX_GREEN_BLOCK; blockNum++) {
             m_modelGreenBlock[playerNum][blockNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
