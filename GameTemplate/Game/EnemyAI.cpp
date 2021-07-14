@@ -7,10 +7,16 @@
 #include <stdlib.h> // rand, srand関数
 #include <time.h>   // time関数
 
-const int MOVE_2 = 2;		//移動量2
-const int MOVE_1 = 1;		//移動量1
 
-
+//定数の定義
+const int EnemyAI::m_MOVE_2 = 2;		//移動量2
+const int EnemyAI::m_MOVE_1 = 1;		//移動量1
+const int EnemyAI::m_MISS_INVALID = 3;//ミスを無効にする回数,現在は3回に設定
+const int EnemyAI::m_RAND_TIMES = 3;//現在は3、pNum*RAND_TIMESがrandの実行回数
+const int EnemyAI::m_RANDOM_ZERO_TO_NINE = 10;//10、randを割って余り0～9を出す
+const int EnemyAI::m_MISSPLAY_EASY = 8;//現在は8、難易度よわいのミスプレイになる可能性のある行動をする割合
+const int EnemyAI::m_MISSPLAY_NORMAL = 6;//現在は6、難易度ふつうのミスプレイになる可能性のある行動をする割合
+const int EnemyAI::m_MISSPLAY_DIFFICULT = 3;//現在は3、難易度つよいのミスプレイになる可能性のある行動をする割合
 EnemyAI::EnemyAI() {
 
 }
@@ -37,11 +43,6 @@ void EnemyAI::Init()
 		m_flagGoal[playerNum] = false;
 		m_JumpFlag[playerNum] = false;
 	}
-
-	//m_difficultyLevel = 0;//難易度1簡単2普通3難しい
-
-	m_maxPlayer = 0;//プレイヤー最大数
-	m_addEnemyNumber = 2;//CPU用番号=2
 }
 
 void EnemyAI::Finish()
@@ -63,11 +64,7 @@ void EnemyAI::Move(const int pNum) {
 
 		DifficultyMove(pNum);
 		m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
-	//	m_player->Animation(pNum);
 	}
-	/*else {
-		m_player->Animation(pNum);
-	}*/
 }
 
 void EnemyAI::Moverule1(const int pNum) {
@@ -78,11 +75,7 @@ void EnemyAI::Moverule1(const int pNum) {
 
 		DifficultyMoverule1(pNum);
 		m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
-		//	m_player->Animation(pNum);
 	}
-	/*else {
-		m_player->Animation(pNum);
-	}*/
 }
 
 
@@ -91,58 +84,37 @@ void EnemyAI::DifficultyMove(const int pNum) {
 	// 乱数生成
 	unsigned int    now = (unsigned int)time(0);
 	srand(now);
-	for (int i = 0; i < pNum * 2; i++) {
+	for (int i = 0; i < pNum * m_RAND_TIMES; i++) {
 		rand();
 	}
-	int     ran1 = rand() % 10;//乱数結果0～9
+	m_randomNumber = rand() % m_RANDOM_ZERO_TO_NINE;//乱数結果0～9
 
 	switch (m_difficultyLevel) {
 	case 0:
-		if (ran1 <=7) {//8割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
+		if (m_randomNumber < m_MISSPLAY_EASY) {//8割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
 			AutoController1(pNum);
 		}
-		//	else if (ran1 <= 6) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
 		else {//2割の行動(最適な行動)
 			AutoController3(pNum);
 		}
 		break;
 	case 1:
-		if (ran1 <= 5) {//6割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
+		if (m_randomNumber < m_MISSPLAY_NORMAL) {//6割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
 			AutoController1(pNum);
 		}
-		//	else if (ran1 <= 4) {//2割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
 		else {//4割の行動(最適な行動)
 			AutoController3(pNum);
 		}
 		break;
 	case 2:
-		if (ran1 <=2) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
+		if (m_randomNumber < m_MISSPLAY_DIFFICULT) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
 			AutoController1(pNum);
 
 		}
-		//	else if (ran1 <= 2) {//1割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
 		else {//7割の行動(最適な行動)
 			AutoController3(pNum);
 		}
-		break;
-		/*default:
-			if (ran1 <= 2) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
-				AutoController1(pNum);
-			}
-			//else if (ran1 <= 2) {//1割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
-			else {//7割の行動(最適な行動)
-				AutoController3(pNum);
-			}
-			//}
-			*/
+		break;		
 	}
 }
 
@@ -150,57 +122,36 @@ void EnemyAI::DifficultyMoverule1(const int pNum) {
 	// 乱数生成
 	unsigned int    now = (unsigned int)time(0);
 	srand(now);
-	for (int i = 0; i < pNum * 3; i++) {
+	for (int i = 0; i < pNum * m_RAND_TIMES; i++) {
 		rand();
 	}
-	int     ran1 = rand() % 10;//乱数結果0～9
+	 m_randomNumber = rand() % m_RANDOM_ZERO_TO_NINE;//乱数結果0～9
 
 	switch (m_difficultyLevel) {
 	case 0:
-		if (ran1 <= 7) {//9割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
-			AutoController11(pNum);
-		}
-		//	else if (ran1 <= 6) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
-		else {//1割の行動(最適な行動)
+		if (m_randomNumber < m_MISSPLAY_EASY) {//8割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
+			AutoControllerRule1(pNum);
+		}		
+		else {//2割の行動(最適な行動)
 			AutoController3(pNum);
 		}
 		break;
 	case 1:
-		if (ran1 <= 5) {//7割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
-			AutoController11(pNum);
+		if (m_randomNumber < m_MISSPLAY_NORMAL) {//6割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
+			AutoControllerRule1(pNum);
 		}
-		//	else if (ran1 <= 4) {//2割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
-		else {//3割の行動(最適な行動)
+		else {//4割の行動(最適な行動)
 			AutoController3(pNum);
 		}
 		break;
 	case 2:
-		if (ran1 <= 2) {//5割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
-			AutoController11(pNum);
+		if (m_randomNumber < m_MISSPLAY_DIFFICULT) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
+			AutoControllerRule1(pNum);
 		}
-		//	else if (ran1 <= 2) {//1割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
-		else {//5割の行動(最適な行動)
+		else {//7割の行動(最適な行動)
 			AutoController3(pNum);
 		}
 		break;
-		/*default:
-			if (ran1 <= 2) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
-				AutoController11(pNum);
-			}
-			//else if (ran1 <= 2) {//1割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも1マス移動)
-		//		AutoController2(pNum);
-		//	}
-			else {//7割の行動(最適な行動)
-				AutoController3(pNum);
-			}
-			//}
-			*/
 	}
 }
 
@@ -212,7 +163,6 @@ void EnemyAI::AutoController1(const int pNum)
 	}
 
 	if (m_flagAnimationJump[pNum] == true ||
-		//m_flagCheckBlock[pNum] == true ||
 		m_stage->GetmActiveOperation(pNum) == false) {
 		return;
 	}
@@ -221,29 +171,22 @@ void EnemyAI::AutoController1(const int pNum)
 		m_bluemiss[pNum] = false;
 
 		//1マス進む
-		if (m_stage->MoveBlock(pNum, MOVE_1) == false) {
+		if (m_stage->MoveBlock(pNum, m_MOVE_1) == false) {
 			return;
 		}
 	}
 	
-	
-
 	//２マス進む
-	else if (m_stage->MoveBlock(pNum, MOVE_2) == false) {
+	else if (m_stage->MoveBlock(pNum, m_MOVE_2) == false) {
 		return;
 	}
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
-	
 	m_JumpFlag[pNum] = true;
-
 	m_flagAnimationJump[pNum] = true;
-
-//	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
-
-
 }
-void EnemyAI::AutoController11(const int pNum)
+
+void EnemyAI::AutoControllerRule1(const int pNum)
 {
 
 	if (m_game->GetStopOperation() == true) {
@@ -251,55 +194,26 @@ void EnemyAI::AutoController11(const int pNum)
 	}
 
 	if (m_flagAnimationJump[pNum] == true ||
-		//m_flagCheckBlock[pNum] == true ||
 		m_stage->GetmActiveOperation(pNum) == false) {
 		return;
 	}
 	//3回までミスする動きをミスしない動きに変える
-		if (m_missInvalidCount[pNum] < 3&&m_stage->GetStageDatePuls2(pNum) != 0) {//1マス進む
+		if (m_missInvalidCount[pNum] < m_MISS_INVALID &&m_stage->GetStageDatePuls2(pNum) != 0) {//1マス進む
 			m_missInvalidCount[pNum]++;
-			if (m_stage->MoveBlock(pNum, MOVE_1) == false) {
-				
+			if (m_stage->MoveBlock(pNum, m_MOVE_1) == false) {		
 				return;
 			}
 		}
 	
 	//２マス進む
-	else if (m_stage->MoveBlock(pNum, MOVE_2) == false) {
+	else if (m_stage->MoveBlock(pNum, m_MOVE_2) == false) {
 		return;
 	}
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
 	m_JumpFlag[pNum] = true;
-
 	m_flagAnimationJump[pNum] = true;
-
-	//	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
-	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
-	
+	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);	
 }
-
-/*void EnemyAI::AutoController2(const int pNum)
-{
-
-	if (m_game->GetStopOperation() == true) {
-		return;
-	}
-
-	if (m_flagAnimationJump[pNum] == true ||
-		//m_flagCheckBlock[pNum] == true ||
-		m_stage->GetmActiveOperation(pNum) == false) {
-		return;
-	}
-
-	//1マス進む
-	if (m_stage->MoveBlock(pNum, MOVE_1) == false) {
-		return;
-	}
-	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
-	m_flagAnimationJump[pNum] = true;
-	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
-
-}*/
 
 void EnemyAI::AutoController3(const int pNum)
 {
@@ -310,28 +224,21 @@ void EnemyAI::AutoController3(const int pNum)
 	}
 
 	if (m_flagAnimationJump[pNum] == true ||
-		//m_flagCheckBlock[pNum] == true ||
 		m_stage->GetmActiveOperation(pNum) == false) {
 		return;
 	}
 	if (m_stage->GetStageDatePuls2(pNum) == 0||m_stage->GetStageDatePuls2(pNum) == 3) {//2マス進む
-		if (m_stage->MoveBlock(pNum, MOVE_2) == false) {
+		if (m_stage->MoveBlock(pNum, m_MOVE_2) == false) {
 			return;
 		}
 	}
 	else {//1マス進む
-		if (m_stage->MoveBlock(pNum, MOVE_1) == false) {
+		if (m_stage->MoveBlock(pNum, m_MOVE_1) == false) {
 			return;
 		}
 	}
-
 	//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
-	
-
 	m_JumpFlag[pNum] = true;
-
 	m_flagAnimationJump[pNum] = true;
-
-	//	m_player->SetCPUJumpFlag(pNum, m_JumpFlag[pNum]);
 	m_player->SetFlagAnimationJump(pNum, m_flagAnimationJump[pNum]);
 }

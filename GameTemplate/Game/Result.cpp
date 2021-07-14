@@ -143,7 +143,6 @@ void Result::Init()
 	m_flagProcessing = true;
 
 	m_spriteBackground->Activate();
-	//m_spritePressAButton->Activate();
 
 	m_spriteChoices[0]->SetMulColor(SRns::COLOR_NORMAL);
 	m_spriteChoices[0]->Deactivate();
@@ -184,28 +183,24 @@ void Result::InitIndividual(const int& pNum)
 	case 1:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKONE);
-		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(win);
 		break;
 	case 2:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTWO);
-		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(stand);
 		break;
 	case 3:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTHREE);
-		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(stand);
 		break;
 	case 4:
 		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
 		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKFOUR);
-		//m_spriteGoalRank[pNum]->SetScale({ 0.2f,0.2f,0.2f });
 		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
 		m_modelRender[pNum]->PlayAnimation(lose);
 		break;
@@ -232,21 +227,7 @@ void Result::Finish()
 }
 
 void Result::Update()
-{//Press_A_Button‚Ì“_–Åˆ—
-	/*if (m_flagBlinking == true) {
-		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() - 0.02f);
-
-		if (m_spritePressAButton->GetMulColorW() <= 0.0f) {
-			m_flagBlinking = false;
-		}
-	}
-	else {
-		m_spritePressAButton->SetMulColorW(m_spritePressAButton->GetMulColorW() + 0.02f);
-
-		if (m_spritePressAButton->GetMulColorW() >= 0.8f) {
-			m_flagBlinking = true;
-		}
-	}*/
+{
 
 	if (m_flagProcessing == false) {
 		return;
@@ -259,20 +240,11 @@ void Result::Update()
 	}
 }
 
-void Result::Display() {
 
-}
-
-
-void Result::AnimationDisplay() {
-
-}
 
 void Result::SelectDisplay() {
-	if (g_pad[0]->IsTrigger(enButtonA) == true && m_spriteChoicesNewGO == false) {
+	if (g_pad[con::player_1]->IsTrigger(enButtonA) == true && m_spriteChoicesNewGO == false) {
 		m_spriteChoicesNewGO = true;
-
-		//m_spritePressAButton->Deactivate();
 
 		m_spritePressANext->Deactivate();
 
