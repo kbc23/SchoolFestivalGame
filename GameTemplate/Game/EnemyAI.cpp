@@ -82,7 +82,7 @@ void EnemyAI::Moverule1(const int pNum) {
 
 void EnemyAI::DifficultyMove(const int pNum) {
 	// —”¶¬
-	unsigned int    now = (unsigned int)time(0);
+	unsigned int    now = (unsigned int)time(NULL);
 	srand(now);
 	for (int i = 0; i < pNum * m_RAND_TIMES; i++) {
 		rand();
