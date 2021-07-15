@@ -17,10 +17,7 @@ public:
 	void InitIndividual(const int& pNum);
 	void Finish() override final;
 	void Update() override final;
-
-
-	void Display();
-	void AnimationDisplay();
+	
 	void SelectDisplay();
 
 	void ResultSelect();
@@ -55,7 +52,6 @@ private:
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示する
 	SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };	//選択肢UI表示
-	//SpriteRender* m_spritePressAButton = nullptr;
 	SpriteRender* m_spriteBackground =  nullptr ;
 	SpriteRender* m_spritePressANext = nullptr;
 	SoundSE* m_seDecision = nullptr;

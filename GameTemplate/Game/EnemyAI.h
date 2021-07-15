@@ -13,22 +13,18 @@ public:
 	void Init() override final;
 	void Finish() override final;
 	void Update() override final;
+
 	void Move(const int pNum);
 	void Moverule1(const int pNum);
 
 	void DifficultyMove(const int pNum);
 	void DifficultyMoverule1(const int pNum);
 	void AutoController1(const int pNum);
-	void AutoController11(const int pNum);
-	//void AutoController2(const int pNum); 
+	void AutoControllerRule1(const int pNum); 
 	void AutoController3(const int pNum);
 
-
-
 public: //Get関数
-	/*bool GetJampFlag(int pNum) {
-		return m_JumpFlag[pNum];
-	}*/
+
 public://Set関数
 	//難易度受け取り
 	void SetDifficultyLevel(const int& i) {
@@ -37,28 +33,34 @@ public://Set関数
 	void SetmissInvalidCount(const int& pNum, const int& i) {
 		m_missInvalidCount[pNum] = i;
 	}
-	//青ブロックでミスしたか受け取り
-	/*void SetBlueMiss(int pNum, bool i) {
-		m_bluemiss[pNum] = i;
-	}*/
 private:
 	Player* m_player = nullptr;
 	MainProcessing* m_game = nullptr;
 	Stage* m_stage = nullptr;
 
+	//定数
+	static const int m_MOVE_2;		//移動量2
+	static const int m_MOVE_1;		//移動量1
 
-	int m_difficultyLevel = 0;//難易度1簡単2普通3難しい
+	static const int m_MISS_INVALID;//ミスを無効にする回数
+	static const int m_RANDOM_ZERO_TO_NINE;//乱数を何で割るか
+	static const int m_RAND_TIMES;//randの実行回数
+
+	static const int m_MISSPLAY_EASY;//難易度よわいのミスプレイになる可能性のある行動をする割合
+	static const int m_MISSPLAY_NORMAL;//難易度ふつうのミスプレイになる可能性のある行動をする割合
+	static const int m_MISSPLAY_DIFFICULT;//難易度つよいのミスプレイになる可能性のある行動をする割合
+
+
+	//変数
+	int m_difficultyLevel = 0;//難易度0よわい1ふつう2つよい
+	int m_randomNumber = 0;//乱数結果0～9、数値によってCPUの行動が決まる
+
+	//cpu関係
 	int m_missInvalidCount[con::PlayerNumberMax] = { 0,0,0,0 };//stopのカウント一定でstopがtrue
-
 	bool m_activePlayer[con::PlayerNumberMax] = { false,false,false,false };	//CPU割り当てるか
-	int m_maxPlayer = 0;//プレイヤー最大数
-	int m_addEnemyNumber = 2;//CPU用番号=2
 	bool m_activeOperation[con::PlayerNumberMax] = { true, true, true, true };   //CPUが操作可能か
 	bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
+	bool m_JumpFlag[con::PlayerNumberMax] = { false };//ジャンプフラグ	
 	bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
-	bool m_bluemiss[con::PlayerNumberMax] = { false };//青ブロックでミスしたか
-	//bool m_bluemissRe = false;//青ブロックでミスしたか
-
-	bool m_JumpFlag[con::PlayerNumberMax] = { false };//ジャンプフラグ
-	
+	bool m_bluemiss[con::PlayerNumberMax] = { false };//青ブロックでミスしたか	
 };
