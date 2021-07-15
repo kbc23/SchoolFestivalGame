@@ -133,11 +133,35 @@ private:
     */
     void NextRound();
 
+    //////////////////////////////
+    // 距離による勝利判定
+    //////////////////////////////
+
     /**
      * @brief 20マス離れているかどうか
     */
+    void CheckPlayerDistance();
 
-    void Length();
+    /**
+     * @brief プレイヤーが１位の条件を満たしているかどうか
+     * @param playerNum プレイヤーの番号
+     * @return 条件を満たしているか
+    */
+    const bool& CheckPlayerRank1(const int& playerNum);
+
+    /**
+     * @brief プレイヤーが20ブロック以上距離を離しているか
+     * @param playerNum プレイヤーの番号
+     * @param otherNum 他のプレイヤーの番号
+     * @return 距離を離しているか
+    */
+    const bool& CheckPlayerDistance20Block(const int& playerNum, const int& otherNum);
+
+    /**
+     * @brief 距離の条件でプレイヤーが勝利したときの処理
+     * @param playerNum プレイヤーの番号
+    */
+    void WinPlayerDistance(const int& playerNum);
 
 public:
     //////////////////////////////

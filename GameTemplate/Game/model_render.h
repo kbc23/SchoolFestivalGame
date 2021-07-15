@@ -83,14 +83,15 @@ private:
 	 * @brief モデルの初期化
 	 * @param filePath tkmファイルのファイルパス
 	*/
-	void InitModel(const char* filePath, modelUpAxis::EnModelUpAxis = modelUpAxis::enModelUpAxisZ);
+	void InitModel(const char* filePath,
+		modelUpAxis::EnModelUpAxis = modelUpAxis::enModelUpAxisZ
+	);
 
 	void InitDirectionLight(); //ディレクションライト
 	void InitPointLight(); //ポイントライト
 	void InitSpotLight(); //スポットライト
 	void InitAmbientLight(); //環境光
 	void InitHemiLight(); //半球ライト
-
 
 	bool InitSkeleton(const char* filePath);
 

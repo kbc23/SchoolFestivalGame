@@ -514,7 +514,7 @@ void Stage::Update()
     //ゴール時の処理
     GoalBlock();
 
-    Length();
+    CheckPlayerDistance();
 
     /*NextRound();*/
 
@@ -1065,7 +1065,11 @@ void Stage::NextRound()
  
 }
 
-void Stage::Length()
+//////////////////////////////
+// 距離による勝利判定
+//////////////////////////////
+
+void Stage::CheckPlayerDistance()
 {
     if (rule1NewGO == false) {
         return;
@@ -1075,119 +1079,94 @@ void Stage::Length()
         return;
     }
 
-    if (m_playerBlockPosition[con::player_1] > m_playerBlockPosition[con::player_2] &&
-        m_playerBlockPosition[con::player_1] > m_playerBlockPosition[con::player_3] &&
-        m_playerBlockPosition[con::player_1] > m_playerBlockPosition[con::player_4])
-    {
-        //player_1の判定
-        if ((m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_2] >= 20 ||
-            m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_2] <= -20) &&
-            (m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_3] >= 20 ||
-                m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_3] <= -20) &&
-            (m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_4] >= 20 ||
-                m_playerBlockPosition[con::player_1] - m_playerBlockPosition[con::player_4] <= -20))
-        {
-            //プレイヤーの操作をできないようにする。
-            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-                m_player->SetActivePlayer(playerNum, false);
-                //ゴールした状態にする。
-                m_player->SetFlagGoal(playerNum, true);
-            }
+    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+        bool check = true;
 
-            //順位を確定
-            m_player->SetGoalRanking(con::player_1, 1);
-            m_player->SetAnimationWin(con::player_1);
-
-            if (rule1NewGO == true) {
-                m_goalPlayer += 1;
-            }
-        }
-    }
-    else if (m_playerBlockPosition[con::player_2] > m_playerBlockPosition[con::player_1] &&
-                m_playerBlockPosition[con::player_2] > m_playerBlockPosition[con::player_3] &&
-                m_playerBlockPosition[con::player_2] > m_playerBlockPosition[con::player_4])
-    {
-        //player_2の判定
-        if ((m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_1] >= 20 ||
-            m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_1] <= -20) &&
-            (m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_3] >= 20 ||
-                m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_3] <= -20) &&
-            (m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_4] >= 20 ||
-                m_playerBlockPosition[con::player_2] - m_playerBlockPosition[con::player_4] <= -20))
-        {
-            //プレイヤーの操作をできないようにする。
-            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-                m_player->SetActivePlayer(playerNum, false);
-                //ゴールした状態にする。
-                m_player->SetFlagGoal(playerNum, true);
-            }
-
-            //順位を確定
-            m_player->SetGoalRanking(con::player_2, 1);
-            m_player->SetAnimationWin(con::player_2);
-
-            if (rule1NewGO == true) {
-                m_goalPlayer += 1;
-            }
-        }
-    }
-    else if (m_playerBlockPosition[con::player_3] > m_playerBlockPosition[con::player_1] &&
-                m_playerBlockPosition[con::player_3] > m_playerBlockPosition[con::player_2] &&
-                m_playerBlockPosition[con::player_3] > m_playerBlockPosition[con::player_4])
-    {
-        //player_3の判定
-        if ((m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_1] >= 20 ||
-            m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_1] <= -20) &&
-            (m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_2] >= 20 ||
-                m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_2] <= -20) &&
-            (m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_4] >= 20 ||
-                m_playerBlockPosition[con::player_3] - m_playerBlockPosition[con::player_4] <= -20))
-        {
-            //プレイヤーの操作をできないようにする。
-            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-                m_player->SetActivePlayer(playerNum, false);
-                //ゴールした状態にする。
-                m_player->SetFlagGoal(playerNum, true);
-            }
-
-            //順位を確定
-            m_player->SetGoalRanking(con::player_3, 1);
-            m_player->SetAnimationWin(con::player_3);
-
-            if (rule1NewGO == true) {
-                m_goalPlayer += 1;
-            }
-        }
-    }
-    else if (m_playerBlockPosition[con::player_4] > m_playerBlockPosition[con::player_1] &&
-                m_playerBlockPosition[con::player_4] > m_playerBlockPosition[con::player_2] &&
-                m_playerBlockPosition[con::player_4] > m_playerBlockPosition[con::player_3])
-    {
-        //player_4の判定
-        if ((m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_1] >= 20 ||
-            m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_1] <= -20) &&
-            (m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_2] >= 20 ||
-                m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_2] <= -20) &&
-            (m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_3] >= 20 ||
-                m_playerBlockPosition[con::player_4] - m_playerBlockPosition[con::player_3] <= -20))
-        {
-            //プレイヤーの操作をできないようにする。
-            for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-                m_player->SetActivePlayer(playerNum, false);
-                //ゴールした状態にする。
-                m_player->SetFlagGoal(playerNum, true);
-            }
-
-            //順位を確定
-            m_player->SetGoalRanking(con::player_4, 1);
-            m_player->SetAnimationWin(con::player_4);
-
-            if (rule1NewGO == true) {
-                m_goalPlayer += 1;
-            }
+        if (CheckPlayerRank1(playerNum) == true) {
+            //勝利条件を満たしている
+            WinPlayerDistance(playerNum);
         }
     }
 }
+
+const bool& Stage::CheckPlayerRank1(const int& playerNum)
+{
+    int otherPlayer[con::PlayerNumberMax - 1] = { 0,0,0 }; //他のプレイヤーの番号を保存
+
+    //他のプレイヤーの番号を取得
+    switch (playerNum) {
+    case con::player_1:
+        otherPlayer[0] = con::player_2;
+        otherPlayer[1] = con::player_3;
+        otherPlayer[2] = con::player_4;
+        break;
+    case con::player_2:
+        otherPlayer[0] = con::player_1;
+        otherPlayer[1] = con::player_3;
+        otherPlayer[2] = con::player_4;
+        break;
+    case con::player_3:
+        otherPlayer[0] = con::player_1;
+        otherPlayer[1] = con::player_2;
+        otherPlayer[2] = con::player_4;
+        break;
+    case con::player_4:
+        otherPlayer[0] = con::player_1;
+        otherPlayer[1] = con::player_2;
+        otherPlayer[2] = con::player_3;
+        break;
+    }
+
+    for (int otherNum = 0; otherNum < con::PlayerNumberMax - 1; otherNum++) {
+        if (CheckPlayerDistance20Block(playerNum, otherPlayer[otherNum]) == false) {
+            //勝利条件を満たしていない
+            return false;
+        }
+    }
+
+    return true;
+}
+
+const bool& Stage::CheckPlayerDistance20Block(const int& playerNum, const int& otherNum)
+{
+    if (m_activeOperation[otherNum] == true && m_activeOperationVersionBlue[otherNum] == true) {
+        if (m_playerBlockPosition[playerNum] > m_playerBlockPosition[otherNum]) {
+            if (m_playerBlockPosition[playerNum] - m_playerBlockPosition[otherNum] >= 20)
+            {
+                //20ブロック以上間があいている
+                return true;
+            }
+            else {
+                //20ブロック以上間があいていない
+                return false;
+            }
+        }
+        else {
+            //プレイヤーを越していない
+            return false;
+        }
+    }
+
+    //ミスをしたプレイヤーは無視
+    return true;
+}
+
+void Stage::WinPlayerDistance(const int& playerNum)
+{
+    //プレイヤーの操作をできないようにする。
+    for (int pNum = con::FIRST_ELEMENT_ARRAY; pNum < con::PlayerNumberMax; pNum++) {
+        m_player->SetActivePlayer(pNum, false);
+        //ゴールした状態にする。
+        m_player->SetFlagGoal(pNum, true);
+    }
+
+    //順位を確定
+    m_player->SetGoalRanking(playerNum, 1);
+    m_player->SetAnimationWin(playerNum);
+
+    m_goalPlayer += 1;
+}
+
 
 //////////////////////////////
 // 進行度

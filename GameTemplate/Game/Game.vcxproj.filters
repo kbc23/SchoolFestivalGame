@@ -612,5 +612,8 @@
     <FxCompile Include="Assets\shader\model.fx">
       <Filter>Assets</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\ShadowMap.fx">
+      <Filter>Assets</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

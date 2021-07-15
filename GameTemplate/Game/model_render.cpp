@@ -96,7 +96,9 @@ void ModelRender::InitAnimation(AnimationClip* animationClip, int maxAnimationCl
 	);
 }
 
-void ModelRender::InitModel(const char* filePath, modelUpAxis::EnModelUpAxis modelUpAxis)
+void ModelRender::InitModel(const char* filePath,
+	modelUpAxis::EnModelUpAxis modelUpAxis
+)
 {
 	//ライトの設定をする。
 	//ディレクションライトを初期化する
