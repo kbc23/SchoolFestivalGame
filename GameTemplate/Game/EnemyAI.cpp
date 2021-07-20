@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "EnemyAI.h"
+
+#include <random>
+
 #include "player.h"
 #include "stage.h"
 #include "main_processing.h"
 #include <stdio.h>
 #include <stdlib.h> // rand, srand関数
 #include <time.h>   // time関数
+
 
 
 //定数の定義
@@ -17,14 +21,21 @@ const int EnemyAI::m_RANDOM_ZERO_TO_NINE = 10;//10、randを割って余り0～9を出す
 const int EnemyAI::m_MISSPLAY_EASY = 8;//現在は8、難易度よわいのミスプレイになる可能性のある行動をする割合
 const int EnemyAI::m_MISSPLAY_NORMAL = 6;//現在は6、難易度ふつうのミスプレイになる可能性のある行動をする割合
 const int EnemyAI::m_MISSPLAY_DIFFICULT = 3;//現在は3、難易度つよいのミスプレイになる可能性のある行動をする割合
-EnemyAI::EnemyAI() {
+
+
+
+EnemyAI::EnemyAI()
+{
 
 }
 
-EnemyAI::~EnemyAI() {
+EnemyAI::~EnemyAI()
+{
 
 }
-bool EnemyAI::Start() {
+
+bool EnemyAI::Start()
+{
 	m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
 	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
@@ -56,7 +67,15 @@ void EnemyAI::Update()
 		return;
 	}
 }
-void EnemyAI::Move(const int pNum) {
+
+const EnButton& CPUController()
+{
+
+}
+
+
+void EnemyAI::Move(const int pNum)
+{
 	m_JumpFlag[pNum] = false;
 
 	m_flagAnimationJump[pNum] = m_player->GetmFlagAnimationJump(pNum);
@@ -80,7 +99,8 @@ void EnemyAI::Moverule1(const int pNum) {
 
 
 
-void EnemyAI::DifficultyMove(const int pNum) {
+void EnemyAI::DifficultyMove(const int pNum)
+{
 	// 乱数生成
 	unsigned int    now = (unsigned int)time(NULL);
 	srand(now);
@@ -90,7 +110,7 @@ void EnemyAI::DifficultyMove(const int pNum) {
 	m_randomNumber = rand() % m_RANDOM_ZERO_TO_NINE;//乱数結果0～9
 
 	switch (m_difficultyLevel) {
-	case 0:
+	case 0: //イージー
 		if (m_randomNumber < m_MISSPLAY_EASY) {//8割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
 			AutoController1(pNum);
 		}
@@ -98,7 +118,7 @@ void EnemyAI::DifficultyMove(const int pNum) {
 			AutoController3(pNum);
 		}
 		break;
-	case 1:
+	case 1: //ノーマル
 		if (m_randomNumber < m_MISSPLAY_NORMAL) {//6割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
 			AutoController1(pNum);
 		}
@@ -106,7 +126,7 @@ void EnemyAI::DifficultyMove(const int pNum) {
 			AutoController3(pNum);
 		}
 		break;
-	case 2:
+	case 2: //ハード
 		if (m_randomNumber < m_MISSPLAY_DIFFICULT) {//3割の行動(ミスプレイの可能性ある動き、移動先のブロックがどれでも2マス移動)
 			AutoController1(pNum);
 

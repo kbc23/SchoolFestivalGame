@@ -24,11 +24,11 @@ namespace
     // タイマー関連
     ////////////////////////////////////////////////////////////
 
-    const int COUNTDOWN_3 = 180;
-    const int COUNTDOWN_2 = 120;
-    const int COUNTDOWN_1 = 60;
-    const int COUNTDOWN_0 = 0;
-    const int COUNTDOWN_DEACTIVATE = -60;
+    const float COUNTDOWN_3 = 180.0f;
+    const float COUNTDOWN_2 = 120.0f;
+    const float COUNTDOWN_1 = 60.0f;
+    const float COUNTDOWN_0 = 0.0f;
+    const float COUNTDOWN_DEACTIVATE = -60.0f;
 
     const int SPRITE_COUNTDOWN_0 = 0;
     const int SPRITE_COUNTDOWN_1 = 1;
@@ -197,7 +197,7 @@ void MainProcessing::DrawBackground()
 {
     for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
         m_spriteBackground[backgroundNum]->SetPosition(
-            { m_spriteBackground[backgroundNum]->GetPosition().x - con::GAME_SCREEN_W / MOVE_BACKGROUND,
+            { (m_spriteBackground[backgroundNum]->GetPosition().x - con::GAME_SCREEN_W / MOVE_BACKGROUND),
               m_spriteBackground[backgroundNum]->GetPosition().y + con::GAME_SCREEN_H / MOVE_BACKGROUND
             }
         );
@@ -523,6 +523,11 @@ void MainProcessing::Loading()
     //BGMを止める
     m_bgmTitle->Stop();
 
+    m_flagCountSE3 = false;
+    m_flagCountSE2 = false;
+    m_flagCountSE1 = false;
+    m_flagStartCountdownSE = false;
+
 
     m_loadStatus = LoadingStatus::endOfLoading;
     m_flagGameStart = true;
@@ -565,34 +570,48 @@ void MainProcessing::StartCountdown()
 {
     --m_countStartCountdown;
 
+    m_countStartCountdown -= g_gameTime->GetFrameDeltaTime();
+
     //カウントダウンフォントを非表示
-    if (m_countStartCountdown == COUNTDOWN_DEACTIVATE) {
+    if (m_countStartCountdown <= COUNTDOWN_DEACTIVATE) {
         m_spriteCountdown[0]->Deactivate();
         m_flagStartCountdown = false;
     }
     //カウント０
-    else if (m_countStartCountdown == COUNTDOWN_0) {
-        m_spriteCountdown[1]->Deactivate();
-        m_spriteCountdown[0]->Activate();
-        m_StopOperation = false;
-        m_seGameStart->Play(false);
+    else if (m_countStartCountdown <= COUNTDOWN_0) {
+        if (m_flagStartCountdownSE == false) {
+            m_spriteCountdown[1]->Deactivate();
+            m_spriteCountdown[0]->Activate();
+            m_StopOperation = false;
+            m_seGameStart->Play(false);
+            m_flagStartCountdownSE = true;
+        }
     }
     //カウント１
-    else if (m_countStartCountdown == COUNTDOWN_1) {
-        m_spriteCountdown[2]->Deactivate();
-        m_spriteCountdown[1]->Activate();
-        m_seCount->Play(false);
+    else if (m_countStartCountdown <= COUNTDOWN_1) {
+        if (m_flagCountSE1 == false) {
+            m_spriteCountdown[2]->Deactivate();
+            m_spriteCountdown[1]->Activate();
+            m_seCount->Play(false);
+            m_flagCountSE1 = true;
+        }
     }
     //カウント２
-    else if (m_countStartCountdown == COUNTDOWN_2) {
-        m_spriteCountdown[3]->Deactivate();
-        m_spriteCountdown[2]->Activate();
-        m_seCount->Play(false);
+    else if (m_countStartCountdown <= COUNTDOWN_2) {
+        if (m_flagCountSE2 == false) {
+            m_spriteCountdown[3]->Deactivate();
+            m_spriteCountdown[2]->Activate();
+            m_seCount->Play(false);
+            m_flagCountSE2 = true;
+        }
     }
     //カウント３
-    else if (m_countStartCountdown == COUNTDOWN_3) {
-        m_spriteCountdown[3]->Activate();
-        m_seCount->Play(false);
+    else if (m_countStartCountdown <= COUNTDOWN_3) {
+        if (m_flagCountSE3 == false) {
+            m_spriteCountdown[3]->Activate();
+            m_seCount->Play(false);
+            m_flagCountSE3 = true;
+        }
     }
 }
 
@@ -668,6 +687,11 @@ void MainProcessing::NextRound()
     m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
     m_flagStartCountdown = true;
     m_StopOperation = true;
+
+    m_flagCountSE3 = false;
+    m_flagCountSE2 = false;
+    m_flagCountSE1 = false;
+    m_flagStartCountdownSE = false;
     //m_flagTitleScene = true;
     //m_flagPlayerSelectScene = false;
     //m_flagGameScene = false;

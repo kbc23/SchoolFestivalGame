@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "sound_engine.h"
+#include "../../MiniEngine/time/Stopwatch.h"
 
 #include "main_processing.h"
 
@@ -36,6 +37,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	SoundEngine::CreateInstance(); //サウンドエンジン
 	EffectEngine::CreateInstance(); //エフェクトエンジン
 
+	//ストップウォッチを生成する
+	Stopwatch stopWatch;
+
 	MainProcessing* game = NewGO<MainProcessing>(igo::PRIORITY_CLASS, igo::CLASS_NAME_GAME);
 	
 	//////////////////////////////////////
@@ -46,6 +50,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
+		//ストップウォッチの計測開始
+		stopWatch.Start();
+
 		//レンダリング開始。
 		g_engine->BeginFrame();
 		
@@ -56,7 +63,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 		//エフェクトエンジンのアップデート。
-		EffectEngine::GetInstance()->Update(1.0f / 60.0f);
+		EffectEngine::GetInstance()->Update(g_gameTime->GetFrameDeltaTime());
 
 		//サウンドエンジンのアップデート
 		SoundEngine::GetInstance()->Update();
@@ -70,6 +77,21 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		// 絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
 		g_engine->EndFrame();
+
+		//FPS固定の処理
+		//スピンロックを行う。
+		int restTime = 0;
+		do {
+			stopWatch.Stop();
+			restTime = STOP_WATCH_CONST_DATA::MILLISECOND_FOR_LOCK_60FPS -
+				static_cast<int>(stopWatch.GetElapsedMillisecond());
+		} while (restTime > 0);
+
+		//ストップウォッチの計測終了
+		stopWatch.Stop();
+
+		//デルタタイムをストップウォッチの計測時間から、計算する
+		g_gameTime->PushFrameDeltaTime((float)stopWatch.GetElapsed());
 	}
 
 	DeleteGO(game);

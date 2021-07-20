@@ -20,6 +20,16 @@ class GameTime{
 	{
 	}
 public:
+	/**
+	 * @brief ゲームタイムのインスタンスを取得
+	 * @return ゲームタイムのインスタンス
+	*/
+	static GameTime& GetInstance()
+	{
+		static GameTime t;
+		return t;
+	}
+
 	/*!
 	 *@brief	1フレームの経過時間を取得(単位・秒)。
 	 */
@@ -31,7 +41,7 @@ public:
 	}
 	void PushFrameDeltaTime(float deltaTime)
 	{
-		m_frameDeltaTimeQue.push_back(deltaTime);
+		m_frameDeltaTimeQue.push_back(min(max(1.0f / 144.0f, deltaTime), 1.0f / 30.0f));
 		if (m_frameDeltaTimeQue.size() > 30.0f) {
 			float totalTime = 0.0f;
 			for (auto time : m_frameDeltaTimeQue) {
@@ -72,3 +82,9 @@ private:
 	std::list<float> m_frameDeltaTimeQue;
 	float		m_frameDeltaTime = 1.0f / 60.0f;		//1フレームの経過時間。
 };
+
+
+static GameTime& GetGameTime()
+{
+	return GameTime::GetInstance();
+}

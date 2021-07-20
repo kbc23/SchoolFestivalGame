@@ -14,6 +14,10 @@ public:
 	void Finish() override final;
 	void Update() override final;
 
+	const EnButton& CPUController();
+
+
+
 	void Move(const int pNum);
 	void Moverule1(const int pNum);
 

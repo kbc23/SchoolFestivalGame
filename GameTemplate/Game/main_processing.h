@@ -322,7 +322,7 @@ private: //data menber
     // タイマー関連
     ////////////////////////////////////////////////////////////
 
-    int m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;       //カウントダウンで使用されるタイマー
+    float m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;       //カウントダウンで使用されるタイマー
     bool m_flagStartCountdown = true;                               //カウントダウンをおこなっているかのフラグ
     bool m_StopOperation = true;                                    //プレイヤーの操作ができるか
     bool m_gameSceneFlagFinish = false;//ゲームシーンでやることが終わっているかtuika
@@ -339,6 +339,11 @@ private: //data menber
     bool m_flagGameStart = false;
 
     bool m_gameEnd = false;
+
+    bool m_flagCountSE3 = false;
+    bool m_flagCountSE2 = false;
+    bool m_flagCountSE1 = false;
+    bool m_flagStartCountdownSE = false;
 
     ////////////////////////////////////////////////////////////
     // その他

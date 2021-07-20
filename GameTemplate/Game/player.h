@@ -7,7 +7,7 @@
 
 class MainProcessing;
 class Stage;
-class EnemyAI;//tuika
+class EnemyAI;
 class Rule1;
 
 
@@ -321,7 +321,7 @@ private: //data menber
 
 	Stage* m_stage = nullptr;
 	MainProcessing* m_game = nullptr;
-	EnemyAI* m_enemyAI = nullptr;//tuika
+	EnemyAI* m_enemyAI = nullptr;
 
 	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
 	SpriteRender* m_spriteGameEnd = nullptr;

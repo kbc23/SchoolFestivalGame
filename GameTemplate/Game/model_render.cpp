@@ -252,7 +252,7 @@ void ModelRender::Update()
 	}
 	//アニメーションを進める。
 	if (m_animationPointer) {	//アニメーションが初期化されていたら
-		m_animationPointer->Progress(1.0f / 60.0f);
+		m_animationPointer->Progress(g_gameTime->GetFrameDeltaTime());
 	}
 	//モデルの座標更新
 	m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
