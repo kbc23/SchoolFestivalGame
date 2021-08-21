@@ -39,7 +39,11 @@ public:
         m_loopSoundSource->SetVolume(m_volume * m_SEVolume);
     }
 
-    void SetBGMVolume(const float BGMVolume)
+    /**
+     * @brief SE全体のボリュームを設定
+     * @param BGMVolume SE全体のボリュームを設定
+    */
+    void SetSEVolume(const float BGMVolume)
     {
         m_SEVolume = BGMVolume;
 
@@ -50,7 +54,6 @@ public:
 
         //ループ再生用のサウンドソースのボリュームを設定する
         m_loopSoundSource->SetVolume(m_volume * m_SEVolume);
-
     }
 
     /**
@@ -128,8 +131,15 @@ public:
     }
 
 private:	//privateなメンバ関数
-    void PlayLoop();		//ループ再生の処理
-    void PlayOneShot();		//ワンショット再生の処理
+    /**
+     * @brief ループ再生の処理
+    */
+    void PlayLoop();
+
+    /**
+     * @brief ワンショット再生の処理
+    */
+    void PlayOneShot();
 
 
 private: //data menber

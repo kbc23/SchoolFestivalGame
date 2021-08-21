@@ -3,7 +3,11 @@
 
 #include "constant.h"
 
-
+////////////////////////////////////////////////////////////
+// メモ
+// トゥーンレンダリングに使用する画像などのパスを読み込んでいるところ
+// NullTextureMaps.cpp
+////////////////////////////////////////////////////////////
 
 //このmodel_render.hとmodel_render.cppに存在するマジックナンバーを定数などに変更しておくこと。
 
@@ -64,12 +68,12 @@ public:
 
 public:
 	/**
-	 * @brief 初期化関数
+	 * @brief 初期化
 	 * @param filePath tkmファイルのファイルパス
+	 * @param modelUpAxis モデルの上方向
+	 * @param animationClip アニメーションクリップ
+	 * @param maxAnimationClipNum アニメーションクリップの最大数
 	*/
-	//void Init(const char* filePath);
-
-
 	void Init(const char* filePath,
 		modelUpAxis::EnModelUpAxis modelUpAxis = modelUpAxis::enModelUpAxisZ,
 		AnimationClip* animationClip = nullptr,
@@ -82,17 +86,42 @@ private:
 	/**
 	 * @brief モデルの初期化
 	 * @param filePath tkmファイルのファイルパス
+	 * @param  モデルの上方向
 	*/
 	void InitModel(const char* filePath,
 		modelUpAxis::EnModelUpAxis = modelUpAxis::enModelUpAxisZ
 	);
 
-	void InitDirectionLight(); //ディレクションライト
-	void InitPointLight(); //ポイントライト
-	void InitSpotLight(); //スポットライト
-	void InitAmbientLight(); //環境光
-	void InitHemiLight(); //半球ライト
+	/**
+	 * @brief ディレクションライトの初期化
+	*/
+	void InitDirectionLight();
 
+	/**
+	 * @brief ポイントライトの初期化
+	*/
+	void InitPointLight();
+
+	/**
+	 * @brief スポットライトの初期化
+	*/
+	void InitSpotLight();
+
+	/**
+	 * @brief 環境光の初期化
+	*/
+	void InitAmbientLight();
+
+	/**
+	 * @brief 半球ライトの初期化
+	*/
+	void InitHemiLight();
+
+	/**
+	 * @brief スケルトンの初期化
+	 * @param filePath ファイルパス
+	 * @return 
+	*/
 	bool InitSkeleton(const char* filePath);
 
 	/**
@@ -101,6 +130,11 @@ private:
 	 * @param maxAnimationClipNum アニメーションクリップの総数
 	*/
 	void InitAnimation(AnimationClip* animationClip, int maxAnimationClipNum);
+
+
+	void InitToonShader();
+
+
 
 
 public:
@@ -116,14 +150,18 @@ public:
 
 	/**
 	 * @brief アニメーションを再生中か
-	 * @return 再生中
+	 * @return 再生中か
 	*/
 	const bool IsPlayingAnimation() const
 	{
 		return m_animationPointer->IsPlaying();
 	}
 
-	bool IsInited() const
+	/**
+	 * @brief アニメーションの初期化が完了しているか
+	 * @return 完了しているか
+	*/
+	const bool IsInited() const
 	{
 		return m_animationPointer->IsInited();
 	}
@@ -131,18 +169,29 @@ public:
 
 
 public: //Get関数
-
-	const Vector3 GetPosition()
+	/**
+	 * @brief 位置を取得
+	 * @return 位置
+	*/
+	const Vector3& GetPosition() const
 	{
 		return m_position;
 	}
 
-	const Quaternion GetRotation()
+	/**
+	 * @brief 回転量を取得
+	 * @return 回転量
+	*/
+	const Quaternion& GetRotation() const
 	{
 		return m_rotation;
 	}
 
-	const Vector3 GetScale()
+	/**
+	 * @brief 拡大率を取得
+	 * @return 拡大率
+	*/
+	const Vector3& GetScale() const
 	{
 		return m_scale;
 	}
@@ -150,39 +199,65 @@ public: //Get関数
 
 
 public: //Set関数
-
-	void SetPosition(const Vector3 v)
+	/**
+	 * @brief 位置を設定
+	 * @param vec 位置
+	*/
+	void SetPosition(const Vector3& position)
 	{
-		m_position = v;
+		m_position = position;
 	}
 
-	void UpPositionY(const float f)
+	/**
+	 * @brief Y座標を指定した量だけ上昇
+	 * @param position 上昇する量
+	*/
+	void UpPositionY(const float position)
 	{
-		m_position.y += f;
+		m_position.y += position;
 	}
 
-	void DownPositionY(const float f)
+	/**
+	 * @brief Y座標を指定した量だけ下降
+	 * @param position 下降する量
+	*/
+	void DownPositionY(const float position)
 	{
-		m_position.y -= f;
+		m_position.y -= position;
 	}
 
+	/**
+	 * @brief Y座標を0.0fに設定する
+	*/
 	void ResetPositionY()
 	{
 		m_position.y = 0.0f;
 	}
 
-	void SetRotation(const Quaternion q)
+	/**
+	 * @brief 回転量を設定
+	 * @param rotation 回転量
+	*/
+	void SetRotation(const Quaternion& rotation)
 	{
-		m_rotation = q;
+		m_rotation = rotation;
 	}
 
-	void SetRotationX(const float f) {
-		m_rotation.SetRotationX(f);
+	/**
+	 * @brief X軸の回転量を設定
+	 * @param rotation X軸の回転量
+	*/
+	void SetRotationX(const float rotation) {
+		m_rotation.SetRotationX(rotation);
 	}
 
-	void SetScale(const Vector3 v)
+	/**
+	 * @brief 拡大率を設定
+	 * @param scale 拡大率
+	*/
+	void SetScale(const Vector3& scale)
 	{
-		m_scale = v;
+		m_scale = scale;
 	}
 
 

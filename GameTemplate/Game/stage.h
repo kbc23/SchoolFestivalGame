@@ -9,9 +9,10 @@
 class Player;
 class Score;
 class MainProcessing;
-class Rule1;
-class EnemyAI;
+class SuddenDeathMode;
+class CPUPlayerController;
 class Pause;
+class GameData;
 
 class Stage : public IGameObject
 {
@@ -19,8 +20,8 @@ public:
     Stage();
     ~Stage();
     bool Start() override final;
-    void Init() override final;
-    void Finish() override final;
+    void Init();
+    void Finish();
     void Update() override final;
 
 
@@ -76,9 +77,11 @@ private:
 
     /**
      * @brief 操作不能状態のタイマーのカウント
-     * @param pNum プレイヤーの番号
+     * @param playerNum プレイヤーの番号
     */
-    void ReturnOperationTimer(const int pNum);
+    //void ReturnOperationTimer(const int pNum);
+
+public:
 
     //////////////////////////////
     // ブロックごとの処理
@@ -86,7 +89,7 @@ private:
 
     /**
      * @brief プレイヤーが乗っているブロックを判別
-     * @param pNum プレイヤー番号
+     * @param playerNum プレイヤー番号
     */
     void CheckBlock(const int pNum);
 
@@ -96,23 +99,31 @@ private:
 
     /**
      * @brief 青色のブロックの上に行ったときの処理    
-     * @param pNum プレイヤー番号
+     * @param playerNum プレイヤー番号
     */
-    void BlueBlock(const int pNum);
+    void BlueBlock(const int& pNum);
+
+    //////////
+    // 黄色のブロック
+    //////////
 
     /**
-     * @brief 青色のブロックの上に行ったときのアニメーション
-     * @param pNum プレイヤー番号
+     * @brief 黄色のブロックの上に行ったときの処理
+     * @param playerNum プレイヤー番号
     */
-    void BlueBlockAnimation(const int pNum);
+    void YellowBlock(const int& playerNum);
 
-    void SuddenDeathBlueBlockAnimation(const int& pNum);
+    //////////
+    // その他
+    //////////
 
     /**
      * @brief 前にいた位置のブロックに戻る処理
-     * @param pNum プレイヤーの番号
+     * @param playerNum プレイヤーの番号
     */
     void ReturnBlock(const int pNum);
+
+private:
 
     //////////////////////////////
     // ゴール時の処理
@@ -123,16 +134,19 @@ private:
     */
     void GoalBlock();
 
+
+public:
     //////////////////////////////
     // ラウンド変更の処理
     //////////////////////////////
-
 
     /**
      * @brief ラウンド変更の処理
     */
     void NextRound();
 
+
+private:
     //////////////////////////////
     // 距離による勝利判定
     //////////////////////////////
@@ -147,7 +161,7 @@ private:
      * @param playerNum プレイヤーの番号
      * @return 条件を満たしているか
     */
-    const bool& CheckPlayerRank1(const int& playerNum);
+    bool CheckPlayerRank1(const int& playerNum);
 
     /**
      * @brief プレイヤーが20ブロック以上距離を離しているか
@@ -155,7 +169,7 @@ private:
      * @param otherNum 他のプレイヤーの番号
      * @return 距離を離しているか
     */
-    const bool& CheckPlayerDistance20Block(const int& playerNum, const int& otherNum);
+    bool CheckPlayerDistance20Block(const int& playerNum, const int& otherNum);
 
     /**
      * @brief 距離の条件でプレイヤーが勝利したときの処理
@@ -170,7 +184,7 @@ public:
 
     /**
      * @brief プレイヤーの移動に応じてブロックを動かす。
-     * @param pNum プレイヤーの番号
+     * @param playerNum プレイヤーの番号
      * @param moveNum ブロックの動く量
      * @return ブロックを動かしたかどうか
     */
@@ -185,27 +199,19 @@ public:
 
 
 public: //Get関数
+
     /**
-     * @brief m_activeOperation[pNum]のGet関数
-     * @param pNum プレイヤー番号
-     * @return プレイヤー番号[pNum]が、操作可能か
+     * @brief m_stageDataの2個先を取得
+     * @param playerNum プレイヤー番号
+     * @return 現在、プレイヤーがいるブロックの２個先のブロックの情報
     */
-    const bool GetmActiveOperation(const int pNum)
+    int& GetStageDateNext2Block(const int playerNum)
     {
-        return m_activeOperation[pNum];
-    }
-    /**
-* @brief m_stageDataの2個先のGet関数
-* @param pNum プレイヤー番号
-* @return m_stageDataの2個先のブロック
-*/
-    int& GetStageDatePuls2(const int& pNum)
-    {
-        /* int plus = m_playerBlockPosition[pNum] + 2;
+        /* int plus = m_playerBlockPosition[playerNum] + 2;
           if (plus >= 99) {
               plus = 99;
           }*/
-        return m_stageData[pNum][m_playerBlockPosition[pNum] + 2];//ここ怪しい
+        return m_stageData[playerNum][m_playerBlockPosition[playerNum] + 2];//ここ怪しい
     }
 
     int GetBlueMiss(const int pNum)
@@ -234,24 +240,17 @@ public: //Set関数
         m_maxPlayer = i;
     }   
 
-    void SetStop(const bool b)
-    {
-        stop = b;
-    }
-
-    void SetRule1NewGO(const bool b)
-    {
-        rule1NewGO = b;
-    }
 
 private: //constant
     static const int m_MAX_BLOCK = 100;      //１レーンのブロックの最大数
     static const int m_START_BLOCK = 0;     //スタート位置のブロックの番号
-    static const int m_INIT_RANK = 1;       //プレイヤーに渡す順位データの初期値
+    static const int m_INIT_RANK = con::rank_1;       //プレイヤーに渡す順位データの初期値
     
     static const int m_MAX_GREEN_BLOCK = 20;            //作成する緑ブロックのモデルの数
     static const int m_MAX_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
     static const int m_MAX_GOAL_BLOCK = 1;      //作成するゴールブロックのモデルの数
+
+    static const int m_MAX_RAUND_WIN = 3;
 
 private: //data menber
 
@@ -259,12 +258,11 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
-    Player* m_player = nullptr;
-    EnemyAI* m_enemyAI = nullptr;
-    Score* m_score = nullptr;
-    //ModelRender* m_modelRender[con::PlayerNumberMax][m_MAX_BLOCK] = { nullptr }; //[プレイヤー番号][ステージのマスの数]
+    //////////////////////////////
+    // NewGO
+    //////////////////////////////
+
     ModelRender* m_modelGreenBlock[con::PlayerNumberMax][m_MAX_GREEN_BLOCK] = { nullptr };
-    //ModelRender* m_modelBlueBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
     ModelRender* m_modelYellowBlock[con::PlayerNumberMax][m_MAX_YELLOW_BLOCK] = { nullptr };
     ModelRender* m_modelGoalBlock[con::PlayerNumberMax][m_MAX_GOAL_BLOCK] = { nullptr };
     SoundBGM* m_bgm = nullptr;
@@ -272,18 +270,22 @@ private: //data menber
     SpriteRender* m_spriteBackgroundSky = nullptr;
     SpriteRender* m_spriteBackgroundCloud_1 = nullptr;
     SpriteRender* m_spriteBackgroundCloud_2 = nullptr;
-    
+
     SpriteRender* m_spriteDegreeOfProgress = nullptr;
     SpriteRender* m_spritePlayerMark[con::PlayerNumberMax] = { nullptr };
 
-    SpriteRender* m_spriteRoundWin[con::PlayerNumberMax][3] = { nullptr };
+    SpriteRender* m_spriteRoundWin[con::PlayerNumberMax][m_MAX_RAUND_WIN] = { nullptr };
 
-    MainProcessing* m_game = nullptr;
+    //////////////////////////////
+    // FindGO
+    //////////////////////////////
 
-    
-
-    Rule1* m_rule1 = nullptr;
-    Pause* m_pause = nullptr;
+    GameData* m_findGameData = nullptr;
+    Player* m_findPlayer = nullptr;
+    CPUPlayerController* m_findCPUPlayerController = nullptr;
+    MainProcessing* m_findMainProcessing = nullptr;
+    SuddenDeathMode* m_findSuddenDeathMode = nullptr;
+    Pause* m_findPause = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ
@@ -299,30 +301,19 @@ private: //data menber
     // プレイヤーの操作状況
     ////////////////////////////////////////////////////////////
 
-    bool m_activeOperation[con::PlayerNumberMax] = { true, true, true, true };   //プレイヤーが操作可能か
-    int m_timerReturnOperation[con::PlayerNumberMax] = { 0, 0, 0, 0 };           //プレイヤーの操作復帰のタイマー
-    bool m_resistanceImpossibleOperation[con::PlayerNumberMax] = {               //プレイヤーの操作不可状態に対する耐性があるか
-        false, false, false, false };
-
-
-    bool m_flagAnimationBlueBlock[con::PlayerNumberMax] = {                 //青いブロックに行ったときのアニメーションをおこなっているか
-        false, false, false, false };
-    int m_timerAnimationBlueBlock[con::PlayerNumberMax] = { 0, 0, 0, 0 };   //青いブロックに行ったときのアニメーションのタイマー
-    bool m_activeOperationVersionBlue[con::PlayerNumberMax] = {             //プレイヤーが操作可能か（青色のブロックVer）
-        true, true, true, true };
-
     int m_nowRank = m_INIT_RANK;            //プレイヤーの順位データに渡すデータ
 
     int m_amountOfMovement[con::PlayerNumberMax] = { 0, 0, 0, 0 };
     bool m_blueMiss[con::PlayerNumberMax] = { false };
+
+    StageData m_playerAnimation[con::PlayerNumberMax] = { greenBlock ,greenBlock ,greenBlock ,greenBlock };
+
     ////////////////////////////////////////////////////////////
     // タイマー関連
     ////////////////////////////////////////////////////////////
 
     bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
     int m_timerAnimation[con::PlayerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
-
-    int Playermember = 0;
 
     ///////////////////////////////////////////////////////////
     // NextRound
@@ -331,7 +322,4 @@ private: //data menber
     int m_goalPlayer = 0;          //ゴールしたプレイヤーの数
     int m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     bool m_allMiss = false;     //プレイヤー全員がミスをしているか
-
-    bool stop = false;  //黄色、青に乗った時の1ゲーム操作不可能フラグ
-    bool rule1NewGO = false;
 };

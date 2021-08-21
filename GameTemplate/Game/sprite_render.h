@@ -8,8 +8,8 @@ namespace SRns //SpriteRenderクラス関連のnamespace constant
 	// 画像の色
 	////////////////////////////////////////////////////////////
 
-	const Vector4 COLOR_NORMAL = { 1.0f,1.0f,1.0f,1.0f };
-	const Vector4 COLOR_GRAY = { 0.5f,0.5f,0.5f,1.0f };
+	const Vector4 COLOR_NORMAL = { 1.0f,1.0f,1.0f,1.0f };	//普通
+	const Vector4 COLOR_GRAY = { 0.5f,0.5f,0.5f,1.0f };		//灰色
 
 	////////////////////////////////////////////////////////////
 	// 透明度
@@ -55,14 +55,22 @@ public:
 		m_position.y = pos.y;
 	}
 
-	void SetPositionX(const float& f)
+	/**
+	 * @brief X座標の場所を設定
+	 * @param pos X座標の場所
+	*/
+	void SetPositionX(const float pos)
 	{
-		m_position.x = f;
+		m_position.x = pos;
 	}
 
-	void SetPositionY(const float& f)
+	/**
+	 * @brief Y座標の場所を設定
+	 * @param pos Y座標の場所
+	*/
+	void SetPositionY(const float pos)
 	{
-		m_position.y = f;
+		m_position.y = pos;
 	}
 
 	/**
@@ -81,9 +89,6 @@ public:
 	void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
-		//座標系の関係で左右反転するから
-		//xの拡大を反転させる
-		//m_scale.x *= -1.0f;
 	}
 
 	/**
@@ -113,21 +118,29 @@ public:
 		m_sprite.SetMulColor(mulColor);
 	}
 
-	void SetMulColorW(const float& mulColorW)
+	/**
+	 * @brief スプライトのmulColor.wを変更する関数
+	 * @param mulColorW mulColor.wに乗算する色
+	*/
+	void SetMulColorW(const float mulColorW)
 	{
 		m_sprite.SetMulColorW(mulColorW);
 	}
 
 	/**
-	 * @brief m_positionのGet関数
-	 * @return 
+	 * @brief 場所を取得
+	 * @return 場所
 	*/
-	const Vector3& GetPosition()
+	const Vector3& GetPosition() const
 	{
 		return m_position;
 	}
 
-	const float& GetMulColorW()
+	/**
+	 * @brief スプライトのmulColor.wを取得
+	 * @return スプライトのmulColor.w
+	*/
+	const float GetMulColorW()
 	{
 		return m_sprite.GetMulColorW();
 	}

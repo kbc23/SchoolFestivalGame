@@ -33,32 +33,35 @@ public: //Get関数
 public: //Set関数
     /**
      * @brief フェードアウトの量を変更
-     * @param f フェードアウトの量
+     * @param amountOfChangeFade フェードアウトの量
     */
-    void SetAmountOfChangeFadeOut(const float& f)
+    void SetAmountOfChangeFadeOut(const float amountOfChangeFade)
     {
-        m_amountOfChangeFadeOut = f;
+        m_amountOfChangeFadeOut = amountOfChangeFade;
     }
 
     /**
      * @brief フェードインの量を変更
-     * @param f フェードインの量
+     * @param amountOfChangeFade フェードインの量
     */
-    void SetAmountOfChangeFadeIn(const float& f)
+    void SetAmountOfChangeFadeIn(const float amountOfChangeFade)
     {
-        m_amountOfChangeFadeIn = f;
+        m_amountOfChangeFadeIn = amountOfChangeFade;
     }
 
 
 public: //その他
     /**
-     * @brief フェードを始める
+     * @brief フェードアウトを始める
     */
     void StartFadeOut()
     {
         m_statusFade = CurrentFadeState::fadeOut;
     }
 
+    /**
+     * @brief フェードインを始める
+    */
     void StartFadeIn()
     {
         m_statusFade = CurrentFadeState::fadeIn;
@@ -82,7 +85,7 @@ public: //その他
      * @brief 現在フェードアウトをしているか
      * @return 現在フェードアウトをしているか
     */
-    const bool& IsFadeOutProgress()
+    bool IsFadeOutProgress()
     {
         if (m_statusFade == CurrentFadeState::fadeOut) {
             return true;
@@ -96,7 +99,7 @@ public: //その他
      * @brief 現在フェードインをしているか
      * @return 現在フェードインをしているか
     */
-    const bool& IsFadeInProgress()
+    bool IsFadeInProgress()
     {
         if (m_statusFade == CurrentFadeState::fadeIn) {
             return true;
@@ -135,7 +138,7 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
-    SpriteRender* m_spriteFade = nullptr;
+    SpriteRender* m_spriteFade = nullptr; //フェードに使用する画像
 
     ////////////////////////////////////////////////////////////
     // フェード処理の変数

@@ -13,8 +13,8 @@ public:
     Pause();
     ~Pause();
     bool Start() override final;
-	void Init() override final;
-	void Finish() override final;
+    void Init();
+    void Finish();
     void Update() override final;
 
 	/**
@@ -33,19 +33,27 @@ public:
     void FinishPause();
 
 private:
-    //ポーズ画面のときに呼ぶやつ
+    /**
+     * @brief ポーズ画面を開くときにおこなう処理
+    */
     void PauseInit();
 
-    //ポーズ画面じゃなくなるときに呼ぶやつ
+    /**
+     * @brief ポーズ画面を閉じるときにおこなう処理
+    */
     void PauseFinish();
+
+
 
 private: //constant
 	static const int m_NUMBER_OF_CHOICES = 3;     //選択肢の数
 
+
+
 private: //data menber
 	SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     Stage* m_stage = nullptr;
-    MainProcessing* m_game = nullptr;
+    MainProcessing* m_mainProcessing = nullptr;
 
     ////////////////////////////////////////////////////////////
     // その他
@@ -64,6 +72,4 @@ private: //data menber
     bool m_flagDecision = false;    //人数を決定したかのフラグ
 
     bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
-
-    bool m_flagMove = true;
 };

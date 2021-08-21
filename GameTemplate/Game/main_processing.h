@@ -12,14 +12,9 @@ class ModeSelect;
 class PlayerSelect;
 class CPUStrengthSelect;
 class Game;
-class EnemyAI;
-class Player;
 class Result;
 
 class GameCamera;
-
-
-
 
 class MainProcessing : public IGameObject
 {
@@ -35,26 +30,27 @@ private:
     // 毎フレームする処理
     ////////////////////////////////////////////////////////////
 
+    /**
+     * @brief 背景画像を移動させる処理
+    */
     void DrawBackground();
 
     ////////////////////////////////////////////////////////////
-    // 最初の読み込み
+    // シーンごとの処理
     ////////////////////////////////////////////////////////////
 
-    void StartLoadingScene();
+    //////////////////////////////
+    // ゲーム開始時のロードの処理
+    //////////////////////////////
 
     /**
-     * @brief ロードの準備
+     * @brief ゲーム開始時のロード
     */
-    void StartLoadingPreparation();
-
     void StartLoading();
 
-    void StartLoadingFinish();
-
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // タイトルシーンの処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief タイトルシーンの処理
@@ -66,9 +62,9 @@ private:
     */
     void DecisionTitleScene();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // モードセレクトシーンの処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief モードセレクトシーンの処理
@@ -85,9 +81,9 @@ private:
     */
     void CancelModeSelectScene();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // プレイヤーセレクトシーンの処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief プレイヤーセレクトシーンの処理
@@ -104,9 +100,9 @@ private:
     */
     void CancelPlayerSelectScene();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // CPUの難易度選択シーンの処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief タイトルシーンの処理
@@ -123,21 +119,33 @@ private:
     */
     void CancelCPUStrengthSelectScene();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // ゲームシーンのためのロード
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
+    /**
+     * @brief ロードの処理
+    */
     void LoadingGameScene();
 
+    /**
+     * @brief ロードの準備
+    */
     void PreparingForLoading();
 
+    /**
+     * @brief ロード
+    */
     void Loading();
 
+    /**
+     * @brief ロードの終わり
+    */
     void EndOfLoading();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // ゲームシーンの処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
 
     /**
      * @brief ゲームシーンの処理
@@ -145,101 +153,108 @@ private:
     void GameScene();
 
     /**
-     * @brief ゲーム開始時のカウントダウン
-    */
-    void StartCountdown();
-
-    /**
      * @brief ゲームシーン終了時
     */
     void FinishGameScene();
 
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
     // リザルトシーンの処理
-    ////////////////////////////////////////////////////////////
+    //////////////////////////////
+
     /**
      * @brief リザルトシーンの処理
     */
     void ResultScene();
+
+
 
 public: //Get関数
     /**
      * @brief m_StopOperationのGet関数
      * @return プレイヤーの操作処理をできなくしているか
     */
-    bool GetStopOperation()
+    const bool GetStopOperation()
     {
         return m_StopOperation;
     }
 
-    const bool& GetRuleSelect()
+    const bool GetFlagSuddenDeathMode()
     {
-        return m_ruleSelect;
+        return m_flagSuddenDeathMode;
     }
-
-    /*const bool& GetRuleSelect()
-    {
-        return m_ruleSelect;
-    }*/
 
 public: //Set関数
-    ///**
-    // * @brief m_flagPlayerSelectSceneのSet関数
-    // * @param b プレイヤーセレクトシーンの処理をしているか
-    //*/
-    //void SetFlagPlayerSelectScene(const bool b)
-    //{
-    //    m_flagPlayerSelectScene = b;
-    //}
-
-    ///**
-    // * @brief m_flagGameSceneのSet関数
-    // * @param b ゲームシーンの処理をしているか
-    //*/
-    //void SetFlagGameScene(const bool b)
-    //{
-    //    m_flagGameScene = b;
-    //}
-
     /**
      * @brief m_maxPlayerのSet関数
-     * @param i 操作しているプレイヤーの数
+     * @param maxPlayer 操作しているプレイヤーの数
     */
-    void SetMaxPlayer(const int i)
+    void SetMaxPlayer(int maxPlayer)
     {
-        m_maxPlayer = i;
+        m_maxPlayer = maxPlayer;
     }
 
-    void SetRank(int pNum, int rank) {//順位受け取りtuika
-        m_rank[pNum] = rank;
-    }
-    void SetDiLevel(const int& i)//難易度受け取りtuika
+    /**
+     * @brief プレイヤーの順位をセット
+     * @param playerNum プレイヤーの番号
+     * @param rank 順位
+    */
+    void SetRank(int playerNum, int rank)
     {
-        m_dilevel = i;
-    }
-    void SetResultSelect(const int i)//リザルト選択受け取りtuika
-    {
-        m_resultselect = i;
+        m_rank[playerNum] = rank;
     }
 
-    void SetRuleSelect(const bool& b)
+    /**
+     * @brief CPUの強さをセット
+     * @param level CPUの強さ
+    */
+    void SetCPULevel(const con::CPULevel& level)
     {
-        m_ruleSelect = b;
+        m_CPULevel = level;
     }
 
-    void SetGameEnd(const bool& b)
+    /**
+     * @brief リザルト画面でどの選択肢を選んだかをセット
+     * @param select リザルト画面でどの選択肢を選んだか
+    */
+    void SetResultSelect(int select)
     {
-        m_gameEnd = b;
+        m_resultselect = select;
     }
 
-    void SetPause_Stage(const bool& b)
+    /**
+     * @brief サドンデスモードを選択したかをセット
+     * @param flagSuddenDeathMode サドンデスモードを選択したか
+    */
+    void SetFlagSuddenDeathMode(bool flagSuddenDeathMode)
     {
-        m_pause_stage = b;
+        m_flagSuddenDeathMode = flagSuddenDeathMode;
     }
 
-    void SetPause_Title(const bool& b)
+    /**
+     * @brief ゲームの処理が終わっているか
+     * @param flagGameEnd ゲームの処理が終わっているか
+    */
+    void SetGameEnd(bool flagGameEnd)
     {
-        m_pause_title = b;
+        m_gameEnd = flagGameEnd;
+    }
+
+    /**
+     * @brief ポーズ画面で「リトライ」を選択したかをセット
+     * @param flagPauseStage ポーズ画面で「リトライ」を選択したか
+    */
+    void SetPause_Stage(bool flagPauseStage)
+    {
+        m_pause_stage = flagPauseStage;
+    }
+
+    /**
+     * @brief ポーズ画面で「タイトルに戻る」を選択したかをセット
+     * @param flagPauseTitle ポーズ画面で「タイトルに戻る」を選択したか
+    */
+    void SetPause_Title(bool flagPauseTitle)
+    {
+        m_pause_title = flagPauseTitle;
     }
 
 
@@ -274,15 +289,7 @@ private: //enum
         LoadingStatusMax
     };
 
-
-public:
-    //bool goal1 = false;
-
-    void NextRound();
-
 private: //constant
-    static const int m_INIT_COUNT_START_COUNTDOWN = 240;        //m_countStartCountdownの初期値
-    static const int m_MAX_COUNTDOWN = 4;               //カウントダウンに使用する画像の最大枚数
 
 
 public: //constant
@@ -301,20 +308,15 @@ private: //data menber
     CPUStrengthSelect* m_CPUStrengthSelect = nullptr;
     Game* m_game = nullptr;
     Result* m_result = nullptr;
-    Player* m_player = nullptr;
-    EnemyAI* m_enemyAI = nullptr;
 
     GameCamera* m_gameCamera = nullptr;
     
     
     SpriteRender* m_spriteBackground[m_MAX_BACKGROUND] = { nullptr };
-    SpriteRender* m_spriteCountdown[m_MAX_COUNTDOWN] = { nullptr };
-    SpriteRender* m_spriteLoading = nullptr;
     Fade* m_fade = nullptr;
     SoundBGM* m_bgmTitle = nullptr;
     SoundSE* m_seCancel = nullptr;
-    SoundSE* m_seCount = nullptr;
-    SoundSE* m_seGameStart = nullptr;
+
     
     
 
@@ -322,16 +324,14 @@ private: //data menber
     // タイマー関連
     ////////////////////////////////////////////////////////////
 
-    float m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;       //カウントダウンで使用されるタイマー
-    bool m_flagStartCountdown = true;                               //カウントダウンをおこなっているかのフラグ
-    bool m_StopOperation = true;                                    //プレイヤーの操作ができるか
-    bool m_gameSceneFlagFinish = false;//ゲームシーンでやることが終わっているかtuika
+    bool m_StopOperation = true; //プレイヤーの操作ができるか
+    bool m_gameSceneFlagFinish = false; //ゲームシーンでやることが終わっているか
     
     ////////////////////////////////////////////////////////////
     // フラグ関連
     ////////////////////////////////////////////////////////////
 
-    GameStatus m_gameStatus = GameStatus::startLoading;
+    GameStatus m_gameStatus = GameStatus::title;
     StartLoadingStatus m_startLoadingStatus = StartLoadingStatus::preparation;
     LoadingStatus m_loadStatus = LoadingStatus::doNothing;
     bool m_startPreparingForLoading = false;
@@ -340,10 +340,6 @@ private: //data menber
 
     bool m_gameEnd = false;
 
-    bool m_flagCountSE3 = false;
-    bool m_flagCountSE2 = false;
-    bool m_flagCountSE1 = false;
-    bool m_flagStartCountdownSE = false;
 
     ////////////////////////////////////////////////////////////
     // その他
@@ -351,11 +347,10 @@ private: //data menber
 
     int m_maxPlayer = 0;                        //操作しているプレイヤーの数
     int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
-    int m_dilevel = 0;//難易度受け取り受け渡し用
+    con::CPULevel m_CPULevel = con::easy;//難易度受け取り受け渡し用
     int m_resultselect = 0;//リザルトで何選んだか
-    //bool m_ruleSelect = false;
 
-    bool m_ruleSelect = false;
+    bool m_flagSuddenDeathMode = false;
 
     bool m_pause_stage = false;
     

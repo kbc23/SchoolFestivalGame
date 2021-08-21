@@ -34,46 +34,21 @@ namespace
 
 Result::Result()
 {
-	/*for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_rank[playerNum]=m_game->GetRank(playerNum);
-	}*/
-}
+	//////////////////////////////
+	// NewGO
+	//////////////////////////////
 
-Result::~Result()
-{
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		DeleteIndividual(playerNum);
-	}
-	//DeleteGO(m_spritePressAButton);
-	DeleteGO(m_spriteBackground);
-	/*DeleteGO(m_spriteGoalRank[0]);
-	DeleteGO(m_spriteGoalRank[1]);
-	DeleteGO(m_spriteGoalRank[2]);
-	DeleteGO(m_spriteGoalRank[3]);*/
-
-
-}
-
-void Result::DeleteIndividual(const int pNum)
-{
-	//p_numはプレイヤーのコントローラー番号
-	DeleteGO(m_modelRender[pNum]);
-	DeleteGO(m_spriteGoalRank[pNum]);
-	DeleteGO(m_spriteChoices[pNum]);
-
-	//DeleteGO(m_skinModelRender[pNum]);
-}
-bool Result::Start()
-{
-	//背景
-	//m_spritePressAButton = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	//m_spritePressAButton->Init(filePath::dds::PRESS_A_BUTTON);
-	//m_spritePressAButton->SetPosition({ 0.0f,200.0f });
-	//m_spritePressAButton-> Deactivate();
+	//////////
+	// 背景のNewGO
+	//////////
 
 	m_spriteBackground = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
 	m_spriteBackground->Init(filePath::dds::BACKGROUND);
 	m_spriteBackground->Deactivate();
+
+	//////////
+	// モデルのNewGO
+	//////////
 
 	//アニメーションの設定
 	m_animationPlayer[win].Load(filePath::tka::WIN);
@@ -84,206 +59,244 @@ bool Result::Start()
 	m_animationPlayer[win].SetLoopFlag(false);
 	m_animationPlayer[lose].SetLoopFlag(false);
 
-	//プレイヤーごとに処理
+	//プレイヤーモデルのNewGO
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		bool check = StartIndividual(playerNum);
+		m_modelCharacter[playerNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+		m_modelCharacter[playerNum]->Init(
+			filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ,
+			m_animationPlayer, Animation_Max);
+		m_modelCharacter[playerNum]->Deactivate();
+		m_modelCharacter[playerNum]->SetRotationX(0.5f);
 
-		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。
-		if (check == false) {
-			return false;
-		}
+		m_modelCharacter[playerNum]->SetPosition(PLAYER_POSITION[playerNum]);
+		m_modelCharacter[playerNum]->SetScale({ 0.2f,0.2f,0.2f });
 	}
+
+	//////////
+	// スプライトのNewGO
+	//////////
+
+	//選択肢のNewGO
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+		m_spriteChoices[spriteNum] = NewGO<SpriteRender>(igo::PRIORITY_UI_2);
+		m_spriteChoices[spriteNum]->Init(filePath::dds::RESULT_COMMAND[spriteNum]);
+		m_spriteChoices[spriteNum]->Deactivate();
+	}
+
+	//PressANextのNewGO
+	m_spritePressANext = NewGO<SpriteRender>(igo::PRIORITY_UI);
+	m_spritePressANext->Init(filePath::dds::PRESS_A_NEXT);
+	m_spritePressANext->Deactivate();
+
+	//////////
+	// SEのNewGO
+	//////////
 
 	m_seDecision = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seDecision->Init(filePath::se::DECISION);
 	m_seMoveCursor = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seMoveCursor->Init(filePath::se::MOVE_CURSOR);
-
-	//選択肢
-	m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteChoices[0]->Init(filePath::dds::COMMAND_PLAY_ONE_MORE_TIME);
-	m_spriteChoices[0]->SetPosition(MODE_SELECT_SPRITE[0]);
-	m_spriteChoices[0]->Deactivate();
-
-	m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteChoices[1]->Init(filePath::dds::COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS);
-	m_spriteChoices[1]->SetPosition(MODE_SELECT_SPRITE[1]);
-	m_spriteChoices[1]->Deactivate();
-
-	m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteChoices[2]->Init(filePath::dds::COMMAND_CHOOSE_A_RULE);
-	m_spriteChoices[2]->SetPosition(MODE_SELECT_SPRITE[2]);
-	m_spriteChoices[2]->Deactivate();
-
-	m_spriteChoices[3] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteChoices[3]->Init(filePath::dds::COMMAND_EXIT_GAME);
-	m_spriteChoices[3]->SetPosition(MODE_SELECT_SPRITE[3]);
-	m_spriteChoices[3]->Deactivate();
-
-	m_spritePressANext = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spritePressANext->Init(filePath::dds::PRESS_A_NEXT);
-	m_spritePressANext->Deactivate();
-
-	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
-	return true;
 }
 
-bool Result::StartIndividual(const int pNum)
+Result::~Result()
 {
-	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisZ, m_animationPlayer, Animation_Max);
-	m_modelRender[pNum]->Deactivate();
-	m_modelRender[pNum]->SetRotationX(0.5f);
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		DeleteGO(m_modelCharacter[playerNum]);
+		DeleteGO(m_spriteGoalRank[playerNum]);
+		DeleteGO(m_spriteChoices[playerNum]);
+	}
+	DeleteGO(m_spritePressANext);
+	DeleteGO(m_spriteBackground);
 
+	DeleteGO(m_seDecision);
+	DeleteGO(m_seMoveCursor);
+}
+
+bool Result::Start()
+{
+	//////////////////////////////
+	// FindGO
+	//////////////////////////////
+
+	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
 	return true;
 }
 
 void Result::Init()
 {
-	m_flagProcessing = true;
+	m_flagProcess = true;
 
-	m_spriteBackground->Activate();
+	//////////
+	// 背景の初期化
+	//////////
 
-	m_spriteChoices[0]->SetMulColor(SRns::COLOR_NORMAL);
-	m_spriteChoices[0]->Deactivate();
-	m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
-	m_spriteChoices[1]->Deactivate();
-	m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
-	m_spriteChoices[2]->Deactivate();
-	m_spriteChoices[3]->SetMulColor(SRns::COLOR_GRAY);
-	m_spriteChoices[3]->Deactivate();
+	m_spriteBackground->Deactivate();
 
+	//////////
+	// モデルの初期化
+	//////////
+
+	//プレイヤーモデルの初期化
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {	
+		m_modelCharacter[playerNum]->Activate();
+		m_modelCharacter[playerNum]->SetRotationX(0.5f);
+		m_modelCharacter[playerNum]->SetPosition(PLAYER_POSITION[playerNum]);
+		m_modelCharacter[playerNum]->SetScale({ 0.2f,0.2f,0.2f });
+	}
+
+	//////////
+	// スプライトのNewGO、初期化
+	//////////
+
+	//プレイヤーごとの順位に応じてNewGO、初期化
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		switch (m_rank[playerNum]) {
+		case con::rank_1:
+			m_spriteGoalRank[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+			m_spriteGoalRank[playerNum]->Init(filePath::dds::RANK[con::rank_1]);
+			m_spriteGoalRank[playerNum]->SetPosition(PLAYER_RANK_SPRITE[playerNum]);
+			m_modelCharacter[playerNum]->PlayAnimation(win);
+			break;
+		case con::rank_2:
+			m_spriteGoalRank[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+			m_spriteGoalRank[playerNum]->Init(filePath::dds::RANK[con::rank_2]);
+			m_spriteGoalRank[playerNum]->SetPosition(PLAYER_RANK_SPRITE[playerNum]);
+			m_modelCharacter[playerNum]->PlayAnimation(stand);
+			break;
+		case con::rank_3:
+			m_spriteGoalRank[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+			m_spriteGoalRank[playerNum]->Init(filePath::dds::RANK[con::rank_3]);
+			m_spriteGoalRank[playerNum]->SetPosition(PLAYER_RANK_SPRITE[playerNum]);
+			m_modelCharacter[playerNum]->PlayAnimation(stand);
+			break;
+		case con::rank_4:
+			m_spriteGoalRank[playerNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+			m_spriteGoalRank[playerNum]->Init(filePath::dds::RANK[con::rank_4]);
+			m_spriteGoalRank[playerNum]->SetPosition(PLAYER_RANK_SPRITE[playerNum]);
+			m_modelCharacter[playerNum]->PlayAnimation(lose);
+			break;
+		}
+	}
+
+	//選択肢の初期化
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+		//m_spriteChoices[spriteNum]->Activate();
+		m_spriteChoices[spriteNum]->SetPosition(MODE_SELECT_SPRITE[spriteNum]);
+
+		if (con::FIRST_ELEMENT_ARRAY == spriteNum) {
+			m_spriteChoices[spriteNum]->SetMulColor(SRns::COLOR_NORMAL);
+		}
+		else {
+			m_spriteChoices[spriteNum]->SetMulColor(SRns::COLOR_GRAY);
+		}
+	}
+
+	//PressANextの初期化
 	m_spritePressANext->Activate();
 
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		InitIndividual(playerNum);
-	}
-
-
+	//////////
+	// メンバ変数の初期化
+	//////////
 
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_rank[playerNum] = 0;
+		m_rank[playerNum] = con::GoalRankMax;
 	}
-
-	m_spriteChoicesNewGO = false;
-	m_spriteChoicesNewGORE = false;
 
 	m_flagDecision = false;    //決定したかのフラグ
-	m_cursorPosition = 0;//カーソルの場所
+	m_cursorPosition = 0; //カーソルの場所
 	m_flagFinish = false;      //このクラスでするべき処理が終わったか
-}
+	m_flagBlinking = true; //m_pressAButtonの透過処理に使用
 
-void Result::InitIndividual(const int& pNum)
-{
-	m_modelRender[pNum]->SetPosition(PLAYER_POSITION[pNum]);
-	m_modelRender[pNum]->SetScale({ 0.2f,0.2f,0.2f });
-	m_modelRender[pNum]->Activate();
-
-	switch (m_rank[pNum]) {
-	case 1:
-		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKONE);
-		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
-		m_modelRender[pNum]->PlayAnimation(win);
-		break;
-	case 2:
-		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTWO);
-		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
-		m_modelRender[pNum]->PlayAnimation(stand);
-		break;
-	case 3:
-		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKTHREE);
-		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
-		m_modelRender[pNum]->PlayAnimation(stand);
-		break;
-	case 4:
-		m_spriteGoalRank[pNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteGoalRank[pNum]->Init(filePath::dds::RANKFOUR);
-		m_spriteGoalRank[pNum]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
-		m_modelRender[pNum]->PlayAnimation(lose);
-		break;
-	}
+	m_displayStatus = DisplayStatus::result;
 }
 
 void Result::Finish()
 {
-	m_flagProcessing = false;
+	m_flagProcess = false;
 
-	m_spriteChoices[0]->Deactivate();
-	m_spriteChoices[1]->Deactivate();
-	m_spriteChoices[2]->Deactivate();
-	m_spriteChoices[3]->Deactivate();
-
-	m_spritePressANext->Deactivate();
+	//////////
+	// 背景の非表示
+	//////////
 
 	m_spriteBackground->Deactivate();
 
+	//////////
+	// モデルの非表示
+	//////////
+
+	//プレイヤーモデルの非表示
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_modelRender[playerNum]->Deactivate();
+		m_modelCharacter[playerNum]->Deactivate();
+	}
+
+	//////////
+	// スプライトのDeleteGO、非表示
+	//////////
+
+	//プレイヤーごとの順位に応じてDeleteGO
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteGO(m_spriteGoalRank[playerNum]);
 	}
+
+	//選択肢の初期化
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+		m_spriteChoices[spriteNum]->Deactivate();
+	}
+
+	//PressANextの初期化
+	m_spritePressANext->Deactivate();
 }
 
 void Result::Update()
 {
-
-	if (m_flagProcessing == false) {
+	if (false == m_flagProcess) {
 		return;
 	}
 
-	m_spriteChoicesNewGORE = m_spriteChoicesNewGO;
-	SelectDisplay();
-	if (m_flagDecision == true && m_flagFinish == false) {
-		FinishResult();
+	switch (m_displayStatus) {
+	case DisplayStatus::result:
+		ResultDisplay();
+		break;
+	case DisplayStatus::commandSelect:
+		SelectDisplay();
+		break;
+	case DisplayStatus::finish:
+		if (false == m_flagFinish) {
+			FinishResult();
+		}
+		break;
 	}
 }
 
-
-
-void Result::SelectDisplay() {
-	if (g_pad[con::player_1]->IsTrigger(enButtonA) == true && m_spriteChoicesNewGO == false) {
-		m_spriteChoicesNewGO = true;
-
+void Result::ResultDisplay()
+{
+	if (g_pad[con::player_1]->IsTrigger(enButtonA) == true) {
+		m_seDecision->Play(false); //再生
 		m_spritePressANext->Deactivate();
 
+		for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+			m_spriteChoices[spriteNum]->Activate();
+		}
 
-		m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteChoices[0]->Init(filePath::dds::COMMAND_PLAY_ONE_MORE_TIME);
-		m_spriteChoices[0]->SetPosition(MODE_SELECT_SPRITE[0]);
-
-		m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteChoices[1]->Init(filePath::dds::COMMAND_CHOOSE_THE_NUMBER_OF_PLAYERS);
-		m_spriteChoices[1]->SetPosition(MODE_SELECT_SPRITE[1]);
-		m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
-
-		m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteChoices[2]->Init(filePath::dds::COMMAND_CHOOSE_A_RULE);
-		m_spriteChoices[2]->SetPosition(MODE_SELECT_SPRITE[2]);
-		m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
-
-		m_spriteChoices[3] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteChoices[3]->Init(filePath::dds::COMMAND_EXIT_GAME);
-		m_spriteChoices[3]->SetPosition(MODE_SELECT_SPRITE[3]);
-		m_spriteChoices[3]->SetMulColor(SRns::COLOR_GRAY);
-	
-		
+		m_displayStatus = DisplayStatus::commandSelect;
 	}
-	ResultSelect();
+}
 
+void Result::SelectDisplay()
+{
+	ResultSelect();
 }
 
 void Result::ResultSelect() {
 	//決定
-	if (g_pad[con::player_1]->IsTrigger(enButtonA) && m_spriteChoicesNewGORE == true) {
-		m_seDecision->Play(false);
+	if (true == g_pad[con::player_1]->IsTrigger(enButtonA)) {
+		m_seDecision->Play(false); //再生
 		m_game->SetResultSelect(m_cursorPosition);
 
-		m_flagDecision = true;
+		m_displayStatus = DisplayStatus::finish;
 	}
 	//上に移動
-	else if (g_pad[con::player_1]->IsTrigger(enButtonUp) == true && m_spriteChoicesNewGORE == true) {
+	else if (true == g_pad[con::player_1]->IsTrigger(enButtonUp)) {
 		m_seMoveCursor->Play(false);
 
 		if (m_cursorPosition == UP_END) {
@@ -297,7 +310,7 @@ void Result::ResultSelect() {
 		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
 	}
 	//下に移動
-	else if (g_pad[con::player_1]->IsTrigger(enButtonDown) == true && m_spriteChoicesNewGORE == true) {
+	else if (true == g_pad[con::player_1]->IsTrigger(enButtonDown)) {
 		m_seMoveCursor->Play(false);
 
 		if (m_cursorPosition == DOWN_END) {

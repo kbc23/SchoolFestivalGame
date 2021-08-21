@@ -20,56 +20,79 @@ namespace //constant
 	////////////////////////////////////////////////////////////
 
 	const int UP_END = 0;      //上端
-	const int MIDLE = 1;       //中
 	const int DOWN_END = 2;   //下端
 }
 
 Pause::Pause()
 {
+	//////////////////////////////
+	// NewGO
+	//////////////////////////////
 
+	//////////
+	// スプライトのNewGO
+	//////////
+
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+		m_spriteChoices[spriteNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+		m_spriteChoices[spriteNum]->Init(filePath::dds::PAUSE_UI[spriteNum]);
+		m_spriteChoices[spriteNum]->Deactivate();
+	}
 }
 
 Pause::~Pause()
 {
-	DeleteGO(m_spriteChoices[0]);
-	DeleteGO(m_spriteChoices[1]);
-	DeleteGO(m_spriteChoices[2]);
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+		DeleteGO(m_spriteChoices[spriteNum]);
+	}
 }
 
 bool Pause::Start()
 {
-	m_spriteChoices[0] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteChoices[0]->Init(filePath::dds::PAUSE_RETURN_TO_GAME);
-	m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
-	m_spriteChoices[0]->Deactivate();
+	//////////////////////////////
+	// FindGO
+	//////////////////////////////
 
-	m_spriteChoices[1] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteChoices[1]->Init(filePath::dds::PAUSE_RETRY);
-	m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
-	m_spriteChoices[1]->Deactivate();
-
-	m_spriteChoices[2] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteChoices[2]->Init(filePath::dds::PAUSE_QUIT_THE_GAME);
-	m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
-	m_spriteChoices[2]->Deactivate();
-
-	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
+	m_mainProcessing = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
 
 	return true;
 }
 
 void Pause::Init()
 {
-	m_flagProcessing = true;
+	m_flagProcess = true;
+
+	//////////
+	// スプライトの初期化
+	//////////
+
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+		m_spriteChoices[spriteNum]->SetPosition(CHOICES_POSITION[spriteNum]);
+		m_spriteChoices[spriteNum]->Deactivate();
+	}
+
+	//////////
+	// メンバ変数の初期化
+	//////////
+
+	m_cursorPosition = 0;       //カーソルの場所
+	m_numberOfPlayer = 0;       //プレイヤーの人数
+	m_flagDecision = false;    //人数を決定したかのフラグ
+	m_flagFinish = false;      //このクラスでするべき処理が終わったか
+
 }
 
 void Pause::Finish()
 {
-	m_flagProcessing = false;
+	m_flagProcess = false;
 
-	m_spriteChoices[0]->Deactivate();
-	m_spriteChoices[1]->Deactivate();
-	m_spriteChoices[2]->Deactivate();
+	//////////
+	// スプライトの非表示
+	//////////
+
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+		m_spriteChoices[spriteNum]->Deactivate();
+	}
 }
 
 void Pause::PauseInit()
@@ -90,8 +113,6 @@ void Pause::PauseInit()
 	m_numberOfPlayer = 0;       //プレイヤーの人数
 	m_flagDecision = false;    //人数を決定したかのフラグ
 	m_flagFinish = false;      //このクラスでするべき処理が終わったか
-	m_flagMove = true;
-	bool m_pause_title = true;
 }
 
 void Pause::PauseFinish()
@@ -103,7 +124,7 @@ void Pause::PauseFinish()
 
 void Pause::Update()
 {
-	if (m_flagProcessing == false) {
+	if (false == m_flagProcess) {
 		return;
 	}
 
@@ -121,11 +142,6 @@ void Pause::AlwaysUpdate()
 
 void Pause::UpdateOnlyPaused()
 {
-	if (m_flagProcessing == false)
-	{
-		return;
-	}
-
 	//決定
 	if (g_pad[con::player_1]->IsTrigger(enButtonA) == true)
 	{
@@ -138,12 +154,12 @@ void Pause::UpdateOnlyPaused()
 		else if (m_cursorPosition == 1)
 		{
 			SetGamePaused(false);
-			m_game->SetPause_Stage(true);
+			m_mainProcessing->SetPause_Stage(true);
 		}
 		else if (m_cursorPosition == 2)
 		{
 			SetGamePaused(false);
-			m_game->SetPause_Title(true);
+			m_mainProcessing->SetPause_Title(true);
 		}
 
 		m_flagDecision = true;

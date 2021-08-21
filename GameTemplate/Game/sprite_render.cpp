@@ -22,8 +22,8 @@ void SpriteRender::Init(const char* texFilePath, float w, float h,
 	//スプライトの初期化用データ
 	SpriteInitData initData;
 	initData.m_ddsFilePath[0] = texFilePath;
-	initData.m_width = w;
-	initData.m_height = h;
+	initData.m_width = static_cast<UINT>(w);
+	initData.m_height = static_cast<UINT>(h);
 	initData.m_fxFilePath = "Assets/shader/sprite.fx";
 	initData.m_psEntryPoinFunc = "PSMain";
 	initData.m_vsEntryPointFunc = "VSMain";

@@ -11,7 +11,7 @@ public:
 	/**
 	 * @brief 初期化
 	 * @param filePath ファイルパス。対応しているファイルフォーマット(*.wav)
-	 * @param is3DSound 3Dサウンド？
+	 * @param is3DSound 3Dサウンドかどうか
 	*/
 	void Init(const wchar_t* filePath, bool is3DSound = false);
 
@@ -19,10 +19,12 @@ public:
 	 * @brief ストリーミング再生向けの初期化
 	 * @param filePath ファイルパス。対応しているファイルフォーマット(*.wav)
 	 * @param is3DSound 3Dサウンド？
-	 * @param ringBufferSize リングバッファのサイズ。(bufferSizeの倍数になっていると無駄なく活用できます)
+	 * @param ringBufferSize リングバッファのサイズ。(bufferSizeの倍数になっていると無駄なく活用できる)
 	 * @param bufferingSize ストリーミングの最大バッファリングサイズ
 	*/
-	void InitStreaming(wchar_t* filePath, bool is3DSound = false, unsigned int ringBufferSize = 3 * 1024 * 1024, unsigned int bufferingSize = 1024 * 512);
+	void InitStreaming(
+		wchar_t* filePath, bool is3DSound = false, unsigned int ringBufferSize = 3 * 1024 * 1024,
+		unsigned int bufferingSize = 1024 * 512);
 
 	/**
 	 * @brief 開放
@@ -65,7 +67,7 @@ public:
 	 * @brief ボリュームを設定
 	 * @param vol ボリューム
 	*/
-	void SetVolume(float vol)
+	void SetVolume(const float vol)
 	{
 		m_sourceVoice->SetVolume(vol);
 	}
@@ -83,7 +85,7 @@ public:
 
 	/**
 	 * @brief 音源の座標を設定
-	 * @details 3Dサウンドの時に必要になります。2Dサウンドでは無視されます。
+	 * @details 3Dサウンドの時に必要。2Dサウンドでは無視。
 	 * @param pos 音源の座標
 	*/
 	void SetPosition(const Vector3& pos)
@@ -124,7 +126,7 @@ public:
 
 	/**
 	 * @brief ボイスの周波数調整比
-	 * @details 詳細はIXAudio2SourceVoiceのSetFrequencyRatioを参照してください。
+	 * @details 詳細はIXAudio2SourceVoiceのSetFrequencyRatioを参照
 	 * @param ratio 周波数比
 	*/
 	void SetFrequencyRatio(float ratio)
@@ -138,7 +140,7 @@ public:
 		return m_sourceVoice;
 	}
 	//入力チャンネル数を取得。
-	int GetNumInputChannel()const
+	int GetNumInputChannel() const
 	{
 		return m_waveFile->GetFormat()->nChannels;
 	}

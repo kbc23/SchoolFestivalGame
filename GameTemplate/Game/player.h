@@ -7,32 +7,20 @@
 
 class MainProcessing;
 class Stage;
-class EnemyAI;
-class Rule1;
-
+class CPUPlayerController;
+class SuddenDeathMode;
+class GameData;
+class GameStartCountdown;
+class Result;
 
 class Player : public IGameObject
 {
 public:
 	Player();
-
 	~Player();
-	/**
-	 * @brief デストラクタの処理をプレイヤーごとに個別でおこなう。
-	 * @param pNum プレイヤー番号
-	*/
-	void DeleteIndividual(const int pNum);
-
 	bool Start() override final;
-	/**
-	 * @brief Start関数の処理をプレイヤーごとに個別でおこなう。
-	 * @param pNum プレイヤー番号
-	 * @return 処理が正常に終了したかどうか
-	*/
-	bool StartIndividual(const int pNum);
-
-	void Init() override final;
-	void Finish() override final;
+	void Init();
+	void Finish();
 
 	////////////////////////////////////////////////////////////
 	// 毎フレームの処理
@@ -45,10 +33,10 @@ public:
 	//////////////////////////////
 
 	/**
-	 * @brief プレイヤーの操作処理の土台
+	 * @brief プレイヤーの操作処理
 	 * @param pNum プレイヤー番号
 	*/
-	void Controller(const int pNum);
+	void Controller(const int& playerNum);
 
 	//////////////////////////////
 	// プレイヤーのアニメーション
@@ -58,23 +46,41 @@ public:
 	 * @brief プレイヤーのアニメーションの処理
 	 * @param pNum プレイヤー番号
 	*/
-	void Animation(const int pNum);
+	void Animation(const int& playerNum);
 
 	/**
 	 * @brief ジャンプ時のアニメーション
 	 * @param pNum プレイヤー番号
 	*/
-	void JumpAnimation(const int pNum);
+	void JumpAnimation(const int& playerNum);
 
 	/**
-	 * @brief 操作不可時のアニメーション
-	 * @param pNum プレイヤー番号
+	 * @brief 青色のブロックの上に行ったときのアニメーション
+	 * @param playerNum プレイヤー番号
 	*/
-	void ImpossibleOperationAnimation(const int pNum);
+	void BlueBlockAnimation(const int& playerNum);
 
-	//////////////////////////////
+	/**
+	 * @brief 青色のブロックの上に行ったとき、サドンデス時のアニメーション
+	 * @param playerNum プレイヤー番号
+	*/
+	void SuddenDeathBlueBlockAnimation(const int& playerNum);
+
+	/**
+	 * @brief 黄色のブロックの上に行ったときのアニメーション
+	 * @param playerNum プレイヤー番号
+	*/
+	void YellowBlockAnimation(const int& playerNum);
+
+	/**
+	 * @brief 青色のブロックの上に行ったとき、サドンデス時のアニメーション
+	 * @param playerNum プレイヤー番号
+	*/
+	void SuddenDeathYellowBlockAnimation(const int& playerNum);
+
+	////////////////////////////////////////////////////////////
 	// ラウンド変更の処理
-	//////////////////////////////
+	////////////////////////////////////////////////////////////
 
 	/**
 	 * @brief ラウンド変更の処理
@@ -84,216 +90,266 @@ public:
 	////////////////////////////////////////////////////////////
 	// サドンデスモードの関数
 	////////////////////////////////////////////////////////////
+
+	/**
+	 * @brief サドンデスモード時の最終順位を確定
+	*/
 	void SuddenDeathRank();
 
 
 public: //Get関数
 	/**
 	 * @brief m_activePlayer[pNum]のGet関数
-	 * @param pNum プレイヤー番号
+	 * @param playerNum プレイヤー番号
 	 * @return プレイヤー番号[pNum]が、操作できるかどうか
 	*/
-	bool GetActivePlayer(const int pNum) {
-		return m_activePlayer[pNum];
+	const bool GetActivePlayer(const int playerNum) const
+	{
+		return m_activePlayer[playerNum];
 	}
 
 	/**
 	 * @brief m_flagAnimationJump[pNum]のGet関数
-	 * @param pNum プレイヤー番号
+	 * @param playerNum プレイヤー番号
 	 * @return プレイヤー番号[pNum]が、ジャンプアニメーションを再生しているかどうか
 	*/
-	bool GetmFlagAnimationJump(const int pNum) {
-		return m_flagAnimationJump[pNum];
+	const bool GetmFlagAnimationJump(const int playerNum) const
+	{
+		return m_flagAnimationJump[playerNum];
 	}
 
 	/**
 	 * @brief m_flagGoal[pNum]のGet関数
-	 * @param pNum プレイヤー番号
+	 * @param playerNum プレイヤー番号
 	 * @return プレイヤーがゴールしたかどうか
 	*/
-	bool GetFlagGoal(const int pNum) {
-		return m_flagGoal[pNum];
-	}
-
-	int GetTimerAnimation(const int pNum)
+	const bool GetFlagGoal(const int playerNum) const
 	{
-		return m_timerAnimation[pNum];
-	}
-
-	bool GetFlagAnimationJump(const int pNum)
-	{
-		return m_flagAnimationJump[pNum];
-	}
-
-	bool GetGameEnd()//ゲーム終了
-	{
-		return m_gameEnd;
-	}
-
-
-
-	const int& GetGoalRanking(const int& pNum)
-	{
-		return m_goalRanking[pNum];
-	}
-
-	const int& GetRoundPoint(const int& pNum)
-	{
-		return m_roundPoint[pNum];
-	}
-
-	const bool& GetFinishSuddenDeath()
-	{
-		return m_finishSuddenDeath;
-	}
-	int GetBlueMiss(const int pNum)
-	{
-		return m_bluemiss[pNum];
-	}
-
-	bool GetModelIsActive(const int& pNum)
-	{
-		return m_modelRender[pNum]->IsActive();
-	}
-
-public: //Set関数
-
-	void DownPositionY(const int& pNum, const float& f)
-	{
-		m_modelRender[pNum]->DownPositionY(f);
-	}
-
-	void ResetPositionY(const int& pNum)
-	{
-		m_modelRender[pNum]->ResetPositionY();
+		return m_flagGoal[playerNum];
 	}
 
 	/**
-	 * @brief m_modelRender[pNum]のX軸の回転量を設定するSet関数
-	 * @param pNum プレイヤー番号
-	 * @param f 回転量
+	 * @brief プレイヤーのゴール順位を取得
+	 * @param playerNum プレイヤー番号
+	 * @return プレイヤーのゴール順位
 	*/
-	void SetRotationX(const int& pNum, const float& f) {
-		m_modelRender[pNum]->SetRotationX(f);
+	const int GetGoalRanking(const int playerNum) const
+	{
+		return m_goalRanking[playerNum];
+	}
+
+	/**
+	 * @brief プレイヤーの取得ラウンド数を取得
+	 * @param playerNum プレイヤー番号
+	 * @return プレイヤーの取得ラウンド数
+	*/
+	const int GetRoundPoint(const int playerNum) const
+	{
+		return m_roundPoint[playerNum];
+	}
+
+	/**
+	 * @brief サドンデスモードが終了したかを取得
+	 * @return サドンデスモードが終了したか
+	*/
+	const bool GetFinishSuddenDeath() const
+	{
+		return m_finishSuddenDeath;
+	}
+
+	/**
+	 * @brief キャラクターのモデルが描画されているかを取得
+	 * @param playerNum プレイヤー番号
+	 * @return キャラクターのモデルが描画されているか
+	*/
+	const bool GetModelIsActive(const int playerNum) const
+	{
+		return m_modelCharacter[playerNum]->IsActive();
+	}
+
+	/**
+	 * @brief プレイヤーが操作できない状態かを取得
+	 * @param playerNum プレイヤー番号
+	 * @return プレイヤーが操作できない状態か
+	*/
+	const bool GetStopController(const int playerNum) const
+	{
+		return m_stopController[playerNum];
+	}
+
+
+
+public: //Set関数
+
+	/**
+	 * @brief プレイヤーモデルのY座標を下げる
+	 * @param playerNum Y座標を下げるプレイヤー番号
+	 * @param downPosition 下げる量
+	*/
+	void DownPositionY(const int playerNum, const float downPosition)
+	{
+		m_modelCharacter[playerNum]->DownPositionY(downPosition);
+	}
+
+	/**
+	 * @brief プレイヤーモデルのY座標を0.0fにリセットする
+	 * @param playerNum Y座標を0.0fにリセットするプレイヤー番号
+	*/
+	void ResetPositionY(const int playerNum)
+	{
+		m_modelCharacter[playerNum]->ResetPositionY();
+	}
+
+	/**
+	 * @brief プレイヤーモデルのX軸の回転量を変更する
+	 * @param playerNum プレイヤー番号
+	 * @param rotation 回転量
+	*/
+	void SetRotationX(const int playerNum, const float rotation)
+	{
+		m_modelCharacter[playerNum]->SetRotationX(rotation);
 	}
 
 	/**
 	 * @brief m_activePlayer[pNum]のSet関数
-	 * @param pNum プレイヤー番号
-	 * @param b 操作できるかどうか
+	 * @param playerNum プレイヤー番号
+	 * @param flagActive 操作できるかどうか
 	*/
-	void SetActivePlayer(const int& pNum, const bool& b) {
-		m_activePlayer[pNum] = b;
+	void SetActivePlayer(const int playerNum, const bool flagActive)
+	{
+		m_activePlayer[playerNum] = flagActive;
 	}
 
 	/**
 	 * @brief ゴール時の順位を確定
-	 * @param pNum プレイヤー番号
+	 * @param playerNum プレイヤー番号
 	 * @param rank 順位
 	*/
-	void SetGoalRanking(const int& pNum, const int& rank) {
-		m_goalRanking[pNum] = rank;
+	void SetGoalRanking(const int playerNum, const int rank)
+	{
+		m_goalRanking[playerNum] = rank;
 
-		SetAndActivateGoalRankFont(pNum, rank);
+		SetAndActivateGoalRankFont(playerNum, rank);
 	}
 
 	/**
 	 * @brief 順位の描画処理ための値の設定と描画状態にする。
-	 * @param pNum プレイヤー番号
+	 * @param playerNum プレイヤー番号
 	 * @param rank 順位
 	*/
-	void SetAndActivateGoalRankFont(const int& pNum, const int& rank)
+	void SetAndActivateGoalRankFont(const int playerNum, const int rank)
 	{
-		m_spriteGoalRank[pNum][rank - 1]->Activate();
+		m_spriteGoalRank[playerNum][rank]->Activate();
 		++m_goalPlayer;
 	}
 
 	/**
 	 * @brief ゴールしたかどうかのSet関数
-	 * @param pNum プレイヤー番号
-	 * @param b ゴールしたかどうか
+	 * @param playerNum プレイヤー番号
+	 * @param flagGoal ゴールしたかどうか
 	*/
-	void SetFlagGoal(const int& pNum, const bool& b)
+	void SetFlagGoal(const int playerNum, const bool flagGoal)
 	{
-		m_flagGoal[pNum] = b;
+		m_flagGoal[playerNum] = flagGoal;
 	}
 
 	/**
 	 * @brief 操作するプレイヤーの人数を保存する変数のSet関数
-	 * @param i 操作するプレイヤーの人数
+	 * @param maxPlayer 操作するプレイヤーの人数
 	*/
-	void SetMaxPlayer(const int& i)
+	void SetMaxPlayer(const int maxPlayer)
 	{
-		m_maxPlayer = i;
-	}
-
-	void SetAnimationIdle(const int& pNum)
-	{
-		m_modelRender[pNum]->PlayAnimation(idle);
-	}
-	void SetGoalPlayer(const int o)
-	{
-		m_goalPlayer = o;
-	}
-
-
-
-	void SetAnimationFall(const int& pNum)
-	{
-		m_modelRender[pNum]->PlayAnimation(fall);
-		m_seFall->Play(false);
-	}
-
-	void SetAnimationSrip(const int& pNum)
-	{
-		m_modelRender[pNum]->PlayAnimation(srip);
-		m_seSrip->Play(false);
-	}
-
-	void SetAnimationWin(const int& pNum)
-	{
-		m_modelRender[pNum]->PlayAnimation(win);
+		m_maxPlayer = maxPlayer;
 	}
 
 	/**
-	 * @brief cpuがジャンプ中か判定する変数のSet関数
-	 * @param i ジャンプ中か真偽判定
+	 * @brief 何人ゴールしたかをセット
+	 * @param goalPlayer 何人ゴールしたか
 	*/
-	void SetFlagAnimationJump(const int& pNum, const bool& i)
+	void SetGoalPlayer(const int goalPlayer)
 	{
-		m_flagAnimationJump[pNum] = i;
-		m_seJump->Play(false);
-	}//tuika
-
-
-	void SetCPUJumpFlag(const int& pNum, const bool& i) {
-		m_EJumpFlag[pNum] = i;
+		m_goalPlayer = goalPlayer;
 	}
 
-	void AddRoundPoint(const int& pNum)
+	/**
+	 * @brief プレイヤーのモデルのアニメーションを[idle]に設定する
+	 * @param playerNum プレイヤー番号
+	*/
+	void SetAnimationIdle(const int playerNum)
 	{
-		++m_roundPoint[pNum];
+		m_modelCharacter[playerNum]->PlayAnimation(idle);
+	}
 
-		if (m_roundPoint[pNum] == 3) {
+	/**
+	 * @brief プレイヤーのモデルのアニメーションを[fall]に設定し、SEを再生する
+	 * @param playerNum プレイヤー番号
+	*/
+	void SetAnimationFall(const int playerNum)
+	{
+		m_modelCharacter[playerNum]->PlayAnimation(fall);
+		m_seFall->Play(false);
+	}
+
+	/**
+	 * @brief プレイヤーのモデルのアニメーションを[srip]に設定し、SEを再生する
+	 * @param playerNum プレイヤー番号
+	*/
+	void SetAnimationSrip(const int playerNum)
+	{
+		m_modelCharacter[playerNum]->PlayAnimation(srip);
+		m_seSrip->Play(false);
+	}
+
+	/**
+	 * @brief プレイヤーのモデルのアニメーションを[win]に設定する
+	 * @param playerNum プレイヤー番号
+	*/
+	void SetAnimationWin(const int playerNum)
+	{
+		m_modelCharacter[playerNum]->PlayAnimation(win);
+	}
+
+	/**
+	 * @brief 取得ラウンド数を増加する。３ラウンド取得した場合、サドンデスモードを終了する。
+	 * @param playerNum プレイヤー番号
+	*/
+	void AddRoundPoint(const int playerNum)
+	{
+		++m_roundPoint[playerNum];
+
+		//３ラウンド取得したとき
+		if (m_roundPoint[playerNum] == 3) {
+			//サドンデスモード終了
 			m_finishSuddenDeath = true;
 		}
 	}
-	void SetDifficultyLevel(const int& i) {//難易度
-		m_difficultyLevel = i;
-	}
 
-	void SetBlueMiss(const int& pNum, const bool& i) {
-		m_bluemiss[pNum] = i;
-	}
-
-	void PlayerModelDeactivate(const int& pNum)
+	/**
+	 * @brief プレイヤーのコントローラーの操作可能状態を変更
+	 * @param playerNum プレイヤー番号
+	 * @param stopController コントローラーが操作可能か
+	*/
+	void SetStopController(const int playerNum, const bool stopController)
 	{
-		m_modelRender[pNum]->Deactivate();
+		m_stopController[playerNum] = stopController;
 	}
 
-	void SetRule1NewGO(const bool b)
+	/**
+	 * @brief プレイヤーのモデルのブロック依存のアニメーション再生状況を変更する
+	 * @param playerNum プレイヤー番号
+	 * @param block ブロックの種類
+	*/
+	void SetNowAnimationBlock(const int playerNum, const con::BlockData& block)
 	{
-		rule1NewGO = b;
+		m_nowAnimationBlock[playerNum] = block;
+
+		//SEの再生
+		if (block == con::BlockData::blueBlock) {
+			m_seFall->Play(false); //落下時のSEを再生
+		}
+		if (block == con::BlockData::yellowBlock) {
+			m_seSrip->Play(false); //スリップ時のSEを再生
+		}
 	}
 
 
@@ -307,10 +363,13 @@ private: //enum
 		win,
 		stand,
 		lose,
-		Animation_Max
+		AnimationMax
 	};
 
-	AnimationClip m_animationPlayer[Animation_Max];
+	AnimationClip m_animationPlayer[AnimationMax];
+
+
+private: //constant
 
 
 
@@ -319,44 +378,54 @@ private: //data menber
 	// クラスのオブジェクト
 	////////////////////////////////////////////////////////////
 
-	Stage* m_stage = nullptr;
-	MainProcessing* m_game = nullptr;
-	EnemyAI* m_enemyAI = nullptr;
+	//////////////////////////////
+	// NewGO
+	//////////////////////////////
 
-	ModelRender* m_modelRender[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
-	SpriteRender* m_spriteGameEnd = nullptr;
-	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax][4] = { nullptr };
-	//FontRender* m_fontGoalRank[con::PlayerNumberMax] = { nullptr };	//ゴール順位を表示するフォント
-	SoundSE* m_seJump = nullptr;
-	SoundSE* m_seFall = nullptr;
-	SoundSE* m_seSrip = nullptr;
+	ModelRender* m_modelCharacter[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
+	SpriteRender* m_spriteGameEnd = nullptr; //ゲーム終了時の画像
+	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax][con::GoalRankMax] = { nullptr }; //ゴール順位の画像
+	SoundSE* m_seJump = nullptr; //ジャンプ時のSE
+	SoundSE* m_seFall = nullptr; //落下時のSE
+	SoundSE* m_seSrip = nullptr; //スリップ時のSE
 
-	Rule1* m_rule1 = nullptr;
+	//////////////////////////////
+	// FindGO
+	//////////////////////////////
+
+	GameData* m_findGameData = nullptr;
+
+	Stage* m_findStage = nullptr;
+	MainProcessing* m_findMainProcessing = nullptr;
+	CPUPlayerController* m_findCPUPlayerController = nullptr;
+	SuddenDeathMode* m_findSuddenDeathMode = nullptr;
+	GameStartCountdown* m_findGameStartCountdown = nullptr;
+	Result* m_findResult = nullptr;
 
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報
 	////////////////////////////////////////////////////////////
-	int m_difficultyLevel = 0;//難易度
-	int m_moveStop[con::PlayerNumberMax] = { 0, 0, 0, 0 };//m_moveStopよりm_moveStopCountが大きかったらm_moveStopBoolはtrue
-	int m_moveStopCount[con::PlayerNumberMax]= { 0, 0, 0, 0 };//m_moveStopよりm_moveStopCountが大きかったらm_moveStopBoolはtrue
-	bool m_moveStopBool[con::PlayerNumberMax] = { false, false, false, false };//trueで移動処理
-	bool m_bluemiss[con::PlayerNumberMax]= { false, false, false, false };//前の移動で青ブロックに落ちたか
-
 
 	int m_activePlayer[con::PlayerNumberMax] = { true, true, true, true };	//このプレイヤーは操作しているか
 	int m_maxPlayer = con::PlayerNumberMax;									//プレイヤーの最大数
 
-	int m_goalRanking[con::PlayerNumberMax] = { 0, 0, 0, 0 };				//プレイヤーのゴール順位
+	int m_goalRanking[con::PlayerNumberMax] =
+	{ con::rank_notClear, con::rank_notClear, con::rank_notClear, con::rank_notClear };	//プレイヤーのゴール順位
 	bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
-	int m_goalPlayer = 0;					
+	int m_goalPlayer = 0;				
 	
-	int m_endTimer = 0;//ゴールしてからの時間tuika
+	int m_endTimer = 0; //ゴールしてからの時間
 	int fontDeavtive = 0;
 
-	bool m_gameEnd = false;//ゴールしたプレイヤーの人数tuika
+	bool m_gameEnd = false; //ゴールしたプレイヤーの人数
 
-	bool m_EJumpFlag[con::PlayerNumberMax] = { false };//cpuジャンプフラグ
+	bool m_stopController[con::PlayerNumberMax] = { false,false,false,false }; //操作不能か
 	
+	con::BlockData m_nowAnimationBlock[con::PlayerNumberMax] =					//プレイヤーの現在のアニメーション
+	{ con::greenBlock,con::greenBlock ,con::greenBlock ,con::greenBlock };
+
+	bool m_flagStopAnimation[con::PlayerNumberMax] = { false,false,false,false }; //アニメーションの処理が止まっているか
+
 	////////////////////////////////////////////////////////////
 	// タイマー関連
 	////////////////////////////////////////////////////////////
@@ -364,17 +433,10 @@ private: //data menber
 	bool m_flagAnimationJump[con::PlayerNumberMax] = { false, false, false, false };	//ジャンプアニメーション中か
 	int m_timerAnimation[con::PlayerNumberMax] = { 0, 0, 0, 0 };						//アニメーションのタイマー
 
-
-	int m_goalPlayerZero = 0;
-
-
-
 	////////////////////////////////////////////////////////////
 	// サドンデスモードのメンバ変数
 	////////////////////////////////////////////////////////////
 
 	int m_roundPoint[con::PlayerNumberMax] = { 0,0,0,0 };		//プレイヤーのラウンドのポイント
 	bool m_finishSuddenDeath = false;							//サドンデスモードが終了したか
-
-	bool rule1NewGO = false;
 };

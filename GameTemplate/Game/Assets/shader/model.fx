@@ -70,7 +70,7 @@ struct SPSIn
 	float3 tangent  : TANGENT;		//接ベクトル
 	float3 biNormal : BINORMAL;		//従法線
 	float2 uv 			: TEXCOORD0;	//uv座標。
-	float3 worldPos		: TEXCOORD1;
+	float4 worldPos		: TEXCOORD1;
 	//ピクセルシェーダーへの入力にカメラ空間の法線を追加する
 	float3 normalInView : TEXCOORD2;	//カメラ空間の法線。
 };
@@ -81,6 +81,7 @@ struct SPSIn
 Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
 Texture2D<float4> g_normalMap : register(t1);			//法線マップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
+Texture2D<float4> g_toonMap : register(t4);  //トゥーンシェーダー用のテクスチャー
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ///////////////////////////////////////////
@@ -183,6 +184,7 @@ SPSIn VSMain(SVSIn vsIn)
 {
 	return VSMainCore(vsIn, false);
 }
+
 /// <summary>
 /// スキンありメッシュの頂点シェーダーのエントリー関数。
 /// </summary>
@@ -190,14 +192,36 @@ SPSIn VSSkinMain( SVSIn vsIn )
 {
 	return VSMainCore(vsIn, true);
 }
+
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
+	//モデルのテクスチャから色をフェッチする
+	float4 color = g_albedo.Sample(g_sampler, psIn.uv);
+
+	//ハーフランバート拡散照明によるライティング計算
+	float p = dot(psIn.normal, dirDirection);
+
+	p *= -1.0f;
+
+	// 内積の値を0以上の値にする
+	p = max(0.0f, p);
+	//float p = dot(psIn.normal * -1.0f, dirDirection.xyz);
+	p = p * 0.5f + 0.5f;
+	p = p * p;
+
+	//計算結果よりトゥーンシェーダー用のテクスチャから色をフェッチする
+	float4 Col = g_toonMap.Sample(g_sampler,float2(p,0.0f));
+
+	//求まった色を乗算する
+	return color *= Col;
+
+
+
 
 	psIn.normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
-
 
 	//////////////////////////////
 	// ディレクションライトによるLambert拡散反射光とPhong鏡面反射光の計算
@@ -233,9 +257,6 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	//半球ライトによるライティングを計算
 	float3 hemiLight = CalcLigFromHemiLight(psIn);
-
-
-
 
 	//////////////////////////////
 	// 最後の仕上げ

@@ -54,31 +54,43 @@ public: //Set関数
      * @brief 表示するテキストの位置を設定
      * @param vec 表示する位置
     */
-    void SetPosition(const Vector2 vec)
+    void SetPosition(const Vector2& vec)
     {
         m_position = vec;
     }
 
-    void SetScale(const float& f)
+    /**
+     * @brief スケールを設定
+     * @param scale スケール
+    */
+    void SetScale(const float scale)
     {
-        m_scale = f;
+        m_scale = scale;
     }
 
     /**
      * @brief 表示するテキストのピボットを設定
      * @param vec ピボット
     */
-    void SetPivot(const Vector2 vec)
+    void SetPivot(const Vector2& vec)
     {
         m_pivot = vec;
     }
 
-    void SetPositionX(const float& f)
+    /**
+     * @brief X座標の位置を設定
+     * @param position X座標の位置
+    */
+    void SetPositionX(const float position)
     {
-        m_position.x = f;
+        m_position.x = position;
     }
 
-    const float& GetPositionX()
+    /**
+     * @brief X座標の位置を取得
+     * @return X座標の位置
+    */
+    const float& GetPositionX() const
     {
         return m_position.x;
     }

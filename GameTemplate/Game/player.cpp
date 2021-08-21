@@ -1,14 +1,29 @@
 #include "stdafx.h"
 #include "player.h"
 
+#include "game_data.h"
 #include "main_processing.h"
-#include "EnemyAI.h"
+#include "CPU_player_controller.h"
 #include "stage.h"
-#include "rule1.h"
+#include "sudden_death_mode.h"
 #include "pause.h"
+#include "game_start_countdown.h"
+#include "Result.h"
 
 namespace //constant
 {
+	////////////////////////////////////////////////////////////
+	// 初期化
+	////////////////////////////////////////////////////////////
+
+	//////////////////////////////
+	// SEの音量
+	//////////////////////////////
+
+	const float INIT_SE_JUMP = 0.3f;
+	const float INIT_SE_FALL = 2.0f;
+	const float INIT_SE_SRIP = 0.7f;
+
 	////////////////////////////////////////////////////////////
 	// 位置情報
 	////////////////////////////////////////////////////////////
@@ -33,15 +48,19 @@ namespace //constant
 	// 入力関係
 	////////////////////////////////////////////////////////////
 
-	const int MOVE_BUTTON_A = 2;		//Aボタンを押したときの移動量
-	const int MOVE_BUTTON_B = 1;		//Bボタンを押したときの移動量
+
 
 	////////////////////////////////////////////////////////////
 	// タイマー関連
 	////////////////////////////////////////////////////////////
 
 	const int TIMER_RESET = 0; //タイマーのリセット
-	const int TIME_ANIMATION = 30; //ジャンプアニメーションの時間（0.5秒）
+	const int TIME_ANIMATION = 30; //ジャンプアニメーションの時間
+
+	const int TIME_BLUE_BLOCK_ANIMATION = 30;   //青色のブロックに行ったときのアニメーションの時間
+
+	const int TIME_YELLOW_BLOCK_ANIMATION = 30; //黄色のブロックに行ったときのアニメーションの時間
+
 
 	////////////////////////////////////////////////////////////
 	// その他
@@ -51,7 +70,7 @@ namespace //constant
 
 	const Vector2 PLAYER_RANK_SPRITE[con::PlayerNumberMax] = {	//プレイヤーの順位の初期座標
 		{ -490.0f, -70.0f},											//プレイヤー１
-		{ -180.0f, -70.0f },											//プレイヤー２
+		{ -180.0f, -70.0f },										//プレイヤー２
 		{ 140.0f, -70.0f },											//プレイヤー３
 		{ 460.0f, -70.0f }											//プレイヤー４
 	};
@@ -60,47 +79,6 @@ namespace //constant
 
 
 Player::Player()
-{
-
-}
-
-////////////////////////////////////////////////////////////
-// デストラクタ関連
-////////////////////////////////////////////////////////////
-
-Player::~Player()
-{
-	//プレイヤーごとに処理
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		DeleteIndividual(playerNum);
-	}
-
-	DeleteGO(m_enemyAI);
-	DeleteGO(m_spriteGameEnd);
-	DeleteGO(m_seJump);
-	DeleteGO(m_seFall);
-	DeleteGO(m_seSrip);
-}
-
-
-
-void Player::DeleteIndividual(const int pNum)
-{
-	//p_numはプレイヤーのコントローラー番号
-
-	DeleteGO(m_modelRender[pNum]);
-	for (int i = 0; i < 4; i++) {
-		DeleteGO(m_spriteGoalRank[pNum][i]);
-	}
-
-	//DeleteGO(m_skinModelRender[pNum]);
-}
-
-////////////////////////////////////////////////////////////
-// Start関数関連
-////////////////////////////////////////////////////////////
-
-bool Player::Start()
 {
 	//アニメーションの設定
 	m_animationPlayer[idle].Load(filePath::tka::IDLE);
@@ -112,21 +90,33 @@ bool Player::Start()
 	m_animationPlayer[lose].Load(filePath::tka::LOSE);
 	//ループ再生をtrueにする
 	m_animationPlayer[idle].SetLoopFlag(true);
-	//m_animationPlayer[win].SetLoopFlag(true);
 	m_animationPlayer[stand].SetLoopFlag(true);
-	//m_animationPlayer[lose].SetLoopFlag(true);
-	//アニメーションの設定
-	//m_animationPlayer[Animation_jump].Load("Assets/animData/UnityChanJump.tka");
-	//ループ再生をtrueにする
-	//m_animationPlayer[Animation_jump].SetLoopFlag(true);
+
+	//////////////////////////////
+	// NewGO
+	//////////////////////////////
+
+	//////////
+	// モデルのNewGO
+	//////////
 
 	//プレイヤーごとに処理
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		bool check = StartIndividual(playerNum);
+		m_modelCharacter[playerNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
+		m_modelCharacter[playerNum]->Init(
+			filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, AnimationMax);
+		m_modelCharacter[playerNum]->Deactivate();
+	}
 
-		//StartIndividual関数がfalseを返したらfalseを返して処理を終了させる。
-		if (check == false) {
-			return false;
+	//////////
+	// スプライトのNewGO
+	//////////
+
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
+			m_spriteGoalRank[playerNum][rankNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
+			m_spriteGoalRank[playerNum][rankNum]->Init(filePath::dds::RANK[rankNum]);
+			m_spriteGoalRank[playerNum][rankNum]->Deactivate();
 		}
 	}
 
@@ -134,104 +124,133 @@ bool Player::Start()
 	m_spriteGameEnd->Init(filePath::dds::GAME_END);
 	m_spriteGameEnd->Deactivate();
 
+	//////////
+	// SEのNewGO
+	//////////
+
 	m_seJump = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seJump->Init(filePath::se::JUMP);
-	m_seJump->SetVolume(0.3f);
+	m_seJump->SetVolume(INIT_SE_JUMP);
 
 	m_seFall = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seFall->Init(filePath::se::FALL);
-	m_seFall->SetVolume(2.0f);
+	m_seFall->SetVolume(INIT_SE_FALL);
 
 	m_seSrip = NewGO<SoundSE>(igo::PRIORITY_CLASS);
 	m_seSrip->Init(filePath::se::SRIP);
-	m_seSrip->SetVolume(0.7f);
-
-	m_stage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
-	m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
-	m_enemyAI = FindGO<EnemyAI>(igo::CLASS_NAME_ENEMYAI);//tuika
-	m_rule1 = FindGO<Rule1>(igo::CLASS_NAME_RULE1);
-
-	return true;
+	m_seSrip->SetVolume(INIT_SE_SRIP);
 }
 
-bool Player::StartIndividual(const int pNum)
+////////////////////////////////////////////////////////////
+// デストラクタ関連
+////////////////////////////////////////////////////////////
+
+Player::~Player()
 {
-	
-	//p_numはプレイヤーのコントローラー番号
-
-	m_modelRender[pNum] = NewGO<ModelRender>(igo::PRIORITY_MODEL);
-	m_modelRender[pNum]->Init(filePath::tkm::CHAEACTER_MODEL, modelUpAxis::enModelUpAxisY, m_animationPlayer, Animation_Max);
-	m_modelRender[pNum]->Deactivate();
-
-	for (int i = 0; i < 4; i++) {
-		m_spriteGoalRank[pNum][i] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteGoalRank[pNum][i]->Init(filePath::dds::RANK[i]);
-		m_spriteGoalRank[pNum][i]->SetPosition(PLAYER_RANK_SPRITE[pNum]);
-		m_spriteGoalRank[pNum][i]->Deactivate();
+	//プレイヤーごとに処理
+	for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+		DeleteGO(m_modelCharacter[playerNum]);
+		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
+			DeleteGO(m_spriteGoalRank[playerNum][rankNum]);
+		}
 	}
+
+	DeleteGO(m_spriteGameEnd);
+	DeleteGO(m_seJump);
+	DeleteGO(m_seFall);
+	DeleteGO(m_seSrip);
+}
+
+////////////////////////////////////////////////////////////
+// Start関数関連
+////////////////////////////////////////////////////////////
+
+bool Player::Start()
+{
+	//////////////////////////////
+	// FindGO
+	//////////////////////////////
+
+	m_findCPUPlayerController = FindGO<CPUPlayerController>(igo::CLASS_NAME_CPU_PLAYER_CONTROLLER);
+	m_findGameData = FindGO<GameData>(igo::CLASS_NAME_GAME_DATA);
+	m_findStage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
+	m_findMainProcessing = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
+	m_findSuddenDeathMode = FindGO<SuddenDeathMode>(igo::CLASS_NAME_SUDDEN_DEATH);
+	m_findGameStartCountdown = FindGO<GameStartCountdown>(igo::CLASS_NAME_GAME_START_COUNTDOWN);
+	m_findResult = FindGO<Result>(igo::CLASS_NAME_RESULT);
 
 	return true;
 }
 
 void Player::Init()
 {
-	m_flagProcessing = true;
+	m_flagProcess = true;
 
-	m_spriteGameEnd->Deactivate();
+	//////////
+	// モデルの初期化
+	//////////
+
+	//プレイヤーごとに処理
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_modelCharacter[playerNum]->Activate();
+		m_modelCharacter[playerNum]->SetPosition(PLAYER_START_POSITION[playerNum]);
+		m_modelCharacter[playerNum]->SetScale({ 0.03f,0.03f,0.03f });
+		m_modelCharacter[playerNum]->PlayAnimation(idle);
+	}
+
+	//////////
+	// スプライトの初期化
+	//////////
 
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_modelRender[playerNum]->SetPosition(PLAYER_START_POSITION[playerNum]);
-		m_modelRender[playerNum]->SetScale({ 0.03f,0.03f,0.03f });
-		m_modelRender[playerNum]->PlayAnimation(idle);
-		m_modelRender[playerNum]->Activate();
-
-		for (int i = 0; i < 4; i++) {
-			m_spriteGoalRank[playerNum][i]->Deactivate();
+		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
+			m_spriteGoalRank[playerNum][rankNum]->SetPosition(PLAYER_RANK_SPRITE[playerNum]);
+			m_spriteGoalRank[playerNum][rankNum]->Deactivate();
 		}
 	}
 
-	
+	m_spriteGameEnd->Deactivate();
+
+	//////////
+	// メンバ変数の初期化
+	//////////
+
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_activePlayer[playerNum] = true;
-		m_goalRanking[playerNum] = 0;
-		m_flagGoal[playerNum] = false;
-		m_flagAnimationJump[playerNum] = false;
-		m_timerAnimation[playerNum] = 0;
-		m_roundPoint[playerNum] = 0;
-		m_EJumpFlag[playerNum] = false;
+		m_activePlayer[playerNum] = true; //このプレイヤーは操作しているか
+		m_goalRanking[playerNum] = con::rank_notClear;	//プレイヤーのゴール順位
+		m_flagGoal[playerNum] = false;	//ゴールしたか
+		m_stopController[playerNum] = false; //操作不能か
+		m_nowAnimationBlock[playerNum] = con::greenBlock; //プレイヤーの現在のアニメーション
+		m_flagStopAnimation[playerNum] = false; //アニメーションの処理が止まっているか
+		m_flagAnimationJump[playerNum] = false;	//ジャンプアニメーション中か
+		m_timerAnimation[playerNum] = 0;						//アニメーションのタイマー
+		m_roundPoint[playerNum] = 0;		//プレイヤーのラウンドのポイント
 	}
 
-	m_maxPlayer = con::PlayerNumberMax;									//プレイヤーの最大数
-
+	m_maxPlayer = con::PlayerNumberMax; //プレイヤーの最大数
 	m_goalPlayer = 0;
-
-	m_endTimer = 0;//ゴールしてからの時間tuika
+	m_endTimer = 0; //ゴールしてからの時間
 	fontDeavtive = 0;
-
-	m_gameEnd = false;//ゴールしたプレイヤーの人数tuika
-
-	m_goalPlayerZero = 0;
-
-	m_finishSuddenDeath = false;							//サドンデスモードが終了したか
-
-	rule1NewGO = false;
-
-
+	m_gameEnd = false; //ゴールしたプレイヤーの人数
+	m_finishSuddenDeath = false; //サドンデスモードが終了したか
 }
 
 void Player::Finish()
 {
-	m_flagProcessing = false;
+	m_flagProcess = false;
 
-	m_spriteGameEnd->Deactivate();
+	//プレイヤーごとに処理
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_modelCharacter[playerNum]->Deactivate();
+	}
 
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_modelRender[playerNum]->Deactivate();
-
-		for (int i = 0; i < 4; i++) {
-			m_spriteGoalRank[playerNum][i]->Deactivate();
+		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
+			m_spriteGoalRank[playerNum][rankNum]->Deactivate();
 		}
 	}
+
+	m_spriteGameEnd->Deactivate();
 }
 
 ////////////////////////////////////////////////////////////
@@ -240,165 +259,116 @@ void Player::Finish()
 
 void Player::Update()
 {
-	if (m_flagProcessing == false) {
+	if (false == m_flagProcess) {
 		return;
 	}
 
 	//プレイヤーごとに操作
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		if (m_maxPlayer > playerNum) {
-			if (m_flagGoal[playerNum] == false) {
-				Controller(playerNum);
-				Animation(playerNum);
-			}
-			else {
-				Animation(playerNum);
-			}
-		}
-		else {
-			switch (m_difficultyLevel) {
-			case 0:
-				m_moveStop[playerNum] = 60;
-				break;
-			case 1:
-				m_moveStop[playerNum] = 45;
-
-				break;
-			case 2:
-				m_moveStop[playerNum] = 20;
-
-				break;
-			}
-			m_moveStopCount[playerNum]++;
-		if (rule1NewGO == true) {
-			if (m_flagGoal[playerNum] == false) {
-				if (m_moveStop[playerNum] < m_moveStopCount[playerNum]) {
-					m_moveStopBool[playerNum] = true;
-				}
-				if (m_moveStopBool[playerNum] == true) {
-					m_enemyAI->Moverule1(playerNum);
-					//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
-					if (m_EJumpFlag[playerNum] == true) {
-						//m_seJump->Play(false);				
-						m_modelRender[playerNum]->PlayAnimation(jump);
-					}
-					m_moveStopCount[playerNum] = 0;
-					if (m_moveStopCount[playerNum] == 0) {
-						m_moveStopBool[playerNum] = false;
-					}
-				}
-				Animation(playerNum);
-			}
-			else {
-				if (m_flagGoal[playerNum] == false) {
-					m_enemyAI->Move(playerNum);
-					//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
-					if (m_EJumpFlag[playerNum] == true) {
-						//m_seJump->Play(false);				
-						m_modelRender[playerNum]->PlayAnimation(jump);
-					}
-					Animation(playerNum);
-				}
-				else {
-					Animation(playerNum);
-				}
-			}
-			}
-		else {
-			if (m_flagGoal[playerNum] == false) {
-				if (m_moveStop[playerNum] < m_moveStopCount[playerNum]) {
-					m_moveStopBool[playerNum] = true;
-				}
-				if (m_moveStopBool[playerNum] == true) {
-					m_enemyAI->Move(playerNum);
-					m_bluemiss[playerNum] = false;
-					//m_EJumpFlag[playerNum]=m_enemyAI->GetJampFlag(playerNum);
-					if (m_EJumpFlag[playerNum] == true) {
-						//m_seJump->Play(false);				
-						m_modelRender[playerNum]->PlayAnimation(jump);
-					}
-					m_moveStopCount[playerNum] = 0;
-					if (m_moveStopCount[playerNum] == 0) {
-						m_moveStopBool[playerNum] = false;
-					}
-				}
-			Animation(playerNum);
-			}
-			else {
-			Animation(playerNum);
-			}
-			}
+		if (m_flagGoal[playerNum] == false) {
+			Controller(playerNum);
 		}
 
-	}//henkou
+		Animation(playerNum);
+	}
 
 	if (con::PlayerNumberMax == m_goalPlayer || m_finishSuddenDeath == true) {
 		m_spriteGameEnd->Activate();
 		m_endTimer++;
 		if (m_endTimer > 180) {
 			//サドンデスモードのとき所持ラウンド勝利数に応じて順位を確定
-			if (rule1NewGO == true) {
+			if (m_findSuddenDeathMode->GetFlagSuddenDeathMode() == true) {
 				SuddenDeathRank();
 			}
 
-			for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-				m_game->SetRank(playerNum, m_goalRanking[playerNum]);
+			//リザルトシーンに順位情報を渡す
+			for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+				m_findResult->SetRank(playerNum, m_goalRanking[playerNum]);
 			}
 
 			m_gameEnd = true;
-			m_game->SetGameEnd(m_gameEnd);
+			m_findMainProcessing->SetGameEnd(m_gameEnd);
 		}
-	}//henkou
-
-	bool check[4] = { false,false,false,false };
-
-	bool check2[4] = { false,false,false,false };
-
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < m_maxPlayer; playerNum++) {
-		check[playerNum] = m_modelRender[playerNum]->IsInited();
-
-		check2[playerNum] = m_modelRender[playerNum]->IsPlayingAnimation();
 	}
-
 }
 
 //////////////////////////////
 // プレイヤーの操作処理
 //////////////////////////////
 
-void Player::Controller(const int pNum)
+void Player::Controller(const int& playerNum)
 {
 	//p_numはプレイヤーのコントローラー番号
 
-	if (m_game->GetStopOperation() == true) {
+	if (m_findGameStartCountdown->GetFlagStopGameProcess() == true) {
 		return;
 	}
 
-	if (m_flagAnimationJump[pNum] == true ||
-		//m_flagCheckBlock[pNum] == true ||
-		m_stage->GetmActiveOperation(pNum) == false) {
+	if (m_stopController[playerNum] == true) {
 		return;
 	}
 
-	//２マス進む
-	if (g_pad[pNum]->IsTrigger(enButtonA) == true) {
-		if (m_stage->MoveBlock(pNum, MOVE_BUTTON_A) == false) {
-			return;
-		}
-		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
-		m_seJump->Play(false);
-		m_modelRender[pNum]->PlayAnimation(jump);
-		m_flagAnimationJump[pNum] = true;
+	//if (m_findMainProcessing->GetStopOperation() == true) {
+	//	return;
+	//}
+
+	if (m_flagAnimationJump[playerNum] == true) {
+		return;
 	}
-	//１マス進む
-	else if (g_pad[pNum]->IsTrigger(enButtonB) == true) {
-		if (m_stage->MoveBlock(pNum, MOVE_BUTTON_B) == false) {
-			return;
+
+	//プレイヤーの操作
+	if (m_maxPlayer > playerNum) {
+		//２マス進む
+		if (g_pad[playerNum]->IsTrigger(enButtonA) == true) {
+			if (m_findStage->MoveBlock(playerNum, con::MOVE_2) == false) {
+				return;
+			}
+			//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+			m_seJump->Play(false);
+			m_modelCharacter[playerNum]->PlayAnimation(jump);
+			m_flagAnimationJump[playerNum] = true;
 		}
-		//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
-		m_seJump->Play(false);
-		m_modelRender[pNum]->PlayAnimation(jump);
-		m_flagAnimationJump[pNum] = true;
+		//１マス進む
+		else if (g_pad[playerNum]->IsTrigger(enButtonB) == true) {
+			if (m_findStage->MoveBlock(playerNum, con::MOVE_1) == false) {
+				return;
+			}
+			//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+			m_seJump->Play(false);
+			m_modelCharacter[playerNum]->PlayAnimation(jump);
+			m_flagAnimationJump[playerNum] = true;
+		}
+	}
+	//CPUの操作
+	else {
+		const int CPUMove = m_findCPUPlayerController->CPUController(playerNum);
+
+		//２マス進む
+		if (CPUMove == con::MOVE_2) {
+			if (m_findStage->MoveBlock(playerNum, con::MOVE_2) == false) {
+				return;
+			}
+
+			m_findCPUPlayerController->SetStopController(playerNum, true);
+
+			//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+			m_seJump->Play(false);
+			m_modelCharacter[playerNum]->PlayAnimation(jump);
+			m_flagAnimationJump[playerNum] = true;
+		}
+		//１マス進む
+		else if (CPUMove == con::MOVE_1) {
+			if (m_findStage->MoveBlock(playerNum, con::MOVE_1) == false) {
+				return;
+			}
+
+			m_findCPUPlayerController->SetStopController(playerNum, true);
+
+			//キャラクターが移動したらアニメーションをジャンプアニメーションを再生
+			m_seJump->Play(false);
+			m_modelCharacter[playerNum]->PlayAnimation(jump);
+			m_flagAnimationJump[playerNum] = true;
+		}
 	}
 }
 
@@ -406,95 +376,204 @@ void Player::Controller(const int pNum)
 // プレイヤーのアニメーション
 //////////////////////////////
 
-void Player::Animation(const int pNum)
+void Player::Animation(const int& playerNum)
 {
-	JumpAnimation(pNum);
-
-	ImpossibleOperationAnimation(pNum);
-}
-
-void Player::JumpAnimation(const int pNum)
-{
-	if (m_flagAnimationJump[pNum] == false) {
+	if (m_flagStopAnimation[playerNum] == true) {
 		return;
 	}
 
-	++m_timerAnimation[pNum];
+	JumpAnimation(playerNum);
+
+	switch (m_nowAnimationBlock[playerNum]) {
+	case con::greenBlock:
+
+		break;
+	case con::blueBlock:
+		//サドンデス時
+		if (true == m_findSuddenDeathMode->GetFlagSuddenDeathMode()) {
+			SuddenDeathBlueBlockAnimation(playerNum);
+		}
+		//レース時
+		else {
+			BlueBlockAnimation(playerNum);
+		}
+		break;
+	case con::yellowBlock:
+		//サドンデス時
+		if (true == m_findSuddenDeathMode->GetFlagSuddenDeathMode()) {
+			SuddenDeathYellowBlockAnimation(playerNum);
+		}
+		//レース時
+		else {
+			YellowBlockAnimation(playerNum);
+		}
+		break;
+	case con::goalBlock:
+
+		break;
+	}
+}
+
+void Player::JumpAnimation(const int& playerNum)
+{
+	if (m_flagAnimationJump[playerNum] == false) {
+		return;
+	}
+
+	++m_timerAnimation[playerNum];
 
 	//ここのマジックナンバーを後で解消する。
-	if (m_timerAnimation[pNum] >= 0 && m_timerAnimation[pNum] <= 15) {
-		m_modelRender[pNum]->UpPositionY(JUMP_MOVE);
+	if (m_timerAnimation[playerNum] >= 0 && m_timerAnimation[playerNum] <= 15) {
+		m_modelCharacter[playerNum]->UpPositionY(JUMP_MOVE);
 	}
-	else if (m_timerAnimation[pNum] >= 16 && m_timerAnimation[pNum] <= 30) {
-		m_modelRender[pNum]->DownPositionY(JUMP_MOVE);
+	else if (m_timerAnimation[playerNum] >= 16 && m_timerAnimation[playerNum] <= 30) {
+		m_modelCharacter[playerNum]->DownPositionY(JUMP_MOVE);
 	}
 
 
-	if (m_timerAnimation[pNum] >= TIME_ANIMATION) {
-		m_flagAnimationJump[pNum] = false;
-		m_timerAnimation[pNum] = TIMER_RESET;
+	if (m_timerAnimation[playerNum] >= TIME_ANIMATION) {
+		m_flagAnimationJump[playerNum] = false;
+		m_timerAnimation[playerNum] = TIMER_RESET;
 
-		if (m_flagGoal[pNum] == false) {
-			m_modelRender[pNum]->PlayAnimation(idle);
+		//着地したブロックの判定
+		m_findStage->CheckBlock(playerNum);
+
+
+
+		if (m_flagGoal[playerNum] == false) {
+			m_modelCharacter[playerNum]->PlayAnimation(idle);
 		}
 		else {
-			if (m_goalRanking[pNum] == 1) {
-				m_modelRender[pNum]->PlayAnimation(win);
+			if (m_goalRanking[playerNum] == con::rank_1) {
+				m_modelCharacter[playerNum]->PlayAnimation(win);
 			}
-			else if (m_goalRanking[pNum] == 4) {
-				m_modelRender[pNum]->PlayAnimation(lose);
+			else if (m_goalRanking[playerNum] == con::rank_4) {
+				m_modelCharacter[playerNum]->PlayAnimation(lose);
 			}
 			else {
-				m_modelRender[pNum]->PlayAnimation(stand);
+				m_modelCharacter[playerNum]->PlayAnimation(stand);
 			}
 		}
 	}
 }
 
-void Player::ImpossibleOperationAnimation(const int pNum)
+void Player::BlueBlockAnimation(const int& playerNum)
 {
+	//落下アニメーションを再生
+	m_modelCharacter[playerNum]->PlayAnimation(fall);
 
+	++m_timerAnimation[playerNum];
+	m_modelCharacter[playerNum]->DownPositionY(30.0f);
+
+	//前の位置に戻すためにフラグをfalseにする。
+	if (m_timerAnimation[playerNum] >= TIME_BLUE_BLOCK_ANIMATION) {
+		m_timerAnimation[playerNum] = TIMER_RESET;
+		//モデルを元に戻す。
+		m_modelCharacter[playerNum]->ResetPositionY();
+		m_modelCharacter[playerNum]->PlayAnimation(idle);
+		//キャラクターの位置を前の位置に戻す
+		m_findStage->ReturnBlock(playerNum);
+
+		//操作可能にする
+		m_stopController[playerNum] = false;
+
+		m_nowAnimationBlock[playerNum] = con::greenBlock;
+	}
+}
+
+void Player::SuddenDeathBlueBlockAnimation(const int& playerNum)
+{
+	//落下アニメーションを再生
+	m_modelCharacter[playerNum]->PlayAnimation(fall);
+
+	++m_timerAnimation[playerNum];
+	m_modelCharacter[playerNum]->DownPositionY(30.0f);
+
+	//プレイヤーを非表示にする。
+	if (m_timerAnimation[playerNum] >= TIME_BLUE_BLOCK_ANIMATION) {
+		m_modelCharacter[playerNum]->Deactivate();
+		//アニメーション処理をしないようにする
+		m_flagStopAnimation[playerNum] = true;
+	}
+}
+
+void Player::YellowBlockAnimation(const int& playerNum)
+{
+	//こけたアニメーションを再生
+	m_modelCharacter[playerNum]->PlayAnimation(srip);
+
+	++m_timerAnimation[playerNum];
+
+	//操作可能にする。
+	if (m_timerAnimation[playerNum] >= TIME_YELLOW_BLOCK_ANIMATION) {
+		m_timerAnimation[playerNum] = TIMER_RESET;
+
+		//モデルを元に戻す
+		m_modelCharacter[playerNum]->PlayAnimation(idle);
+		//操作可能にする
+		m_stopController[playerNum] = false;
+
+		m_nowAnimationBlock[playerNum] = con::greenBlock;
+	}
+}
+
+void Player::SuddenDeathYellowBlockAnimation(const int& playerNum)
+{
+	//こけたアニメーションを再生
+	m_modelCharacter[playerNum]->PlayAnimation(srip);
+
+	++m_timerAnimation[playerNum];
+
+	//操作可能にする。
+	if (m_timerAnimation[playerNum] >= TIME_YELLOW_BLOCK_ANIMATION) {
+		//アニメーション処理をしないようにする
+		m_flagStopAnimation[playerNum] = true;
+	}
 }
 
 void Player::NextRound()
 {
-	while (fontDeavtive<120)
+	while (fontDeavtive < 120)
 	{
 		fontDeavtive += 1;
 	}
 
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_modelRender[playerNum]->PlayAnimation(idle);
-		m_modelRender[playerNum]->ResetPositionY();
-		m_modelRender[playerNum]->Activate();
+		m_modelCharacter[playerNum]->PlayAnimation(idle);
+		m_modelCharacter[playerNum]->ResetPositionY();
+		m_modelCharacter[playerNum]->Activate();
 	}
 	
 	if (fontDeavtive >= 120) {
 		m_spriteGameEnd->Deactivate();
 		m_goalPlayer = 0;
+
 		for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < m_maxPlayer; playerNum++) {
 			m_flagGoal[playerNum] = false;
 		}
+
 		fontDeavtive = 0;
-		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
-			for (int i = 0; i < 4; i++) {
-				m_spriteGoalRank[playerNum][i]->Deactivate();
+
+		for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+			for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < con::GoalRankMax; spriteNum++) {
+				m_spriteGoalRank[playerNum][spriteNum]->Deactivate();
 			}
 		}
 	}
 
-	for (int i = 0; i < con::PlayerNumberMax; i++) {
-
-		m_activePlayer[i] = true;	
-		//m_maxPlayer = i;		
-		m_goalRanking[i] = 0;
-		m_flagGoal[i] = false;
-		m_flagAnimationJump[i] = false;	
-		m_timerAnimation[i] = 0;
+	for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+		m_activePlayer[playerNum] = true;
+		m_goalRanking[playerNum] = con::rank_notClear;
+		m_flagGoal[playerNum] = false;
+		m_flagAnimationJump[playerNum] = false;
+		m_timerAnimation[playerNum] = 0;
+		m_flagStopAnimation[playerNum] = false;
+		m_stopController[playerNum] = false;
+		m_nowAnimationBlock[playerNum] = con::greenBlock;
 	}
+
 	m_goalPlayer = 0;												
 	fontDeavtive = 0;
-	m_goalPlayerZero = 0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -503,11 +582,12 @@ void Player::NextRound()
 
 void Player::SuddenDeathRank()
 {
-	int Ranking = 1;
+	int Ranking = con::rank_1;
 	bool checkAddRank = false;
 
+	//取得ラウンド数が多い順に高い順位にする
 	for (int roundPointNum = 3; roundPointNum >= 0; roundPointNum--) {
-		for (int playerNum = 0; playerNum < con::PlayerNumberMax; playerNum++) {
+		for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
 			if (m_roundPoint[playerNum] == roundPointNum) {
 				m_goalRanking[playerNum] = Ranking;
 				checkAddRank = true;

@@ -11,55 +11,65 @@ class SoundEngine
 {
 public:
 	/*!
-	 * @brief	コンストラクタ。
+	 * @brief コンストラクタ
 	 */
 	SoundEngine();
+
 	/*!
-	 * @brief	デストラクタ。
+	 * @brief デストラクタ
 	 */
 	~SoundEngine();
+
 	/*!
-	 * @brief	初期化。
+	 * @brief 初期化
 	 */
 	void Init();
+
 	/*!
-	 * @brief	開放。
+	 * @brief 開放
 	 */
 	void Release();
+
 	/*!
-	* @brief	更新。
+	* @brief 更新
 	*/
 	void Update();
-	/*!
-	* @brief	3Dサウンドソースを追加。
+	
+	/**
+	 * @brief 3Dサウンドソースを追加
+	 * @param source 追加する3Dサウンドソース
 	*/
-	void Add3DSoundSource(SoundSource* s)
+	void Add3DSoundSource(SoundSource* source)
 	{
-		m_3dSoundSource.push_back(s);
+		m_3dSoundSource.push_back(source);
 	}
-	/*!
-	* @brief	3Dサウンドソースを削除。
+
+	/**
+	 * @brief 3Dサウンドソースを削除
+	 * @param source 削除する3Dサウンドソース
 	*/
-	void Remove3DSoundSource(SoundSource* s)
+	void Remove3DSoundSource(SoundSource* source)
 	{
-		auto it = std::find(m_3dSoundSource.begin(), m_3dSoundSource.end(), s);
+		auto it = std::find(m_3dSoundSource.begin(), m_3dSoundSource.end(), source);
 		if (it != m_3dSoundSource.end()) {
 			m_3dSoundSource.erase(it);
 		}
 	}
-	/*!
-	* @brief	サウンドリスナーの座標を設定。
-	* @details
-	*  3D音源を使っている時の計算に使用されます。
+
+	/**
+	 * @brief サウンドリスナーの座標を設定
+	 * @details 3D音源を使っている時の計算に使用
+	 * @param pos サウンドリスナーの座標
 	*/
 	void SetListenerPosition(const Vector3& pos)
 	{
 		m_listenerPosition = pos;
 	}
-	/*!
-	* @brief	サウンドリスナーの前方向を設定。
-	* @details
-	*  3D音源を使っている時の計算に使用されます。
+
+	/**
+	 * @brief サウンドリスナーの前方向を設定
+	 * @details 3D音源を使っている時の計算に使用
+	 * @param front サウンドリスナーの前方向
 	*/
 	void SetListenerFront(Vector3 front)
 	{
@@ -67,10 +77,11 @@ public:
 		m_listener.OrientFront.y = front.y;
 		m_listener.OrientFront.z = front.z;
 	}
-	/*!
-	* @brief	サウンドリスナーの上方向を設定。
-	* @details
-	*  3D音源を使っている時の計算に使用されます。
+
+	/**
+	 * @brief サウンドリスナーの上方向を設定
+	 * 	 * @details 3D音源を使っている時の計算に使用
+	 * @param up サウンドリスナーの上方向
 	*/
 	void SetListenerUp(Vector3 up)
 	{
@@ -114,9 +125,11 @@ public:
 	}
 
 
-private:	//stataicなデータメンバ
+private:	//staticなデータメンバ
 		static SoundEngine* m_instance;
-public:		//staicなメンバ関数
+
+
+public:		//staticなメンバ関数
 		/// <summary>
 	/// シングルトンパターン
 	/// 唯一のインスタンスを作る関数

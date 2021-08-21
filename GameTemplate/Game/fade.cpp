@@ -15,6 +15,7 @@ Fade::~Fade()
 
 bool Fade::Start()
 {
+    //フェードに使用する画像の初期化
     m_spriteFade = NewGO<SpriteRender>(igo::PRIORITY_FADE);
     m_spriteFade->Init(filePath::dds::FADE);
     m_spriteFade->SetMulColorW(m_amountOfFade);
@@ -48,24 +49,30 @@ void Fade::ChangeAmountOfFade()
 
 void Fade::FadeOut()
 {
+    //フェードアウトする
     m_amountOfFade += m_amountOfChangeFadeOut;
 
+    //フェードアウトしきったか
     if (m_amountOfFade >= 1.0f) {
         m_amountOfFade = 1.0f;
         m_statusFade = CurrentFadeState::wait;
     }
 
+    //画像のフェード量を変更
     m_spriteFade->SetMulColorW(m_amountOfFade);
 }
 
 void Fade::FadeIn()
 {
+    //フェードインする
     m_amountOfFade -= m_amountOfChangeFadeIn;
     
+    //フェードインしきったか
     if (m_amountOfFade <= 0.0f) {
         m_amountOfFade = 0.0f;
         m_statusFade = CurrentFadeState::wait;
     }
 
+    //画像のフェード量を変更
     m_spriteFade->SetMulColorW(m_amountOfFade);
 }

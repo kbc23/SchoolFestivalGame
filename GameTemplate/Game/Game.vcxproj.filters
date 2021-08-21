@@ -51,38 +51,83 @@
     <Filter Include="MyCode">
       <UniqueIdentifier>{9c3da424-8d88-4dc7-a652-053e636d0815}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\ゲーム">
-      <UniqueIdentifier>{bc64cef2-3fc3-4d65-829b-21526d885c77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{3de4da7d-ecb9-4741-b360-9ae2485eb050}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\エンジン">
+    <Filter Include="MyCode\Engine">
       <UniqueIdentifier>{a88b4dd2-e261-4c3f-8bef-49ed72185e2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\エンジン\モデル">
-      <UniqueIdentifier>{61c1515d-5ad6-4e89-ba4f-18bcfd033163}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\エンジン\フォント">
-      <UniqueIdentifier>{0dfa856f-5a5e-4a54-8834-cb67e5fc05ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\エンジン\その他">
-      <UniqueIdentifier>{a934335a-9111-44b5-bede-75b2a13aa22b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\エンジン\音">
-      <UniqueIdentifier>{1eea3f54-1850-4e5c-aa79-17576ce182ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\エンジン\音\触らないやつ">
-      <UniqueIdentifier>{f8bdb55e-6547-4055-be90-6cf771887c62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyCode\エンジン\エフェクト">
+    <Filter Include="MyCode\Engine\Effect">
       <UniqueIdentifier>{aea1777c-6440-456a-a133-de23bc47d762}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\エンジン\スプライト">
+    <Filter Include="MyCode\Engine\Sprite">
       <UniqueIdentifier>{323f9224-8d02-4c27-929a-272ae79a9216}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\その他">
+    <Filter Include="MyCode\Engine\Others">
+      <UniqueIdentifier>{a934335a-9111-44b5-bede-75b2a13aa22b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Engine\Font">
+      <UniqueIdentifier>{0dfa856f-5a5e-4a54-8834-cb67e5fc05ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Engine\Model">
+      <UniqueIdentifier>{61c1515d-5ad6-4e89-ba4f-18bcfd033163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Engine\Sound">
+      <UniqueIdentifier>{1eea3f54-1850-4e5c-aa79-17576ce182ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Engine\Sound\触らないやつ">
+      <UniqueIdentifier>{f8bdb55e-6547-4055-be90-6cf771887c62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing">
+      <UniqueIdentifier>{bc64cef2-3fc3-4d65-829b-21526d885c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Others">
       <UniqueIdentifier>{2e9fe057-f5ae-4427-a98c-f7f6def4f4ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\ModeSelectScene">
+      <UniqueIdentifier>{274f7644-30d3-433b-8861-f067a92b56f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\PlayerSelectScene">
+      <UniqueIdentifier>{74192791-08d9-4719-a677-f40faa62f7ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\CPUStrengthSelectScene">
+      <UniqueIdentifier>{34c62853-1769-4e3f-8062-5633a71d06bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene">
+      <UniqueIdentifier>{8f0c3136-d76f-4d09-99f6-9afedc91f2e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\Player">
+      <UniqueIdentifier>{95c45eba-8306-475d-880b-13c8f26b7e0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\CPU">
+      <UniqueIdentifier>{548bf805-f67f-40b3-b580-40420e99a754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\StartCountdown">
+      <UniqueIdentifier>{b60e446a-1f2f-47d1-9f27-c06898418be3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\Pause">
+      <UniqueIdentifier>{5982be2d-03d3-44b2-842d-c2ff13818bd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\Score">
+      <UniqueIdentifier>{7b384a3b-7aea-4e19-99ac-5570a99ca210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\ResultScene">
+      <UniqueIdentifier>{08718744-8c91-4669-aea6-22f31e007ce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\Stage">
+      <UniqueIdentifier>{eb5c0de6-d846-4704-9123-f84d6ec1a094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\TitleScene">
+      <UniqueIdentifier>{9e04760d-3967-4c8e-a078-472b05d5b1ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\SuddenDeathMode">
+      <UniqueIdentifier>{b7da35c3-9535-4471-8eb1-689d16de5bd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\Goal">
+      <UniqueIdentifier>{dd85495c-d7b5-4e59-92f7-4d21add73f64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainProcessing\GameScene\Rank">
+      <UniqueIdentifier>{aceb48f9-c65b-45f4-b778-c07ae21c2cff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -245,89 +290,101 @@
     <ClCompile Include="..\..\ExEngine\level2D\MapChip2D.cpp">
       <Filter>ExEngine\level2D</Filter>
     </ClCompile>
-    <ClCompile Include="stage_select.cpp">
-      <Filter>MyCode</Filter>
-    </ClCompile>
     <ClCompile Include="model_render.cpp">
-      <Filter>MyCode\エンジン\モデル</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Model</Filter>
     </ClCompile>
     <ClCompile Include="game_camera.cpp">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClCompile>
-    <ClCompile Include="stage.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing</Filter>
     </ClCompile>
     <ClCompile Include="font_render.cpp">
-      <Filter>MyCode\エンジン\フォント</Filter>
-    </ClCompile>
-    <ClCompile Include="score.cpp">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClCompile>
-    <ClCompile Include="player_select.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Font</Filter>
     </ClCompile>
     <ClCompile Include="timer.cpp">
-      <Filter>MyCode\エンジン\その他</Filter>
+      <Filter>MyCode\Engine\Others</Filter>
     </ClCompile>
     <ClCompile Include="sound_SE.cpp">
-      <Filter>MyCode\エンジン\音</Filter>
+      <Filter>MyCode\Engine\Sound</Filter>
     </ClCompile>
     <ClCompile Include="sound_BGM.cpp">
-      <Filter>MyCode\エンジン\音</Filter>
+      <Filter>MyCode\Engine\Sound</Filter>
     </ClCompile>
     <ClCompile Include="sound_engine.cpp">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClCompile>
     <ClCompile Include="sound_source.cpp">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClCompile>
     <ClCompile Include="wav_file.cpp">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClCompile>
     <ClCompile Include="wav_file_bank.cpp">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClCompile>
     <ClCompile Include="effect_render.cpp">
-      <Filter>MyCode\エンジン\エフェクト</Filter>
+      <Filter>MyCode\Engine\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
       <Filter>ExEngine</Filter>
     </ClCompile>
     <ClCompile Include="sprite_render.cpp">
-      <Filter>MyCode\エンジン\スプライト</Filter>
-    </ClCompile>
-    <ClCompile Include="rule1.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="fade.cpp">
-      <Filter>MyCode\エンジン\スプライト</Filter>
-    </ClCompile>
-    <ClCompile Include="mode_select.cpp">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClCompile>
-    <ClCompile Include="CPU_strength_select.cpp">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClCompile>
-    <ClCompile Include="title.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="main_processing.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="pause.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+    <ClCompile Include="mode_select.cpp">
+      <Filter>MyCode\MainProcessing\ModeSelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="player_select.cpp">
+      <Filter>MyCode\MainProcessing\PlayerSelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU_strength_select.cpp">
+      <Filter>MyCode\MainProcessing\CPUStrengthSelectScene</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyAI.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+    <ClCompile Include="player.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="game_data.cpp">
+      <Filter>MyCode\MainProcessing\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="CPU_player_controller.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="game_start_countdown.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\StartCountdown</Filter>
+    </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\Pause</Filter>
+    </ClCompile>
+    <ClCompile Include="score.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\Score</Filter>
     </ClCompile>
     <ClCompile Include="Result.cpp">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing\ResultScene</Filter>
+    </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="sudden_death_mode.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\SuddenDeathMode</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>MyCode\MainProcessing\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="goal.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="toon_map.cpp">
+      <Filter>MyCode\Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="rank.cpp">
+      <Filter>MyCode\MainProcessing\GameScene\Rank</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,59 +568,44 @@
     <ClInclude Include="..\..\ExEngine\level2D\MapChip2D.h">
       <Filter>ExEngine\level2D</Filter>
     </ClInclude>
-    <ClInclude Include="stage_select.h">
-      <Filter>MyCode</Filter>
-    </ClInclude>
     <ClInclude Include="model_render.h">
-      <Filter>MyCode\エンジン\モデル</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Model</Filter>
     </ClInclude>
     <ClInclude Include="game_camera.h">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClInclude>
-    <ClInclude Include="stage.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing</Filter>
     </ClInclude>
     <ClInclude Include="font_render.h">
-      <Filter>MyCode\エンジン\フォント</Filter>
-    </ClInclude>
-    <ClInclude Include="score.h">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClInclude>
-    <ClInclude Include="player_select.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Font</Filter>
     </ClInclude>
     <ClInclude Include="timer.h">
-      <Filter>MyCode\エンジン\その他</Filter>
+      <Filter>MyCode\Engine\Others</Filter>
     </ClInclude>
     <ClInclude Include="util.h">
-      <Filter>MyCode\エンジン\その他</Filter>
+      <Filter>MyCode\Engine\Others</Filter>
     </ClInclude>
     <ClInclude Include="Noncopyable.h">
-      <Filter>MyCode\エンジン\その他</Filter>
+      <Filter>MyCode\Engine\Others</Filter>
     </ClInclude>
     <ClInclude Include="sound_SE.h">
-      <Filter>MyCode\エンジン\音</Filter>
+      <Filter>MyCode\Engine\Sound</Filter>
     </ClInclude>
     <ClInclude Include="sound_BGM.h">
-      <Filter>MyCode\エンジン\音</Filter>
+      <Filter>MyCode\Engine\Sound</Filter>
     </ClInclude>
     <ClInclude Include="sound_engine.h">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClInclude>
     <ClInclude Include="sound_source.h">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClInclude>
     <ClInclude Include="wav_file.h">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClInclude>
     <ClInclude Include="wav_file_bank.h">
-      <Filter>MyCode\エンジン\音\触らないやつ</Filter>
+      <Filter>MyCode\Engine\Sound\触らないやつ</Filter>
     </ClInclude>
     <ClInclude Include="effect_render.h">
-      <Filter>MyCode\エンジン\エフェクト</Filter>
+      <Filter>MyCode\Engine\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
       <Filter>ExEngine</Filter>
@@ -572,40 +614,67 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="sprite_render.h">
-      <Filter>MyCode\エンジン\スプライト</Filter>
-    </ClInclude>
-    <ClInclude Include="rule1.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="fade.h">
-      <Filter>MyCode\エンジン\スプライト</Filter>
-    </ClInclude>
-    <ClInclude Include="mode_select.h">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClInclude>
-    <ClInclude Include="CPU_strength_select.h">
-      <Filter>MyCode\ゲーム</Filter>
-    </ClInclude>
-    <ClInclude Include="title.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\Engine\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="constant.h">
-      <Filter>MyCode\その他</Filter>
+      <Filter>MyCode\Others</Filter>
     </ClInclude>
     <ClInclude Include="main_processing.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="pause.h">
-      <Filter>MyCode\ゲーム</Filter>
+    <ClInclude Include="mode_select.h">
+      <Filter>MyCode\MainProcessing\ModeSelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="player_select.h">
+      <Filter>MyCode\MainProcessing\PlayerSelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU_strength_select.h">
+      <Filter>MyCode\MainProcessing\CPUStrengthSelectScene</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing\GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyAI.h">
-      <Filter>MyCode\ゲーム</Filter>
+    <ClInclude Include="player.h">
+      <Filter>MyCode\MainProcessing\GameScene\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="game_data.h">
+      <Filter>MyCode\MainProcessing\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU_player_controller.h">
+      <Filter>MyCode\MainProcessing\GameScene\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="game_start_countdown.h">
+      <Filter>MyCode\MainProcessing\GameScene\StartCountdown</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
+      <Filter>MyCode\MainProcessing\GameScene\Pause</Filter>
+    </ClInclude>
+    <ClInclude Include="score.h">
+      <Filter>MyCode\MainProcessing\GameScene\Score</Filter>
     </ClInclude>
     <ClInclude Include="Result.h">
-      <Filter>MyCode\ゲーム</Filter>
+      <Filter>MyCode\MainProcessing\ResultScene</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
+      <Filter>MyCode\MainProcessing\GameScene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="sudden_death_mode.h">
+      <Filter>MyCode\MainProcessing\GameScene\SuddenDeathMode</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>MyCode\MainProcessing\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="goal.h">
+      <Filter>MyCode\MainProcessing\GameScene\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="toon_map.h">
+      <Filter>MyCode\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="rank.h">
+      <Filter>MyCode\MainProcessing\GameScene\Rank</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

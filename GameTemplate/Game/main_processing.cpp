@@ -6,14 +6,8 @@
 #include "player_select.h"
 #include "CPU_strength_select.h"
 #include "game.h"
-#include "player.h"
-#include "EnemyAI.h"
-
 #include "game_camera.h"
-
-
 #include "Result.h"
-#include "mode_select.h"
 #include "pause.h"
 
 
@@ -21,22 +15,7 @@
 namespace
 {
     ////////////////////////////////////////////////////////////
-    // タイマー関連
-    ////////////////////////////////////////////////////////////
-
-    const float COUNTDOWN_3 = 180.0f;
-    const float COUNTDOWN_2 = 120.0f;
-    const float COUNTDOWN_1 = 60.0f;
-    const float COUNTDOWN_0 = 0.0f;
-    const float COUNTDOWN_DEACTIVATE = -60.0f;
-
-    const int SPRITE_COUNTDOWN_0 = 0;
-    const int SPRITE_COUNTDOWN_1 = 1;
-    const int SPRITE_COUNTDOWN_2 = 2;
-    const int SPRITE_COUNTDOWN_3 = 3;
-
-    ////////////////////////////////////////////////////////////
-    // 位置情報
+    // 初期化
     ////////////////////////////////////////////////////////////
 
     const Vector2 BACKGROUND_START_POSITION[MainProcessing::m_MAX_BACKGROUND] =
@@ -50,13 +29,28 @@ namespace
         { 2560.0f,-1440.0f }
     };
 
+    constexpr const char* SPRITE_BACKGROUND[MainProcessing::m_MAX_BACKGROUND] =
+    {
+        filePath::dds::BACKGROUND,
+        filePath::dds::BACKGROUND,
+        filePath::dds::BACKGROUND_2,
+        filePath::dds::BACKGROUND_2,
+        filePath::dds::BACKGROUND_2,
+        filePath::dds::BACKGROUND,
+        filePath::dds::BACKGROUND
+    };
+
+    ////////////////////////////////////////////////////////////
+    // ボリューム
+    ////////////////////////////////////////////////////////////
+
+    const float TITLE_BGM_VOLUME = 0.5f; //タイトル画面のBGMのボリューム
 
     ////////////////////////////////////////////////////////////
     // その他
     ////////////////////////////////////////////////////////////
 
     const float MOVE_BACKGROUND = 1010.0f;      //背景の移動量
-    const float TITLE_BGM_VOLUME = 0.5f;
 }
 
 
@@ -68,8 +62,6 @@ MainProcessing::MainProcessing()
 
 MainProcessing::~MainProcessing()
 {
-    DeleteGO(m_spriteLoading);
-
     //タイトルシーン
     DeleteGO(m_title);
 
@@ -82,32 +74,89 @@ MainProcessing::~MainProcessing()
     //CPUの難易度選択シーン
     DeleteGO(m_CPUStrengthSelect);
 
-    //選択画面の背景を削除
-    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
-        DeleteGO(m_spriteBackground[backgroundNum]);
-    }
-    DeleteGO(m_bgmTitle);
-
     //ゲームシーン
     DeleteGO(m_game);
 
     //リザルトシーン
     DeleteGO(m_result);
 
+    //選択画面の背景を削除
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        DeleteGO(m_spriteBackground[backgroundNum]);
+    }
+
+    //タイトル画面のBGM
+    DeleteGO(m_bgmTitle);
+
+    //カメラ
     DeleteGO(m_gameCamera);
 
+    //キャンセルボタンのSE
     DeleteGO(m_seCancel);
-    DeleteGO(m_seCount);
-    DeleteGO(m_seGameStart);
 }
 
 bool MainProcessing::Start()
 {
-    m_flagProcessing = true;
+    ////////////////////////////////////////////////////////////
+    // 背景
+    ////////////////////////////////////////////////////////////
 
-    m_spriteLoading = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteLoading->Init(filePath::dds::START_LOADING);
-    m_spriteLoading->SetMulColorW(SRns::TRANSPARENCY_0);
+    //画像の配列番号と表示位置（0の位置が画面）
+    //0 1
+    //2 3 4
+    //  5 6
+
+    //背景の初期化
+    for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_MAX_BACKGROUND; spriteNum++) {
+        m_spriteBackground[spriteNum] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND); //NewGO
+        m_spriteBackground[spriteNum]->Init(SPRITE_BACKGROUND[spriteNum]); //初期化
+        m_spriteBackground[spriteNum]->SetPosition(BACKGROUND_START_POSITION[spriteNum]); //位置
+    }
+
+    //フェードの処理を初期化
+    m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
+
+    ////////////////////////////////////////////////////////////
+    // BGM
+    ////////////////////////////////////////////////////////////
+
+    //選択画面のBGMを初期化、再生
+    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS); //NewGO
+    m_bgmTitle->Init(filePath::bgm::TITLE); //初期化
+    m_bgmTitle->SetVolume(TITLE_BGM_VOLUME); //音量調整
+    m_bgmTitle->Play(true); //再生
+
+    //BGM全体の音量を設定
+    m_bgmTitle->SetBGMVolume(0.0f);
+
+    ////////////////////////////////////////////////////////////
+    // SE
+    ////////////////////////////////////////////////////////////
+
+    //キャンセルのSEを初期化    
+    m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS); //NewGO
+    m_seCancel->Init(filePath::se::CANCEL); //初期化
+
+    //SE全体の音量を設定
+    m_seCancel->SetSEVolume(0.5f);
+
+    ////////////////////////////////////////////////////////////
+    // クラス
+    ////////////////////////////////////////////////////////////
+
+    //カメラを初期化
+    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
+
+    //シーンのNewGO
+    m_title = NewGO<Title>(igo::PRIORITY_CLASS);
+    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_CLASS);
+    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_CLASS);
+    m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_CLASS);
+    m_game = NewGO<Game>(igo::PRIORITY_CLASS, igo::CLASS_NAME_GAME);
+    m_result = NewGO<Result>(igo::PRIORITY_CLASS, igo::CLASS_NAME_RESULT);
+
+    //シーンの状態の切り替え
+    m_gameStatus = GameStatus::startLoading;
 
     return true;
 }
@@ -120,7 +169,7 @@ void MainProcessing::Update()
 {
     switch (m_gameStatus) {
     case GameStatus::startLoading:
-        StartLoadingScene();
+        StartLoading();
         break;
     case GameStatus::title:
         TitleScene();
@@ -148,35 +197,28 @@ void MainProcessing::Update()
         return;
     }
 
-    if (m_flagGameStart == false && m_gameStatus != GameStatus::startLoading) {
+    if (m_flagGameStart == false) {
         DrawBackground();
     }
 
     // TODO: この下にあるポーズ関連の処理をPauseクラスで処理をおこなうように変更すること
 
+    //こいつリトライじゃねーか！！！！！
     if (m_pause_stage == true)
     {
-        for (int countdownNum = con::FIRST_ELEMENT_ARRAY; countdownNum < m_MAX_COUNTDOWN; countdownNum++) {
-            m_spriteCountdown[countdownNum]->Deactivate();
-        }
-
         m_game->Finish();
         m_game->Init();
-        NextRound(); //カウントダウンの初期化
+
         m_pause_stage = false;
     }
 
     if (m_pause_title == true)
     {
-        for (int countdownNum = con::FIRST_ELEMENT_ARRAY; countdownNum < m_MAX_COUNTDOWN; countdownNum++) {
-            m_spriteCountdown[countdownNum]->Deactivate();
-        }
-
         m_game->Finish();
-        NextRound(); //カウントダウンの初期化
         m_title->Init();
+
         m_gameStatus = GameStatus::title;
-        m_pause_title = false();
+        m_pause_title = false;
 
         //背景を初期状態に戻して、表示
         for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
@@ -195,6 +237,7 @@ void MainProcessing::Update()
 
 void MainProcessing::DrawBackground()
 {
+    //背景のアニメーション
     for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
         m_spriteBackground[backgroundNum]->SetPosition(
             { (m_spriteBackground[backgroundNum]->GetPosition().x - con::GAME_SCREEN_W / MOVE_BACKGROUND),
@@ -212,139 +255,24 @@ void MainProcessing::DrawBackground()
 }
 
 ////////////////////////////////////////////////////////////
-// 最初の読み込み
+// シーンごとの処理
 ////////////////////////////////////////////////////////////
 
-void MainProcessing::StartLoadingScene()
-{
-    switch (m_startLoadingStatus) {
-    case StartLoadingStatus::preparation:
-        StartLoadingPreparation();
-        break;
-    case StartLoadingStatus::loading:
-        StartLoading();
-        break;
-    case StartLoadingStatus::finish:
-        StartLoadingFinish();
-        break;
-    default:
-        MessageBoxA(nullptr, "読み込みにてエラーが発生しました。", "エラー", MB_OK);
-        return;
 
-    }
-}
-
-void MainProcessing::StartLoadingPreparation()
-{
-    m_spriteLoading->SetMulColorW(m_spriteLoading->GetMulColorW() + 0.05f);
-
-    if (m_spriteLoading->GetMulColorW() >= SRns::TRANSPARENCY_100) {
-        m_spriteLoading->SetMulColorW(SRns::TRANSPARENCY_100);
-        m_startLoadingStatus = StartLoadingStatus::loading;
-    }
-}
+//////////////////////////////
+// ゲーム開始時のロードの処理
+//////////////////////////////
 
 void MainProcessing::StartLoading()
 {
-    //背景の初期化
-    m_spriteBackground[0] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[0]->Init(filePath::dds::BACKGROUND);
-    m_spriteBackground[1] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[1]->Init(filePath::dds::BACKGROUND);
-    m_spriteBackground[2] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[2]->Init(filePath::dds::BACKGROUND_2);
-    m_spriteBackground[3] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[3]->Init(filePath::dds::BACKGROUND_2);
-    m_spriteBackground[4] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[4]->Init(filePath::dds::BACKGROUND_2);
-    m_spriteBackground[5] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[5]->Init(filePath::dds::BACKGROUND);
-    m_spriteBackground[6] = NewGO<SpriteRender>(igo::PRIORITY_BACKGROUND);
-    m_spriteBackground[6]->Init(filePath::dds::BACKGROUND);
-
-    //画像の配列番号と表示位置（0の位置が画面）
-    //0 1
-    //2 3 4
-    //  5 6
-
-    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
-        m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]);
-        m_spriteBackground[backgroundNum]->Deactivate();
-    }
-    
-
-
-    //フェードの処理をNewGO
-    m_fade = NewGO<Fade>(igo::PRIORITY_CLASS);
-
-    //選択画面のBGMを初期化、再生
-    m_bgmTitle = NewGO<SoundBGM>(igo::PRIORITY_CLASS);
-    m_bgmTitle->Init(filePath::bgm::TITLE);
-    m_bgmTitle->SetVolume(TITLE_BGM_VOLUME);
-
-    //キャンセルのSEを初期化    
-    m_seCancel = NewGO<SoundSE>(igo::PRIORITY_CLASS);
-    m_seCancel->Init(filePath::se::CANCEL);
-
-    //////////////////////////////
-    // シーンごとの処理に使用するもののNewGO
-    //////////////////////////////
-
-    //タイトルシーン
-    m_title = NewGO<Title>(igo::PRIORITY_CLASS);
-
-    //モードセレクトシーン
-    m_modeSelect = NewGO<ModeSelect>(igo::PRIORITY_CLASS);
-
-    //プレイヤーセレクトシーン
-    m_playerSelect = NewGO<PlayerSelect>(igo::PRIORITY_CLASS);
-
-    //CPUの難易度選択シーン
-    m_CPUStrengthSelect = NewGO<CPUStrengthSelect>(igo::PRIORITY_CLASS);
-
-    //ゲームシーン
-    m_game = NewGO<Game>(igo::PRIORITY_CLASS);
-    m_gameCamera = NewGO<GameCamera>(igo::PRIORITY_CLASS);
-
-    //リザルトシーン
-    m_result = NewGO<Result>(igo::PRIORITY_CLASS);
-
-    //カウントダウンのUIの初期化
-    for (int countdownNum = con::FIRST_ELEMENT_ARRAY; countdownNum < m_MAX_COUNTDOWN; countdownNum++) {
-        m_spriteCountdown[countdownNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-        m_spriteCountdown[countdownNum]->Init(filePath::dds::COUNT[countdownNum]);
-        m_spriteCountdown[countdownNum]->Deactivate();
-    }
-
-
-    //カウントダウンのSE
-    m_seCount = NewGO<SoundSE>(igo::PRIORITY_CLASS);
-    m_seCount->Init(filePath::se::COUNT);
-    m_seGameStart = NewGO<SoundSE>(igo::PRIORITY_CLASS);
-    m_seGameStart->Init(filePath::se::GAME_START);
-
-    m_startLoadingStatus = StartLoadingStatus::finish;
-}
-
-void MainProcessing::StartLoadingFinish()
-{
-    m_spriteLoading->Deactivate();
-
-    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
-        m_spriteBackground[backgroundNum]->Activate();
-    }
-
     m_title->Init();
 
-    m_bgmTitle->Play(true);
-
     m_gameStatus = GameStatus::title;
-
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // タイトルシーンの処理
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void MainProcessing::TitleScene()
 {
@@ -363,9 +291,9 @@ void MainProcessing::DecisionTitleScene()
     m_gameStatus = GameStatus::modeSelect;
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // モードセレクトシーンの処理
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void MainProcessing::ModeSelectScene()
 {
@@ -399,9 +327,9 @@ void MainProcessing::CancelModeSelectScene()
     m_gameStatus = GameStatus::title;
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // プレイヤーセレクトシーンの処理
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void MainProcessing::PlayerSelectScene()
 {
@@ -421,6 +349,7 @@ void MainProcessing::DecisionPlayerSelectScene()
 {
     m_CPUStrengthSelect->Init();
     m_playerSelect->Finish();
+
     m_gameStatus = GameStatus::CPUStrengthSelect;
 }
 
@@ -434,9 +363,9 @@ void MainProcessing::CancelPlayerSelectScene()
     m_gameStatus = GameStatus::modeSelect;
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // CPUの難易度選択シーンの処理
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void MainProcessing::CPUStrengthSelectScene()
 {
@@ -470,9 +399,9 @@ void MainProcessing::CancelCPUStrengthSelectScene()
     m_gameStatus = GameStatus::playerSelect;
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // ゲームシーンのためのロード
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void MainProcessing::LoadingGameScene()
 {
@@ -507,11 +436,8 @@ void MainProcessing::PreparingForLoading()
 void MainProcessing::Loading()
 {
     //モードの選択情報を渡す
-    m_game->SetRuleSuddenDeath(m_ruleSelect);
-    m_game->SetMaxPlayer(m_maxPlayer);
-    //m_player->SetDifficultyLevel(m_dilevel);
-    // m_enemyAI->SetDifficultyLevel(m_dilevel);
-    m_game->SetDilevel(m_dilevel);
+    m_game->GetGameDataObject()->SetMaxPlayer(m_maxPlayer);
+    m_game->GetGameDataObject()->SetCPULevel(m_CPULevel);
 
     m_game->Init();
 
@@ -522,11 +448,6 @@ void MainProcessing::Loading()
 
     //BGMを止める
     m_bgmTitle->Stop();
-
-    m_flagCountSE3 = false;
-    m_flagCountSE2 = false;
-    m_flagCountSE1 = false;
-    m_flagStartCountdownSE = false;
 
 
     m_loadStatus = LoadingStatus::endOfLoading;
@@ -547,82 +468,22 @@ void MainProcessing::EndOfLoading()
     }
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // ゲームシーンの処理
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void MainProcessing::GameScene()
 {
     if (m_gameEnd == false) {
-        if (m_flagStartCountdown == false) {
-            return;
-        }
-
-
-        StartCountdown();
         return;
     }
 
     FinishGameScene();
 }
 
-void MainProcessing::StartCountdown()
-{
-    --m_countStartCountdown;
-
-    m_countStartCountdown -= g_gameTime->GetFrameDeltaTime();
-
-    //カウントダウンフォントを非表示
-    if (m_countStartCountdown <= COUNTDOWN_DEACTIVATE) {
-        m_spriteCountdown[0]->Deactivate();
-        m_flagStartCountdown = false;
-    }
-    //カウント０
-    else if (m_countStartCountdown <= COUNTDOWN_0) {
-        if (m_flagStartCountdownSE == false) {
-            m_spriteCountdown[1]->Deactivate();
-            m_spriteCountdown[0]->Activate();
-            m_StopOperation = false;
-            m_seGameStart->Play(false);
-            m_flagStartCountdownSE = true;
-        }
-    }
-    //カウント１
-    else if (m_countStartCountdown <= COUNTDOWN_1) {
-        if (m_flagCountSE1 == false) {
-            m_spriteCountdown[2]->Deactivate();
-            m_spriteCountdown[1]->Activate();
-            m_seCount->Play(false);
-            m_flagCountSE1 = true;
-        }
-    }
-    //カウント２
-    else if (m_countStartCountdown <= COUNTDOWN_2) {
-        if (m_flagCountSE2 == false) {
-            m_spriteCountdown[3]->Deactivate();
-            m_spriteCountdown[2]->Activate();
-            m_seCount->Play(false);
-            m_flagCountSE2 = true;
-        }
-    }
-    //カウント３
-    else if (m_countStartCountdown <= COUNTDOWN_3) {
-        if (m_flagCountSE3 == false) {
-            m_spriteCountdown[3]->Activate();
-            m_seCount->Play(false);
-            m_flagCountSE3 = true;
-        }
-    }
-}
-
 void MainProcessing::FinishGameScene()
 {
     m_game->Finish();
-
-    m_spriteCountdown[0]->Deactivate();
-    m_spriteCountdown[1]->Deactivate();
-    m_spriteCountdown[2]->Deactivate();
-    m_spriteCountdown[3]->Deactivate();
 
     //背景を初期状態に戻して、表示
     for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
@@ -635,20 +496,16 @@ void MainProcessing::FinishGameScene()
     m_startPreparingForLoading = false;
     m_startEndOfLoading = false;
 
-    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-        m_result->SetRank(playerNum, m_rank[playerNum]);
-    }
-
     m_result->Init();
 
-    m_bgmTitle->Play(true);
+    m_bgmTitle->Play(true); //再生
 
     m_gameStatus = GameStatus::result;
 }
 
-////////////////////////////////////////////////////////////
+//////////////////////////////
 // リザルトシーンの処理
-////////////////////////////////////////////////////////////
+//////////////////////////////
 
 void MainProcessing::ResultScene()
 {
@@ -658,42 +515,26 @@ void MainProcessing::ResultScene()
 
     m_result->Finish();
 
-    m_StopOperation = true;
-    m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
-    m_flagStartCountdown = true;
-
-    switch (m_resultselect) {
-    case 0: //もう一度プレイ
-        DecisionCPUStrengthSelectScene();
+    switch (m_result->GetCursorPosition()) {
+    //もう一度プレイ
+    case choice::ResultCommand::playOneMoreTime:
+        //ゲームのロード処理をおこなう
         m_gameStatus = GameStatus::loadingGame;
         m_loadStatus = LoadingStatus::preparingForLoading;
         break;
-    case 1: //プレイヤー数選択
-        DecisionModeSelectScene();
+    //プレイヤー数選択
+    case choice::ResultCommand::chooseTheNumberOfPlayers:
+        m_playerSelect->Init();
         m_gameStatus = GameStatus::playerSelect;
         break;
-    case 2: //モード選択
-        DecisionTitleScene();
+    //モード選択
+    case choice::ResultCommand::chooseARule:
+        m_modeSelect->Init();
         m_gameStatus = GameStatus::modeSelect;
         break;
-    case 3: //ゲーム終了
+    //ゲーム終了
+    case choice::ResultCommand::exitGame:
         exit(EXIT_SUCCESS);
         break;
     }
-}
-
-void MainProcessing::NextRound()
-{
-    m_countStartCountdown = m_INIT_COUNT_START_COUNTDOWN;
-    m_flagStartCountdown = true;
-    m_StopOperation = true;
-
-    m_flagCountSE3 = false;
-    m_flagCountSE2 = false;
-    m_flagCountSE1 = false;
-    m_flagStartCountdownSE = false;
-    //m_flagTitleScene = true;
-    //m_flagPlayerSelectScene = false;
-    //m_flagGameScene = false;
-    //m_maxPlayer = 0;
 }

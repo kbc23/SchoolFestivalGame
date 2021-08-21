@@ -11,8 +11,8 @@ public:
     PlayerSelect();
     ~PlayerSelect();
     bool Start() override final;
-    void Init() override final;
-    void Finish() override final;
+    void Init();
+    void Finish();
     void Update() override final;
     
 
@@ -27,6 +27,9 @@ private:
     */
     void FinishPlayerSelect();
 
+    /**
+     * @brief 選択しているUIが上下に動く処理
+    */
     void DrawMove();
 
 
@@ -73,5 +76,5 @@ private: //data menber
 
     bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
 
-    bool m_flagMove = true;
+    bool m_flagDrawMove = true;     //UIが上下に移動する処理に使用するフラグ
 };

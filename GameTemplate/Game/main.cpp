@@ -4,8 +4,14 @@
 #include "../../MiniEngine/time/Stopwatch.h"
 
 #include "main_processing.h"
+#include "constant.h"
 
 //作業が終わったら、Get関数、Set関数をconst参照に変更しておくこと
+
+//８月２０日がリファクタリングの締め切り
+//するべきこと
+//・リファクタリング
+//・「トゥーンシェーダー」の実装
 
 namespace //constant
 {
@@ -27,8 +33,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//////////////////////////////////////
 
 	//コントローラーの初期化
-	for (int i = 0; i < NUMBER_OF_CONTROLLER; i++) {
-		g_pad[i]->Init(i);
+	for (int controllerNum = con::FIRST_ELEMENT_ARRAY; controllerNum < NUMBER_OF_CONTROLLER; controllerNum++) {
+		g_pad[controllerNum]->Init(controllerNum);
 	}
 
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
@@ -40,7 +46,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ストップウォッチを生成する
 	Stopwatch stopWatch;
 
-	MainProcessing* game = NewGO<MainProcessing>(igo::PRIORITY_CLASS, igo::CLASS_NAME_GAME);
+	MainProcessing* game = NewGO<MainProcessing>(igo::PRIORITY_CLASS, igo::CLASS_NAME_MAIN_PROCESSING);
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

@@ -12,21 +12,13 @@ public:
 	void Finish();
 	void Update() override final;
 
-private:
-
-
 
 public: //GetŠÖ”
-	const bool& GetFlagFinish()
+	const bool GetFlagFinish()
 	{
 		return m_flagFinish;
 	}
 
-public: //SetŠÖ”
-	void SetSpriteTitleMulColorW(const float& f)
-	{
-		m_spriteTitle->SetMulColorW(f);
-	}
 
 private: //data menber
 	////////////////////////////////////////////////////////////

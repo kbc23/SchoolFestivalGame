@@ -4,16 +4,19 @@
 #include "sound_SE.h"
 
 class MainProcessing;
+class SuddenDeathMode;
 
 class ModeSelect : public IGameObject
 {
 public:
-public:
     ModeSelect();
     ~ModeSelect();
     bool Start() override final;
-    void Init() override final;
-    void Finish() override final;
+    /**
+     * @brief データの初期化
+    */
+    void Init();
+    void Finish();
     void Update() override final;
 
 
@@ -28,6 +31,9 @@ private:
     */
     void FinishCPUStrengthSelect();
     
+    /**
+     * @brief 選択しているUIが上下に移動する処理
+    */
     void DrawMove();
 
 
@@ -36,10 +42,23 @@ public: //Get関数
      * @brief m_flagFinishのGet関数
      * @return このクラスの処理が終了したか
     */
-    bool GetFlagFinish()
+    const bool GetFlagFinish() const
     {
         return m_flagFinish;
     }
+
+
+
+private: //enum
+    enum ModeName
+    {
+        raceMode,
+        suddenDeathMode,
+        ModeNameMax
+    };
+
+
+
 
 private: //constant
     static const int m_NUMBER_OF_CHOICES = 2;     //選択肢の数
@@ -51,12 +70,21 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
+    //////////////////////////////
+    // NewGO
+    //////////////////////////////
+
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     FontRender* m_fontChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     FontRender* m_font = nullptr;
     SoundSE* m_seDecision = nullptr;
     SoundSE* m_seMoveCursor = nullptr;
-    MainProcessing* m_game = nullptr;
+
+    //////////////////////////////
+    // FindGO
+    //////////////////////////////
+
+    SuddenDeathMode* m_findSuddenDeathMode = nullptr;
 
     ////////////////////////////////////////////////////////////
     // その他
@@ -76,5 +104,5 @@ private: //data menber
 
     bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
 
-    bool m_flagMove = true;
+    bool m_flagDrawMove = true;     //UIが上下に移動する処理に使用するフラグ
 };

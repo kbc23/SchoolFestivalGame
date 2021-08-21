@@ -96,6 +96,11 @@ void ModelRender::InitAnimation(AnimationClip* animationClip, int maxAnimationCl
 	);
 }
 
+void InitToonShader()
+{
+
+}
+
 void ModelRender::InitModel(const char* filePath,
 	modelUpAxis::EnModelUpAxis modelUpAxis
 )

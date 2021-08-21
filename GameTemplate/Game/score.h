@@ -5,9 +5,8 @@
 
 class MainProcessing;
 class Player;
-class Stage;
-class Rule1;
 class Pause;
+class GameStartCountdown;
 
 class Score : public IGameObject
 {
@@ -15,8 +14,8 @@ public:
     Score();
     ~Score();
     bool Start() override final;
-    void Init() override final;
-    void Finish() override final;
+    void Init();
+    void Finish();
 
     ////////////////////////////////////////////////////////////
     // 毎フレームの処理
@@ -28,19 +27,19 @@ public:
      * @brief スコア時間を増加する関数
      * @param pNum プレイヤー番号
     */
-    void AddTime(const int pNum);
+    void AddTime(const int& playerNum);
 
     /**
      * @brief スコア時間の増加を停止する関数
      * @param pNum プレイヤー番号
     */
-    void FinishTime(const int pNum);
+    void FinishTime(const int& playerNum);
 
     /**
      * @brief スコア時間の描画処理
      * @param pNum プレイヤー番号
     */
-    void DrawTime(const int pNum);
+    void DrawTime(const int& playerNum);
 
     //////////////////////////////
     // ラウンド変更の処理
@@ -55,13 +54,22 @@ private: //data menber
     ////////////////////////////////////////////////////////////
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
-    
-    Player* m_player = nullptr;
-    MainProcessing* m_game = nullptr;
+
+    //////////////////////////////
+    // NewGO
+    //////////////////////////////
+
     SpriteRender* m_spriteUI = nullptr;
     FontRender* m_fontScoreTime[con::PlayerNumberMax] = { nullptr }; //各プレイヤーのスコアタイムのフォント
-    Stage* m_stage = nullptr;
-    Pause* m_pause = nullptr;
+
+    //////////////////////////////
+    // FindGO
+    //////////////////////////////
+
+    Player* m_findPlayer = nullptr;
+    MainProcessing* m_findMainProcessing = nullptr;
+    Pause* m_findPause = nullptr;
+    GameStartCountdown* m_findGameStartCountdown = nullptr;
 
     ////////////////////////////////////////////////////////////
     // スコアタイム関連

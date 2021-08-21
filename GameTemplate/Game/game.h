@@ -1,11 +1,16 @@
 #pragma once
+#include "constant.h"
+#include "game_data.h"
 
 class Player;
 class Stage;
 class Score;
-class EnemyAI;
-class Rule1;
+class CPUPlayerController;
+class SuddenDeathMode;
 class Pause;
+class GameStartCountdown;
+class Goal;
+class Rank;
 
 class Game : public IGameObject
 {
@@ -13,23 +18,31 @@ public:
     Game();
     ~Game();
     bool Start() override final;
-    void Init() override final;
-    void Finish() override final;
+    void Init();
+    void Finish();
     void Update() override final;
 
 
 
+public:
+
+
+
+private:
+
+
+
+
+
 public: //Get関数
-
-
-
-public: //Set関数
-    void SetRuleSuddenDeath(const bool& b)
+    /**
+     * @brief GameDataクラスのオブジェクトを取得する
+     * @return GameDataクラスのオブジェクト
+    */
+    GameData* GetGameDataObject()
     {
-        m_ruleSuddenDeath = b;
+        return m_gameData;
     }
-
-
 
 
 
@@ -38,36 +51,24 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
+    //////////////////////////////
+    // NewGO
+    //////////////////////////////
+
     Player* m_player = nullptr;
     Stage* m_stage = nullptr;
     Score* m_score = nullptr;
-    EnemyAI* m_enemyAI = nullptr;
-    Rule1* m_rule1 = nullptr;
+    SuddenDeathMode* m_suddenDeathMode = nullptr;
     Pause* m_pause = nullptr;
+    GameData* m_gameData = nullptr;
+    GameStartCountdown* m_gameStartCountdown = nullptr;
+    CPUPlayerController* m_CPUPlayerController = nullptr;
+    Goal* m_goal = nullptr;
+    Rank* m_rank = nullptr;
+
+    //////////////////////////////
+    // FindGO
+    //////////////////////////////
 
 
-    ////////////////////////////////////////////////////////////
-    // フラグ
-    ////////////////////////////////////////////////////////////
-
-    bool m_ruleSuddenDeath = false;
-
-
-    ////////////////////////////////////////////////////////////
-    // その他
-    ////////////////////////////////////////////////////////////
-
-    int m_maxPlayer = 0;                        //操作しているプレイヤーの数
-    int m_dilevel = 0;//難易度受け取り受け渡し用
-
-public:
-    void SetMaxPlayer(const int& i)
-    {
-        m_maxPlayer = i;
-    }
-
-    void SetDilevel(const int& i)
-    {
-        m_dilevel = i;
-    }
 };

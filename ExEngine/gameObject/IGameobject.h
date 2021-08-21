@@ -32,14 +32,6 @@ public:
 	* 適切に初期化を行ってください。
 	*/
 	virtual bool Start() { return true; }
-	virtual void Init()
-	{
-
-	}
-	virtual void Finish()
-	{
-
-	}
 	/*!
 		*@brief	更新
 		*/
@@ -201,21 +193,8 @@ protected:
 	bool m_isNewFromGameObjectManager;	//GameObjectManagerでnewされた。
 	bool m_isRegist = false;							//GameObjectManagerに登録されている？
 	bool m_isActive = true;							//Activeフラグ。
-	
-	
-	//追加
-protected:
-	bool m_flagProcessing = false; //このクラスが毎フレームの処理をおこなうか
-public:
-	const bool& GetFlagProcessing()
-	{
-		return m_flagProcessing;
-	}
 
-	//void SetFlagProcessing(const bool& b)
-	//{
-	//	m_flagProcessing = b;
-	//}
+	bool m_flagProcess = false;		//処理をおこなうかどうか
 };
 
 
@@ -233,14 +212,19 @@ namespace igo //constant
 	//constexpr const char*型で宣言すること
 	//しなかった場合は、コンパイルエラーが発生する。
 
+	constexpr const char* CLASS_NAME_MAIN_PROCESSING = "mainProcessing";
 	constexpr const char* CLASS_NAME_PLAYER = "player";
 	constexpr const char* CLASS_NAME_GAME = "game";
 	constexpr const char* CLASS_NAME_STAGE = "stage";
-	constexpr const char* CLASS_NAME_RULE1 = "rule1";
-	constexpr const char* CLASS_NAME_ENEMYAI = "enemyAI";
+	constexpr const char* CLASS_NAME_SUDDEN_DEATH = "suddenDeath";
+	constexpr const char* CLASS_NAME_CPU_PLAYER_CONTROLLER = "CPUPlayerController";
 	constexpr const char* CLASS_NAME_SCORE = "score";
 	constexpr const char* CLASS_NAME_PAUSE = "pause";
-	constexpr const char* CLASS_NAME_MAIN_PROCESSING = "pause";
+	constexpr const char* CLASS_NAME_GAME_DATA = "gameData";
+	constexpr const char* CLASS_NAME_GAME_START_COUNTDOWN = "gameStartCountdown";
+	constexpr const char* CLASS_NAME_GOAL = "goal";
+	constexpr const char* CLASS_NAME_RANK = "rank";
+	constexpr const char* CLASS_NAME_RESULT = "result";
 
 	////////////////////////////////////////////////////////////
 	// 優先度
@@ -250,6 +234,7 @@ namespace igo //constant
 	const int PRIORITY_BACKGROUND = 0;
 	const int PRIORITY_MODEL = 1;
 	const int PRIORITY_UI = 2;
-	const int PRIORITY_FONT = 3;
-	const int PRIORITY_FADE = 4;
+	const int PRIORITY_UI_2 = 3;
+	const int PRIORITY_FONT = 4;
+	const int PRIORITY_FADE = 5;
 }

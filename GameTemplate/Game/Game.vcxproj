@@ -291,9 +291,12 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="CPU_strength_select.cpp" />
     <ClCompile Include="effect_render.cpp" />
-    <ClCompile Include="EnemyAI.cpp" />
+    <ClCompile Include="CPU_player_controller.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="font_render.cpp" />
+    <ClCompile Include="game_data.cpp" />
+    <ClCompile Include="game_start_countdown.cpp" />
+    <ClCompile Include="goal.cpp" />
     <ClCompile Include="main_processing.cpp" />
     <ClCompile Include="game_camera.cpp" />
     <ClCompile Include="game.cpp" />
@@ -303,8 +306,9 @@
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="player_select.cpp" />
+    <ClCompile Include="rank.cpp" />
     <ClCompile Include="Result.cpp" />
-    <ClCompile Include="rule1.cpp" />
+    <ClCompile Include="sudden_death_mode.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="sound_BGM.cpp" />
     <ClCompile Include="sound_engine.cpp" />
@@ -312,7 +316,6 @@
     <ClCompile Include="sound_source.cpp" />
     <ClCompile Include="sprite_render.cpp" />
     <ClCompile Include="stage.cpp" />
-    <ClCompile Include="stage_select.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -324,6 +327,7 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="toon_map.cpp" />
     <ClCompile Include="wav_file.cpp" />
     <ClCompile Include="wav_file_bank.cpp" />
   </ItemGroup>
@@ -391,9 +395,12 @@
     <ClInclude Include="constant.h" />
     <ClInclude Include="CPU_strength_select.h" />
     <ClInclude Include="effect_render.h" />
-    <ClInclude Include="EnemyAI.h" />
+    <ClInclude Include="CPU_player_controller.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="font_render.h" />
+    <ClInclude Include="game_data.h" />
+    <ClInclude Include="game_start_countdown.h" />
+    <ClInclude Include="goal.h" />
     <ClInclude Include="main_processing.h" />
     <ClInclude Include="game_camera.h" />
     <ClInclude Include="game.h" />
@@ -403,8 +410,9 @@
     <ClInclude Include="pause.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="player_select.h" />
+    <ClInclude Include="rank.h" />
     <ClInclude Include="Result.h" />
-    <ClInclude Include="rule1.h" />
+    <ClInclude Include="sudden_death_mode.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="sound_BGM.h" />
     <ClInclude Include="sound_engine.h" />
@@ -412,11 +420,11 @@
     <ClInclude Include="sound_source.h" />
     <ClInclude Include="sprite_render.h" />
     <ClInclude Include="stage.h" />
-    <ClInclude Include="stage_select.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="toon_map.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="wav_file.h" />
     <ClInclude Include="wav_file_bank.h" />

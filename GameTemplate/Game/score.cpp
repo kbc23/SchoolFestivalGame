@@ -5,8 +5,10 @@
 
 #include "main_processing.h"
 #include "player.h"
-#include "stage.h"
 #include "pause.h"
+#include "game_start_countdown.h"
+
+
 
 namespace //constant
 {
@@ -17,7 +19,7 @@ namespace //constant
     const Vector2 SCORE_TIME_FONT_POSITION[con::PlayerNumberMax] = {	//スコアタイムの表示位置
         { -570.0f, -300.0f },										        //プレイヤー１
         { -250.0f, -300.0f },												//プレイヤー２
-        { 70.0f, -300.0f },												//プレイヤー３
+        { 70.0f, -300.0f },												    //プレイヤー３
         { 400.0f, -300.0f }													//プレイヤー４
     };
 
@@ -36,7 +38,27 @@ namespace //constant
 
 Score::Score()
 {
+    //////////////////////////////
+    // NewGO
+    //////////////////////////////
 
+    //////////
+    // フォントのNewGO
+    //////////
+
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
+        m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
+        m_fontScoreTime[playerNum]->Deactivate();
+    }
+
+    //////////
+    // スプライトのNewGO
+    //////////
+
+    m_spriteUI = NewGO<SpriteRender>(igo::PRIORITY_UI);
+    m_spriteUI->Init(filePath::dds::SCORE_TIME_UI);
+    m_spriteUI->Deactivate();
 }
 
 Score::~Score()
@@ -50,51 +72,64 @@ Score::~Score()
 
 bool Score::Start()
 {
-    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        m_fontScoreTime[playerNum] = NewGO<FontRender>(igo::PRIORITY_FONT);
-        m_fontScoreTime[playerNum]->Init(INIT_FONT_SCORE_TIME, SCORE_TIME_FONT_POSITION[playerNum]);
-        m_fontScoreTime[playerNum]->Deactivate();
-    }
+    //////////////////////////////
+    // FindGO
+    //////////////////////////////
 
-    m_spriteUI = NewGO<SpriteRender>(igo::PRIORITY_UI);
-    m_spriteUI->Init(filePath::dds::SCORE_TIME_UI);
-    m_spriteUI->Deactivate();
-
-    m_player = FindGO<Player>(igo::CLASS_NAME_PLAYER);
-    m_game = FindGO<MainProcessing>(igo::CLASS_NAME_GAME);
-    m_pause = FindGO<Pause>(igo::CLASS_NAME_PAUSE);
+    m_findPlayer = FindGO<Player>(igo::CLASS_NAME_PLAYER);
+    m_findMainProcessing = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
+    m_findPause = FindGO<Pause>(igo::CLASS_NAME_PAUSE);
+    m_findGameStartCountdown = FindGO <GameStartCountdown>(igo::CLASS_NAME_GAME_START_COUNTDOWN);
 
     return true;
 }
 
 void Score::Init()
 {
-    m_flagProcessing = true;
+    m_flagProcess = true;
+
+    //////////
+    // フォントの初期化
+    //////////
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontScoreTime[playerNum]->Activate();
     }
 
+    //////////
+    // スプライトの初期化
+    //////////
+
     m_spriteUI->Activate();
 
-
+    //////////
+    // メンバ変数の初期化
+    //////////
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-        m_scoreTime[playerNum] = 0;
-        m_flagScoreTimeProcessing[playerNum] = true;
-        m_scoreTimeMinutes[playerNum] = 0;
-        m_scoreTimeSeconds[playerNum] = 0;
-        m_scoreTimeCommaSeconds[playerNum] = 0;
+        m_scoreTime[playerNum] = 0; //スコアタイムのカウント
+        m_flagScoreTimeProcessing[playerNum] = true; //スコアタイムのカウントの処理をおこなっているか
+        m_scoreTimeMinutes[playerNum] = 0; //分
+        m_scoreTimeSeconds[playerNum] = 0; //秒
+        m_scoreTimeCommaSeconds[playerNum] = 0; //コンマ秒
     }
 }
 
 void Score::Finish()
 {
-    m_flagProcessing = false;
+    m_flagProcess = false;
+
+    //////////
+    // フォントの非表示
+    //////////
 
     for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontScoreTime[playerNum]->Deactivate();
     }
+
+    //////////
+    // スプライトの非表示
+    //////////
 
     m_spriteUI->Deactivate();
 }
@@ -105,11 +140,11 @@ void Score::Finish()
 
 void Score::Update()
 {
-    if (m_flagProcessing == false) {
+    if (false == m_flagProcess) {
         return;
     }
 
-    if (m_game->GetStopOperation() == true) {
+    if (m_findGameStartCountdown->GetFlagStopGameProcess() == true) {
         return;
     }
 
@@ -123,81 +158,80 @@ void Score::Update()
 
 }
 
-void Score::AddTime(const int pNum)
+void Score::AddTime(const int& playerNum)
 {
-    ++m_scoreTime[pNum];
+    ++m_scoreTime[playerNum];
 }
 
-void Score::FinishTime(const int pNum)
+void Score::FinishTime(const int& playerNum)
 {
-    if (m_player->GetFlagGoal(pNum) == false) {
+    if (m_findPlayer->GetFlagGoal(playerNum) == false) {
         return;
     }
 
-    m_flagScoreTimeProcessing[pNum] = false;
+    m_flagScoreTimeProcessing[playerNum] = false;
 }
 
-void Score::DrawTime(const int pNum)
+void Score::DrawTime(const int& playerNum)
 {
     std::wstring scoreTimeString;
 
     //分の計算
-    if (m_scoreTime[pNum] == ONE_MINUTES_FLAME) {
-        m_scoreTime[pNum] = con::TIME_RESET_ZERO;
-        m_scoreTimeSeconds[pNum] = con::TIME_RESET_ZERO;
-        ++m_scoreTimeMinutes[pNum];
+    if (m_scoreTime[playerNum] == ONE_MINUTES_FLAME) {
+        m_scoreTime[playerNum] = con::TIME_RESET_ZERO;
+        m_scoreTimeSeconds[playerNum] = con::TIME_RESET_ZERO;
+        ++m_scoreTimeMinutes[playerNum];
     }
 
     //秒の計算
-    m_scoreTimeSeconds[pNum] = m_scoreTime[pNum] / SIXTY_FLAME;
+    m_scoreTimeSeconds[playerNum] = m_scoreTime[playerNum] / SIXTY_FLAME;
 
     //コンマ秒の計算
-    double conmaSeconds = m_scoreTime[pNum] % SIXTY_FLAME;
+    double conmaSeconds = m_scoreTime[playerNum] % SIXTY_FLAME;
 
     conmaSeconds = conmaSeconds / SIXTY_FLAME * ADJUSTMENT_CONMA_SECONDS;
 
-    m_scoreTimeCommaSeconds[pNum] = int(conmaSeconds);
+    m_scoreTimeCommaSeconds[playerNum] = int(conmaSeconds);
 
     //表示するタイムの文字列を作成
-    if (m_scoreTimeSeconds[pNum] < ONE_DIGIT_CHECK) {
-        if (m_scoreTimeCommaSeconds[pNum] < ONE_DIGIT_CHECK) {
-            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[pNum]) + L":0" +
-                std::to_wstring(m_scoreTimeSeconds[pNum]) + L":0" +
-                std::to_wstring(m_scoreTimeCommaSeconds[pNum]);
+    if (m_scoreTimeSeconds[playerNum] < ONE_DIGIT_CHECK) {
+        if (m_scoreTimeCommaSeconds[playerNum] < ONE_DIGIT_CHECK) {
+            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[playerNum]) + L":0" +
+                std::to_wstring(m_scoreTimeSeconds[playerNum]) + L":0" +
+                std::to_wstring(m_scoreTimeCommaSeconds[playerNum]);
         }
         else {
-            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[pNum]) + L":0" +
-                std::to_wstring(m_scoreTimeSeconds[pNum]) + L":" +
-                std::to_wstring(m_scoreTimeCommaSeconds[pNum]);
+            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[playerNum]) + L":0" +
+                std::to_wstring(m_scoreTimeSeconds[playerNum]) + L":" +
+                std::to_wstring(m_scoreTimeCommaSeconds[playerNum]);
         }
     }
     else {
-        if (m_scoreTimeCommaSeconds[pNum] < ONE_DIGIT_CHECK) {
-            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[pNum]) + L":" +
-                std::to_wstring(m_scoreTimeSeconds[pNum]) + L":0" +
-                std::to_wstring(m_scoreTimeCommaSeconds[pNum]);
+        if (m_scoreTimeCommaSeconds[playerNum] < ONE_DIGIT_CHECK) {
+            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[playerNum]) + L":" +
+                std::to_wstring(m_scoreTimeSeconds[playerNum]) + L":0" +
+                std::to_wstring(m_scoreTimeCommaSeconds[playerNum]);
         }
         else {
-            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[pNum]) + L":" +
-                std::to_wstring(m_scoreTimeSeconds[pNum]) + L":" +
-                std::to_wstring(m_scoreTimeCommaSeconds[pNum]);
+            scoreTimeString = std::to_wstring(m_scoreTimeMinutes[playerNum]) + L":" +
+                std::to_wstring(m_scoreTimeSeconds[playerNum]) + L":" +
+                std::to_wstring(m_scoreTimeCommaSeconds[playerNum]);
         }
     }
 
     //表示する文字列を更新
-    m_fontScoreTime[pNum]->SetText(scoreTimeString.c_str());
+    m_fontScoreTime[playerNum]->SetText(scoreTimeString.c_str());
 }
 
 void Score::NextRound()
 {
-    for (int i = 0; i < con::PlayerNumberMax; i++) {
-        m_scoreTime[i] = 0;
-        m_flagScoreTimeProcessing[i] = true;
-        m_scoreTimeMinutes[i] = 0;
-        m_scoreTimeSeconds[i] = 0;
-        m_scoreTimeCommaSeconds[i] = 0;
+    for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
+        m_scoreTime[playerNum] = con::TIME_RESET_ZERO;
+        m_flagScoreTimeProcessing[playerNum] = true;
+        m_scoreTimeMinutes[playerNum] = con::TIME_RESET_ZERO;
+        m_scoreTimeSeconds[playerNum] = con::TIME_RESET_ZERO;
+        m_scoreTimeCommaSeconds[playerNum] = con::TIME_RESET_ZERO;
 
-        DrawTime(i);
+        DrawTime(playerNum);
     }
-    
 }
