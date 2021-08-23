@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "player.h"
 
-#include "game_data.h"
 #include "main_processing.h"
 #include "CPU_player_controller.h"
 #include "stage.h"
 #include "sudden_death_mode.h"
 #include "pause.h"
 #include "game_start_countdown.h"
-#include "Result.h"
+#include "result.h"
+#include "rank.h"
 
 namespace //constant
 {
@@ -99,24 +99,6 @@ Player::Player()
 	}
 
 	//////////////////////////////
-	// スプライトのNewGO
-	//////////////////////////////
-
-	//ゴール順位のスプライトの初期化
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
-			m_spriteGoalRank[playerNum][rankNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-			m_spriteGoalRank[playerNum][rankNum]->Init(filePath::dds::RANK[rankNum]); //初期化
-			m_spriteGoalRank[playerNum][rankNum]->Deactivate(); //非表示
-		}
-	}
-
-	//ゲーム終了時のスプライトの初期化
-	m_spriteGameEnd = NewGO<SpriteRender>(igo::PRIORITY_UI);
-	m_spriteGameEnd->Init(filePath::dds::GAME_END); //初期化
-	m_spriteGameEnd->Deactivate(); //非表示
-
-	//////////////////////////////
 	// SEのNewGO
 	//////////////////////////////
 
@@ -145,12 +127,7 @@ Player::~Player()
 	//プレイヤーごとに処理
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		DeleteGO(m_modelCharacter[playerNum]);
-		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
-			DeleteGO(m_spriteGoalRank[playerNum][rankNum]);
-		}
 	}
-
-	DeleteGO(m_spriteGameEnd);
 
 	DeleteGO(m_seJump);
 	DeleteGO(m_seFall);
@@ -168,12 +145,12 @@ bool Player::Start()
 	////////////////////////////////////////////////////////////
 
 	m_findCPUPlayerController = FindGO<CPUPlayerController>(igo::CLASS_NAME_CPU_PLAYER_CONTROLLER);
-	m_findGameData = FindGO<GameData>(igo::CLASS_NAME_GAME_DATA);
 	m_findStage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
 	m_findMainProcessing = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
 	m_findSuddenDeathMode = FindGO<SuddenDeathMode>(igo::CLASS_NAME_SUDDEN_DEATH);
 	m_findGameStartCountdown = FindGO<GameStartCountdown>(igo::CLASS_NAME_GAME_START_COUNTDOWN);
 	m_findResult = FindGO<Result>(igo::CLASS_NAME_RESULT);
+	m_findRank = FindGO<Rank>(igo::CLASS_NAME_RANK);
 
 	return true;
 }
@@ -195,28 +172,12 @@ void Player::Init()
 	}
 
 	////////////////////////////////////////////////////////////
-	// スプライトの初期化
-	////////////////////////////////////////////////////////////
-
-	//ゴール順位のスプライトの初期化
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
-			m_spriteGoalRank[playerNum][rankNum]->SetPosition(PLAYER_RANK_SPRITE_INIT_POSITION[playerNum]); //位置
-			m_spriteGoalRank[playerNum][rankNum]->Deactivate(); //非表示
-		}
-	}
-
-	//ゲーム終了時のスプライトの初期化
-	m_spriteGameEnd->Deactivate(); //非表示
-
-	////////////////////////////////////////////////////////////
 	// メンバ変数の初期化
 	////////////////////////////////////////////////////////////
 
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_activePlayer[playerNum] = true; //このプレイヤーは操作しているか
 		m_goalRanking[playerNum] = con::rank_notClear; //プレイヤーのゴール順位
-		m_flagGoal[playerNum] = false; //ゴールしたか
 		m_stopController[playerNum] = false; //操作不能か
 		m_nowAnimationBlock[playerNum] = con::greenBlock; //プレイヤーの現在のアニメーション
 		m_flagStopAnimation[playerNum] = false; //アニメーションの処理が止まっているか
@@ -240,15 +201,6 @@ void Player::Finish()
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_modelCharacter[playerNum]->Deactivate(); //非表示
 	}
-
-	//ゴール順位のスプライトの非表示
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		for (int rankNum = con::FIRST_ELEMENT_ARRAY; rankNum < con::GoalRankMax; rankNum++) {
-			m_spriteGoalRank[playerNum][rankNum]->Deactivate(); //非表示
-		}
-	}
-
-	m_spriteGameEnd->Deactivate(); //非表示
 }
 
 ////////////////////////////////////////////////////////////
@@ -264,7 +216,7 @@ void Player::Update()
 	//プレイヤーごとに操作
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		//ゴールしたプレイヤーは操作できない
-		if (m_flagGoal[playerNum] == false) {
+		if (false == m_findRank->GetDoingGoal(playerNum)) {
 			//操作
 			Controller(playerNum);
 		}
@@ -281,7 +233,7 @@ void Player::GameEnd()
 	//全員ゴールしたとき
 	if (con::PlayerNumberMax == m_goalPlayer || m_finishSuddenDeath == true) {
 		//終了
-		m_spriteGameEnd->Activate();
+		
 		m_endTimer++;
 		if (m_endTimer > 180) {
 			//サドンデスモードのとき所持ラウンド勝利数に応じて順位を確定
@@ -292,7 +244,8 @@ void Player::GameEnd()
 			
 			//リザルトシーンに順位情報を渡す
 			for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-				m_findResult->SetRank(playerNum, m_goalRanking[playerNum]);
+				//m_findResult->SetRank(playerNum, m_goalRanking[playerNum]);
+				m_findRank->SetFlagGameEnd(true); //Rankクラスにゲームが終了したことを伝える
 			}
 
 			//ゲームシーン終了
@@ -490,7 +443,7 @@ void Player::JumpAnimation(const int playerNum)
 void Player::GoalAnimation(const int playerNum)
 {
 	//ゴールしていない場合
-	if (m_flagGoal[playerNum] == false) {
+	if (m_findRank->GetDoingGoal(playerNum) == false) {
 		m_modelCharacter[playerNum]->PlayAnimation(idle); //アニメーション
 	}
 	//ゴールした場合
@@ -600,29 +553,13 @@ void Player::NextRound()
 		m_modelCharacter[playerNum]->Activate(); //表示
 	}
 
-	//終了スプライトを非表示
-	m_spriteGameEnd->Deactivate();
-
 	//ゴールしたプレイヤーを０にする
 	m_goalPlayer = 0;
-
-	//ゴールしてない状態にする
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_flagGoal[playerNum] = false;
-	}
-
-	//スプライトの非表示
-	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-		for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < con::GoalRankMax; spriteNum++) {
-			m_spriteGoalRank[playerNum][spriteNum]->Deactivate(); //非表示
-		}
-	}
 
 	//以下、メンバ変数をリセット
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_activePlayer[playerNum] = true;
 		m_goalRanking[playerNum] = con::rank_notClear;
-		m_flagGoal[playerNum] = false;
 		m_flagAnimationJump[playerNum] = false;
 		m_timerAnimation[playerNum] = 0;
 		m_flagStopAnimation[playerNum] = false;

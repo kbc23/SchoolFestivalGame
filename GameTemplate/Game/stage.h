@@ -12,7 +12,7 @@ class MainProcessing;
 class SuddenDeathMode;
 class CPUPlayerController;
 class Pause;
-class GameData;
+class Rank;
 
 class Stage : public IGameObject
 {
@@ -267,12 +267,12 @@ private: //data menber
     // FindGO
     //////////////////////////////
 
-    GameData* m_findGameData = nullptr;
     Player* m_findPlayer = nullptr;
     CPUPlayerController* m_findCPUPlayerController = nullptr;
     MainProcessing* m_findMainProcessing = nullptr;
     SuddenDeathMode* m_findSuddenDeathMode = nullptr;
     Pause* m_findPause = nullptr;
+    Rank* m_findRank = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ブロックのデータ

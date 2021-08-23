@@ -6,6 +6,7 @@
 #include "player.h"
 #include "game_start_countdown.h"
 #include "CPU_player_controller.h"
+#include "rank.h"
 
 
 
@@ -39,6 +40,7 @@ bool SuddenDeathMode::Start()
 	m_findPlayer = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 	m_findGameStartCountdown = FindGO<GameStartCountdown>(igo::CLASS_NAME_GAME_START_COUNTDOWN);
 	m_findCPUPlayerController = FindGO<CPUPlayerController>(igo::CLASS_NAME_CPU_PLAYER_CONTROLLER);
+	m_findRank = FindGO<Rank>(igo::CLASS_NAME_RANK);
 
 	return true;
 }
@@ -82,7 +84,7 @@ void SuddenDeathMode::NextRound()
 		return;
 	}
 
-	++m_timerNextRound;
+	++m_timerNextRound; //タイマーのカウント
 
 	//タイマーが超えたか
 	if (NEXT_ROUND_TIME > m_timerNextRound) {
@@ -95,6 +97,7 @@ void SuddenDeathMode::NextRound()
 	m_findPlayer->NextRound();
 	m_findGameStartCountdown->NextRound();
 	m_findCPUPlayerController->NextRound();
+	m_findRank->NextRound();
 
 	m_flagNextRound = false;
 	m_timerNextRound = con::TIME_RESET_ZERO;

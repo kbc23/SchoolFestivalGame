@@ -318,7 +318,7 @@ private: //data menber
     bool m_startEndOfLoading = false;
     bool m_flagGameStart = false;
 
-    bool m_gameEnd = false;
+    bool m_gameEnd = false; //ゲームシーンのゲームが終了したか
 
 
     ////////////////////////////////////////////////////////////

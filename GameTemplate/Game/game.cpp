@@ -60,7 +60,7 @@ void Game::Init()
     m_CPUPlayerController->Init();
     m_gameStartCountdown->Init();
     //m_goal->Init();
-    //m_rank->Init();
+    m_rank->Init();
 
     if (m_suddenDeathMode->GetFlagSuddenDeathMode() == true) {
         m_suddenDeathMode->Init();

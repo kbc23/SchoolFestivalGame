@@ -307,7 +307,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="player_select.cpp" />
     <ClCompile Include="rank.cpp" />
-    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="result.cpp" />
     <ClCompile Include="sudden_death_mode.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="sound_BGM.cpp" />
@@ -410,7 +410,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="player_select.h" />
     <ClInclude Include="rank.h" />
-    <ClInclude Include="Result.h" />
+    <ClInclude Include="result.h" />
     <ClInclude Include="sudden_death_mode.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="sound_BGM.h" />

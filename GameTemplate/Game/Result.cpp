@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Result.h"
+#include "result.h"
 #include "main_processing.h"
 
 

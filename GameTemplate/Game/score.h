@@ -8,6 +8,7 @@ class Player;
 class Pause;
 class GameStartCountdown;
 class Stage;
+class Rank;
 
 class Score : public IGameObject
 {
@@ -72,6 +73,7 @@ private: //data menber
     Pause* m_findPause = nullptr;
     GameStartCountdown* m_findGameStartCountdown = nullptr;
     Stage* m_findStage = nullptr;
+    Rank* m_findRank = nullptr;
 
     ////////////////////////////////////////////////////////////
     // スコアタイム関連

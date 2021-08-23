@@ -8,6 +8,7 @@
 #include "pause.h"
 #include "game_start_countdown.h"
 #include "stage.h"
+#include "rank.h"
 
 
 
@@ -82,6 +83,7 @@ bool Score::Start()
     m_findPause = FindGO<Pause>(igo::CLASS_NAME_PAUSE);
     m_findGameStartCountdown = FindGO<GameStartCountdown>(igo::CLASS_NAME_GAME_START_COUNTDOWN);
     m_findStage = FindGO<Stage>(igo::CLASS_NAME_STAGE);
+    m_findRank = FindGO<Rank>(igo::CLASS_NAME_RANK);
 
     return true;
 }
@@ -175,7 +177,7 @@ void Score::AddTime(const int playerNum)
 void Score::FinishTime(const int playerNum)
 {
     //ƒS[ƒ‹‚µ‚Ä‚¢‚È‚¢ê‡
-    if (m_findPlayer->GetFlagGoal(playerNum) == false) {
+    if (false == m_findRank->GetDoingGoal(playerNum)) {
         return;
     }
 

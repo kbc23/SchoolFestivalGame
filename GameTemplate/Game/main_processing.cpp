@@ -7,7 +7,7 @@
 #include "CPU_strength_select.h"
 #include "game.h"
 #include "game_camera.h"
-#include "Result.h"
+#include "result.h"
 #include "pause.h"
 
 
@@ -127,7 +127,7 @@ bool MainProcessing::Start()
     m_bgmTitle->Play(true); //再生
 
     //BGM全体の音量を設定
-    m_bgmTitle->SetBGMVolume(0.0f);
+    m_bgmTitle->SetBGMVolume(0.0f); //0.5f
 
     ////////////////////////////////////////////////////////////
     // SE
@@ -138,7 +138,7 @@ bool MainProcessing::Start()
     m_seCancel->Init(filePath::se::CANCEL); //初期化
 
     //SE全体の音量を設定
-    m_seCancel->SetSEVolume(0.5f);
+    m_seCancel->SetSEVolume(0.0f); //0.5f
 
     ////////////////////////////////////////////////////////////
     // クラス

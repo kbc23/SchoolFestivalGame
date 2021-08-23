@@ -9,9 +9,9 @@ class MainProcessing;
 class Stage;
 class CPUPlayerController;
 class SuddenDeathMode;
-class GameData;
 class GameStartCountdown;
 class Result;
+class Rank;
 
 class Player : public IGameObject
 {
@@ -137,16 +137,6 @@ public: //Get関数
 	}
 
 	/**
-	 * @brief m_flagGoal[pNum]のGet関数
-	 * @param playerNum プレイヤー番号
-	 * @return プレイヤーがゴールしたかどうか
-	*/
-	const bool GetFlagGoal(const int playerNum) const
-	{
-		return m_flagGoal[playerNum];
-	}
-
-	/**
 	 * @brief プレイヤーのゴール順位を取得
 	 * @param playerNum プレイヤー番号
 	 * @return プレイヤーのゴール順位
@@ -246,29 +236,6 @@ public: //Set関数
 	void SetGoalRanking(const int playerNum, const int rank)
 	{
 		m_goalRanking[playerNum] = rank;
-
-		SetAndActivateGoalRankFont(playerNum, rank);
-	}
-
-	/**
-	 * @brief 順位の描画処理ための値の設定と描画状態にする。
-	 * @param playerNum プレイヤー番号
-	 * @param rank 順位
-	*/
-	void SetAndActivateGoalRankFont(const int playerNum, const int rank)
-	{
-		m_spriteGoalRank[playerNum][rank]->Activate();
-		++m_goalPlayer;
-	}
-
-	/**
-	 * @brief ゴールしたかどうかのSet関数
-	 * @param playerNum プレイヤー番号
-	 * @param flagGoal ゴールしたかどうか
-	*/
-	void SetFlagGoal(const int playerNum, const bool flagGoal)
-	{
-		m_flagGoal[playerNum] = flagGoal;
 	}
 
 	/**
@@ -401,8 +368,6 @@ private: //data menber
 	//////////////////////////////
 
 	ModelRender* m_modelCharacter[con::PlayerNumberMax] = { nullptr };	//プレイヤーキャラクターのモデル
-	SpriteRender* m_spriteGameEnd = nullptr; //ゲーム終了時の画像
-	SpriteRender* m_spriteGoalRank[con::PlayerNumberMax][con::GoalRankMax] = { nullptr }; //ゴール順位の画像
 	SoundSE* m_seJump = nullptr; //ジャンプ時のSE
 	SoundSE* m_seFall = nullptr; //落下時のSE
 	SoundSE* m_seSrip = nullptr; //スリップ時のSE
@@ -411,14 +376,13 @@ private: //data menber
 	// FindGO
 	//////////////////////////////
 
-	GameData* m_findGameData = nullptr;
-
 	Stage* m_findStage = nullptr;
 	MainProcessing* m_findMainProcessing = nullptr;
 	CPUPlayerController* m_findCPUPlayerController = nullptr;
 	SuddenDeathMode* m_findSuddenDeathMode = nullptr;
 	GameStartCountdown* m_findGameStartCountdown = nullptr;
 	Result* m_findResult = nullptr;
+	Rank* m_findRank = nullptr;
 
 	////////////////////////////////////////////////////////////
 	// プレイヤー情報
@@ -429,7 +393,7 @@ private: //data menber
 
 	int m_goalRanking[con::PlayerNumberMax] =
 	{ con::rank_notClear, con::rank_notClear, con::rank_notClear, con::rank_notClear };	//プレイヤーのゴール順位
-	bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
+	//bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
 	int m_goalPlayer = 0;				
 	
 	int m_endTimer = 0; //ゴールしてからの時間

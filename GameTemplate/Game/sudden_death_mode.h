@@ -5,6 +5,7 @@ class Score;
 class Player;
 class GameStartCountdown;
 class CPUPlayerController;
+class Rank;
 
 class SuddenDeathMode : public IGameObject
 {
@@ -79,6 +80,7 @@ private: //data member
 	Player* m_findPlayer = nullptr;
 	GameStartCountdown* m_findGameStartCountdown = nullptr;
 	CPUPlayerController* m_findCPUPlayerController = nullptr;
+	Rank* m_findRank = nullptr;
 
 	////////////////////////////////////////////////////////////
 	// ƒtƒ‰ƒO

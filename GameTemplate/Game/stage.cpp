@@ -3,7 +3,6 @@
 
 #include <random>
 
-#include "game_data.h"
 #include "player.h"
 #include "score.h"
 #include "main_processing.h"
@@ -11,6 +10,7 @@
 #include "CPU_player_controller.h"
 #include "pause.h"
 #include "sudden_death_mode.h"
+#include "rank.h"
 
 
 
@@ -49,10 +49,14 @@ namespace //constant
 
     const float MAX_DEGREE_OF_PROGRESS_POSITION = 835.0f; //進行度
 
+    const float INIT_SPRITE_PLAYER_MARK = 0.0f; //プレイヤーマークの位置
+
     const float INIT_SPRITE_BACKGROUND_CLOUD_1 = 0.0f;
     const float INIT_SPRITE_BACKGROUND_CLOUD_2 = 1280.0f;
 
     const float MOVE_BACKGROUND = 1.0f;
+
+    const int START_BLOCK = 0;
 
     ////////////////////////////////////////////////////////////
     // 確率関連
@@ -208,13 +212,13 @@ bool Stage::Start()
     // FindGO
     ////////////////////////////////////////////////////////////
 
-    m_findGameData = FindGO<GameData>(igo::CLASS_NAME_GAME_DATA);
     m_findPlayer = FindGO<Player>(igo::CLASS_NAME_PLAYER);
     m_findSuddenDeathMode = FindGO<SuddenDeathMode>(igo::CLASS_NAME_SUDDEN_DEATH);
     m_findMainProcessing = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
     m_findCPUPlayerController = FindGO<CPUPlayerController>(igo::CLASS_NAME_CPU_PLAYER_CONTROLLER);
     m_findPause = FindGO<Pause>(igo::CLASS_NAME_PAUSE);
     m_findSuddenDeathMode = FindGO<SuddenDeathMode>(igo::CLASS_NAME_SUDDEN_DEATH);
+    m_findRank = FindGO<Rank>(igo::CLASS_NAME_RANK);
 
     return true;
 }
@@ -244,7 +248,6 @@ void Stage::Init()
     // スプライトの初期化
     ////////////////////////////////////////////////////////////
 
-
     //背景の初期化
     m_spriteBackgroundSky->Activate(); //表示
     m_spriteBackgroundCloud_1->Activate(); //表示
@@ -256,7 +259,7 @@ void Stage::Init()
     m_spriteDegreeOfProgress->Activate(); //表示
     for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
         m_spritePlayerMark[playerNum]->Activate(); //表示
-        m_spritePlayerMark[playerNum]->SetPositionX(0.0f); //位置
+        m_spritePlayerMark[playerNum]->SetPositionX(INIT_SPRITE_PLAYER_MARK); //位置
     }
 
     //ラウンドのUIの初期化
@@ -306,18 +309,18 @@ void Stage::Finish()
 {
     m_flagProcess = false;
 
-    //////////
+    ////////////////////////////////////////////////////////////
     // モデルの非表示
-    //////////
+    ////////////////////////////////////////////////////////////
 
     //ブロックの非表示
     for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
         BlockDeactivate(playerNum);
     }
 
-    //////////
+    ////////////////////////////////////////////////////////////
     // スプライトの非表示
-    //////////
+    ////////////////////////////////////////////////////////////
 
     //背景の非表示
     m_spriteBackgroundSky->Deactivate(); //非表示
@@ -337,27 +340,27 @@ void Stage::Finish()
         }
     }
 
-    //////////
+    ////////////////////////////////////////////////////////////
     // フォントの非表示
-    //////////
+    ////////////////////////////////////////////////////////////
 
     //プレイヤーが現在何番目のブロックにいるかの表示の非表示
     for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
         m_fontPlayerBlockPosition[playerNum]->Deactivate(); //非表示
     }
 
-    //////////
+    ////////////////////////////////////////////////////////////
     // BGMのDeleteGO
-    //////////
+    ////////////////////////////////////////////////////////////
 
     DeleteGO(m_bgm);
 }
 
 void Stage::StageCreate()
 {
+    //メモ
     //緑は連続で６個まで
-    //青の後は緑
-    //黄色の後は緑
+    //青、黄色の後は緑
     //青:70% 黄色:30%
 
     std::mt19937 mt{ std::random_device{}() };
@@ -532,7 +535,7 @@ void Stage::DrawBlock(const int playerNum)
 
     for (int blockNum = DRAW_FIRST_BLOCK; blockNum < DRAW_LAST_BLOCK; blockNum++) {
         //スタート地点より前のブロックを描画しない
-        if (m_playerBlockPosition[playerNum] + blockNum < 0) {
+        if (m_playerBlockPosition[playerNum] + blockNum < START_BLOCK) {
             continue;
         }
         //ゴール地点より後のブロックを描画しない
@@ -543,10 +546,10 @@ void Stage::DrawBlock(const int playerNum)
         //緑ブロック
         if (m_stageData[playerNum][m_playerBlockPosition[playerNum] + blockNum] == greenBlock) {
             m_modelGreenBlock[playerNum][numberOfUsesGreenBlock]->SetPosition({ //位置
-            BLOCK_POSITION_X[playerNum],
-            BLOCK_POSITION_Y,
-            BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
+                BLOCK_POSITION_X[playerNum],
+                BLOCK_POSITION_Y,
+                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
+            });
             m_modelGreenBlock[playerNum][numberOfUsesGreenBlock]->Activate(); //表示
             ++numberOfUsesGreenBlock;
         }
@@ -560,7 +563,7 @@ void Stage::DrawBlock(const int playerNum)
                BLOCK_POSITION_X[playerNum],
                BLOCK_POSITION_Y,
                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
+            });
             m_modelYellowBlock[playerNum][numberOfUsesYellowBlock]->Activate(); //表示
             ++numberOfUsesYellowBlock;
         }
@@ -570,7 +573,7 @@ void Stage::DrawBlock(const int playerNum)
                BLOCK_POSITION_X[playerNum],
                BLOCK_POSITION_Y,
                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum
-                });
+            });
             m_modelGoalBlock[playerNum][numberOfUsesGoalBlock]->Activate(); //表示
         }
     }
@@ -608,7 +611,7 @@ void Stage::DrawMoveBlock(const int playerNum)
         //ブロックの描画
         for (int blockNum = DRAW_FIRST_BLOCK; blockNum < DRAW_LAST_BLOCK; blockNum++) {
             //スタート地点より前のブロックを描画しない
-            if (playerBlockPosition + blockNum < 0) {
+            if (playerBlockPosition + blockNum < START_BLOCK) {
                 continue;
             }
             //ゴール地点より後のブロックを描画しない
@@ -619,10 +622,10 @@ void Stage::DrawMoveBlock(const int playerNum)
             //緑ブロック
             if (m_stageData[playerNum][playerBlockPosition + blockNum] == greenBlock) {
                 m_modelGreenBlock[playerNum][numberOfUsesGreenBlock]->SetPosition({ //位置
-                BLOCK_POSITION_X[playerNum],
-                BLOCK_POSITION_Y,
-                BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - static_cast<float>(moveCorrection)
-                    });
+                    BLOCK_POSITION_X[playerNum],
+                    BLOCK_POSITION_Y,
+                    BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - static_cast<float>(moveCorrection)
+                });
                 m_modelGreenBlock[playerNum][numberOfUsesGreenBlock]->Activate(); //表示
                 ++numberOfUsesGreenBlock;
             }
@@ -636,7 +639,7 @@ void Stage::DrawMoveBlock(const int playerNum)
                    BLOCK_POSITION_X[playerNum],
                    BLOCK_POSITION_Y,
                    BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - static_cast<float>(moveCorrection)
-                    });
+                });
                 m_modelYellowBlock[playerNum][numberOfUsesYellowBlock]->Activate(); //表示
                 ++numberOfUsesYellowBlock;
             }
@@ -646,7 +649,7 @@ void Stage::DrawMoveBlock(const int playerNum)
                    BLOCK_POSITION_X[playerNum],
                    BLOCK_POSITION_Y,
                    BLOCK_POSITION_Z + BLOCK_SIZE * blockNum - static_cast<float>(moveCorrection)
-                    });
+                });
                 m_modelGoalBlock[playerNum][numberOfUsesGoalBlock]->Activate(); //表示
             }
         }
@@ -805,7 +808,7 @@ void Stage::GoalBlock()
     }
 
     bool flagAddNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
-    int nextRank = 0; //次のプレイヤーの順位
+    int nextRank = con::player_1; //次のプレイヤーの順位
 
     for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
         //プレイヤーの順位を確定
@@ -814,10 +817,12 @@ void Stage::GoalBlock()
             m_findPlayer->SetActivePlayer(playerNum, false);
 
             //順位を確定
-            m_findPlayer->SetGoalRanking(playerNum, m_nowRank);
+            //m_findPlayer->SetGoalRanking(playerNum, m_nowRank);
+            m_findRank->SetGoalRanking(playerNum, m_nowRank);
+
 
             //ゴールした状態にする。
-            m_findPlayer->SetFlagGoal(playerNum, true);
+            //m_findPlayer->SetFlagGoal(playerNum, true);
 
             //次のプレイヤーの順位のために増加
             ++nextRank;
@@ -874,7 +879,8 @@ void Stage::MissRoundWin()
             for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
                 if (m_findPlayer->GetStopController(playerNum) == false) {
                     //順位を確定
-                    m_findPlayer->SetGoalRanking(playerNum, con::rank_1);
+                    m_findRank->SetGoalRanking(playerNum, con::rank_1);
+                    //m_findPlayer->SetGoalRanking(playerNum, con::rank_1);
                     m_findPlayer->SetAnimationWin(playerNum); //アニメーション
 
                     //ゴールした人数を増加
@@ -883,7 +889,7 @@ void Stage::MissRoundWin()
 
                 m_findPlayer->SetActivePlayer(playerNum, false);
                 //ゴールした状態にする。
-                m_findPlayer->SetFlagGoal(playerNum, true);
+                //m_findPlayer->SetFlagGoal(playerNum, true);
             }
         }
 
@@ -1048,11 +1054,12 @@ void Stage::WinPlayerDistance(const int playerNum)
     for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
         m_findPlayer->SetActivePlayer(playerNum, false);
         //ゴールした状態にする。
-        m_findPlayer->SetFlagGoal(playerNum, true);
+        //m_findPlayer->SetFlagGoal(playerNum, true);
     }
 
     //順位を確定
-    m_findPlayer->SetGoalRanking(playerNum, con::rank_1);
+    m_findRank->SetGoalRanking(playerNum, con::rank_1);
+    //m_findPlayer->SetGoalRanking(playerNum, con::rank_1);
     m_findPlayer->SetAnimationWin(playerNum); //アニメーション
     
     //ゴールしたプレイヤーの人数を増やす

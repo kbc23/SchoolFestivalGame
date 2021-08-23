@@ -365,7 +365,7 @@
     <ClCompile Include="score.cpp">
       <Filter>MyCode\MainProcessing\GameScene\Score</Filter>
     </ClCompile>
-    <ClCompile Include="Result.cpp">
+    <ClCompile Include="result.cpp">
       <Filter>MyCode\MainProcessing\ResultScene</Filter>
     </ClCompile>
     <ClCompile Include="stage.cpp">
@@ -652,7 +652,7 @@
     <ClInclude Include="score.h">
       <Filter>MyCode\MainProcessing\GameScene\Score</Filter>
     </ClInclude>
-    <ClInclude Include="Result.h">
+    <ClInclude Include="result.h">
       <Filter>MyCode\MainProcessing\ResultScene</Filter>
     </ClInclude>
     <ClInclude Include="stage.h">
