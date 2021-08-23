@@ -59,27 +59,16 @@ private:
     // 毎フレームの処理
     ////////////////////////////////////////////////////////////
 
+    void DrawBlock(const int playerNum);
 
+    void DrawMoveBlock(const int playerNum);
 
-    void DrawBlock(const int pNum);
-
-    void DrawMoveBlock(const int pNum);
-
-    void DrawFontPlayerBlockPosition(const int pNum);
+    void DrawFontPlayerBlockPosition(const int playerNum);
 
     void DrawBackground();
 
     void DrawRoundWin();
 
-    //////////////////////////////
-    // タイマー
-    //////////////////////////////
-
-    /**
-     * @brief 操作不能状態のタイマーのカウント
-     * @param playerNum プレイヤーの番号
-    */
-    //void ReturnOperationTimer(const int pNum);
 
 public:
 
@@ -91,7 +80,7 @@ public:
      * @brief プレイヤーが乗っているブロックを判別
      * @param playerNum プレイヤー番号
     */
-    void CheckBlock(const int pNum);
+    void CheckBlock(const int playerNum);
 
     //////////
     // 青色のブロック
@@ -101,7 +90,7 @@ public:
      * @brief 青色のブロックの上に行ったときの処理    
      * @param playerNum プレイヤー番号
     */
-    void BlueBlock(const int& pNum);
+    void BlueBlock(const int playerNum);
 
     //////////
     // 黄色のブロック
@@ -111,7 +100,7 @@ public:
      * @brief 黄色のブロックの上に行ったときの処理
      * @param playerNum プレイヤー番号
     */
-    void YellowBlock(const int& playerNum);
+    void YellowBlock(const int playerNum);
 
     //////////
     // その他
@@ -121,7 +110,7 @@ public:
      * @brief 前にいた位置のブロックに戻る処理
      * @param playerNum プレイヤーの番号
     */
-    void ReturnBlock(const int pNum);
+    void ReturnBlock(const int playerNum);
 
 private:
 
@@ -161,7 +150,7 @@ private:
      * @param playerNum プレイヤーの番号
      * @return 条件を満たしているか
     */
-    bool CheckPlayerRank1(const int& playerNum);
+    bool CheckPlayerRank1(const int playerNum);
 
     /**
      * @brief プレイヤーが20ブロック以上距離を離しているか
@@ -169,13 +158,13 @@ private:
      * @param otherNum 他のプレイヤーの番号
      * @return 距離を離しているか
     */
-    bool CheckPlayerDistance20Block(const int& playerNum, const int& otherNum);
+    bool CheckPlayerDistance20Block(const int playerNum, const int otherNum);
 
     /**
      * @brief 距離の条件でプレイヤーが勝利したときの処理
      * @param playerNum プレイヤーの番号
     */
-    void WinPlayerDistance(const int& playerNum);
+    void WinPlayerDistance(const int playerNum);
 
 public:
     //////////////////////////////
@@ -188,14 +177,20 @@ public:
      * @param moveNum ブロックの動く量
      * @return ブロックを動かしたかどうか
     */
-    bool MoveBlock(const int pNum, const int moveNum);
+    bool MoveBlock(const int playerNum, const int moveNum);
 
     //////////////////////////////
     // 進行度
     //////////////////////////////
 
-    void DegreeOfProgress(const int& pNum);
+    void DegreeOfProgress(const int playerNum);
 
+
+
+private: //追加
+    void MissRoundWin();
+
+    void BlockDeactivate(const int playerNum);
 
 
 public: //Get関数
@@ -207,17 +202,9 @@ public: //Get関数
     */
     int& GetStageDateNext2Block(const int playerNum)
     {
-        /* int plus = m_playerBlockPosition[playerNum] + 2;
-          if (plus >= 99) {
-              plus = 99;
-          }*/
         return m_stageData[playerNum][m_playerBlockPosition[playerNum] + 2];//ここ怪しい
     }
 
-    int GetBlueMiss(const int pNum)
-    {
-        return m_blueMiss[pNum];
-    }
 
 public: //enum
     //ブロックの種類
@@ -233,11 +220,11 @@ public: //enum
 public: //Set関数
     /**
      * @brief 操作するプレイヤーの人数を保存する変数のSet関数
-     * @param i 操作するプレイヤーの人数
+     * @param playerNum 操作するプレイヤーの人数
     */
-    void SetMaxPlayer(const int i)
+    void SetMaxPlayer(const int playerNum)
     {
-        m_maxPlayer = i;
+        m_maxPlayer = playerNum;
     }   
 
 
@@ -304,7 +291,6 @@ private: //data menber
     int m_nowRank = m_INIT_RANK;            //プレイヤーの順位データに渡すデータ
 
     int m_amountOfMovement[con::PlayerNumberMax] = { 0, 0, 0, 0 };
-    bool m_blueMiss[con::PlayerNumberMax] = { false };
 
     StageData m_playerAnimation[con::PlayerNumberMax] = { greenBlock ,greenBlock ,greenBlock ,greenBlock };
 
@@ -318,8 +304,9 @@ private: //data menber
     ///////////////////////////////////////////////////////////
     // NextRound
     ///////////////////////////////////////////////////////////
+
     int m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
     int m_goalPlayer = 0;          //ゴールしたプレイヤーの数
-    int m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
+    //int m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     bool m_allMiss = false;     //プレイヤー全員がミスをしているか
 };

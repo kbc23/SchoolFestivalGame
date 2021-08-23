@@ -132,11 +132,6 @@ private:
 	void InitAnimation(AnimationClip* animationClip, int maxAnimationClipNum);
 
 
-	void InitToonShader();
-
-
-
-
 public:
 	/**
 	 * @brief アニメーションを再生する

@@ -35,6 +35,15 @@ public: //Get関数
 		return m_flagSuddenDeathMode;
 	}
 
+	/**
+	 * @brief 次のラウンドに移行するかを取得
+	 * @return 次のラウンドに移行するか
+	*/
+	const bool GetFlagNextRound() const
+	{
+		return m_flagNextRound;
+	}
+
 
 public: //Set関数
 	/**
@@ -44,6 +53,15 @@ public: //Set関数
 	void SetFlagSuddenDeathMode(const bool flagSuddenDeathMode)
 	{
 		m_flagSuddenDeathMode = flagSuddenDeathMode;
+	}
+
+	/**
+	 * @brief 次のラウンドに移行するかをセット
+	 * @param flag 次のラウンドに移行するか
+	*/
+	void SetFlagNextRound(const bool flag)
+	{
+		m_flagNextRound = flag;
 	}
 
 
@@ -70,8 +88,11 @@ private: //data member
 
 	bool m_finishSuddenDeath = false; //サドンデスモードが終了したか
 
+	bool m_flagNextRound = false; //次のラウンドに移行するか
+
 	////////////////////////////////////////////////////////////
 	// その他
 	////////////////////////////////////////////////////////////
-};
 
+	int m_timerNextRound = 0; //次のラウンドに移行するときのタイマー
+};

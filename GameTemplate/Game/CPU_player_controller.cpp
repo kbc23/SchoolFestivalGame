@@ -83,8 +83,6 @@ void CPUPlayerController::Update()
 
 int CPUPlayerController::CPUController(const int playerNum)
 {
-	//return enButtonA;
-
 	//操作を停止しているかどうか
 	if (StopController(playerNum) == true) {
 		return con::NOT_MOVE;
@@ -93,32 +91,40 @@ int CPUPlayerController::CPUController(const int playerNum)
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_int_distribution<int> randomNum(con::MINIMUM_RANDOM_NUMBER, con::MAXIMUM_RANDOM_NUMBER);
 
-	const int random = randomNum(mt);
-	//EnButton button = enButtonNum;
+	const int random = randomNum(mt); //乱数
 
 	switch (m_CPULevel) {
+	//よわい
 	case con::easy:
+		//ミス
 		if (random < EASY_MISS) {
 			return MissMove(playerNum);
 		}
+		//ミスしない
 		else {
 			return OKMove(playerNum);
 		}
 
 		break;
+	//ふつう
 	case con::normal:
+		//ミス
 		if (random < NORMAL_MISS) {
 			return MissMove(playerNum);
 		}
+		//ミスしない
 		else {
 			return OKMove(playerNum);
 		}
 
 		break;
+	//つよい
 	case con::hard:
+		//ミス
 		if (random < HARD_MISS) {
 			return MissMove(playerNum);
 		}
+		//ミスしない
 		else {
 			return OKMove(playerNum);
 		}
@@ -139,6 +145,7 @@ bool CPUPlayerController::StopController(const int playerNum)
 	++m_stopControllerTimer[playerNum];
 
 	switch (m_CPULevel) {
+	//よわい
 	case con::easy:
 		if (m_stopControllerTimer[playerNum] >= EASY_JUMP_COOL_TIME) {
 			m_stopController[playerNum] = false;
@@ -148,6 +155,7 @@ bool CPUPlayerController::StopController(const int playerNum)
 		}
 
 		break;
+	//ふつう
 	case con::normal:
 		if (m_stopControllerTimer[playerNum] >= NORMAL_JUMP_COOL_TIME) {
 			m_stopController[playerNum] = false;
@@ -157,6 +165,7 @@ bool CPUPlayerController::StopController(const int playerNum)
 		}
 
 		break;
+	//つよい
 	case con::hard:
 		if (m_stopControllerTimer[playerNum] >= HARD_JUMP_COOL_TIME) {
 			m_stopController[playerNum] = false;
@@ -175,39 +184,42 @@ bool CPUPlayerController::StopController(const int playerNum)
 const int& CPUPlayerController::MissMove(const int playerNum)
 {
 	//サドンデスモードの場合
-	//条件: ミスを無効にできる回数が１回以上かつサドンデスモード時
-	if (0 < m_missInvalidCount[playerNum] && true == m_findSuddenDeathMode->GetFlagSuddenDeathMode()) {
-		--m_missInvalidCount[playerNum];
+	//条件: ミスを無効にできる回数が残っているかつサドンデスモード時
+	if (m_MISS_INVALID > m_missInvalidCount[playerNum] && true == m_findSuddenDeathMode->GetFlagSuddenDeathMode()) {
+		++m_missInvalidCount[playerNum];
+		//ミスしない
 		return OKMove(playerNum);
 	}
 
-	if (m_flagBlueBlockMiss[playerNum] == false) {
-		//２マス進む
-		return con::MOVE_2;
+	//前回青ブロックでミスをしていたら
+	if (true == m_flagBlueBlockMiss[playerNum]) {
+		//２マス先が青ブロック
+		if (m_findStage->GetStageDateNext2Block(playerNum) == con::blueBlock) {
+			//１マス進む
+			return con::MOVE_1;
+		}
+		//それ以外
+		else {
+			m_flagBlueBlockMiss[playerNum] = false;
+
+			//２マス進む
+			return con::MOVE_2;
+		}
 	}
 
-	if (m_findStage->GetStageDateNext2Block(playerNum) == con::blueBlock) {
-		//１マス進む
-		return con::MOVE_1;
-	}
-	else {
-		m_flagBlueBlockMiss[playerNum] = false;
-
-		//２マス進む
-		return con::MOVE_2;
-	}
-
-	//１マス進む
-	return con::MOVE_1;
+	//２マス進む
+	return con::MOVE_2;
 }
 
 const int& CPUPlayerController::OKMove(const int playerNum)
 {
+	//２マス先が緑ブロックまたはゴールブロック
 	if (m_findStage->GetStageDateNext2Block(playerNum) == con::greenBlock ||
 		m_findStage->GetStageDateNext2Block(playerNum) == con::goalBlock) {
 		//２マス進む
 		return con::MOVE_2;
 	}
+	//それ以外
 	else {
 		//１マス進む
 		return con::MOVE_1;		

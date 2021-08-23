@@ -48,7 +48,7 @@ public: //Get関数
 	 * @brief 読み込み終了判定
 	 * @return 
 	*/
-	bool IsReadEnd() const
+	const bool IsReadEnd() const
 	{
 		return m_isReadEnd;
 	}
@@ -57,7 +57,7 @@ public: //Get関数
 	 * @brief ファイルサイズを取得
 	 * @return 
 	*/
-	DWORD   GetSize() const
+	DWORD GetSize() const
 	{
 		return m_dwSize;
 	}

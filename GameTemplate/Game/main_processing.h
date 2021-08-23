@@ -167,28 +167,36 @@ private:
     void ResultScene();
 
 
+public: //Pause関連
+    /**
+     * @brief ポーズ画面でリトライを選択
+    */
+    void PauseRetry();
+
+    /**
+     * @brief ポーズ画面でタイトルに戻るを選択
+    */
+    void PauseTitle();
+
+
 
 public: //Get関数
     /**
      * @brief m_StopOperationのGet関数
      * @return プレイヤーの操作処理をできなくしているか
     */
-    const bool GetStopOperation()
+    const bool GetStopOperation() const
     {
         return m_StopOperation;
     }
 
-    const bool GetFlagSuddenDeathMode()
-    {
-        return m_flagSuddenDeathMode;
-    }
 
 public: //Set関数
     /**
      * @brief m_maxPlayerのSet関数
      * @param maxPlayer 操作しているプレイヤーの数
     */
-    void SetMaxPlayer(int maxPlayer)
+    void SetMaxPlayer(const int maxPlayer)
     {
         m_maxPlayer = maxPlayer;
     }
@@ -198,7 +206,7 @@ public: //Set関数
      * @param playerNum プレイヤーの番号
      * @param rank 順位
     */
-    void SetRank(int playerNum, int rank)
+    void SetRank(const int playerNum, const int rank)
     {
         m_rank[playerNum] = rank;
     }
@@ -216,46 +224,22 @@ public: //Set関数
      * @brief リザルト画面でどの選択肢を選んだかをセット
      * @param select リザルト画面でどの選択肢を選んだか
     */
-    void SetResultSelect(int select)
+    void SetResultSelect(const int select)
     {
         m_resultselect = select;
     }
 
-    /**
-     * @brief サドンデスモードを選択したかをセット
-     * @param flagSuddenDeathMode サドンデスモードを選択したか
-    */
-    void SetFlagSuddenDeathMode(bool flagSuddenDeathMode)
-    {
-        m_flagSuddenDeathMode = flagSuddenDeathMode;
-    }
 
     /**
      * @brief ゲームの処理が終わっているか
      * @param flagGameEnd ゲームの処理が終わっているか
     */
-    void SetGameEnd(bool flagGameEnd)
+    void SetGameEnd(const bool flagGameEnd)
     {
         m_gameEnd = flagGameEnd;
     }
 
-    /**
-     * @brief ポーズ画面で「リトライ」を選択したかをセット
-     * @param flagPauseStage ポーズ画面で「リトライ」を選択したか
-    */
-    void SetPause_Stage(bool flagPauseStage)
-    {
-        m_pause_stage = flagPauseStage;
-    }
 
-    /**
-     * @brief ポーズ画面で「タイトルに戻る」を選択したかをセット
-     * @param flagPauseTitle ポーズ画面で「タイトルに戻る」を選択したか
-    */
-    void SetPause_Title(bool flagPauseTitle)
-    {
-        m_pause_title = flagPauseTitle;
-    }
 
 
 private: //enum
@@ -289,7 +273,6 @@ private: //enum
         LoadingStatusMax
     };
 
-private: //constant
 
 
 public: //constant
@@ -317,9 +300,6 @@ private: //data menber
     SoundBGM* m_bgmTitle = nullptr;
     SoundSE* m_seCancel = nullptr;
 
-    
-    
-
     ////////////////////////////////////////////////////////////
     // タイマー関連
     ////////////////////////////////////////////////////////////
@@ -345,16 +325,9 @@ private: //data menber
     // その他
     ////////////////////////////////////////////////////////////
 
-    int m_maxPlayer = 0;                        //操作しているプレイヤーの数
+    int m_maxPlayer = 0; //操作しているプレイヤーの数
     int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
-    con::CPULevel m_CPULevel = con::easy;//難易度受け取り受け渡し用
-    int m_resultselect = 0;//リザルトで何選んだか
-
-    bool m_flagSuddenDeathMode = false;
-
-    bool m_pause_stage = false;
-    
-    bool m_pause_title = false;
-
+    con::CPULevel m_CPULevel = con::easy; //難易度受け取り受け渡し用
+    int m_resultselect = 0; //リザルトで何選んだか
 };
 

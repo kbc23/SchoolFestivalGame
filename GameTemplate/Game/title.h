@@ -14,7 +14,7 @@ public:
 
 
 public: //GetŠÖ”
-	const bool GetFlagFinish()
+	const bool GetFlagFinish() const
 	{
 		return m_flagFinish;
 	}

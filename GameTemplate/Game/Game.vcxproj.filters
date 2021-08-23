@@ -380,9 +380,6 @@
     <ClCompile Include="goal.cpp">
       <Filter>MyCode\MainProcessing\GameScene\Goal</Filter>
     </ClCompile>
-    <ClCompile Include="toon_map.cpp">
-      <Filter>MyCode\Engine\Model</Filter>
-    </ClCompile>
     <ClCompile Include="rank.cpp">
       <Filter>MyCode\MainProcessing\GameScene\Rank</Filter>
     </ClCompile>
@@ -669,9 +666,6 @@
     </ClInclude>
     <ClInclude Include="goal.h">
       <Filter>MyCode\MainProcessing\GameScene\Goal</Filter>
-    </ClInclude>
-    <ClInclude Include="toon_map.h">
-      <Filter>MyCode\Engine\Model</Filter>
     </ClInclude>
     <ClInclude Include="rank.h">
       <Filter>MyCode\MainProcessing\GameScene\Rank</Filter>

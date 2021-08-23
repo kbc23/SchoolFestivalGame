@@ -71,7 +71,7 @@ public: //その他
      * @brief 現在フェードをしているか
      * @return 現在フェードをしているか
     */
-    const bool& IsFadeProgress()
+    const bool IsFadeProgress() const
     {
         if (m_statusFade == CurrentFadeState::wait) {
             return false;
@@ -85,7 +85,7 @@ public: //その他
      * @brief 現在フェードアウトをしているか
      * @return 現在フェードアウトをしているか
     */
-    bool IsFadeOutProgress()
+    const bool IsFadeOutProgress() const
     {
         if (m_statusFade == CurrentFadeState::fadeOut) {
             return true;
@@ -99,7 +99,7 @@ public: //その他
      * @brief 現在フェードインをしているか
      * @return 現在フェードインをしているか
     */
-    bool IsFadeInProgress()
+    const bool IsFadeInProgress() const
     {
         if (m_statusFade == CurrentFadeState::fadeIn) {
             return true;

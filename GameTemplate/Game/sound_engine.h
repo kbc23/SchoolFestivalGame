@@ -71,7 +71,7 @@ public:
 	 * @details 3D音源を使っている時の計算に使用
 	 * @param front サウンドリスナーの前方向
 	*/
-	void SetListenerFront(Vector3 front)
+	void SetListenerFront(const Vector3& front)
 	{
 		m_listener.OrientFront.x = front.x;
 		m_listener.OrientFront.y = front.y;
@@ -83,7 +83,7 @@ public:
 	 * 	 * @details 3D音源を使っている時の計算に使用
 	 * @param up サウンドリスナーの上方向
 	*/
-	void SetListenerUp(Vector3 up)
+	void SetListenerUp(const Vector3& up)
 	{
 		m_listener.OrientTop.x = up.x;
 		m_listener.OrientTop.y = up.y;
@@ -104,7 +104,7 @@ public:
 	/*!
 	* @brief	出力チャンネルの数を取得。
 	*/
-	int GetNumChannel() const
+	const int GetNumChannel() const
 	{
 		return m_nChannels;
 	}
@@ -119,7 +119,7 @@ public:
 	/// サウンドエンジンが利用可能かどうか判定。
 	/// </summary>
 	/// <returns>trueが返ってきたら利用可能です。</returns>
-	bool IsAvailable() const
+	const bool IsAvailable() const
 	{
 		return m_isInited;
 	}

@@ -39,7 +39,7 @@ public: //GetŠÖ”
      * @brief m_flagFinish‚ÌGetŠÖ”
      * @return ‚±‚ÌƒNƒ‰ƒX‚Ìˆ—‚ªI—¹‚µ‚½‚©
     */
-    bool GetFlagFinish()
+    const bool GetFlagFinish() const
     {
         return m_flagFinish;
     }

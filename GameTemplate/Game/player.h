@@ -33,10 +33,22 @@ public:
 	//////////////////////////////
 
 	/**
-	 * @brief プレイヤーの操作処理
+	 * @brief キャラクターの操作処理
 	 * @param pNum プレイヤー番号
 	*/
-	void Controller(const int& playerNum);
+	void Controller(const int playerNum);
+
+	/**
+	 * @brief プレイヤーの操作処理
+	 * @param playerNum プレイヤー番号
+	*/
+	void ControllerPlayer(const int playerNum);
+
+	/**
+	 * @brief CPUの操作処理
+	 * @param playerNum プレイヤー番号
+	*/
+	void ControllerCPU(const int playerNum);
 
 	//////////////////////////////
 	// プレイヤーのアニメーション
@@ -46,37 +58,37 @@ public:
 	 * @brief プレイヤーのアニメーションの処理
 	 * @param pNum プレイヤー番号
 	*/
-	void Animation(const int& playerNum);
+	void Animation(const int playerNum);
 
 	/**
 	 * @brief ジャンプ時のアニメーション
 	 * @param pNum プレイヤー番号
 	*/
-	void JumpAnimation(const int& playerNum);
+	void JumpAnimation(const int playerNum);
 
 	/**
 	 * @brief 青色のブロックの上に行ったときのアニメーション
 	 * @param playerNum プレイヤー番号
 	*/
-	void BlueBlockAnimation(const int& playerNum);
+	void BlueBlockAnimation(const int playerNum);
 
 	/**
 	 * @brief 青色のブロックの上に行ったとき、サドンデス時のアニメーション
 	 * @param playerNum プレイヤー番号
 	*/
-	void SuddenDeathBlueBlockAnimation(const int& playerNum);
+	void SuddenDeathBlueBlockAnimation(const int playerNum);
 
 	/**
 	 * @brief 黄色のブロックの上に行ったときのアニメーション
 	 * @param playerNum プレイヤー番号
 	*/
-	void YellowBlockAnimation(const int& playerNum);
+	void YellowBlockAnimation(const int playerNum);
 
 	/**
 	 * @brief 青色のブロックの上に行ったとき、サドンデス時のアニメーション
 	 * @param playerNum プレイヤー番号
 	*/
-	void SuddenDeathYellowBlockAnimation(const int& playerNum);
+	void SuddenDeathYellowBlockAnimation(const int playerNum);
 
 	////////////////////////////////////////////////////////////
 	// ラウンド変更の処理
@@ -95,6 +107,12 @@ public:
 	 * @brief サドンデスモード時の最終順位を確定
 	*/
 	void SuddenDeathRank();
+
+
+private: //追加
+	void GameEnd();
+
+	void GoalAnimation(const int playerNum);
 
 
 public: //Get関数
@@ -415,7 +433,6 @@ private: //data menber
 	int m_goalPlayer = 0;				
 	
 	int m_endTimer = 0; //ゴールしてからの時間
-	int fontDeavtive = 0;
 
 	bool m_gameEnd = false; //ゴールしたプレイヤーの人数
 

@@ -43,7 +43,7 @@ public://Get関数
 	 * @brief 処理が終わったかを取得
 	 * @return 処理が終わったか
 	*/
-	const bool GetFlagFinish()
+	const bool GetFlagFinish() const
 	{
 		return m_flagFinish;
 	}
@@ -52,12 +52,12 @@ public://Get関数
 	 * @brief 選択していた選択肢の番号を取得
 	 * @return 選択していた選択肢の番号
 	*/
-	const bool GetSelect()
+	const bool GetSelect() const
 	{
 		return m_cursorPosition;
 	}
 
-	const int GetCursorPosition()
+	const int GetCursorPosition() const
 	{
 		return m_cursorPosition;
 	}

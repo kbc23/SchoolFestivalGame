@@ -7,6 +7,7 @@ class MainProcessing;
 class Player;
 class Pause;
 class GameStartCountdown;
+class Stage;
 
 class Score : public IGameObject
 {
@@ -27,19 +28,19 @@ public:
      * @brief スコア時間を増加する関数
      * @param pNum プレイヤー番号
     */
-    void AddTime(const int& playerNum);
+    void AddTime(const int playerNum);
 
     /**
      * @brief スコア時間の増加を停止する関数
      * @param pNum プレイヤー番号
     */
-    void FinishTime(const int& playerNum);
+    void FinishTime(const int playerNum);
 
     /**
      * @brief スコア時間の描画処理
      * @param pNum プレイヤー番号
     */
-    void DrawTime(const int& playerNum);
+    void DrawTime(const int playerNum);
 
     //////////////////////////////
     // ラウンド変更の処理
@@ -70,6 +71,7 @@ private: //data menber
     MainProcessing* m_findMainProcessing = nullptr;
     Pause* m_findPause = nullptr;
     GameStartCountdown* m_findGameStartCountdown = nullptr;
+    Stage* m_findStage = nullptr;
 
     ////////////////////////////////////////////////////////////
     // スコアタイム関連

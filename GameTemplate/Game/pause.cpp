@@ -8,7 +8,7 @@ namespace //constant
 	// 位置情報
 	////////////////////////////////////////////////////////////
 
-	const Vector2 CHOICES_POSITION[3] = 
+	const Vector2 CHOICES_POSITION[Pause::Choices::ChoicesMax] =
 	{
 		{0.0f,150.0f},
 		{0.0f,0.0f},
@@ -33,16 +33,16 @@ Pause::Pause()
 	// スプライトのNewGO
 	//////////
 
-	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < ChoicesMax; spriteNum++) {
 		m_spriteChoices[spriteNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-		m_spriteChoices[spriteNum]->Init(filePath::dds::PAUSE_UI[spriteNum]);
-		m_spriteChoices[spriteNum]->Deactivate();
+		m_spriteChoices[spriteNum]->Init(filePath::dds::PAUSE_UI[spriteNum]); //初期化
+		m_spriteChoices[spriteNum]->Deactivate(); //非表示
 	}
 }
 
 Pause::~Pause()
 {
-	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < ChoicesMax; spriteNum++) {
 		DeleteGO(m_spriteChoices[spriteNum]);
 	}
 }
@@ -66,20 +66,18 @@ void Pause::Init()
 	// スプライトの初期化
 	//////////
 
-	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
-		m_spriteChoices[spriteNum]->SetPosition(CHOICES_POSITION[spriteNum]);
-		m_spriteChoices[spriteNum]->Deactivate();
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < ChoicesMax; spriteNum++) {
+		m_spriteChoices[spriteNum]->SetPosition(CHOICES_POSITION[spriteNum]); //位置
+		m_spriteChoices[spriteNum]->Deactivate(); //非表示
 	}
 
 	//////////
 	// メンバ変数の初期化
 	//////////
 
-	m_cursorPosition = 0;       //カーソルの場所
-	m_numberOfPlayer = 0;       //プレイヤーの人数
-	m_flagDecision = false;    //人数を決定したかのフラグ
-	m_flagFinish = false;      //このクラスでするべき処理が終わったか
-
+	m_cursorPosition = UP_END; //カーソルの場所
+	m_flagDecision = false; //人数を決定したかのフラグ
+	m_pausePlayer = con::player_1; //ポーズ状態にしたプレイヤー
 }
 
 void Pause::Finish()
@@ -90,36 +88,34 @@ void Pause::Finish()
 	// スプライトの非表示
 	//////////
 
-	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < m_NUMBER_OF_CHOICES; spriteNum++) {
-		m_spriteChoices[spriteNum]->Deactivate();
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < ChoicesMax; spriteNum++) {
+		m_spriteChoices[spriteNum]->Deactivate(); //非表示
 	}
 }
 
 void Pause::PauseInit()
 {
-	m_spriteChoices[0]->SetPosition(CHOICES_POSITION[0]);
-	m_spriteChoices[0]->SetMulColor(SRns::COLOR_NORMAL);
-	m_spriteChoices[0]->Activate();
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < ChoicesMax; spriteNum++) {
+		m_spriteChoices[spriteNum]->Activate(); //表示
 
-	m_spriteChoices[1]->SetPosition(CHOICES_POSITION[1]);
-	m_spriteChoices[1]->SetMulColor(SRns::COLOR_GRAY);
-	m_spriteChoices[1]->Activate();
+		//最初の選択肢
+		if (con::FIRST_ELEMENT_ARRAY == spriteNum) {
+			m_spriteChoices[spriteNum]->SetMulColor(SRns::COLOR_NORMAL); //カラー
+		}
+		else {
+			m_spriteChoices[spriteNum]->SetMulColor(SRns::COLOR_GRAY); //カラー
+		}
+	}
 
-	m_spriteChoices[2]->SetPosition(CHOICES_POSITION[2]);
-	m_spriteChoices[2]->SetMulColor(SRns::COLOR_GRAY);
-	m_spriteChoices[2]->Activate();
-
-	m_cursorPosition = 0;       //カーソルの場所
-	m_numberOfPlayer = 0;       //プレイヤーの人数
-	m_flagDecision = false;    //人数を決定したかのフラグ
-	m_flagFinish = false;      //このクラスでするべき処理が終わったか
+	m_cursorPosition = UP_END; //カーソルの場所
+	m_flagDecision = false; //人数を決定したかのフラグ
 }
 
 void Pause::PauseFinish()
 {
-	m_spriteChoices[0]->Deactivate();
-	m_spriteChoices[1]->Deactivate();
-	m_spriteChoices[2]->Deactivate();
+	for (int spriteNum = con::FIRST_ELEMENT_ARRAY; spriteNum < ChoicesMax; spriteNum++) {
+		m_spriteChoices[spriteNum]->Deactivate(); //非表示
+	}
 }
 
 void Pause::Update()
@@ -128,75 +124,68 @@ void Pause::Update()
 		return;
 	}
 
-	if (g_pad[0]->IsTrigger(enButtonStart))
-	{
-		SetGamePaused(true);
-		PauseInit();
-	}
-}
+	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+		if (true == g_pad[playerNum]->IsTrigger(enButtonStart)) {
+			//ポーズ状態にする
+			SetGamePaused(true);
+			//ポーズ画面のために初期化
+			PauseInit();
 
-void Pause::AlwaysUpdate()
-{
-	
+			m_pausePlayer = playerNum; //ポーズしたプレイヤーをセット
+		}
+	}
 }
 
 void Pause::UpdateOnlyPaused()
 {
 	//決定
-	if (g_pad[con::player_1]->IsTrigger(enButtonA) == true)
-	{
+	if (g_pad[m_pausePlayer]->IsTrigger(enButtonA) == true) {
+		SetGamePaused(false); //ポーズ状態を終わらせる
 
-		if (m_cursorPosition == 0)
-		{
-			SetGamePaused(false);
-			PauseFinish();
+		//ゲームに戻る
+		if (m_cursorPosition == returnGame) {
+			PauseFinish(); //ポーズ画面を終わったときの後始末
 		}
-		else if (m_cursorPosition == 1)
-		{
-			SetGamePaused(false);
-			m_mainProcessing->SetPause_Stage(true);
+		//リトライ
+		else if (m_cursorPosition == retry) {
+			m_mainProcessing->PauseRetry();
 		}
-		else if (m_cursorPosition == 2)
-		{
-			SetGamePaused(false);
-			m_mainProcessing->SetPause_Title(true);
+		//ゲームをやめる
+		else if (m_cursorPosition == finish) {
+			m_mainProcessing->PauseTitle();
 		}
 
 		m_flagDecision = true;
 	}
 	//上に移動
-	else if (g_pad[con::player_1]->IsTrigger(enButtonUp) == true) {
+	else if (g_pad[m_pausePlayer]->IsTrigger(enButtonUp) == true) {
+		//カーソルが上端
 		if (m_cursorPosition == UP_END) {
 			return;
 		}
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY); //カラー
 
-		--m_cursorPosition;
+		--m_cursorPosition; //カーソルを移動
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL); //カラー
 	}
 	//下に移動
-	else if (g_pad[con::player_1]->IsTrigger(enButtonDown) == true)
-	{
+	else if (g_pad[m_pausePlayer]->IsTrigger(enButtonDown) == true) {
+		//カーソルが下端
 		if (m_cursorPosition == DOWN_END) {
 			return;
 		}
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_GRAY); //カラー
 
-		++m_cursorPosition;
+		++m_cursorPosition; //カーソルを移動
 
-		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL);
+		m_spriteChoices[m_cursorPosition]->SetMulColor(SRns::COLOR_NORMAL); //カラー
 	}
-	if (g_pad[0]->IsTrigger(enButtonStart))
-	{
-		SetGamePaused(false);
-		PauseFinish();
+	//スタートボタン
+	if (true == g_pad[m_pausePlayer]->IsTrigger(enButtonStart)) {
+		SetGamePaused(false); //ポーズ状態を終わらせる
+		PauseFinish(); //ポーズ画面を終わったときの後始末
 	}
-}
-
-void Pause::FinishPause()
-{
-	m_flagFinish = true;
 }

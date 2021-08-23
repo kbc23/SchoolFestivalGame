@@ -327,7 +327,6 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="title.cpp" />
-    <ClCompile Include="toon_map.cpp" />
     <ClCompile Include="wav_file.cpp" />
     <ClCompile Include="wav_file_bank.cpp" />
   </ItemGroup>
@@ -424,7 +423,6 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="title.h" />
-    <ClInclude Include="toon_map.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="wav_file.h" />
     <ClInclude Include="wav_file_bank.h" />

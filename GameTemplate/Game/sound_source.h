@@ -35,7 +35,7 @@ public:
 	 * @brief 再生
 	 * @param isLoop ループ再生フラグ
 	*/
-	void Play(bool isLoop);
+	void Play(const bool isLoop);
 
 	/**
 	 * @brief 停止
@@ -58,7 +58,7 @@ public:
 	 * @brief 再生中か
 	 * @return 再生中か
 	*/
-	bool IsPlaying() const
+	const bool IsPlaying() const
 	{
 		return m_isPlaying;
 	}
@@ -76,7 +76,7 @@ public:
 	 * @brief ボリュームを取得
 	 * @return 現在のボリューム
 	*/
-	float GetVolume() const
+	const float GetVolume() const
 	{
 		float vol;
 		m_sourceVoice->GetVolume(&vol);
@@ -101,7 +101,7 @@ public:
 	 * @brief 音源の座標を取得
 	 * @return 音源の座標
 	*/
-	Vector3 GetPosition() const
+	const Vector3& GetPosition() const
 	{
 		return m_position;
 	}
@@ -110,7 +110,7 @@ public:
 	 * @brief 音源の移動速度を取得
 	 * @return 音源の移動速度
 	*/
-	Vector3 GetVelocity() const
+	const Vector3& GetVelocity() const
 	{
 		return m_velocity;
 	}
@@ -119,7 +119,7 @@ public:
 	 * @brief ループフラグを取得
 	 * @return ループフラグ
 	*/
-	bool GetLoopFlag() const
+	const bool GetLoopFlag() const
 	{
 		return m_isLoop;
 	}

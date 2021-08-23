@@ -197,42 +197,11 @@ void MainProcessing::Update()
         return;
     }
 
+    //ゲームシーンが始まっているか
     if (m_flagGameStart == false) {
+        //背景の描画
         DrawBackground();
     }
-
-    // TODO: この下にあるポーズ関連の処理をPauseクラスで処理をおこなうように変更すること
-
-    //こいつリトライじゃねーか！！！！！
-    if (m_pause_stage == true)
-    {
-        m_game->Finish();
-        m_game->Init();
-
-        m_pause_stage = false;
-    }
-
-    if (m_pause_title == true)
-    {
-        m_game->Finish();
-        m_title->Init();
-
-        m_gameStatus = GameStatus::title;
-        m_pause_title = false;
-
-        //背景を初期状態に戻して、表示
-        for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
-            m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]);
-            m_spriteBackground[backgroundNum]->Activate();
-        }
-
-        //BGMを再生
-        m_bgmTitle->Play(true);
-
-        m_flagGameStart = false;
-    }
-
-    // TODO END
 }
 
 void MainProcessing::DrawBackground()
@@ -247,7 +216,7 @@ void MainProcessing::DrawBackground()
     }
 
     //背景を初期位置にリセット
-    if (m_spriteBackground[6]->GetPosition().x <= 0.0f) {
+    if (m_spriteBackground[m_MAX_BACKGROUND - 1]->GetPosition().x <= 0.0f) {
         for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
             m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]);
         }
@@ -537,4 +506,35 @@ void MainProcessing::ResultScene()
         exit(EXIT_SUCCESS);
         break;
     }
+}
+
+////////////////////////////////////////////////////////////
+// ポーズ画面と関係
+////////////////////////////////////////////////////////////
+
+void MainProcessing::PauseRetry()
+{
+    //ゲームシーンをやり直す
+    m_game->Finish();
+    m_game->Init();
+}
+
+void MainProcessing::PauseTitle()
+{
+    //ゲームシーンからタイトルシーンに移行
+    m_game->Finish();
+    m_title->Init();
+
+    m_gameStatus = GameStatus::title;
+
+    //背景を初期状態に戻して、表示
+    for (int backgroundNum = con::FIRST_ELEMENT_ARRAY; backgroundNum < m_MAX_BACKGROUND; backgroundNum++) {
+        m_spriteBackground[backgroundNum]->SetPosition(BACKGROUND_START_POSITION[backgroundNum]); //位置
+        m_spriteBackground[backgroundNum]->Activate(); //表示
+    }
+
+    //BGMを再生
+    m_bgmTitle->Play(true);
+
+    m_flagGameStart = false;
 }

@@ -107,8 +107,7 @@ private: //data menber
 
 	bool m_stopController[con::PlayerNumberMax] = { false,false,false,false }; //CPUのコントローラーの処理を止めるか
 
-	int m_missInvalidCount[con::PlayerNumberMax] = 
-	{ m_MISS_INVALID,m_MISS_INVALID,m_MISS_INVALID,m_MISS_INVALID }; //サドンデス時のミスを無効にする回数
+	int m_missInvalidCount[con::PlayerNumberMax] = { 0,0,0,0 }; //サドンデス時のミスを無効にする回数
 
 	////////////////////////////////////////////////////////////
 	// その他

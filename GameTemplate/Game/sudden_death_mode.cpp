@@ -7,6 +7,15 @@
 #include "game_start_countdown.h"
 #include "CPU_player_controller.h"
 
+
+
+namespace
+{
+	const int NEXT_ROUND_TIME = 120;
+}
+
+
+
 SuddenDeathMode::SuddenDeathMode()
 {
 }
@@ -62,31 +71,31 @@ void SuddenDeathMode::Update()
 		return;
 	}
 
-	//if (con::PlayerNumberMax == m_goalPlayer || m_finishSuddenDeath == true) {
-	//	m_spriteGameEnd->Activate();
-	//	m_endTimer++;
-	//	if (m_endTimer > 180) {
-	//		//サドンデスモードのとき所持ラウンド勝利数に応じて順位を確定
-	//		if (m_findSuddenDeathMode->GetFlagSuddenDeathMode() == true) {
-	//			SuddenDeathRank();
-	//		}
-
-	//		for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-	//			m_findMainProcessing->SetRank(playerNum, m_goalRanking[playerNum]);
-	//		}
-
-	//		m_gameEnd = true;
-	//		m_findMainProcessing->SetGameEnd(m_gameEnd);
-	//	}
-	//}
+	//次のラウンドへの移行処理
+	NextRound();
 }
 
 void SuddenDeathMode::NextRound()
 {
+	//次のラウンドへ移行するか
+	if (false == m_flagNextRound) {
+		return;
+	}
+
+	++m_timerNextRound;
+
+	//タイマーが超えたか
+	if (NEXT_ROUND_TIME > m_timerNextRound) {
+		return;
+	}
+
 	//各クラスの状態を次のラウンドに移動するために変更する
 	m_findStage->NextRound();
 	m_findScore->NextRound();
 	m_findPlayer->NextRound();
 	m_findGameStartCountdown->NextRound();
 	m_findCPUPlayerController->NextRound();
+
+	m_flagNextRound = false;
+	m_timerNextRound = con::TIME_RESET_ZERO;
 }

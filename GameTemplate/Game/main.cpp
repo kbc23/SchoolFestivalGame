@@ -6,12 +6,7 @@
 #include "main_processing.h"
 #include "constant.h"
 
-//作業が終わったら、Get関数、Set関数をconst参照に変更しておくこと
 
-//８月２０日がリファクタリングの締め切り
-//するべきこと
-//・リファクタリング
-//・「トゥーンシェーダー」の実装
 
 namespace //constant
 {

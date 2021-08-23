@@ -18,19 +18,10 @@ public:
     void Update() override final;
 
 	/**
-	 * @brief ポーズしているか関係なしに呼ばれるアップデート関数
-	*/
-	void AlwaysUpdate()override final;
-
-	/**
 	 * @brief ポーズ中にだけ呼ばれるアップデート関数
 	*/
 	void UpdateOnlyPaused()override final;
 
-    /**
-     * @brief このクラスの処理の終了処理
-    */
-    void FinishPause();
 
 private:
     /**
@@ -44,14 +35,24 @@ private:
     void PauseFinish();
 
 
+public: //enum
+    enum Choices
+    {
+        returnGame, //ゲームに戻る
+        retry,      //リトライ
+        finish,     //ゲームをやめる
+        ChoicesMax
+    };
+
+
 
 private: //constant
-	static const int m_NUMBER_OF_CHOICES = 3;     //選択肢の数
+	//static const int m_NUMBER_OF_CHOICES = 3;     //選択肢の数
 
 
 
 private: //data menber
-	SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
+	SpriteRender* m_spriteChoices[ChoicesMax] = { nullptr };
     Stage* m_stage = nullptr;
     MainProcessing* m_mainProcessing = nullptr;
 
@@ -61,15 +62,11 @@ private: //data menber
 
     int m_cursorPosition = 0;       //カーソルの場所
 
-    int m_numberOfPlayer = 0;       //プレイヤーの人数
-
-
+    int m_pausePlayer = con::player_1; //ポーズ状態にしたプレイヤー
 
     ////////////////////////////////////////////////////////////
     // フラグ
     ////////////////////////////////////////////////////////////
 
     bool m_flagDecision = false;    //人数を決定したかのフラグ
-
-    bool m_flagFinish = false;      //このクラスでするべき処理が終わったか
 };
