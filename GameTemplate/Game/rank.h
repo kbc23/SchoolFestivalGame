@@ -109,14 +109,12 @@ public: //Set関数
     void AddRoundPoint(const int playerNum)
     {
         ++m_roundPoint[playerNum];
+        m_goalRanking[playerNum] = con::rank_1; //勝利時アニメーションを流すために順位を確定
         m_flagNextRound = true; //次のラウンドに移行する
 
         //３ラウンド取得したとき
         if (m_roundPoint[playerNum] == 3) {
             m_flagGameEnd = true; //ゲームが終了した判定にする
-
-            //サドンデスモード終了
-            //m_finishSuddenDeath = true;
         }
     }
 

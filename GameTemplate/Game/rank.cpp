@@ -290,7 +290,7 @@ void Rank::NextRound()
 		m_goalRanking[playerNum] = con::rank_notClear;
 	}
 
-	m_flagNextRound = false;
+	m_flagNextRound = false; //次のラウンドに移行するか
 
 	m_timerNextRound = con::TIME_RESET_ZERO; //次のラウンドに移行するタイマー
 }

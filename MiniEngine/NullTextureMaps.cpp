@@ -40,7 +40,7 @@ void NullTextureMaps::Init()
 
 	//トゥーンマップをロード
 	TexLoad(
-		"Assets/shader/toonMap3.DDS",
+		"Assets/shader/toonMap.DDS",
 		m_toonMap,
 		m_toonMapSize);
 

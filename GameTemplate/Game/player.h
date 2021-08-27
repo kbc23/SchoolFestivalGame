@@ -126,16 +126,6 @@ public: //Get関数
 	}
 
 	/**
-	 * @brief プレイヤーのゴール順位を取得
-	 * @param playerNum プレイヤー番号
-	 * @return プレイヤーのゴール順位
-	*/
-	const int GetGoalRanking(const int playerNum) const
-	{
-		return m_goalRanking[playerNum];
-	}
-
-	/**
 	 * @brief サドンデスモードが終了したかを取得
 	 * @return サドンデスモードが終了したか
 	*/
@@ -205,16 +195,6 @@ public: //Set関数
 	void SetActivePlayer(const int playerNum, const bool flagActive)
 	{
 		m_activePlayer[playerNum] = flagActive;
-	}
-
-	/**
-	 * @brief ゴール時の順位を確定
-	 * @param playerNum プレイヤー番号
-	 * @param rank 順位
-	*/
-	void SetGoalRanking(const int playerNum, const int rank)
-	{
-		m_goalRanking[playerNum] = rank;
 	}
 
 	/**
@@ -333,10 +313,6 @@ private: //enum
 	AnimationClip m_animationPlayer[AnimationMax];
 
 
-private: //constant
-
-
-
 private: //data menber
 	////////////////////////////////////////////////////////////
 	// クラスのオブジェクト
@@ -370,9 +346,6 @@ private: //data menber
 	int m_activePlayer[con::PlayerNumberMax] = { true, true, true, true };	//このプレイヤーは操作しているか
 	int m_maxPlayer = con::PlayerNumberMax;									//プレイヤーの最大数
 
-	int m_goalRanking[con::PlayerNumberMax] =
-	{ con::rank_notClear, con::rank_notClear, con::rank_notClear, con::rank_notClear };	//プレイヤーのゴール順位
-	//bool m_flagGoal[con::PlayerNumberMax] = { false, false, false, false };	//ゴールしたか
 	int m_goalPlayer = 0;				
 	
 	int m_endTimer = 0; //ゴールしてからの時間

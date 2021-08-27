@@ -177,7 +177,6 @@ void Player::Init()
 
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_activePlayer[playerNum] = true; //このプレイヤーは操作しているか
-		m_goalRanking[playerNum] = con::rank_notClear; //プレイヤーのゴール順位
 		m_stopController[playerNum] = false; //操作不能か
 		m_nowAnimationBlock[playerNum] = con::greenBlock; //プレイヤーの現在のアニメーション
 		m_flagStopAnimation[playerNum] = false; //アニメーションの処理が止まっているか
@@ -421,11 +420,11 @@ void Player::GoalAnimation(const int playerNum)
 	//ゴールした場合
 	else {
 		//１位
-		if (m_goalRanking[playerNum] == con::rank_1) {
+		if (m_findRank->GetGoalRanking(playerNum) == con::rank_1) {
 			m_modelCharacter[playerNum]->PlayAnimation(win); //アニメーション
 		}
 		//４位
-		else if (m_goalRanking[playerNum] == con::rank_4) {
+		else if (m_findRank->GetGoalRanking(playerNum) == con::rank_4) {
 			m_modelCharacter[playerNum]->PlayAnimation(lose); //アニメーション
 		}
 		//２、３位
@@ -531,7 +530,6 @@ void Player::NextRound()
 	//以下、メンバ変数をリセット
 	for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
 		m_activePlayer[playerNum] = true;
-		m_goalRanking[playerNum] = con::rank_notClear;
 		m_flagAnimationJump[playerNum] = false;
 		m_timerAnimation[playerNum] = 0;
 		m_flagStopAnimation[playerNum] = false;
