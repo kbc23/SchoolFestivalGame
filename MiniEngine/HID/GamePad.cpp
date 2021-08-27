@@ -44,16 +44,16 @@ namespace {
 		DWORD keyCoord2;		//!<キーボードのキーコード。
 	};
 	const VirtualPadToKeyboard vPadToKeyboardTable[enButtonNum] = {
-		{ enButtonUp		, VK_NUMPAD8,	'8' 		},
-		{ enButtonDown		, VK_NUMPAD2,	'2' 		},
-		{ enButtonLeft		, VK_NUMPAD4,	'4' 		},
-		{ enButtonRight		, VK_NUMPAD6,	'6' 		},
-		{ enButtonA			, 'J',			0xFFFFFFFF	},
-		{ enButtonB			, 'K',			0xFFFFFFFF	},
+		{ enButtonUp		, VK_UP,	'8' 		},
+		{ enButtonDown		, VK_DOWN,	'2' 		},
+		{ enButtonLeft		, VK_LEFT,	'4' 		},
+		{ enButtonRight		, VK_RIGHT,	'6' 		},
+		{ enButtonA			, 'Z',			0xFFFFFFFF},
+		{ enButtonB			, 'X',			0xFFFFFFFF	},
 		{ enButtonY			, 'I',			0xFFFFFFFF	},
 		{ enButtonX			, 'L',			0xFFFFFFFF	},
 		{ enButtonSelect	, VK_SPACE,		0xFFFFFFFF	},
-		{ enButtonStart		, VK_RETURN,	0xFFFFFFFF	},
+		{ enButtonStart		, VK_ESCAPE,	0xFFFFFFFF	},
 		{ enButtonRB1		, '7',			0xFFFFFFFF	},
 		{ enButtonRB2		, '8',			0xFFFFFFFF	},
 		{ enButtonRB3		, '9',			0xFFFFFFFF	},
