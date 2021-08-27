@@ -153,15 +153,6 @@ Stage::Stage()
         m_spritePlayerMark[playerNum]->Deactivate(); //非表示
     }
 
-    //ラウンドのポイントのUIのNewGO
-    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int roundNum = con::FIRST_ELEMENT_ARRAY; roundNum < m_MAX_RAUND_WIN; roundNum++) {
-            m_spriteRoundWin[playerNum][roundNum] = NewGO<SpriteRender>(igo::PRIORITY_UI);
-            m_spriteRoundWin[playerNum][roundNum]->Init(filePath::dds::ROUND_WIN[playerNum][roundNum]); //初期化
-            m_spriteRoundWin[playerNum][roundNum]->Deactivate(); //非表示
-        }
-    }
-
     //////////////////////////////
     // フォントのNewGO
     //////////////////////////////
@@ -262,13 +253,6 @@ void Stage::Init()
         m_spritePlayerMark[playerNum]->SetPositionX(INIT_SPRITE_PLAYER_MARK); //位置
     }
 
-    //ラウンドのUIの初期化
-    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int roundNum = con::FIRST_ELEMENT_ARRAY; roundNum < m_MAX_RAUND_WIN; roundNum++) {
-            m_spriteRoundWin[playerNum][roundNum]->Deactivate(); //非表示
-        }
-    }
-
     ////////////////////////////////////////////////////////////
     // フォントの初期化
     ////////////////////////////////////////////////////////////
@@ -300,7 +284,6 @@ void Stage::Init()
     }
 
     m_nowRank = m_INIT_RANK; //プレイヤーの順位データに渡すデータ
-    m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
     m_goalPlayer = 0; //ゴールしたプレイヤーの数
     m_allMiss = false; //プレイヤー全員がミスをしているか
 }
@@ -331,13 +314,6 @@ void Stage::Finish()
     m_spriteDegreeOfProgress->Deactivate(); //非表示
     for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
         m_spritePlayerMark[playerNum]->Deactivate(); //非表示
-    }
-
-    //ラウンドのUIの非表示
-    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int roundNum = con::FIRST_ELEMENT_ARRAY; roundNum < m_MAX_RAUND_WIN; roundNum++) {
-            m_spriteRoundWin[playerNum][roundNum]->Deactivate(); //非表示
-        }
     }
 
     ////////////////////////////////////////////////////////////
@@ -513,9 +489,6 @@ void Stage::Update()
     //背景の描画
     DrawBackground();
 
-    //ラウンド勝利数の描画
-    DrawRoundWin();
-
     //ゴール時の処理
     GoalBlock();
 
@@ -680,23 +653,6 @@ void Stage::DrawBackground()
     }
 }
 
-void Stage::DrawRoundWin()
-{
-    //サドンデスモードでないとき
-    if (m_findSuddenDeathMode->GetFlagSuddenDeathMode() == false) {
-        return;
-    }
-
-    //取得ラウンド数のUIの表示
-    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-        for (int roundNum = con::FIRST_ELEMENT_ARRAY; roundNum < m_MAX_RAUND_WIN; roundNum++) {
-            if (roundNum < m_findPlayer->GetRoundPoint(playerNum)) {
-                m_spriteRoundWin[playerNum][roundNum]->Activate(); //表示
-            }
-        }
-    }
-}
-
 //////////////////////////////
 // ブロックの移動処理
 //////////////////////////////
@@ -807,6 +763,10 @@ void Stage::GoalBlock()
         return;
     }
 
+    if (true == m_findRank->GetFlagNextRound()) {
+        return;
+    }
+
     bool flagAddNowRank = false; //プレイヤーの順位に代入する数字が変わるかのフラグ
     int nextRank = con::player_1; //次のプレイヤーの順位
 
@@ -816,9 +776,15 @@ void Stage::GoalBlock()
             //プレイヤーの操作をできないようにする。
             m_findPlayer->SetActivePlayer(playerNum, false);
 
-            //順位を確定
-            //m_findPlayer->SetGoalRanking(playerNum, m_nowRank);
-            m_findRank->SetGoalRanking(playerNum, m_nowRank);
+            //サドンデスモード時
+            if (true == m_findSuddenDeathMode->GetFlagSuddenDeathMode()) {
+                m_findRank->AddRoundPoint(playerNum);
+            }
+            //レースモード時
+            else {
+                //順位を確定
+                m_findRank->SetGoalRanking(playerNum, m_nowRank);
+            }
 
 
             //ゴールした状態にする。
@@ -878,9 +844,8 @@ void Stage::MissRoundWin()
         if (count == 3) {
             for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
                 if (m_findPlayer->GetStopController(playerNum) == false) {
-                    //順位を確定
-                    m_findRank->SetGoalRanking(playerNum, con::rank_1);
-                    //m_findPlayer->SetGoalRanking(playerNum, con::rank_1);
+                    //ラウンドを取得
+                    m_findRank->AddRoundPoint(playerNum);
                     m_findPlayer->SetAnimationWin(playerNum); //アニメーション
 
                     //ゴールした人数を増加
@@ -911,16 +876,22 @@ void Stage::MissRoundWin()
 
 void Stage::NextRound()
 {
-    if (m_allMiss == false) {
-        //プレイヤーのラウンド勝利ポイント
-        for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-            //１位のプレイヤー
-            if (m_findPlayer->GetGoalRanking(playerNum) == con::rank_1) {
-                //ラウンドを取得
-                m_findPlayer->AddRoundPoint(playerNum);
-            }
-        }
-    }
+    //if (m_allMiss == false) {
+    //    //プレイヤーのラウンド勝利ポイント
+    //    for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
+    //        //１位のプレイヤー
+    //        if (m_findRank->GetGoalRanking(playerNum) == con::rank_1) {
+    //            //ラウンドを取得
+    //            m_findRank->AddRoundPoint(playerNum);
+    //        }
+
+    //        ////１位のプレイヤー
+    //        //if (m_findPlayer->GetGoalRanking(playerNum) == con::rank_1) {
+    //        //    //ラウンドを取得
+    //        //    m_findPlayer->AddRoundPoint(playerNum);
+    //        //}
+    //    }
+    //}
     
     //ステージを作成
     StageCreate();
@@ -958,6 +929,10 @@ void Stage::NextRound()
 
 void Stage::CheckPlayerDistance()
 {
+    if (true == m_findRank->GetFlagNextRound()) {
+        return;
+    }
+
     //サドンデスモードか
     if (m_findSuddenDeathMode->GetFlagSuddenDeathMode() == false) {
         return;
@@ -1057,8 +1032,10 @@ void Stage::WinPlayerDistance(const int playerNum)
         //m_findPlayer->SetFlagGoal(playerNum, true);
     }
 
+    //ラウンドを取得
+    m_findRank->AddRoundPoint(playerNum);
     //順位を確定
-    m_findRank->SetGoalRanking(playerNum, con::rank_1);
+    //m_findRank->SetGoalRanking(playerNum, con::rank_1);
     //m_findPlayer->SetGoalRanking(playerNum, con::rank_1);
     m_findPlayer->SetAnimationWin(playerNum); //アニメーション
     

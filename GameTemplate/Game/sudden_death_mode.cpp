@@ -59,12 +59,6 @@ void SuddenDeathMode::Init()
 void SuddenDeathMode::Finish()
 {
 	m_flagProcess = false;
-
-	//////////////////////////////
-	// メンバ変数のFinishの処理
-	//////////////////////////////
-
-	m_flagSuddenDeathMode = false; //サドンデスモードか
 }
 
 void SuddenDeathMode::Update()

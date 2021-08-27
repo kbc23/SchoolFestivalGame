@@ -183,10 +183,8 @@ void Player::Init()
 		m_flagStopAnimation[playerNum] = false; //アニメーションの処理が止まっているか
 		m_flagAnimationJump[playerNum] = false;	//ジャンプアニメーション中か
 		m_timerAnimation[playerNum] = 0; //アニメーションのタイマー
-		m_roundPoint[playerNum] = 0; //プレイヤーのラウンドのポイント
 	}
 
-	m_maxPlayer = con::PlayerNumberMax; //プレイヤーの最大数
 	m_goalPlayer = 0;
 	m_endTimer = 0; //ゴールしてからの時間
 	m_gameEnd = false; //ゴールしたプレイヤーの人数
@@ -223,37 +221,6 @@ void Player::Update()
 		//アニメーション
 		Animation(playerNum);
 	}
-
-	//終了時
-	GameEnd();
-}
-
-void Player::GameEnd()
-{
-	//全員ゴールしたとき
-	if (con::PlayerNumberMax == m_goalPlayer || m_finishSuddenDeath == true) {
-		//終了
-		
-		m_endTimer++;
-		if (m_endTimer > 180) {
-			//サドンデスモードのとき所持ラウンド勝利数に応じて順位を確定
-			if (m_findSuddenDeathMode->GetFlagSuddenDeathMode() == true) {
-				//サドンデスモード時の最終順位の決定
-				SuddenDeathRank();
-			}
-			
-			//リザルトシーンに順位情報を渡す
-			for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-				//m_findResult->SetRank(playerNum, m_goalRanking[playerNum]);
-				m_findRank->SetFlagGameEnd(true); //Rankクラスにゲームが終了したことを伝える
-			}
-
-			//ゲームシーン終了
-			m_gameEnd = true;
-			m_findMainProcessing->SetGameEnd(m_gameEnd);
-		}
-	}
-
 }
 
 //////////////////////////////
@@ -274,6 +241,11 @@ void Player::Controller(const int playerNum)
 
 	//ジャンプアニメーション中か
 	if (m_flagAnimationJump[playerNum] == true) {
+		return;
+	}
+
+	//次のラウンドに移行する時
+	if (true == m_findRank->GetFlagNextRound()) {
 		return;
 	}
 
@@ -565,32 +537,5 @@ void Player::NextRound()
 		m_flagStopAnimation[playerNum] = false;
 		m_stopController[playerNum] = false;
 		m_nowAnimationBlock[playerNum] = con::greenBlock;
-	}
-}
-
-////////////////////////////////////////////////////////////
-// サドンデスモードの関数
-////////////////////////////////////////////////////////////
-
-void Player::SuddenDeathRank()
-{
-	int Ranking = con::rank_1; //順位
-	bool checkAddRank = false; //次の取得ラウンド数のプレイヤーの順位が変わるか
-
-	//取得ラウンド数が多い順に高い順位にする
-	for (int roundPointNum = 3; roundPointNum >= con::FIRST_ELEMENT_ARRAY; roundPointNum--) {
-		for (int playerNum = con::FIRST_ELEMENT_ARRAY; playerNum < con::PlayerNumberMax; playerNum++) {
-			//順位を確定
-			if (m_roundPoint[playerNum] == roundPointNum) {
-				m_goalRanking[playerNum] = Ranking;
-				checkAddRank = true;
-			}
-		}
-
-		//次のプレイヤーの順位のために順位を増加する
-		if (checkAddRank == true) {
-			++Ranking; //順位を変更
-			checkAddRank = false;
-		}
 	}
 }

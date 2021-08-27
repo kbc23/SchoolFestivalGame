@@ -99,19 +99,8 @@ public:
 	*/
 	void NextRound();
 
-	////////////////////////////////////////////////////////////
-	// サドンデスモードの関数
-	////////////////////////////////////////////////////////////
-
-	/**
-	 * @brief サドンデスモード時の最終順位を確定
-	*/
-	void SuddenDeathRank();
-
 
 private: //追加
-	void GameEnd();
-
 	void GoalAnimation(const int playerNum);
 
 
@@ -144,16 +133,6 @@ public: //Get関数
 	const int GetGoalRanking(const int playerNum) const
 	{
 		return m_goalRanking[playerNum];
-	}
-
-	/**
-	 * @brief プレイヤーの取得ラウンド数を取得
-	 * @param playerNum プレイヤー番号
-	 * @return プレイヤーの取得ラウンド数
-	*/
-	const int GetRoundPoint(const int playerNum) const
-	{
-		return m_roundPoint[playerNum];
 	}
 
 	/**
@@ -298,16 +277,16 @@ public: //Set関数
 	 * @brief 取得ラウンド数を増加する。３ラウンド取得した場合、サドンデスモードを終了する。
 	 * @param playerNum プレイヤー番号
 	*/
-	void AddRoundPoint(const int playerNum)
-	{
-		++m_roundPoint[playerNum];
+	//void AddRoundPoint(const int playerNum)
+	//{
+	//	++m_roundPoint[playerNum];
 
-		//３ラウンド取得したとき
-		if (m_roundPoint[playerNum] == 3) {
-			//サドンデスモード終了
-			m_finishSuddenDeath = true;
-		}
-	}
+	//	//３ラウンド取得したとき
+	//	if (m_roundPoint[playerNum] == 3) {
+	//		//サドンデスモード終了
+	//		m_finishSuddenDeath = true;
+	//	}
+	//}
 
 	/**
 	 * @brief プレイヤーのコントローラーの操作可能状態を変更
@@ -418,6 +397,5 @@ private: //data menber
 	// サドンデスモードのメンバ変数
 	////////////////////////////////////////////////////////////
 
-	int m_roundPoint[con::PlayerNumberMax] = { 0,0,0,0 };		//プレイヤーのラウンドのポイント
 	bool m_finishSuddenDeath = false;							//サドンデスモードが終了したか
 };

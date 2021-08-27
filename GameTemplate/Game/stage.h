@@ -67,8 +67,6 @@ private:
 
     void DrawBackground();
 
-    void DrawRoundWin();
-
 
 public:
 
@@ -218,14 +216,7 @@ public: //enum
     };
 
 public: //Set関数
-    /**
-     * @brief 操作するプレイヤーの人数を保存する変数のSet関数
-     * @param playerNum 操作するプレイヤーの人数
-    */
-    void SetMaxPlayer(const int playerNum)
-    {
-        m_maxPlayer = playerNum;
-    }   
+
 
 
 private: //constant
@@ -236,8 +227,6 @@ private: //constant
     static const int m_MAX_GREEN_BLOCK = 20;            //作成する緑ブロックのモデルの数
     static const int m_MAX_YELLOW_BLOCK = 10;    //作成する青、黄色ブロックのモデルの数
     static const int m_MAX_GOAL_BLOCK = 1;      //作成するゴールブロックのモデルの数
-
-    static const int m_MAX_RAUND_WIN = 3;
 
 private: //data menber
 
@@ -260,8 +249,6 @@ private: //data menber
 
     SpriteRender* m_spriteDegreeOfProgress = nullptr;
     SpriteRender* m_spritePlayerMark[con::PlayerNumberMax] = { nullptr };
-
-    SpriteRender* m_spriteRoundWin[con::PlayerNumberMax][m_MAX_RAUND_WIN] = { nullptr };
 
     //////////////////////////////
     // FindGO
@@ -305,8 +292,6 @@ private: //data menber
     // NextRound
     ///////////////////////////////////////////////////////////
 
-    int m_maxPlayer = con::PlayerNumberMax;	//プレイヤーの最大数
     int m_goalPlayer = 0;          //ゴールしたプレイヤーの数
-    //int m_nextTime = 0;          //次のラウンドに移るのに一瞬で行かないための待ち時間
     bool m_allMiss = false;     //プレイヤー全員がミスをしているか
 };

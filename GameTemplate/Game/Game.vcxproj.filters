@@ -123,9 +123,6 @@
     <Filter Include="MyCode\MainProcessing\GameScene\SuddenDeathMode">
       <UniqueIdentifier>{b7da35c3-9535-4471-8eb1-689d16de5bd2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\MainProcessing\GameScene\Goal">
-      <UniqueIdentifier>{dd85495c-d7b5-4e59-92f7-4d21add73f64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\MainProcessing\GameScene\Rank">
       <UniqueIdentifier>{aceb48f9-c65b-45f4-b778-c07ae21c2cff}</UniqueIdentifier>
     </Filter>
@@ -350,9 +347,6 @@
     <ClCompile Include="player.cpp">
       <Filter>MyCode\MainProcessing\GameScene\Player</Filter>
     </ClCompile>
-    <ClCompile Include="game_data.cpp">
-      <Filter>MyCode\MainProcessing\GameScene</Filter>
-    </ClCompile>
     <ClCompile Include="CPU_player_controller.cpp">
       <Filter>MyCode\MainProcessing\GameScene\CPU</Filter>
     </ClCompile>
@@ -376,9 +370,6 @@
     </ClCompile>
     <ClCompile Include="title.cpp">
       <Filter>MyCode\MainProcessing\TitleScene</Filter>
-    </ClCompile>
-    <ClCompile Include="goal.cpp">
-      <Filter>MyCode\MainProcessing\GameScene\Goal</Filter>
     </ClCompile>
     <ClCompile Include="rank.cpp">
       <Filter>MyCode\MainProcessing\GameScene\Rank</Filter>
@@ -637,9 +628,6 @@
     <ClInclude Include="player.h">
       <Filter>MyCode\MainProcessing\GameScene\Player</Filter>
     </ClInclude>
-    <ClInclude Include="game_data.h">
-      <Filter>MyCode\MainProcessing\GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="CPU_player_controller.h">
       <Filter>MyCode\MainProcessing\GameScene\CPU</Filter>
     </ClInclude>
@@ -664,18 +652,12 @@
     <ClInclude Include="title.h">
       <Filter>MyCode\MainProcessing\TitleScene</Filter>
     </ClInclude>
-    <ClInclude Include="goal.h">
-      <Filter>MyCode\MainProcessing\GameScene\Goal</Filter>
-    </ClInclude>
     <ClInclude Include="rank.h">
       <Filter>MyCode\MainProcessing\GameScene\Rank</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
-      <Filter>Assets</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\shader\ShadowMap.fx">
       <Filter>Assets</Filter>
     </FxCompile>
   </ItemGroup>

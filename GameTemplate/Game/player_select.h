@@ -3,7 +3,7 @@
 #include "sprite_render.h"
 #include "sound_SE.h"
 
-class MainProcessing;
+class Player;
 
 class PlayerSelect : public IGameObject
 {
@@ -54,11 +54,20 @@ private: //data menber
     // クラスのオブジェクト
     ////////////////////////////////////////////////////////////
 
-    MainProcessing* m_game = nullptr;
+    //////////////////////////////
+    // NewGO
+    //////////////////////////////
+
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     FontRender* m_font = nullptr;
     SoundSE* m_seDecision = nullptr;
     SoundSE* m_seMoveCursor = nullptr;
+
+    //////////////////////////////
+    // FindGO
+    //////////////////////////////
+
+    Player* m_findPlayer = nullptr;
 
     ////////////////////////////////////////////////////////////
     // その他

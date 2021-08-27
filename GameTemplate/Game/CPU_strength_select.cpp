@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "CPU_strength_select.h"
 
-#include "main_processing.h"
 #include "constant.h"
+#include "CPU_player_controller.h"
 
 
 
@@ -100,7 +100,7 @@ bool CPUStrengthSelect::Start()
     // FindGO
     //////////////////////////////
 
-    m_game = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
+    m_findCPUPlayerController = FindGO<CPUPlayerController>(igo::CLASS_NAME_CPU_PLAYER_CONTROLLER);
 
     return true;
 }
@@ -170,7 +170,7 @@ void CPUStrengthSelect::Update()
     SelectTheNumberOfCPUStrength();
 
     if (m_flagDecision == true && m_flagFinish == false) {
-        m_game->SetCPULevel(static_cast<con::CPULevel>(m_cursorPosition));
+        m_findCPUPlayerController->SetCPULevel(static_cast<con::CPULevel>(m_cursorPosition));
         FinishCPUStrengthSelect();
     }
 

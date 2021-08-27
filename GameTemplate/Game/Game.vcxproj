@@ -294,9 +294,7 @@
     <ClCompile Include="CPU_player_controller.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="font_render.cpp" />
-    <ClCompile Include="game_data.cpp" />
     <ClCompile Include="game_start_countdown.cpp" />
-    <ClCompile Include="goal.cpp" />
     <ClCompile Include="main_processing.cpp" />
     <ClCompile Include="game_camera.cpp" />
     <ClCompile Include="game.cpp" />
@@ -397,9 +395,7 @@
     <ClInclude Include="CPU_player_controller.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="font_render.h" />
-    <ClInclude Include="game_data.h" />
     <ClInclude Include="game_start_countdown.h" />
-    <ClInclude Include="goal.h" />
     <ClInclude Include="main_processing.h" />
     <ClInclude Include="game_camera.h" />
     <ClInclude Include="game.h" />
@@ -429,11 +425,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Assets\shader\ShadowMap.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>

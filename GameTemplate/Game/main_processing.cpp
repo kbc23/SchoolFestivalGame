@@ -101,7 +101,7 @@ bool MainProcessing::Start()
     // 背景
     ////////////////////////////////////////////////////////////
 
-    //画像の配列番号と表示位置（0の位置が画面）
+    //画像の配列番号と表示位置（0の位置がゲームスクリーン）
     //0 1
     //2 3 4
     //  5 6
@@ -404,10 +404,6 @@ void MainProcessing::PreparingForLoading()
 
 void MainProcessing::Loading()
 {
-    //モードの選択情報を渡す
-    m_game->GetGameDataObject()->SetMaxPlayer(m_maxPlayer);
-    m_game->GetGameDataObject()->SetCPULevel(m_CPULevel);
-
     m_game->Init();
 
     //選択画面の背景を非表示

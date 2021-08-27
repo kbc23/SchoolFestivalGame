@@ -193,15 +193,6 @@ public: //Get関数
 
 public: //Set関数
     /**
-     * @brief m_maxPlayerのSet関数
-     * @param maxPlayer 操作しているプレイヤーの数
-    */
-    void SetMaxPlayer(const int maxPlayer)
-    {
-        m_maxPlayer = maxPlayer;
-    }
-
-    /**
      * @brief プレイヤーの順位をセット
      * @param playerNum プレイヤーの番号
      * @param rank 順位
@@ -209,15 +200,6 @@ public: //Set関数
     void SetRank(const int playerNum, const int rank)
     {
         m_rank[playerNum] = rank;
-    }
-
-    /**
-     * @brief CPUの強さをセット
-     * @param level CPUの強さ
-    */
-    void SetCPULevel(const con::CPULevel& level)
-    {
-        m_CPULevel = level;
     }
 
     /**
@@ -327,7 +309,6 @@ private: //data menber
 
     int m_maxPlayer = 0; //操作しているプレイヤーの数
     int m_rank[con::PlayerNumberMax] = { 0,0,0,0 };
-    con::CPULevel m_CPULevel = con::easy; //難易度受け取り受け渡し用
     int m_resultselect = 0; //リザルトで何選んだか
 };
 

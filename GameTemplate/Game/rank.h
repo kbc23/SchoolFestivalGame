@@ -18,15 +18,24 @@ public:
 
 
 private:
+    void DrawRoundPoint();
     /**
      * @brief ゲームシーンが終了したかを確認（次のラウンドに移行するかも確認）
     */
     void CheckGameEnd();
 
+
+    void CheckNextRound();
+
     /**
      * @brief ゲームシーンが終了するときの処理
     */
     void GameEnd();
+
+    /**
+     * @brief サドンデスモード時の最終順位を確定
+    */
+    void SuddenDeathRank();
 
 
 public:
@@ -54,6 +63,21 @@ public: //Get関数
         }
     }
 
+    /**
+     * @brief プレイヤーのゴール順位を取得
+     * @param playerNum プレイヤー番号
+     * @return プレイヤーのゴール順位
+    */
+    const int GetGoalRanking(const int playerNum) const
+    {
+        return m_goalRanking[playerNum];
+    }
+
+    const bool GetFlagNextRound() const
+    {
+        return m_flagNextRound;
+    }
+
 
 public: //Set関数
     /**
@@ -79,6 +103,24 @@ public: //Set関数
     }
 
     /**
+     * @brief 取得ラウンド数を増加する。３ラウンド取得した場合、サドンデスモードを終了する。
+     * @param playerNum プレイヤー番号
+    */
+    void AddRoundPoint(const int playerNum)
+    {
+        ++m_roundPoint[playerNum];
+        m_flagNextRound = true; //次のラウンドに移行する
+
+        //３ラウンド取得したとき
+        if (m_roundPoint[playerNum] == 3) {
+            m_flagGameEnd = true; //ゲームが終了した判定にする
+
+            //サドンデスモード終了
+            //m_finishSuddenDeath = true;
+        }
+    }
+
+    /**
      * @brief ゲームが終了したかをセット
      * @param flag ゲームが終了したか
     */
@@ -87,12 +129,8 @@ public: //Set関数
         m_flagGameEnd = flag;
     }
 
-
-
-    void SpriteActivate(const int playerNum, const int rank)
-    {
-        m_spriteGoalRank[playerNum][rank]->Activate();
-    }
+private: //constant
+    static const int m_MAX_RAUND_WIN = 3;
 
 
 
@@ -106,6 +144,7 @@ private: //data menber
     //////////////////////////////
 
     SpriteRender* m_spriteGoalRank[con::PlayerNumberMax][con::GoalRankMax] = { nullptr }; //ゴール順位の画像
+    SpriteRender* m_spriteRoundWin[con::PlayerNumberMax][m_MAX_RAUND_WIN] = { nullptr };
     SpriteRender* m_spriteGameEnd = nullptr; //ゲーム終了時の画像
 
     //////////////////////////////
@@ -123,5 +162,11 @@ private: //data menber
     int m_goalRanking[con::PlayerNumberMax] =
     { con::rank_notClear, con::rank_notClear, con::rank_notClear, con::rank_notClear };	//プレイヤーのゴール順位
 
+    int m_roundPoint[con::PlayerNumberMax] = { 0,0,0,0 }; //プレイヤーのラウンドのポイント
+
     bool m_flagGameEnd = false; //ゲームが終了したか
+    bool m_flagNextRound = false; //次のラウンドに移行するか
+
+    int m_timerGameEnd = con::TIME_RESET_ZERO; //ゲーム終了時のタイマー
+    int m_timerNextRound = con::TIME_RESET_ZERO; //次のラウンドに移行するタイマー
 };

@@ -3,8 +3,7 @@
 #include "font_render.h"
 #include "sound_SE.h"
 
-class MainProcessing;
-class SuddenDeathMode;
+class CPUPlayerController;
 
 class CPUStrengthSelect : public IGameObject
 {
@@ -61,8 +60,6 @@ private: //data menber
     // NewGO
     //////////////////////////////
 
-    MainProcessing* m_game = nullptr;
-
     SpriteRender* m_spriteChoices[m_NUMBER_OF_CHOICES] = { nullptr };
     FontRender* m_font = nullptr;
     SoundSE* m_seDecision = nullptr;
@@ -72,7 +69,7 @@ private: //data menber
     // FindGO
     //////////////////////////////
 
-
+    CPUPlayerController* m_findCPUPlayerController = nullptr;
 
     ////////////////////////////////////////////////////////////
     // ‚»‚Ì‘¼

@@ -65,8 +65,6 @@ void CPUPlayerController::Init()
 		m_stopController[playerNum] = false; //CPUのコントローラーの処理を止めるか
 		m_stopControllerTimer[playerNum] = con::TIME_RESET_ZERO; //CPUのコントローラーの処理を止めてるときのタイマー
 	}
-
-	m_CPULevel = con::easy; //CPUの強さ
 }
 
 void CPUPlayerController::Finish()
@@ -229,6 +227,6 @@ const int& CPUPlayerController::OKMove(const int playerNum)
 void CPUPlayerController::NextRound()
 {
 	for (int playerNum = con::player_1; playerNum < con::PlayerNumberMax; playerNum++) {
-		m_missInvalidCount[playerNum] = m_MISS_INVALID;
+		m_missInvalidCount[playerNum] = 0;
 	}
 }

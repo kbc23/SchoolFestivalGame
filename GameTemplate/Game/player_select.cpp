@@ -2,7 +2,7 @@
 #include "player_select.h"
 
 #include "constant.h"
-#include "main_processing.h"
+#include "player.h"
 
 
 
@@ -104,7 +104,7 @@ bool PlayerSelect::Start()
     // FindGO
     //////////////////////////////
 
-    m_game = FindGO<MainProcessing>(igo::CLASS_NAME_MAIN_PROCESSING);
+    m_findPlayer = FindGO<Player>(igo::CLASS_NAME_PLAYER);
 
     return true;
 }
@@ -228,7 +228,7 @@ void PlayerSelect::SelectTheNumberOfPlayers()
 
 void PlayerSelect::FinishPlayerSelect()
 {
-    m_game->SetMaxPlayer(m_cursorPosition + ADD_ONE);
+    m_findPlayer->SetMaxPlayer(m_cursorPosition + ADD_ONE);
 
     m_flagFinish = true;
 }
