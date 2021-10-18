@@ -27,7 +27,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 			nullTextureMaps.GetNormalMap().get(), 
 			nullTextureMaps.GetNormalMapSize());
 	}
-	//トゥーンマップ
+	//トゥーンシェーディング
 	if (tkmMat.toonMap != nullptr) {
 		m_toonMap.InitFromMemory(tkmMat.toonMap.get(), tkmMat.toonMapSize);
 	}
@@ -77,7 +77,7 @@ void Material::InitFromTkmMaterila(
 	SMaterialParam matParam;
 	matParam.hasNormalMap = m_normalMap.IsValid() ? 1 : 0;
 	matParam.hasSpecMap = m_specularMap.IsValid() ? 1 : 0;
-	matParam.hasToonMap = m_toonMap.IsValid() ? 1 : 0;
+	matParam.hasToonMap = m_toonMap.IsValid() ? 1 : 0; //トゥーンシェーディングの処理
 	m_constantBuffer.Init(sizeof(SMaterialParam), &matParam);
 
 	//ルートシグネチャを初期化。

@@ -40,7 +40,7 @@ public:
 		return m_normalMap;
 	}
 	/// <summary>
-	/// 法線マップを取得。
+	/// トゥーンマップを取得。
 	/// </summary>
 	/// <returns></returns>
 	Texture& GetToonMap()

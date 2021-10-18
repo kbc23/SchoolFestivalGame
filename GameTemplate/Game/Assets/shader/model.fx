@@ -218,8 +218,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//求まった色を乗算する
 	return color *= Col;
 
-
-
+	//ここから下は未使用
 
 	psIn.normal = GetNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
 
